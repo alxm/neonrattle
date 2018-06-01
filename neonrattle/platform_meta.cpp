@@ -173,13 +173,13 @@ ZPixel z_sprite_getTransparentColor(void)
     return 0xf81f;
 }
 
-ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
+ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
 {
     g_sprites[Sprite].image.setFrame(Frame);
     return g_sprites[Sprite].image._buffer;
 }
 
-void z_sprite_blit(ZSpriteId Sprite, int X, int Y, uint8_t Frame)
+void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
 {
     g_sprites[Sprite].image.setFrame(Frame);
     gb.display.drawImage(X, Y, g_sprites[Sprite].image);

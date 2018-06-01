@@ -20,14 +20,20 @@
 
 #include "generated/data_gfx_alxm.h"
 #include "generated/data_gfx_alxm_wing.h"
+#include "generated/data_gfx_map0.h"
+#include "generated/data_gfx_tiles.h"
 
 void z_graphics_setup(void)
 {
+    z_sprite_load(Z_SPRITE_MAP0, map0);
+
+    z_sprite_load(Z_SPRITE_TILES, tiles);
+
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
 }
 
-void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, uint8_t Frame)
+void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame)
 {
     z_sprite_blit(Sprite,
                   X - z_sprite_getWidth(Sprite) / 2,

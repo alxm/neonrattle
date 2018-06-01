@@ -122,17 +122,17 @@ ZPixel z_sprite_getTransparentColor(void)
     return a_sprite_getColorKey();
 }
 
-static ASprite* getCurrentSprite(ZSpriteId Sprite, uint8_t Frame)
+static ASprite* getCurrentSprite(ZSpriteId Sprite, unsigned Frame)
 {
     return a_spriteframes_getByIndex(g_sprites[Sprite], Frame);
 }
 
-ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame)
+ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
 {
     return a_sprite_getPixels(getCurrentSprite(Sprite, Frame));
 }
 
-void z_sprite_blit(ZSpriteId Sprite, int X, int Y, uint8_t Frame)
+void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
 {
     a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }

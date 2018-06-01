@@ -16,36 +16,38 @@
 */
 
 #include "platform.h"
-#include "state_play.h"
-
-#include "obj_apple.h"
-#include "obj_snake.h"
-#include "util_fix.h"
 #include "util_map.h"
-#include "util_pool.h"
-#include "util_screen.h"
 
-void z_state_title_init(void)
+#define Z_MAP_W 64
+#define Z_MAP_H 64
+
+#define Z_TILE_DIM 16
+
+typedef struct {
+    bool wall;
+} ZTile;
+
+static ZTile g_map[Z_MAP_H][Z_MAP_W];
+
+void z_map_setup(void)
 {
-    // create snake
-    z_snake_new(z_fix_fromInt(Z_SCREEN_W / 2), z_fix_fromInt(Z_SCREEN_H / 2));
+    ZPixel* pixels = z_sprite_getPixels(Z_SPRITE_MAP0, 0);
 
-    // a few apples
-    for(int i = 64; i--; ) {
-        z_apple_new(z_fix_fromInt(2 + z_random_int(Z_SCREEN_W - 4)),
-                    z_fix_fromInt(2 + z_random_int(Z_SCREEN_H - 4)));
+    for(int y = 0; y < Z_MAP_H; y++) {
+        for(int x = 0; x < Z_MAP_W; x++) {
+            g_map[y][x].wall = *pixels++ != 0;
+        }
     }
 }
 
-void z_state_title_tick(void)
+void z_map_draw(void)
 {
-    z_pool_tick(Z_POOL_SNAKE, z_snake_tick, NULL);
-    z_pool_tick(Z_POOL_APPLE, z_apple_tick, NULL);
-}
-
-void z_state_title_draw(void)
-{
-    z_map_draw();
-    z_pool_draw(Z_POOL_SNAKE, z_snake_draw);
-    z_pool_draw(Z_POOL_APPLE, z_apple_draw);
+    for(int y = 0; y < Z_MAP_H; y++) {
+        for(int x = 0; x < Z_MAP_W; x++) {
+            z_sprite_blit(Z_SPRITE_TILES,
+                          x * Z_TILE_DIM,
+                          y * Z_TILE_DIM,
+                          (unsigned)(g_map[y][x].wall * 4 + (y & 1) * 2 + (x & 1)));
+        }
+    }
 }

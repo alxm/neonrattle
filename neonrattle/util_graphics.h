@@ -39,6 +39,12 @@ typedef enum Z_ENUM_PACK {
 } ZColorId;
 
 typedef enum Z_ENUM_PACK {
+    // Maps
+    Z_SPRITE_MAP0,
+
+    // Tiles
+    Z_SPRITE_TILES,
+
     // Misc
     Z_SPRITE_ALXM,
     Z_SPRITE_ALXM_WING,
@@ -51,9 +57,9 @@ extern void z_graphics_setup(void);
 extern ZPixel* z_screen_getPixels(void);
 
 extern ZPixel z_sprite_getTransparentColor(void);
-extern ZPixel* z_sprite_getPixels(ZSpriteId Sprite, uint8_t Frame);
-extern void z_sprite_blit(ZSpriteId Sprite, int X, int Y, uint8_t Frame);
-extern void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, uint8_t Frame);
+extern ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame);
+extern void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame);
+extern void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame);
 extern int z_sprite_getWidth(ZSpriteId Sprite);
 extern int z_sprite_getHeight(ZSpriteId Sprite);
 extern uint8_t z_sprite_getNumFrames(ZSpriteId Sprite);

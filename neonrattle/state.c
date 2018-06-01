@@ -26,6 +26,7 @@
 #include "obj_snake.h"
 #include "util_input.h"
 #include "util_light.h"
+#include "util_map.h"
 #include "util_pool.h"
 #include "util_screen.h"
 #include "util_str.h"
@@ -79,10 +80,9 @@ void z_state_setup(void)
 
     z_graphics_setup();
     z_light_reset();
+    z_map_setup();
     z_screen_reset();
-    #if !Z_PLATFORM_ARDUBOY
-        z_sound_setup();
-    #endif
+    z_sound_setup();
     z_str_setup();
 
     z_apple_setup();
