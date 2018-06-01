@@ -50,10 +50,10 @@ static const ZState g_states[Z_STATE_NUM] = {
         Z_SWIPE_INVALID,
         Z_SWIPE_HIDE,
     },
-    [Z_STATE_TITLE] = {
-        z_state_title_init,
-        z_state_title_tick,
-        z_state_title_draw,
+    [Z_STATE_PLAY] = {
+        z_state_play_init,
+        z_state_play_tick,
+        z_state_play_draw,
         NULL,
         Z_SWIPE_SHOW,
         Z_SWIPE_HIDE,
@@ -91,7 +91,7 @@ void z_state_setup(void)
     z_snake_setup();
 
     #if Z_DEBUG_STATS
-        z_state_set(Z_STATE_TITLE, false);
+        z_state_set(Z_STATE_PLAY, false);
     #else
         z_state_set(Z_STATE_INTRO, false);
     #endif

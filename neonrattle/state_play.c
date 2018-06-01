@@ -25,7 +25,7 @@
 #include "util_pool.h"
 #include "util_screen.h"
 
-void z_state_title_init(void)
+void z_state_play_init(void)
 {
     // create snake
     z_snake_new(z_fix_fromInt(Z_SCREEN_W / 2), z_fix_fromInt(Z_SCREEN_H / 2));
@@ -37,13 +37,13 @@ void z_state_title_init(void)
     }
 }
 
-void z_state_title_tick(void)
+void z_state_play_tick(void)
 {
     z_pool_tick(Z_POOL_SNAKE, z_snake_tick, NULL);
     z_pool_tick(Z_POOL_APPLE, z_apple_tick, NULL);
 }
 
-void z_state_title_draw(void)
+void z_state_play_draw(void)
 {
     z_map_draw();
     z_pool_draw(Z_POOL_SNAKE, z_snake_draw);
