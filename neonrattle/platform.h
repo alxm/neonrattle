@@ -19,10 +19,6 @@
     #define Z_PLATFORM_A2X 1
 #endif
 
-#ifdef ARDUINO_AVR_LEONARDO
-    #define Z_PLATFORM_ARDUBOY 1
-#endif
-
 #ifdef ARDUINO_SAMD_ZERO
     #define Z_PLATFORM_META 1
 #endif
@@ -50,38 +46,11 @@
 
 #if Z_PLATFORM_A2X
     #include "platform_a2x.h"
-#elif Z_PLATFORM_ARDUBOY
-    #include "platform_arduboy.h"
 #elif Z_PLATFORM_META
     #include "platform_meta.h"
 #endif
 
 Z_EXTERN_C_START
-
-#if !Z_PLATFORM_ARDUBOY
-    #define PROGMEM
-    typedef size_t ZPoolObjOffset;
-
-    static inline char z_pgm_readChar(const char* Address)
-    {
-        return *Address;
-    }
-
-    static inline uint8_t z_pgm_readU8(const uint8_t* Address)
-    {
-        return *Address;
-    }
-
-    static inline int z_pgm_readI16(const int* Address)
-    {
-        return *Address;
-    }
-
-    static inline uint16_t z_pgm_readU16(const uint16_t* Address)
-    {
-        return *Address;
-    }
-#endif
 
 #define uN(X, Bits) (uint8_t)((X) & ((1 << (Bits)) - 1))
 #define u1(X) uN(X, 1)

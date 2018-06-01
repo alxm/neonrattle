@@ -17,6 +17,8 @@
 
 #pragma once
 
+typedef size_t ZPoolObjOffset;
+
 typedef enum Z_ENUM_PACK {
     Z_POOL_INVALID = -1,
     Z_POOL_APPLE,

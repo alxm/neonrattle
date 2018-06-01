@@ -18,7 +18,6 @@
 #include "platform.h"
 #include "util_sound.h"
 
-#if !Z_PLATFORM_ARDUBOY
 #include "generated/data_sfx_pause.h"
 #include "generated/data_sfx_pressed_a.h"
 #include "generated/data_sfx_resume.h"
@@ -33,4 +32,3 @@ void z_sound_setup(void)
     z_sfx_load(Z_SFX_SWIPE_HIDE, swipe_hide);
     z_sfx_load(Z_SFX_SWIPE_SHOW, swipe_show);
 }
-#endif // !Z_PLATFORM_ARDUBOY

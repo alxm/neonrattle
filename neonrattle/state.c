@@ -29,7 +29,6 @@
 #include "util_map.h"
 #include "util_pool.h"
 #include "util_screen.h"
-#include "util_str.h"
 #include "util_timer.h"
 
 typedef struct {
@@ -83,7 +82,6 @@ void z_state_setup(void)
     z_map_setup();
     z_screen_reset();
     z_sound_setup();
-    z_str_setup();
 
     z_apple_setup();
     z_circle_setup();
