@@ -19,6 +19,7 @@
 #include "obj_snake.h"
 
 #include "obj_apple.h"
+#include "util_camera.h"
 #include "util_collision.h"
 #include "util_input.h"
 #include "util_pixel.h"
@@ -70,6 +71,14 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
     }
 
     return s;
+}
+
+void z_snake_getCoords(const ZSnake* Snake, ZFix* X, ZFix* Y)
+{
+    const ZSegment* head = &Snake->body[Snake->head];
+
+    *X = head->x;
+    *Y = head->y;
 }
 
 bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
@@ -164,11 +173,14 @@ void z_snake_draw(ZPoolObjHeader* Snake)
     unsigned len = ((snake->head - snake->tail) & Z_SNAKE_LEN_MASK) + 1;
     ZPixel* const buffer = z_screen_getPixels();
 
+    ZFix originX, originY;
+    z_camera_getOrigin(&originX, &originY);
+
     for(unsigned i = snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
         ZSegment* s = &snake->body[i];
 
-        const int x = z_fix_toInt(s->x);
-        const int y = z_fix_toInt(s->y);
+        const int x = Z_SCREEN_W / 2 + z_fix_toInt(s->x - originX);
+        const int y = Z_SCREEN_H / 2 + z_fix_toInt(s->y - originY);
 
         safePixel(buffer, x, y, s->r, s->g, s->b, 192);
         safePixel(buffer, x-1, y, s->r, s->g, s->b, 192);

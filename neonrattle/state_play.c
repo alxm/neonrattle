@@ -20,15 +20,21 @@
 
 #include "obj_apple.h"
 #include "obj_snake.h"
+#include "util_camera.h"
 #include "util_fix.h"
 #include "util_map.h"
 #include "util_pool.h"
 #include "util_screen.h"
 
+static struct {
+    ZSnake* snake;
+} g_context;
+
 void z_state_play_init(void)
 {
     // create snake
-    z_snake_new(z_fix_fromInt(Z_SCREEN_W / 2), z_fix_fromInt(Z_SCREEN_H / 2));
+    g_context.snake = z_snake_new(
+        z_fix_fromInt(Z_SCREEN_W / 2), z_fix_fromInt(Z_SCREEN_H / 2));
 
     // a few apples
     for(int i = 64; i--; ) {
@@ -41,6 +47,7 @@ void z_state_play_tick(void)
 {
     z_pool_tick(Z_POOL_SNAKE, z_snake_tick, NULL);
     z_pool_tick(Z_POOL_APPLE, z_apple_tick, NULL);
+    z_camera_tick(g_context.snake);
 }
 
 void z_state_play_draw(void)

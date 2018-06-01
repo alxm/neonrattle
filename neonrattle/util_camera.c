@@ -15,10 +15,24 @@
     along with Neon Rattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "platform.h"
+#include "util_camera.h"
 
-#include "util_fix.h"
+static struct {
+    ZFix x, y;
+} g_camera;
 
-extern void z_map_setup(void);
+void z_camera_tick(const ZSnake* Snake)
+{
+    ZFix x, y;
+    z_snake_getCoords(Snake, &x, &y);
 
-extern void z_map_draw(void);
+    g_camera.x = x;
+    g_camera.y = y;
+}
+
+void z_camera_getOrigin(ZFix* X, ZFix* Y)
+{
+    *X = g_camera.x;
+    *Y = g_camera.y;
+}

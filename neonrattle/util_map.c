@@ -18,10 +18,14 @@
 #include "platform.h"
 #include "util_map.h"
 
+#include "util_camera.h"
+
 #define Z_MAP_W 64
 #define Z_MAP_H 64
 
-#define Z_TILE_DIM 16
+#define Z_TILE_SHIFT 4
+#define Z_TILE_DIM (1 << Z_TILE_SHIFT)
+#define Z_TILE_MASK (Z_TILE_DIM - 1)
 
 typedef struct {
     bool wall;
@@ -42,12 +46,47 @@ void z_map_setup(void)
 
 void z_map_draw(void)
 {
-    for(int y = 0; y < Z_MAP_H; y++) {
-        for(int x = 0; x < Z_MAP_W; x++) {
+    ZFix originX, originY;
+    z_camera_getOrigin(&originX, &originY);
+
+    z_draw_fill(Z_COLOR_BLUE);
+
+    int topLeftMapPixelX = z_fix_toInt(originX) - Z_SCREEN_W / 2;
+    int topLeftMapPixelY = z_fix_toInt(originY) - Z_SCREEN_H / 2;
+
+    int topLeftTileX = topLeftMapPixelX >> Z_TILE_SHIFT;
+    int topLeftTileY = topLeftMapPixelY >> Z_TILE_SHIFT;
+
+    int topLeftScreenX = 0 - (topLeftMapPixelX & Z_TILE_MASK);
+    int topLeftScreenY = 0 - (topLeftMapPixelY & Z_TILE_MASK);
+
+    if(topLeftMapPixelX < 0) {
+        topLeftScreenX += -topLeftTileX * Z_TILE_DIM;
+        topLeftTileX = 0;
+    }
+
+    if(topLeftMapPixelY < 0) {
+        topLeftScreenY += -topLeftTileY * Z_TILE_DIM;
+        topLeftTileY = 0;
+    }
+
+    int tileEndX = z_math_min(topLeftTileX + (Z_SCREEN_W / Z_TILE_DIM + 1),
+                              Z_MAP_W);
+    int tileEndY = z_math_min(topLeftTileY + (Z_SCREEN_H / Z_TILE_DIM + 1),
+                              Z_MAP_H);
+
+    for(int tileY = topLeftTileY, screenY = topLeftScreenY;
+        tileY < tileEndY;
+        tileY++, screenY += Z_TILE_DIM) {
+
+        for(int tileX = topLeftTileX, screenX = topLeftScreenX;
+            tileX < tileEndX;
+            tileX++, screenX += Z_TILE_DIM) {
+
             z_sprite_blit(Z_SPRITE_TILES,
-                          x * Z_TILE_DIM,
-                          y * Z_TILE_DIM,
-                          (unsigned)(g_map[y][x].wall * 4 + (y & 1) * 2 + (x & 1)));
+                          screenX,
+                          screenY,
+                          (unsigned)(g_map[tileY][tileX].wall * 4 + (tileY & 1) * 2 + (tileX & 1)));
         }
     }
 }

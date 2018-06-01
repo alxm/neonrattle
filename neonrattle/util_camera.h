@@ -17,8 +17,8 @@
 
 #pragma once
 
-#include "util_fix.h"
+#include "obj_snake.h"
 
-extern void z_map_setup(void);
+extern void z_camera_tick(const ZSnake* Snake);
 
-extern void z_map_draw(void);
+extern void z_camera_getOrigin(ZFix* X, ZFix* Y);

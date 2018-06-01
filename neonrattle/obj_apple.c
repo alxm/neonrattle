@@ -19,6 +19,7 @@
 #include "obj_apple.h"
 
 #include "obj_snake.h"
+#include "util_camera.h"
 #include "util_pixel.h"
 
 #define Z_APPLE_ALPHA_STEP 8
@@ -86,8 +87,11 @@ void z_apple_draw(ZPoolObjHeader* Apple)
 {
     ZApple* apple = (ZApple*)Apple;
 
-    const int x = z_fix_toInt(apple->x);
-    const int y = z_fix_toInt(apple->y);
+    ZFix originX, originY;
+    z_camera_getOrigin(&originX, &originY);
+
+    const int x = Z_SCREEN_W / 2 + z_fix_toInt(apple->x - originX);
+    const int y = Z_SCREEN_H / 2 + z_fix_toInt(apple->y - originY);
 
     ZPixel* const buffer = z_screen_getPixels();
 

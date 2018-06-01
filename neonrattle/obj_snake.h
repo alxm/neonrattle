@@ -25,6 +25,7 @@ typedef struct ZSnake ZSnake;
 extern void z_snake_setup(void);
 
 extern ZSnake* z_snake_new(ZFix X, ZFix Y);
+extern void z_snake_getCoords(const ZSnake* Snake, ZFix* X, ZFix* Y);
 
 extern ZPoolTick z_snake_tick;
 extern ZPoolDraw z_snake_draw;

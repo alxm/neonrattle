@@ -251,6 +251,36 @@ extern unsigned z_fix_atan(ZFix X1, ZFix Y1, ZFix X2, ZFix Y2);
 extern void z_fix_rotateCounter(ZFix X, ZFix Y, unsigned Angle, ZFix* NewX, ZFix* NewY);
 extern void z_fix_rotateClockwise(ZFix X, ZFix Y, unsigned Angle, ZFix* NewX, ZFix* NewY);
 
+static inline int z_math_min(int X, int Y)
+{
+    return X < Y ? X : Y;
+}
+
+static inline unsigned z_math_minu(unsigned X, unsigned Y)
+{
+    return X < Y ? X : Y;
+}
+
+static inline int z_math_max(int X, int Y)
+{
+    return X > Y ? X : Y;
+}
+
+static inline unsigned z_math_maxu(unsigned X, unsigned Y)
+{
+    return X > Y ? X : Y;
+}
+
+static inline int z_math_clamp(int X, int Min, int Max)
+{
+    return X < Min ? Min : (X > Max ? Max : X);
+}
+
+static inline unsigned z_math_clampu(unsigned X, unsigned Min, unsigned Max)
+{
+    return X < Min ? Min : (X > Max ? Max : X);
+}
+
 static inline int z_math_abs(int X)
 {
     return X >= 0 ? X : -X;
