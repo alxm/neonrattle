@@ -23,7 +23,7 @@
 #include "util_pixel.h"
 
 #define Z_APPLE_ALPHA_STEP 8
-#define Z_APPLE_ALPHA_MIN (Z_APPLE_ALPHA_STEP * 4)
+#define Z_APPLE_ALPHA_MIN 128
 #define Z_APPLE_ALPHA_MAX 256
 
 struct ZApple {
@@ -51,9 +51,9 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
         a->y = Y;
         a->dim = 2;
         a->alpha = Z_APPLE_ALPHA_MIN
-            + Z_APPLE_ALPHA_STEP * z_random_int(
-                (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / Z_APPLE_ALPHA_STEP);
-        a->alphaDir = -1 + z_random_int(3);
+            + (z_random_int(Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN)
+                & ~(Z_APPLE_ALPHA_STEP - 1));
+        a->alphaDir = -1 + z_random_int(2) * 2;
     }
 
     return a;
@@ -67,8 +67,12 @@ bool z_apple_tick(ZPoolObjHeader* Apple, void* Context)
 
     apple->alpha += apple->alphaDir * Z_APPLE_ALPHA_STEP;
 
-    if(apple->alpha <= Z_APPLE_ALPHA_MIN || apple->alpha >= Z_APPLE_ALPHA_MAX) {
-        apple->alphaDir *= -1;
+    if(apple->alpha <= Z_APPLE_ALPHA_MIN) {
+        apple->alpha = Z_APPLE_ALPHA_MIN;
+        apple->alphaDir = 1;
+    } else if(apple->alpha >= Z_APPLE_ALPHA_MAX) {
+        apple->alpha = Z_APPLE_ALPHA_MAX;
+        apple->alphaDir = -1;
     }
 
     return !z_snake_collides(apple->x, apple->y, 2);
