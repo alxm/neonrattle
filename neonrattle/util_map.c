@@ -32,7 +32,7 @@ void z_map_setup(void)
 {
     const ZPixel white = z_pixel_fromRGB(255, 255, 255);
 
-    ZPixel* pixels = z_sprite_getPixels(Z_SPRITE_MAP0, 0);
+    const ZPixel* pixels = z_sprite_getPixels(Z_SPRITE_MAP0, 0);
 
     for(int y = 0; y < Z_MAP_H; y++) {
         for(int x = 0; x < Z_MAP_W; x++) {
@@ -50,7 +50,7 @@ void z_map_init(void)
     const ZPixel red100 = z_pixel_fromRGB(255, 0, 0);
     const ZPixel green100 = z_pixel_fromRGB(0, 255, 0);
 
-    ZPixel* pixels = z_sprite_getPixels(Z_SPRITE_MAP0, 0);
+    const ZPixel* pixels = z_sprite_getPixels(Z_SPRITE_MAP0, 0);
 
     for(int y = 0; y < Z_MAP_H; y++) {
         for(int x = 0; x < Z_MAP_W; x++) {

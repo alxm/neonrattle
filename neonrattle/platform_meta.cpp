@@ -21,6 +21,8 @@
 #include "util_fps.h"
 #include "util_input.h"
 
+#include "generated/data_gfx_palette.h"
+
 #if Z_PLATFORM_META
 typedef struct {
     Button index;
@@ -30,7 +32,7 @@ typedef struct {
 
 typedef struct {
     Image image;
-    uint8_t numFrames;
+    const uint16_t* buffer;
 } ZSprite;
 
 typedef struct {
@@ -148,27 +150,31 @@ void z_platform_meta_drawLights(ZColorId ColorId, int Alpha, int X, int Y)
     gb.lights.drawPixel(X, Y);
 }
 
-void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer, uint8_t NumFrames)
+void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer)
 {
     g_sprites[Sprite].image.init(Buffer);
-    g_sprites[Sprite].numFrames = NumFrames;
+    g_sprites[Sprite].buffer = Buffer;
 }
 
 ZPixel z_sprite_getTransparentColor(void)
 {
-    return 0xf81f;
+    return g_sprites[Z_SPRITE_PALETTE].buffer[4];
 }
 
-ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
+const ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
 {
-    g_sprites[Sprite].image.setFrame(Frame);
-    return g_sprites[Sprite].image._buffer;
+    unsigned dim = g_sprites[Sprite].buffer[0] * g_sprites[Sprite].buffer[1];
+
+    return g_sprites[Sprite].buffer + Z_META_IMAGE_HEADER_LEN + dim * Frame;
 }
 
 ZPixel z_sprite_getPixel(ZSpriteId Sprite, unsigned Frame, int X, int Y)
 {
-    g_sprites[Sprite].image.setFrame(Frame);
-    return g_sprites[Sprite].image._buffer[Y * z_sprite_getWidth(Sprite) + X];
+    unsigned w = g_sprites[Sprite].buffer[0];
+    unsigned dim = w * g_sprites[Sprite].buffer[1];
+
+    return *(g_sprites[Sprite].buffer
+                + Z_META_IMAGE_HEADER_LEN + dim * Frame + Y * w + X);
 }
 
 void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
@@ -179,17 +185,17 @@ void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
 
 int z_sprite_getWidth(ZSpriteId Sprite)
 {
-    return g_sprites[Sprite].image.width();
+    return g_sprites[Sprite].buffer[0];
 }
 
 int z_sprite_getHeight(ZSpriteId Sprite)
 {
-    return g_sprites[Sprite].image.height();
+    return g_sprites[Sprite].buffer[1];
 }
 
 uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
 {
-    return g_sprites[Sprite].numFrames;
+    return g_sprites[Sprite].buffer[2];
 }
 
 void z_draw_fill(ZColorId ColorId)

@@ -6,8 +6,6 @@
 
 #if Z_PLATFORM_META
 
-static const uint8_t z_data_gfx_alxm_frames = 1;
-
 static const uint16_t z_data_gfx_alxm_buffer[] = {
     // Frame dimension
     55, 5,

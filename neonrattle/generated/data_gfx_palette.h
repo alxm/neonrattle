@@ -6,9 +6,7 @@
 
 #if Z_PLATFORM_META
 
-#define Z_GAMEBUINO_IMAGE_HEADER_LEN 6
-
-static const uint8_t z_data_gfx_palette_frames = 1;
+#define Z_META_IMAGE_HEADER_LEN 6
 
 static const uint16_t z_data_gfx_palette_buffer[] = {
     // Frame dimension

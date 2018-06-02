@@ -6,8 +6,6 @@
 
 #if Z_PLATFORM_META
 
-static const uint8_t z_data_gfx_tiles_frames = 8;
-
 static const uint16_t z_data_gfx_tiles_buffer[] = {
     // Frame dimension
     16, 16,

@@ -143,12 +143,10 @@ def main(PaletteName, ImageName, UniqueName):
 
     if PaletteName == ImageName:
         contents += """
-#define Z_GAMEBUINO_IMAGE_HEADER_LEN 6
+#define Z_META_IMAGE_HEADER_LEN 6
 """
 
     contents += """
-static const uint8_t z_data_gfx_{name}_frames = {numFrames};
-
 static const uint16_t z_data_gfx_{name}_buffer[] = {{
     // Frame dimension
     {width}, {height},

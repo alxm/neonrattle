@@ -81,7 +81,7 @@ extern void z_graphics_setup(void);
 extern ZPixel* z_screen_getPixels(void);
 
 extern ZPixel z_sprite_getTransparentColor(void);
-extern ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame);
+extern const ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame);
 extern ZPixel z_sprite_getPixel(ZSpriteId Sprite, unsigned Frame, int X, int Y);
 extern void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame);
 extern void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame);

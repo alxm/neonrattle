@@ -119,7 +119,7 @@ static inline ASprite* getCurrentSprite(ZSpriteId Sprite, unsigned Frame)
     return a_spriteframes_getByIndex(g_sprites[Sprite], Frame);
 }
 
-ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
+const ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
 {
     return a_sprite_getPixels(getCurrentSprite(Sprite, Frame));
 }
