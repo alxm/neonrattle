@@ -104,25 +104,25 @@ void z_apple_draw(ZPoolObjHeader* Apple)
     const int a2 = (128 * apple->alpha) >> 8;
     const int a3 = (64 * apple->alpha) >> 8;
 
-    safePixel(buffer, x, y, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a1);
-    safePixel(buffer, x-1, y, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a1);
-    safePixel(buffer, x, y-1, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a0);
-    safePixel(buffer, x-1, y-1, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a1);
+    safePixel(buffer, x, y, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a1);
+    safePixel(buffer, x-1, y, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a1);
+    safePixel(buffer, x, y-1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a0);
+    safePixel(buffer, x-1, y-1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a1);
 
-    safePixel(buffer, x-1, y-2, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a2);
-    safePixel(buffer, x, y-2, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a2);
+    safePixel(buffer, x-1, y-2, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
+    safePixel(buffer, x, y-2, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
 
-    safePixel(buffer, x-1, y+1, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a2);
-    safePixel(buffer, x, y+1, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a2);
+    safePixel(buffer, x-1, y+1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
+    safePixel(buffer, x, y+1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
 
-    safePixel(buffer, x-2, y-1, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a2);
-    safePixel(buffer, x-2, y, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a2);
+    safePixel(buffer, x-2, y-1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
+    safePixel(buffer, x-2, y, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
 
-    safePixel(buffer, x+1, y-1, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a2);
-    safePixel(buffer, x+1, y, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a2);
+    safePixel(buffer, x+1, y-1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
+    safePixel(buffer, x+1, y, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
 
-    safePixel(buffer, x+1, y-2, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a3);
-    safePixel(buffer, x+1, y+1, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a3);
-    safePixel(buffer, x-2, y+1, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a3);
-    safePixel(buffer, x-2, y-2, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a3);
+    safePixel(buffer, x+1, y-2, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a3);
+    safePixel(buffer, x+1, y+1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a3);
+    safePixel(buffer, x-2, y+1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a3);
+    safePixel(buffer, x-2, y-2, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a3);
 }

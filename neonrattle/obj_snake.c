@@ -27,10 +27,6 @@
 #define Z_SNAKE_LEN 256
 #define Z_SNAKE_LEN_MASK (Z_SNAKE_LEN - 1)
 
-#define Z_SNAKE_R 0x5a
-#define Z_SNAKE_G 0xff
-#define Z_SNAKE_B 0xfd
-
 typedef struct {
     ZFix x, y;
     int r, g, b;
@@ -65,9 +61,9 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
 
         s->body[0].x = X;
         s->body[0].y = Y;
-        s->body[0].r = Z_SNAKE_R;
-        s->body[0].g = Z_SNAKE_G;
-        s->body[0].b = Z_SNAKE_B;
+        s->body[0].r = z_colors[Z_COLOR_SNAKE_BLUE_01].r;
+        s->body[0].g = z_colors[Z_COLOR_SNAKE_BLUE_01].g;
+        s->body[0].b = z_colors[Z_COLOR_SNAKE_BLUE_01].b;
     }
 
     return s;
@@ -112,9 +108,9 @@ bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
 
             s->x = x;
             s->y = y;
-            s->r = Z_APPLE_R;
-            s->g = Z_APPLE_G;
-            s->b = Z_APPLE_B;
+            s->r = z_colors[Z_COLOR_APPLE_03].r;
+            s->g = z_colors[Z_COLOR_APPLE_03].g;
+            s->b = z_colors[Z_COLOR_APPLE_03].b;
         }
     } else {
         snake->tail = (snake->tail + 1) & Z_SNAKE_LEN_MASK;
@@ -124,9 +120,9 @@ bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
 
         s->x = x;
         s->y = y;
-        s->r = Z_SNAKE_R;
-        s->g = Z_SNAKE_G;
-        s->b = Z_SNAKE_B;
+        s->r = z_colors[Z_COLOR_SNAKE_BLUE_01].r;
+        s->g = z_colors[Z_COLOR_SNAKE_BLUE_01].g;
+        s->b = z_colors[Z_COLOR_SNAKE_BLUE_01].b;
     }
 
     if(z_button_pressed(Z_BUTTON_LEFT)) {
@@ -141,17 +137,18 @@ bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
 
     for(unsigned i = snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
         ZSegment* s = &snake->body[i];
+        ZColor* targetColor = &z_colors[Z_COLOR_SNAKE_BLUE_01];
 
-        if(s->r != Z_SNAKE_R) {
-            s->r += (Z_SNAKE_R - s->r) / 16;
+        if(s->r != targetColor->r) {
+            s->r += (targetColor->r - s->r) / 16;
         }
 
-        if(s->g != Z_SNAKE_G) {
-            s->g += (Z_SNAKE_G - s->g) / 16;
+        if(s->g != targetColor->g) {
+            s->g += (targetColor->g - s->g) / 16;
         }
 
-        if(s->b != Z_SNAKE_B) {
-            s->b += (Z_SNAKE_B - s->b) / 16;
+        if(s->b != targetColor->b) {
+            s->b += (targetColor->b - s->b) / 16;
         }
     }
 

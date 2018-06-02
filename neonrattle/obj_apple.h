@@ -20,10 +20,6 @@
 #include "util_fix.h"
 #include "util_pool.h"
 
-#define Z_APPLE_R 0xc8
-#define Z_APPLE_G 0x1e
-#define Z_APPLE_B 0x62
-
 typedef struct ZApple ZApple;
 
 extern void z_apple_setup(void);
