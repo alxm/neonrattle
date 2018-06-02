@@ -126,3 +126,8 @@ void z_pool_draw(ZPoolId Pool, ZPoolDraw* Callback)
         Callback(o);
     }
 }
+
+void* z_pool_getFirst(ZPoolId Pool)
+{
+    return g_pools[Pool]->activeList;
+}

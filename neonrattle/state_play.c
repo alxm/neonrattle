@@ -32,15 +32,10 @@ static struct {
 
 void z_state_play_init(void)
 {
-    // create snake
-    g_context.snake = z_snake_new(
-        z_fix_fromInt(Z_SCREEN_W / 2), z_fix_fromInt(Z_SCREEN_H / 2));
+    // place apples and player on map
+    z_map_init();
 
-    // a few apples
-    for(int i = 64; i--; ) {
-        z_apple_new(z_fix_fromInt(2 + z_random_int(Z_SCREEN_W - 4)),
-                    z_fix_fromInt(2 + z_random_int(Z_SCREEN_H - 4)));
-    }
+    g_context.snake = z_pool_getFirst(Z_POOL_SNAKE);
 }
 
 void z_state_play_tick(void)

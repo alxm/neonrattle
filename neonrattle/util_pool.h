@@ -63,3 +63,5 @@ extern bool z_pool_noActive(ZPoolId Pool);
 
 extern void z_pool_tick(ZPoolId Pool, ZPoolTick* Callback, void* Context);
 extern void z_pool_draw(ZPoolId Pool, ZPoolDraw* Callback);
+
+extern void* z_pool_getFirst(ZPoolId Pool);

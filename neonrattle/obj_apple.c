@@ -33,7 +33,7 @@ struct ZApple {
     int alpha, alphaDir;
 };
 
-#define Z_APPLE_NUM_MAX (64)
+#define Z_APPLE_NUM_MAX (256)
 
 Z_POOL_DECLARE(ZApple, Z_APPLE_NUM_MAX, g_pool);
 
