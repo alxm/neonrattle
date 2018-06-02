@@ -27,9 +27,9 @@
 #define Z_SNAKE_LEN 256
 #define Z_SNAKE_LEN_MASK (Z_SNAKE_LEN - 1)
 
-#define Z_SNAKE_R 160
-#define Z_SNAKE_G 200
-#define Z_SNAKE_B 128
+#define Z_SNAKE_R 0x5a
+#define Z_SNAKE_G 0xff
+#define Z_SNAKE_B 0xfd
 
 typedef struct {
     ZFix x, y;

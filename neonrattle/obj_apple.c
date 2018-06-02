@@ -29,7 +29,7 @@
 struct ZApple {
     ZPoolObjHeader poolObject;
     ZFix x, y;
-    ZFix dim;
+    int dim;
     int alpha, alphaDir;
 };
 
@@ -49,7 +49,7 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
     if(a != NULL) {
         a->x = X;
         a->y = Y;
-        a->dim = 2;
+        a->dim = 4;
         a->alpha = Z_APPLE_ALPHA_MIN
             + (z_random_int(Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN)
                 & ~(Z_APPLE_ALPHA_STEP - 1));
@@ -75,7 +75,7 @@ bool z_apple_tick(ZPoolObjHeader* Apple, void* Context)
         apple->alphaDir = -1;
     }
 
-    return !z_snake_collides(apple->x, apple->y, 2);
+    return !z_snake_collides(apple->x, apple->y, apple->dim);
 }
 
 static void safePixel(ZPixel* Buffer, int X, int Y, int R, int G, int B, int A)
@@ -100,9 +100,9 @@ void z_apple_draw(ZPoolObjHeader* Apple)
     ZPixel* const buffer = z_screen_getPixels();
 
     const int a0 = apple->alpha;
-    const int a1 = (192 * apple->alpha) >> 8;
-    const int a2 = (80 * apple->alpha) >> 8;
-    const int a3 = (32 * apple->alpha) >> 8;
+    const int a1 = (224 * apple->alpha) >> 8;
+    const int a2 = (128 * apple->alpha) >> 8;
+    const int a3 = (64 * apple->alpha) >> 8;
 
     safePixel(buffer, x, y, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a1);
     safePixel(buffer, x-1, y, Z_APPLE_R, Z_APPLE_G, Z_APPLE_B, a1);
