@@ -19,6 +19,13 @@
 
 #include "util_fix.h"
 
+#define Z_MAP_W 64
+#define Z_MAP_H 64
+
+#define Z_TILE_SHIFT 4
+#define Z_TILE_DIM (1 << Z_TILE_SHIFT)
+#define Z_TILE_MASK (Z_TILE_DIM - 1)
+
 extern void z_map_setup(void);
 
 extern void z_map_draw(void);

@@ -20,13 +20,6 @@
 
 #include "util_camera.h"
 
-#define Z_MAP_W 64
-#define Z_MAP_H 64
-
-#define Z_TILE_SHIFT 4
-#define Z_TILE_DIM (1 << Z_TILE_SHIFT)
-#define Z_TILE_MASK (Z_TILE_DIM - 1)
-
 typedef struct {
     bool wall;
 } ZTile;
@@ -48,8 +41,6 @@ void z_map_draw(void)
 {
     ZFix originX, originY;
     z_camera_getOrigin(&originX, &originY);
-
-    z_draw_fill(Z_COLOR_BLUE);
 
     int topLeftMapPixelX = z_fix_toInt(originX) - Z_SCREEN_W / 2;
     int topLeftMapPixelY = z_fix_toInt(originY) - Z_SCREEN_H / 2;
