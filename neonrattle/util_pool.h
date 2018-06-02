@@ -17,8 +17,6 @@
 
 #pragma once
 
-typedef size_t ZPoolObjOffset;
-
 typedef enum Z_ENUM_PACK {
     Z_POOL_INVALID = -1,
     Z_POOL_APPLE,
@@ -28,15 +26,17 @@ typedef enum Z_ENUM_PACK {
     Z_POOL_NUM
 } ZPoolId;
 
-typedef struct {
-    ZPoolObjOffset nextOffset;
-} ZPoolObjHeader;
+typedef struct ZPoolObjHeader ZPoolObjHeader;
+
+struct ZPoolObjHeader {
+    ZPoolObjHeader* next;
+};
 
 typedef struct ZPoolHeader {
-    ZPoolObjOffset freeList;
-    ZPoolObjOffset activeList;
-    const ZPoolObjOffset capacity;
-    const ZPoolObjOffset objSize;
+    ZPoolObjHeader* freeList;
+    ZPoolObjHeader* activeList;
+    const size_t capacity;
+    const size_t objSize;
 } ZPoolHeader;
 
 #define Z_POOL_DECLARE(ObjectType, NumObjects, VarName)              \
