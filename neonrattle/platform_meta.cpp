@@ -17,7 +17,6 @@
 
 #include "platform.h"
 
-#include "generated/data_gfx_palette.h"
 #include "state.h"
 #include "util_fps.h"
 #include "util_input.h"
@@ -39,13 +38,10 @@ typedef struct {
     uint32_t size;
 } ZSfx;
 
+ZColor z_colors[Z_COLOR_NUM];
 static ZButton g_buttons[Z_BUTTON_NUM];
 static ZSprite g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
-static struct {
-    Color color;
-    int r, g, b;
-} g_colors[Z_COLOR_NUM];
 
 void setup(void)
 {
@@ -59,16 +55,6 @@ void setup(void)
     g_buttons[Z_BUTTON_A].index = BUTTON_A;
     g_buttons[Z_BUTTON_B].index = BUTTON_B;
     g_buttons[Z_BUTTON_MENU].index = BUTTON_MENU;
-
-    const uint16_t palWidth = z_data_gfx_palette_buffer[0];
-
-    for(int c = 0; c < Z_COLOR_NUM; c++) {
-        ZPixel pixel = z_data_gfx_palette_buffer[
-                Z_GAMEBUINO_IMAGE_HEADER_LEN + 1 * palWidth + 1 + c];
-
-        g_colors[c].color = (Color)pixel;
-        z_pixel_toRGB(pixel, &g_colors[c].r, &g_colors[c].g, &g_colors[c].b);
-    }
 
     z_state_setup();
 }
@@ -126,14 +112,14 @@ static void prepLights(ZColorId BgColorId, ZColorId ColorId, int Alpha)
     ZPixel color = 0;
 
     if(ColorId != Z_COLOR_INVALID) {
-        int r2 = g_colors[ColorId].r;
-        int g2 = g_colors[ColorId].g;
-        int b2 = g_colors[ColorId].b;
+        int r2 = z_colors[ColorId].r;
+        int g2 = z_colors[ColorId].g;
+        int b2 = z_colors[ColorId].b;
 
         if(BgColorId != Z_COLOR_INVALID) {
-            int r1 = g_colors[BgColorId].r;
-            int g1 = g_colors[BgColorId].g;
-            int b1 = g_colors[BgColorId].b;
+            int r1 = z_colors[BgColorId].r;
+            int g1 = z_colors[BgColorId].g;
+            int b1 = z_colors[BgColorId].b;
 
             color = z_pixel_fromRGB(r1 + (((r2 - r1) * Alpha) >> 8),
                                     g1 + (((g2 - g1) * Alpha) >> 8),
@@ -144,7 +130,7 @@ static void prepLights(ZColorId BgColorId, ZColorId ColorId, int Alpha)
                                     (b2 * Alpha) >> 8);
         }
     } else if(BgColorId != Z_COLOR_INVALID) {
-        color = (ZPixel)g_colors[BgColorId].color;
+        color = z_colors[BgColorId].pixel;
     }
 
     gb.lights.setColor((Color)color);
@@ -179,6 +165,12 @@ ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
     return g_sprites[Sprite].image._buffer;
 }
 
+ZPixel z_sprite_getPixel(ZSpriteId Sprite, unsigned Frame, int X, int Y)
+{
+    g_sprites[Sprite].image.setFrame(Frame);
+    return g_sprites[Sprite].image._buffer[Y * z_sprite_getWidth(Sprite) + X];
+}
+
 void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
 {
     g_sprites[Sprite].image.setFrame(Frame);
@@ -202,25 +194,25 @@ uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
 
 void z_draw_fill(ZColorId ColorId)
 {
-    gb.display.setColor(g_colors[ColorId].color);
+    gb.display.setColor((Color)z_colors[ColorId].pixel);
     gb.display.fill();
 }
 
 void z_draw_rectangle(int X, int Y, int W, int H, ZColorId ColorId)
 {
-    gb.display.setColor(g_colors[ColorId].color);
+    gb.display.setColor((Color)z_colors[ColorId].pixel);
     gb.display.fillRect(X, Y, W, H);
 }
 
 void z_draw_pixel(int X, int Y, ZColorId ColorId)
 {
-    gb.display.setColor(g_colors[ColorId].color);
+    gb.display.setColor((Color)z_colors[ColorId].pixel);
     gb.display.drawPixel(X, Y);
 }
 
 void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId)
 {
-    gb.display.setColor(g_colors[ColorId].color);
+    gb.display.setColor((Color)z_colors[ColorId].pixel);
     gb.display.drawCircle(X, Y, Radius);
 }
 

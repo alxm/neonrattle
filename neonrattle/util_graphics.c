@@ -18,19 +18,42 @@
 #include "platform.h"
 #include "util_graphics.h"
 
+#include "generated/data_gfx_palette.h"
+
+#include "generated/data_gfx_map0.h"
+
+#include "generated/data_gfx_tiles.h"
+
 #include "generated/data_gfx_alxm.h"
 #include "generated/data_gfx_alxm_wing.h"
-#include "generated/data_gfx_map0.h"
-#include "generated/data_gfx_tiles.h"
 
 void z_graphics_setup(void)
 {
+    z_sprite_load(Z_SPRITE_PALETTE, palette);
+
     z_sprite_load(Z_SPRITE_MAP0, map0);
 
     z_sprite_load(Z_SPRITE_TILES, tiles);
 
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
+
+    int row = 1;
+    int col = 0;
+
+    for(ZColorId c = 0; c < Z_COLOR_NUM; c++, col++) {
+        ZPixel pixel = z_sprite_getPixel(Z_SPRITE_PALETTE, 0, col, row);
+
+        while(pixel == 0) {
+            row++;
+            col = 0;
+            pixel = z_sprite_getPixel(Z_SPRITE_PALETTE, 0, col, row);
+        }
+
+        z_colors[c].pixel = pixel;
+        z_pixel_toRGB(
+            pixel, &z_colors[c].r, &z_colors[c].g, &z_colors[c].b);
+    }
 }
 
 void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame)

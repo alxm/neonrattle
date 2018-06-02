@@ -61,11 +61,11 @@ static void swipeDraw(void)
     if(h > 0) {
         int rH = h - 1;
 
-        z_draw_rectangle(0, 0, Z_SCREEN_W, rH, Z_COLOR_BLUE);
-        z_draw_hline(0, Z_SCREEN_W - 1, rH, Z_COLOR_YELLOW);
+        z_draw_rectangle(0, 0, Z_SCREEN_W, rH, Z_COLOR_BG_GREEN_01);
+        z_draw_hline(0, Z_SCREEN_W - 1, rH, Z_COLOR_BG_GREEN_03);
 
-        z_draw_hline(0, Z_SCREEN_W - 1, Z_SCREEN_H - h, Z_COLOR_YELLOW);
-        z_draw_rectangle(0, Z_SCREEN_H - rH, Z_SCREEN_W, rH, Z_COLOR_BLUE);
+        z_draw_hline(0, Z_SCREEN_W - 1, Z_SCREEN_H - h, Z_COLOR_BG_GREEN_03);
+        z_draw_rectangle(0, Z_SCREEN_H - rH, Z_SCREEN_W, rH, Z_COLOR_BG_GREEN_01);
     }
 }
 

@@ -60,6 +60,6 @@ void z_circle_draw(ZPoolObjHeader* Circle)
     int x = z_fix_toInt(circle->x) + z_screen_getXShake();
     int y = z_fix_toInt(circle->y) + z_screen_getYShake();
 
-    z_draw_circle(x, y, circle->radius, Z_COLOR_RED);
-    z_draw_circle(x, y, u8(circle->radius * 2), Z_COLOR_RED);
+    z_draw_circle(x, y, circle->radius, Z_COLOR_BG_GREEN_04);
+    z_draw_circle(x, y, u8(circle->radius * 2), Z_COLOR_BG_GREEN_04);
 }

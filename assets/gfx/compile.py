@@ -26,24 +26,14 @@ class Palette:
         image = Image.open(PaletteName).convert('RGB')
         width, height = image.size
 
-        if width < 3 or height < 3:
+        if width < 2 or height < 1:
             print('Invalid palette {}'.format(PaletteName))
             sys.exit(1)
 
         pixels = image.load()
 
-        self.white = []
-        self.whiteStart = 0
         self.transparent = pixels[0, 0]
-        self.limit = pixels[0, 1]
-
-        for x in range(0, width):
-            r, g, b = pixels[x, 0]
-
-            if r == 255 and g == 255 and b == 255:
-                self.white.append(pixels[x, 1])
-            else:
-                self.whiteStart = x
+        self.limit = pixels[1, 0]
 
 class Sheet:
     def __init__(self, ImageName, Palette):
@@ -177,7 +167,6 @@ static const uint16_t z_data_gfx_{name}_buffer[] = {{
 
     print(contents.format(year = time.strftime('%Y'),
                           path = ImageName,
-                          whiteStart = palette.whiteStart,
                           name = UniqueName,
                           numFrames = numFrames,
                           width = sheet.frameWidth,

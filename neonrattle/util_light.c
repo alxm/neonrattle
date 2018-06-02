@@ -25,8 +25,8 @@ static const struct {
     ZColorId color;
     unsigned counterSpeed[2];
 } g_patterns[Z_LIGHT_NUM] = {
-    [Z_LIGHT_EXPLOSION] = {Z_COLOR_RED, {8, 2}},
-    [Z_LIGHT_PLAYER_SHOOTING] = {Z_COLOR_YELLOW, {16, 8}},
+    [Z_LIGHT_EXPLOSION] = {Z_COLOR_BG_GREEN_04, {8, 2}},
+    [Z_LIGHT_PLAYER_SHOOTING] = {Z_COLOR_BG_GREEN_03, {16, 8}},
 };
 
 static struct {

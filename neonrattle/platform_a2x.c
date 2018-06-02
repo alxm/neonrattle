@@ -22,10 +22,10 @@
 #include "util_input.h"
 
 #if Z_PLATFORM_A2X
+ZColor z_colors[Z_COLOR_NUM];
 static AInputButton* g_buttons[Z_BUTTON_NUM];
 static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
-static ASfx * g_sfx[Z_SFX_NUM];
-static ZPixel g_colors[Z_COLOR_NUM];
+static ASfx* g_sfx[Z_SFX_NUM];
 
 A_SETUP
 {
@@ -53,14 +53,6 @@ A_STATE(run)
         g_buttons[Z_BUTTON_A] = a_button_new("key.z gamepad.b.a");
         g_buttons[Z_BUTTON_B] = a_button_new("key.x gamepad.b.b");
         g_buttons[Z_BUTTON_MENU] = a_button_new("key.enter gamepad.b.start");
-
-        ASprite* pal = a_sprite_newFromFile("assets/gfx/palette.png");
-
-        for(ZColorId c = 0; c < Z_COLOR_NUM; c++) {
-            g_colors[c] = a_sprite_getPixel(pal, 1 + c, 1);
-        }
-
-        a_sprite_free(pal);
 
         z_state_setup();
     }
@@ -122,7 +114,7 @@ ZPixel z_sprite_getTransparentColor(void)
     return a_sprite_getColorKey();
 }
 
-static ASprite* getCurrentSprite(ZSpriteId Sprite, unsigned Frame)
+static inline ASprite* getCurrentSprite(ZSpriteId Sprite, unsigned Frame)
 {
     return a_spriteframes_getByIndex(g_sprites[Sprite], Frame);
 }
@@ -130,6 +122,11 @@ static ASprite* getCurrentSprite(ZSpriteId Sprite, unsigned Frame)
 ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
 {
     return a_sprite_getPixels(getCurrentSprite(Sprite, Frame));
+}
+
+ZPixel z_sprite_getPixel(ZSpriteId Sprite, unsigned Frame, int X, int Y)
+{
+    return a_sprite_getPixel(getCurrentSprite(Sprite, Frame), X, Y);
 }
 
 void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
@@ -154,19 +151,19 @@ uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
 
 void z_draw_fill(ZColorId ColorId)
 {
-    a_pixel_setPixel(g_colors[ColorId]);
+    a_pixel_setPixel(z_colors[ColorId].pixel);
     a_draw_fill();
 }
 
 void z_draw_rectangle(int X, int Y, int W, int H, ZColorId ColorId)
 {
-    a_pixel_setPixel(g_colors[ColorId]);
+    a_pixel_setPixel(z_colors[ColorId].pixel);
     a_draw_rectangle(X, Y, W, H);
 }
 
 void z_draw_pixel(int X, int Y, ZColorId ColorId)
 {
-    a_pixel_setPixel(g_colors[ColorId]);
+    a_pixel_setPixel(z_colors[ColorId].pixel);
     a_draw_pixel(X, Y);
 }
 
@@ -174,7 +171,7 @@ void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId)
 {
     a_pixel_push();
 
-    a_pixel_setPixel(g_colors[ColorId]);
+    a_pixel_setPixel(z_colors[ColorId].pixel);
     a_pixel_setFillDraw(false);
     a_draw_circle(X, Y, Radius);
 
