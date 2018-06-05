@@ -31,6 +31,7 @@ struct ZApple {
     ZFix x, y;
     int dim;
     int alpha, alphaDir;
+    ZColorId color;
 };
 
 #define Z_APPLE_NUM_MAX (256)
@@ -54,6 +55,7 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
             + (z_random_int(Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN)
                 & ~(Z_APPLE_ALPHA_STEP - 1));
         a->alphaDir = -1 + z_random_int(2) * 2;
+        a->color = Z_COLOR_APPLE_01 + z_random_int(Z_COLOR_APPLE_NUM);
     }
 
     return a;
@@ -78,13 +80,34 @@ bool z_apple_tick(ZPoolObjHeader* Apple, void* Context)
     return !z_snake_collides(apple->x, apple->y, apple->dim);
 }
 
-static void safePixel(ZPixel* Buffer, int X, int Y, int R, int G, int B, int A)
+static void pixelAlpha(ZPixel* Buffer, int X, int Y, int R, int G, int B, int A)
 {
     if(X < 0 || X >= Z_SCREEN_W || Y < 0 || Y >= Z_SCREEN_H) {
         return;
     }
 
     z_pixel_drawAlpha(Buffer + Y * Z_SCREEN_W + X, R, G, B, A);
+}
+
+static void hlineAlpha(ZPixel* Buffer, int X1, int X2, int Y, int R, int G, int B, int A)
+{
+    if(Y < 0 || Y >= Z_SCREEN_H || X2 < 0 || X1 >= Z_SCREEN_W) {
+        return;
+    }
+
+    if(X1 < 0) {
+        X1 = 0;
+    }
+
+    if(X2 >= Z_SCREEN_W) {
+        X2 = Z_SCREEN_W - 1;
+    }
+
+    Buffer += Y * Z_SCREEN_W + X1;
+
+    for(int x = X2 - X1; x >= 0; x--, Buffer++) {
+        z_pixel_drawAlpha(Buffer, R, G, B, A);
+    }
 }
 
 void z_apple_draw(ZPoolObjHeader* Apple)
@@ -99,30 +122,28 @@ void z_apple_draw(ZPoolObjHeader* Apple)
 
     ZPixel* const buffer = z_screen_getPixels();
 
-    const int a0 = apple->alpha;
-    const int a1 = (224 * apple->alpha) >> 8;
-    const int a2 = (128 * apple->alpha) >> 8;
-    const int a3 = (64 * apple->alpha) >> 8;
+    const int a100 = apple->alpha;
+    const int a050 = (128 * a100) >> 8;
+    const int r = z_colors[apple->color].r;
+    const int g = z_colors[apple->color].g;
+    const int b = z_colors[apple->color].b;
 
-    safePixel(buffer, x, y, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a1);
-    safePixel(buffer, x-1, y, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a1);
-    safePixel(buffer, x, y-1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a0);
-    safePixel(buffer, x-1, y-1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a1);
-
-    safePixel(buffer, x-1, y-2, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
-    safePixel(buffer, x, y-2, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
-
-    safePixel(buffer, x-1, y+1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
-    safePixel(buffer, x, y+1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
-
-    safePixel(buffer, x-2, y-1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
-    safePixel(buffer, x-2, y, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
-
-    safePixel(buffer, x+1, y-1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
-    safePixel(buffer, x+1, y, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a2);
-
-    safePixel(buffer, x+1, y-2, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a3);
-    safePixel(buffer, x+1, y+1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a3);
-    safePixel(buffer, x-2, y+1, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a3);
-    safePixel(buffer, x-2, y-2, z_colors[Z_COLOR_APPLE_03].r, z_colors[Z_COLOR_APPLE_03].g, z_colors[Z_COLOR_APPLE_03].b, a3);
+    hlineAlpha(buffer, x - 1, x, y - 3, r, g, b, a100);
+    hlineAlpha(buffer, x - 2, x + 1, y - 2, r, g, b, a100);
+    hlineAlpha(buffer, x - 3, x - 2, y - 1, r, g, b, a100);
+    hlineAlpha(buffer, x + 1, x + 2, y - 1, r, g, b, a100);
+    hlineAlpha(buffer, x - 3, x - 2, y, r, g, b, a100);
+    hlineAlpha(buffer, x + 1, x + 2, y, r, g, b, a100);
+    hlineAlpha(buffer, x - 2, x + 1, y + 1, r, g, b, a100);
+    hlineAlpha(buffer, x - 1, x, y + 2, r, g, b, a100);
+    pixelAlpha(buffer, x - 2, y - 3, r, g, b, a050);
+    pixelAlpha(buffer, x + 1, y - 3, r, g, b, a050);
+    pixelAlpha(buffer, x - 3, y - 2, r, g, b, a050);
+    pixelAlpha(buffer, x + 2, y - 2, r, g, b, a050);
+    pixelAlpha(buffer, x - 3, y + 1, r, g, b, a050);
+    pixelAlpha(buffer, x + 2, y + 1, r, g, b, a050);
+    pixelAlpha(buffer, x - 2, y + 2, r, g, b, a050);
+    pixelAlpha(buffer, x + 1, y + 2, r, g, b, a050);
+    hlineAlpha(buffer, x - 1, x, y - 1, r, g, b, a050);
+    hlineAlpha(buffer, x - 1, x, y, r, g, b, a050);
 }

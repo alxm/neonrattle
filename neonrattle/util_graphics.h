@@ -19,6 +19,8 @@
 
 Z_EXTERN_C_START
 
+#define Z_COLOR_APPLE_NUM 5
+
 typedef enum Z_ENUM_PACK {
     Z_COLOR_INVALID = -1,
 
@@ -41,6 +43,8 @@ typedef enum Z_ENUM_PACK {
     Z_COLOR_APPLE_01,
     Z_COLOR_APPLE_02,
     Z_COLOR_APPLE_03,
+    Z_COLOR_APPLE_04,
+    Z_COLOR_APPLE_05,
 
     Z_COLOR_BG_GREEN_01,
     Z_COLOR_BG_GREEN_02,

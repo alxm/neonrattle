@@ -105,12 +105,13 @@ bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
             snake->head = (snake->head + 1) & Z_SNAKE_LEN_MASK;
 
             ZSegment* s = &snake->body[snake->head];
+            ZColorId color = Z_COLOR_APPLE_01 + z_random_int(Z_COLOR_APPLE_NUM);
 
             s->x = x;
             s->y = y;
-            s->r = z_colors[Z_COLOR_APPLE_03].r;
-            s->g = z_colors[Z_COLOR_APPLE_03].g;
-            s->b = z_colors[Z_COLOR_APPLE_03].b;
+            s->r = z_colors[color].r;
+            s->g = z_colors[color].g;
+            s->b = z_colors[color].b;
         }
     } else {
         snake->tail = (snake->tail + 1) & Z_SNAKE_LEN_MASK;
