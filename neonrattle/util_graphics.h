@@ -19,7 +19,7 @@
 
 Z_EXTERN_C_START
 
-#define Z_COLOR_APPLE_NUM 5
+#include "util_fix.h"
 
 typedef enum Z_ENUM_PACK {
     Z_COLOR_INVALID = -1,
@@ -52,10 +52,25 @@ typedef enum Z_ENUM_PACK {
     Z_COLOR_BG_GREEN_04,
     Z_COLOR_BG_GREEN_05,
 
-    Z_COLOR_SNAKE_BLUE_01,
+    Z_COLOR_SNAKE_01,
+    Z_COLOR_SNAKE_02,
+    Z_COLOR_SNAKE_03,
 
     Z_COLOR_NUM
 } ZColorId;
+
+#define Z_COLOR_APPLE_NUM 5
+#define Z_COLOR_SNAKE_NUM 3
+
+static inline ZColorId z_color_getRandomApple(void)
+{
+    return (ZColorId)(Z_COLOR_APPLE_01 + z_random_int(Z_COLOR_APPLE_NUM));
+}
+
+static inline ZColorId z_color_getRandomSnake(void)
+{
+    return (ZColorId)(Z_COLOR_SNAKE_01 + z_random_int(Z_COLOR_SNAKE_NUM));
+}
 
 typedef enum Z_ENUM_PACK {
     Z_SPRITE_PALETTE,

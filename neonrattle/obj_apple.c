@@ -55,7 +55,7 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
             + (z_random_int(Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN)
                 & ~(Z_APPLE_ALPHA_STEP - 1));
         a->alphaDir = -1 + z_random_int(2) * 2;
-        a->color = Z_COLOR_APPLE_01 + z_random_int(Z_COLOR_APPLE_NUM);
+        a->color = z_color_getRandomApple();
     }
 
     return a;

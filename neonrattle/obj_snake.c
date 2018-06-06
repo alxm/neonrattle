@@ -30,6 +30,7 @@
 typedef struct {
     ZFix x, y;
     int r, g, b;
+    ZColorId targetColor;
 } ZSegment;
 
 struct ZSnake {
@@ -59,11 +60,14 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
         s->angle = Z_FIX_DEG_022;
         s->grow = 4;
 
+        ZColorId c = z_color_getRandomSnake();
+
         s->body[0].x = X;
         s->body[0].y = Y;
-        s->body[0].r = z_colors[Z_COLOR_SNAKE_BLUE_01].r;
-        s->body[0].g = z_colors[Z_COLOR_SNAKE_BLUE_01].g;
-        s->body[0].b = z_colors[Z_COLOR_SNAKE_BLUE_01].b;
+        s->body[0].r = z_colors[c].r;
+        s->body[0].g = z_colors[c].g;
+        s->body[0].b = z_colors[c].b;
+        s->body[0].targetColor = c;
     }
 
     return s;
@@ -105,25 +109,28 @@ bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
             snake->head = (snake->head + 1) & Z_SNAKE_LEN_MASK;
 
             ZSegment* s = &snake->body[snake->head];
-            ZColorId color = Z_COLOR_APPLE_01 + z_random_int(Z_COLOR_APPLE_NUM);
+            ZColorId c = z_color_getRandomApple();
 
             s->x = x;
             s->y = y;
-            s->r = z_colors[color].r;
-            s->g = z_colors[color].g;
-            s->b = z_colors[color].b;
+            s->r = z_colors[c].r;
+            s->g = z_colors[c].g;
+            s->b = z_colors[c].b;
+            s->targetColor = z_color_getRandomSnake();
         }
     } else {
         snake->tail = (snake->tail + 1) & Z_SNAKE_LEN_MASK;
         snake->head = (snake->head + 1) & Z_SNAKE_LEN_MASK;
 
         ZSegment* s = &snake->body[snake->head];
+        ZColorId c = z_color_getRandomSnake();
 
         s->x = x;
         s->y = y;
-        s->r = z_colors[Z_COLOR_SNAKE_BLUE_01].r;
-        s->g = z_colors[Z_COLOR_SNAKE_BLUE_01].g;
-        s->b = z_colors[Z_COLOR_SNAKE_BLUE_01].b;
+        s->r = z_colors[c].r;
+        s->g = z_colors[c].g;
+        s->b = z_colors[c].b;
+        s->targetColor = c;
     }
 
     if(z_button_pressed(Z_BUTTON_LEFT)) {
@@ -138,7 +145,7 @@ bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
 
     for(unsigned i = snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
         ZSegment* s = &snake->body[i];
-        ZColor* targetColor = &z_colors[Z_COLOR_SNAKE_BLUE_01];
+        ZColor* targetColor = &z_colors[s->targetColor];
 
         if(s->r != targetColor->r) {
             s->r += (targetColor->r - s->r) / 16;
