@@ -21,6 +21,7 @@
 #include "obj_apple.h"
 #include "obj_snake.h"
 #include "util_camera.h"
+#include "util_pool.h"
 
 typedef struct {
     bool wall;
@@ -41,7 +42,7 @@ void z_map_setup(void)
     }
 }
 
-void z_map_init(void)
+void z_map_init(ZList* Apples, ZSnake** Snake)
 {
     z_pool_reset(Z_POOL_APPLE);
 
@@ -61,7 +62,7 @@ void z_map_init(void)
                 int sx = x * Z_TILE_DIM + Z_TILE_DIM / 2;
                 int sy = y * Z_TILE_DIM + Z_TILE_DIM / 2;
 
-                z_snake_new(z_fix_fromInt(sx), z_fix_fromInt(sy));
+                *Snake = z_snake_new(z_fix_fromInt(sx), z_fix_fromInt(sy));
             } else if(p == red25) {
                 num = 1;
             } else if(p == red50) {
@@ -74,7 +75,11 @@ void z_map_init(void)
                 int ax = x * Z_TILE_DIM + 2 + z_random_int(Z_TILE_DIM - 4);
                 int ay = y * Z_TILE_DIM + 2 + z_random_int(Z_TILE_DIM - 4);
 
-                z_apple_new(z_fix_fromInt(ax), z_fix_fromInt(ay));
+                ZApple* a = z_apple_new(z_fix_fromInt(ax), z_fix_fromInt(ay));
+
+                if(a != NULL) {
+                    z_list_addLast(Apples, a);
+                }
             }
         }
     }

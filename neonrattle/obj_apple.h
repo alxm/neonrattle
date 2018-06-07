@@ -17,14 +17,16 @@
 
 #pragma once
 
+#include "obj_snake.h"
 #include "util_fix.h"
-#include "util_pool.h"
 
 typedef struct ZApple ZApple;
+
+extern const size_t z_apple_listNodeOffset0;
 
 extern void z_apple_setup(void);
 
 extern ZApple* z_apple_new(ZFix X, ZFix Y);
 
-extern ZPoolTick z_apple_tick;
-extern ZPoolDraw z_apple_draw;
+extern void z_apple_tick(ZApple* Apple, ZSnake* Snake);
+extern void z_apple_draw(ZApple* Apple);

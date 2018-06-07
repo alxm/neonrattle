@@ -18,7 +18,6 @@
 #pragma once
 
 #include "util_fix.h"
-#include "util_pool.h"
 
 typedef struct ZSnake ZSnake;
 
@@ -27,7 +26,7 @@ extern void z_snake_setup(void);
 extern ZSnake* z_snake_new(ZFix X, ZFix Y);
 extern void z_snake_getCoords(const ZSnake* Snake, ZFix* X, ZFix* Y);
 
-extern ZPoolTick z_snake_tick;
-extern ZPoolDraw z_snake_draw;
+extern bool z_snake_tick(ZSnake* Snake);
+extern void z_snake_draw(ZSnake* Snake);
 
-extern bool z_snake_collides(ZFix X, ZFix Y, int Dim);
+extern bool z_snake_collides(ZSnake* Snake, ZFix X, ZFix Y, int Dim);

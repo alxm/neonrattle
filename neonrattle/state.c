@@ -27,7 +27,6 @@
 #include "util_input.h"
 #include "util_light.h"
 #include "util_map.h"
-#include "util_pool.h"
 #include "util_screen.h"
 #include "util_timer.h"
 

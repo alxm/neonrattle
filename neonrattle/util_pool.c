@@ -29,13 +29,12 @@ void z_pool_register(ZPoolId Id, ZPoolHeader* Pool)
 void z_pool_reset(ZPoolId Pool)
 {
     ZPoolHeader* pool = g_pools[Pool];
-    ZPoolObjHeader* current = (ZPoolObjHeader*)(pool + 1);
+    ZPoolFreeObject* current = (ZPoolFreeObject*)(pool + 1);
 
     pool->freeList = current;
-    pool->activeList = NULL;
 
     for(size_t numObjects = pool->capacity; numObjects > 1; numObjects--) {
-        ZPoolObjHeader* next = (ZPoolObjHeader*)
+        ZPoolFreeObject* next = (ZPoolFreeObject*)
                                     ((uint8_t*)current + pool->objSize);
 
         current->next = next;
@@ -56,78 +55,26 @@ void* z_pool_alloc(ZPoolId Pool)
                 [Z_POOL_APPLE] = "Z_POOL_APPLE",
                 [Z_POOL_CIRCLE] = "Z_POOL_CIRCLE",
                 [Z_POOL_PARTICLE] = "Z_POOL_PARTICLE",
-                [Z_POOL_SNAKE] = "Z_POOL_SNAKE",
             };
 
             printf("Can't allocate from %s (%d)\n", names[Pool], ++fails[Pool]);
         #endif
+
         return NULL;
     }
 
-    ZPoolObjHeader* object = pool->freeList;
+    ZPoolFreeObject* object = pool->freeList;
 
     pool->freeList = object->next;
-    object->next = pool->activeList;
-    pool->activeList = object;
 
     return object;
 }
 
-static ZPoolObjHeader* releaseObject(ZPoolHeader* Pool, ZPoolObjHeader* Object, ZPoolObjHeader* LastObject)
-{
-    ZPoolObjHeader* next = Object->next;
-
-    if(LastObject == NULL) {
-        Pool->activeList = next;
-    } else {
-        LastObject->next = next;
-    }
-
-    Object->next = Pool->freeList;
-    Pool->freeList = Object;
-
-    return next;
-}
-
-void z_pool_clear(ZPoolId Pool)
+void z_pool_free(ZPoolId Pool, void* Object)
 {
     ZPoolHeader* pool = g_pools[Pool];
+    ZPoolFreeObject* block = Object;
 
-    for(ZPoolObjHeader* o = pool->activeList; o != NULL; ) {
-        o = releaseObject(pool, o, NULL);
-    }
-}
-
-bool z_pool_noActive(ZPoolId Pool)
-{
-    return g_pools[Pool]->activeList == NULL;
-}
-
-void z_pool_tick(ZPoolId Pool, ZPoolTick* Callback, void* Context)
-{
-    ZPoolHeader* pool = g_pools[Pool];
-    ZPoolObjHeader* lastObj = NULL;
-
-    for(ZPoolObjHeader* o = pool->activeList; o != NULL; ) {
-        if(Callback(o, Context)) {
-            lastObj = o;
-            o = o->next;
-        } else {
-            o = releaseObject(pool, o, lastObj);
-        }
-    }
-}
-
-void z_pool_draw(ZPoolId Pool, ZPoolDraw* Callback)
-{
-    ZPoolHeader* pool = g_pools[Pool];
-
-    for(ZPoolObjHeader* o = pool->activeList; o != NULL; o = o->next) {
-        Callback(o);
-    }
-}
-
-void* z_pool_getFirst(ZPoolId Pool)
-{
-    return g_pools[Pool]->activeList;
+    block->next = pool->freeList;
+    pool->freeList = block;
 }

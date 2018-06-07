@@ -23,6 +23,7 @@
 #include "util_collision.h"
 #include "util_input.h"
 #include "util_pixel.h"
+#include "util_pool.h"
 
 #define Z_SNAKE_LEN 256
 #define Z_SNAKE_LEN_MASK (Z_SNAKE_LEN - 1)
@@ -34,16 +35,14 @@ typedef struct {
 } ZSegment;
 
 struct ZSnake {
-    ZPoolObjHeader poolObject;
     ZSegment body[Z_SNAKE_LEN];
     unsigned head, tail;
     ZFixu angle;
     int grow;
+
 };
 
-#define Z_SNAKE_NUM_MAX (1)
-
-Z_POOL_DECLARE(ZSnake, Z_SNAKE_NUM_MAX, g_pool);
+Z_POOL_DECLARE(ZSnake, 1, g_pool);
 
 void z_snake_setup(void)
 {
@@ -81,7 +80,7 @@ void z_snake_getCoords(const ZSnake* Snake, ZFix* X, ZFix* Y)
     *Y = head->y;
 }
 
-bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
+bool z_snake_tick(ZSnake* Snake)
 {
     static bool move = false;
 
@@ -93,22 +92,19 @@ bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
         return true;
     }
 
-    Z_UNUSED(Context);
+    ZSegment* head = &Snake->body[Snake->head];
 
-    ZSnake* snake = (ZSnake*)Snake;
-    ZSegment* head = &snake->body[snake->head];
+    ZFix x = head->x + z_fix_cosf(Snake->angle);
+    ZFix y = head->y - z_fix_sinf(Snake->angle);
 
-    ZFix x = head->x + z_fix_cosf(snake->angle);
-    ZFix y = head->y - z_fix_sinf(snake->angle);
-
-    if(snake->grow > 0) {
-        if(((snake->head - snake->tail) & Z_SNAKE_LEN_MASK) == Z_SNAKE_LEN_MASK) {
-            snake->grow = 0;
+    if(Snake->grow > 0) {
+        if(((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) == Z_SNAKE_LEN_MASK) {
+            Snake->grow = 0;
         } else {
-            snake->grow--;
-            snake->head = (snake->head + 1) & Z_SNAKE_LEN_MASK;
+            Snake->grow--;
+            Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
 
-            ZSegment* s = &snake->body[snake->head];
+            ZSegment* s = &Snake->body[Snake->head];
             ZColorId c = z_color_getRandomApple();
 
             s->x = x;
@@ -119,10 +115,10 @@ bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
             s->targetColor = z_color_getRandomSnake();
         }
     } else {
-        snake->tail = (snake->tail + 1) & Z_SNAKE_LEN_MASK;
-        snake->head = (snake->head + 1) & Z_SNAKE_LEN_MASK;
+        Snake->tail = (Snake->tail + 1) & Z_SNAKE_LEN_MASK;
+        Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
 
-        ZSegment* s = &snake->body[snake->head];
+        ZSegment* s = &Snake->body[Snake->head];
         ZColorId c = z_color_getRandomSnake();
 
         s->x = x;
@@ -134,17 +130,17 @@ bool z_snake_tick(ZPoolObjHeader* Snake, void* Context)
     }
 
     if(z_button_pressed(Z_BUTTON_LEFT)) {
-        snake->angle += Z_FIX_DEG_001 * 8;
+        Snake->angle += Z_FIX_DEG_001 * 8;
     }
 
     if(z_button_pressed(Z_BUTTON_RIGHT)) {
-        snake->angle -= Z_FIX_DEG_001 * 8;
+        Snake->angle -= Z_FIX_DEG_001 * 8;
     }
 
-    unsigned len = ((snake->head - snake->tail) & Z_SNAKE_LEN_MASK) + 1;
+    unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
 
-    for(unsigned i = snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
-        ZSegment* s = &snake->body[i];
+    for(unsigned i = Snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
+        ZSegment* s = &Snake->body[i];
         ZColor* targetColor = &z_colors[s->targetColor];
 
         if(s->r != targetColor->r) {
@@ -172,14 +168,13 @@ static void safePixel(ZPixel* Buffer, int X, int Y, int R, int G, int B, int A)
     z_pixel_drawAlpha(Buffer + Y * Z_SCREEN_W + X, R, G, B, A);
 }
 
-void z_snake_draw(ZPoolObjHeader* Snake)
+void z_snake_draw(ZSnake* Snake)
 {
-    ZSnake* snake = (ZSnake*)Snake;
-    unsigned len = ((snake->head - snake->tail) & Z_SNAKE_LEN_MASK) + 1;
+    unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
     ZPixel* const buffer = z_screen_getPixels();
 
-    for(unsigned i = snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
-        ZSegment* s = &snake->body[i];
+    for(unsigned i = Snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
+        ZSegment* s = &Snake->body[i];
 
         int x, y;
         z_camera_coordsToScreen(s->x, s->y, &x, &y);
@@ -208,49 +203,22 @@ void z_snake_draw(ZPoolObjHeader* Snake)
     }
 }
 
-typedef struct {
-    int x, y;
-    int dim;
-    bool hit;
-} ZCollisionContext;
-
-static bool collisionCheck(ZPoolObjHeader* Snake, void* Context)
+bool z_snake_collides(ZSnake* Snake, ZFix X, ZFix Y, int Dim)
 {
-    ZCollisionContext* context = (ZCollisionContext*)Context;
+    ZSegment* head = &Snake->body[Snake->head];
 
-    if(context->hit) {
+    if(z_collision_boxAndBox(z_fix_toInt(head->x),
+                             z_fix_toInt(head->y),
+                             4,
+                             4,
+                             z_fix_toInt(X),
+                             z_fix_toInt(Y),
+                             Dim,
+                             Dim)) {
+
+        Snake->grow += 4;
         return true;
     }
 
-    ZSnake* snake = (ZSnake*)Snake;
-    ZSegment* head = &snake->body[snake->head];
-
-    context->hit = z_collision_boxAndBox(z_fix_toInt(head->x),
-                                         z_fix_toInt(head->y),
-                                         4,
-                                         4,
-                                         context->x,
-                                         context->y,
-                                         context->dim,
-                                         context->dim);
-
-    if(context->hit) {
-        snake->grow += 4;
-    }
-
-    return true;
-}
-
-bool z_snake_collides(ZFix X, ZFix Y, int Dim)
-{
-    ZCollisionContext context = {
-        z_fix_toInt(X),
-        z_fix_toInt(Y),
-        Dim,
-        false
-    };
-
-    z_pool_tick(Z_POOL_SNAKE, collisionCheck, &context);
-
-    return context.hit;
+    return false;
 }

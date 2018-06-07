@@ -17,7 +17,9 @@
 
 #pragma once
 
+#include "obj_snake.h"
 #include "util_fix.h"
+#include "util_list.h"
 
 #define Z_MAP_W 32
 #define Z_MAP_H 16
@@ -27,5 +29,5 @@
 #define Z_TILE_MASK (Z_TILE_DIM - 1)
 
 extern void z_map_setup(void);
-extern void z_map_init(void);
+extern void z_map_init(ZList* Apples, ZSnake** Snake);
 extern void z_map_draw(void);

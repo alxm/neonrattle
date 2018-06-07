@@ -22,32 +22,40 @@
 #include "obj_snake.h"
 #include "util_camera.h"
 #include "util_fix.h"
+#include "util_list.h"
 #include "util_map.h"
-#include "util_pool.h"
 #include "util_screen.h"
 
 static struct {
+    ZList apples;
     ZSnake* snake;
 } g_context;
 
 void z_state_play_init(void)
 {
-    // place apples and player on map
-    z_map_init();
+    z_list_init(&g_context.apples, z_apple_listNodeOffset0);
 
-    g_context.snake = z_pool_getFirst(Z_POOL_SNAKE);
+    // place apples and player on map
+    z_map_init(&g_context.apples, &g_context.snake);
 }
 
 void z_state_play_tick(void)
 {
-    z_pool_tick(Z_POOL_SNAKE, z_snake_tick, NULL);
-    z_pool_tick(Z_POOL_APPLE, z_apple_tick, NULL);
+    z_snake_tick(g_context.snake);
     z_camera_tick(g_context.snake);
+
+    Z_LIST_ITERATE(&g_context.apples, ZApple*, apple) {
+        z_apple_tick(apple, g_context.snake);
+    }
 }
 
 void z_state_play_draw(void)
 {
     z_map_draw();
-    z_pool_draw(Z_POOL_SNAKE, z_snake_draw);
-    z_pool_draw(Z_POOL_APPLE, z_apple_draw);
+
+    z_snake_draw(g_context.snake);
+
+    Z_LIST_ITERATE(&g_context.apples, ZApple*, apple) {
+        z_apple_draw(apple);
+    }
 }

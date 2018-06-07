@@ -19,12 +19,12 @@
 #include "obj_circle.h"
 
 #include "util_light.h"
+#include "util_pool.h"
 #include "util_screen.h"
 
 #define Z_CIRCLE_RADIUS_MAX (4)
 
 struct ZCircle {
-    ZPoolObjHeader poolObject;
     ZFix x, y;
     uint8_t radius;
 };
@@ -45,21 +45,16 @@ void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y)
     z_light_setPulse(Z_LIGHT_EXPLOSION);
 }
 
-bool z_circle_tick(ZPoolObjHeader* Circle, void* Context)
+bool z_circle_tick(ZCircle* Circle)
 {
-    Z_UNUSED(Context);
-
-    ZCircle* circle = (ZCircle*)Circle;
-
-    return circle->radius++ < Z_CIRCLE_RADIUS_MAX;
+    return Circle->radius++ < Z_CIRCLE_RADIUS_MAX;
 }
 
-void z_circle_draw(ZPoolObjHeader* Circle)
+void z_circle_draw(ZCircle* Circle)
 {
-    ZCircle* circle = (ZCircle*)Circle;
-    int x = z_fix_toInt(circle->x) + z_screen_getXShake();
-    int y = z_fix_toInt(circle->y) + z_screen_getYShake();
+    int x = z_fix_toInt(Circle->x) + z_screen_getXShake();
+    int y = z_fix_toInt(Circle->y) + z_screen_getYShake();
 
-    z_draw_circle(x, y, circle->radius, Z_COLOR_BG_GREEN_04);
-    z_draw_circle(x, y, u8(circle->radius * 2), Z_COLOR_BG_GREEN_04);
+    z_draw_circle(x, y, Circle->radius, Z_COLOR_BG_GREEN_04);
+    z_draw_circle(x, y, u8(Circle->radius * 2), Z_COLOR_BG_GREEN_04);
 }

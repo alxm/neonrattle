@@ -18,12 +18,9 @@
 #pragma once
 
 #include "util_fix.h"
-#include "util_pool.h"
 
 typedef struct ZParticle ZParticle;
 
 extern void z_particle_setup(void);
 
 extern void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y);
-extern ZPoolTick z_particle_tick;
-extern ZPoolDraw z_particle_draw;

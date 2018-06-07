@@ -20,19 +20,23 @@
 
 #include "obj_snake.h"
 #include "util_camera.h"
+#include "util_list.h"
 #include "util_pixel.h"
+#include "util_pool.h"
 
 #define Z_APPLE_ALPHA_STEP 8
 #define Z_APPLE_ALPHA_MIN 128
 #define Z_APPLE_ALPHA_MAX 256
 
 struct ZApple {
-    ZPoolObjHeader poolObject;
+    ZListNode applesListNode;
     ZFix x, y;
     int dim;
     int alpha, alphaDir;
     ZColorId color;
 };
+
+const size_t z_apple_listNodeOffset0 = offsetof(ZApple, applesListNode);
 
 #define Z_APPLE_NUM_MAX (256)
 
@@ -61,23 +65,27 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
     return a;
 }
 
-bool z_apple_tick(ZPoolObjHeader* Apple, void* Context)
+static void z_apple_free(ZApple* Apple)
 {
-    Z_UNUSED(Context);
+    z_list_remove(&Apple->applesListNode);
+    z_pool_free(Z_POOL_APPLE, Apple);
+}
 
-    ZApple* apple = (ZApple*)Apple;
+void z_apple_tick(ZApple* Apple, ZSnake* Snake)
+{
+    Apple->alpha += Apple->alphaDir * Z_APPLE_ALPHA_STEP;
 
-    apple->alpha += apple->alphaDir * Z_APPLE_ALPHA_STEP;
-
-    if(apple->alpha <= Z_APPLE_ALPHA_MIN) {
-        apple->alpha = Z_APPLE_ALPHA_MIN;
-        apple->alphaDir = 1;
-    } else if(apple->alpha >= Z_APPLE_ALPHA_MAX) {
-        apple->alpha = Z_APPLE_ALPHA_MAX;
-        apple->alphaDir = -1;
+    if(Apple->alpha <= Z_APPLE_ALPHA_MIN) {
+        Apple->alpha = Z_APPLE_ALPHA_MIN;
+        Apple->alphaDir = 1;
+    } else if(Apple->alpha >= Z_APPLE_ALPHA_MAX) {
+        Apple->alpha = Z_APPLE_ALPHA_MAX;
+        Apple->alphaDir = -1;
     }
 
-    return !z_snake_collides(apple->x, apple->y, apple->dim);
+    if(z_snake_collides(Snake, Apple->x, Apple->y, Apple->dim)) {
+        z_apple_free(Apple);
+    }
 }
 
 static void pixelAlpha(ZPixel* Buffer, int X, int Y, int R, int G, int B, int A)
@@ -110,20 +118,18 @@ static void hlineAlpha(ZPixel* Buffer, int X1, int X2, int Y, int R, int G, int 
     }
 }
 
-void z_apple_draw(ZPoolObjHeader* Apple)
+void z_apple_draw(ZApple* Apple)
 {
-    ZApple* apple = (ZApple*)Apple;
-
     int x, y;
-    z_camera_coordsToScreen(apple->x, apple->y, &x, &y);
+    z_camera_coordsToScreen(Apple->x, Apple->y, &x, &y);
 
     ZPixel* const buffer = z_screen_getPixels();
 
-    const int a100 = apple->alpha;
+    const int a100 = Apple->alpha;
     const int a050 = (128 * a100) >> 8;
-    const int r = z_colors[apple->color].r;
-    const int g = z_colors[apple->color].g;
-    const int b = z_colors[apple->color].b;
+    const int r = z_colors[Apple->color].r;
+    const int g = z_colors[Apple->color].g;
+    const int b = z_colors[Apple->color].b;
 
     hlineAlpha(buffer, x - 1, x, y - 3, r, g, b, a100);
     hlineAlpha(buffer, x - 2, x + 1, y - 2, r, g, b, a100);

@@ -18,12 +18,9 @@
 #pragma once
 
 #include "util_fix.h"
-#include "util_pool.h"
 
 typedef struct ZCircle ZCircle;
 
 extern void z_circle_setup(void);
 
 extern void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y);
-extern ZPoolTick z_circle_tick;
-extern ZPoolDraw z_circle_draw;

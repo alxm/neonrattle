@@ -20,6 +20,7 @@
 
 #include "obj_circle.h"
 #include "obj_particle.h"
+#include "util_pool.h"
 
 void z_effect_particles(ZFix X, ZFix Y, uint8_t Num)
 {

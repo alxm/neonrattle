@@ -19,10 +19,10 @@
 #include "obj_particle.h"
 
 #include "util_fps.h"
+#include "util_pool.h"
 #include "util_screen.h"
 
 struct ZParticle {
-    ZPoolObjHeader poolObject;
     ZFix x, y;
     unsigned angle;
     unsigned splitNum;
@@ -45,24 +45,18 @@ void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
     Particle->ticks = 0;
 }
 
-bool z_particle_tick(ZPoolObjHeader* Particle, void* Context)
+bool z_particle_tick(ZParticle* Particle)
 {
-    Z_UNUSED(Context);
+    Particle->ticks++;
 
-    ZParticle* particle = (ZParticle*)Particle;
-
-    particle->ticks++;
-
-    return particle->ticks < Z_FPS / 4
-        || (particle->ticks < Z_FPS && z_random_int(4) != 0);
+    return Particle->ticks < Z_FPS / 4
+        || (Particle->ticks < Z_FPS && z_random_int(4) != 0);
 }
 
-void z_particle_draw(ZPoolObjHeader* Particle)
+void z_particle_draw(ZParticle* Particle)
 {
-    ZParticle* particle = (ZParticle*)Particle;
-
-    unsigned splitNum = 1 + particle->splitNum;
-    unsigned angle = particle->angle;
+    unsigned splitNum = 1 + Particle->splitNum;
+    unsigned angle = Particle->angle;
 
     static const unsigned incs[4] = {
         Z_INT_DEG_112, Z_INT_DEG_090, Z_INT_DEG_067, Z_INT_DEG_090
@@ -70,10 +64,10 @@ void z_particle_draw(ZPoolObjHeader* Particle)
 
     for(unsigned i = 0; i < splitNum; i++) {
         int x =
-            z_fix_toInt(particle->x + z_fix_cos(angle) * particle->ticks)
+            z_fix_toInt(Particle->x + z_fix_cos(angle) * Particle->ticks)
                 + z_screen_getXShake();
         int y =
-            z_fix_toInt(particle->y - z_fix_sin(angle) * particle->ticks)
+            z_fix_toInt(Particle->y - z_fix_sin(angle) * Particle->ticks)
                 + z_screen_getYShake();
 
         z_draw_pixel(x,

@@ -26,15 +26,12 @@ typedef enum Z_ENUM_PACK {
     Z_POOL_NUM
 } ZPoolId;
 
-typedef struct ZPoolObjHeader ZPoolObjHeader;
-
-struct ZPoolObjHeader {
-    ZPoolObjHeader* next;
-};
+typedef struct ZPoolFreeObject {
+    struct ZPoolFreeObject* next;
+} ZPoolFreeObject;
 
 typedef struct ZPoolHeader {
-    ZPoolObjHeader* freeList;
-    ZPoolObjHeader* activeList;
+    ZPoolFreeObject* freeList;
     const size_t capacity;
     const size_t objSize;
 } ZPoolHeader;
@@ -42,26 +39,17 @@ typedef struct ZPoolHeader {
 #define Z_POOL_DECLARE(ObjectType, NumObjects, VarName)              \
     static struct {                                                  \
         ZPoolHeader header;                                          \
-        uint8_t data[NumObjects * sizeof(ObjectType)];               \
-    } z_pool__##ObjectType = {                                       \
+        ObjectType data[NumObjects];                                 \
+    } g_pool__##ObjectType = {                                       \
         .header = {                                                  \
             .capacity = NumObjects,                                  \
             .objSize = sizeof(ObjectType)                            \
         }                                                            \
     };                                                               \
-    static ZPoolHeader* const VarName = &z_pool__##ObjectType.header
-
-typedef bool ZPoolTick(ZPoolObjHeader*, void*);
-typedef void ZPoolDraw(ZPoolObjHeader*);
+    static ZPoolHeader* const VarName = &g_pool__##ObjectType.header
 
 extern void z_pool_register(ZPoolId Id, ZPoolHeader* Pool);
 extern void z_pool_reset(ZPoolId Pool);
 
 extern void* z_pool_alloc(ZPoolId Pool);
-extern void z_pool_clear(ZPoolId Pool);
-extern bool z_pool_noActive(ZPoolId Pool);
-
-extern void z_pool_tick(ZPoolId Pool, ZPoolTick* Callback, void* Context);
-extern void z_pool_draw(ZPoolId Pool, ZPoolDraw* Callback);
-
-extern void* z_pool_getFirst(ZPoolId Pool);
+extern void z_pool_free(ZPoolId Pool, void* Object);
