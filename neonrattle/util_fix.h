@@ -291,7 +291,7 @@ static inline int z_random_int(int Max)
     return rand() % Max;
 }
 
-static inline unsigned z_random_uint(unsigned Max)
+static inline unsigned z_random_intu(unsigned Max)
 {
     return (unsigned)rand() % Max;
 }

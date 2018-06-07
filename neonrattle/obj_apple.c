@@ -55,7 +55,7 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
         a->x = X;
         a->y = Y;
         a->dim = 4;
-        a->alphaAngle = z_random_uint(z_fixu_fromInt(Z_ANGLES_NUM));
+        a->alphaAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
         a->color = z_color_getRandomApple();
     }
 

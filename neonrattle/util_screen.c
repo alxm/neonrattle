@@ -37,8 +37,8 @@ void z_screen_tick(void)
 {
     if(g_shakeFrames) {
         g_shakeFrames--;
-        z_screen.xShake = u4(z_random_uint(3));
-        z_screen.yShake = u4(z_random_uint(3));
+        z_screen.xShake = u4(z_random_intu(3));
+        z_screen.yShake = u4(z_random_intu(3));
     } else {
         z_screen.xShake = 1;
         z_screen.yShake = 1;

@@ -40,8 +40,8 @@ void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
 {
     Particle->x = X;
     Particle->y = Y;
-    Particle->angle = z_fix_wrapAngleInt(z_random_uint(Z_ANGLES_NUM));
-    Particle->splitNum = u2(z_random_uint(4));
+    Particle->angle = z_fix_wrapAngleInt(z_random_intu(Z_ANGLES_NUM));
+    Particle->splitNum = u2(z_random_intu(4));
     Particle->ticks = 0;
 }
 
