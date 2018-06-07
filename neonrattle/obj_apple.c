@@ -24,7 +24,7 @@
 #include "util_pixel.h"
 #include "util_pool.h"
 
-#define Z_APPLE_ALPHA_STEP 8
+#define Z_APPLE_ALPHA_DEG_STEP 8
 #define Z_APPLE_ALPHA_MIN 128
 #define Z_APPLE_ALPHA_MAX 256
 
@@ -32,7 +32,7 @@ struct ZApple {
     ZListNode applesListNode;
     ZFix x, y;
     int dim;
-    int alpha, alphaDir;
+    ZFixu alphaAngle;
     ZColorId color;
 };
 
@@ -55,10 +55,7 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
         a->x = X;
         a->y = Y;
         a->dim = 4;
-        a->alpha = Z_APPLE_ALPHA_MIN
-            + (z_random_int(Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN)
-                & ~(Z_APPLE_ALPHA_STEP - 1));
-        a->alphaDir = -1 + z_random_int(2) * 2;
+        a->alphaAngle = z_random_uint(z_fixu_fromInt(Z_ANGLES_NUM));
         a->color = z_color_getRandomApple();
     }
 
@@ -73,15 +70,7 @@ static void z_apple_free(ZApple* Apple)
 
 void z_apple_tick(ZApple* Apple, ZSnake* Snake)
 {
-    Apple->alpha += Apple->alphaDir * Z_APPLE_ALPHA_STEP;
-
-    if(Apple->alpha <= Z_APPLE_ALPHA_MIN) {
-        Apple->alpha = Z_APPLE_ALPHA_MIN;
-        Apple->alphaDir = 1;
-    } else if(Apple->alpha >= Z_APPLE_ALPHA_MAX) {
-        Apple->alpha = Z_APPLE_ALPHA_MAX;
-        Apple->alphaDir = -1;
-    }
+    Apple->alphaAngle += Z_APPLE_ALPHA_DEG_STEP * Z_FIX_DEG_001;
 
     if(z_snake_collides(Snake, Apple->x, Apple->y, Apple->dim)) {
         z_apple_free(Apple);
@@ -125,7 +114,10 @@ void z_apple_draw(ZApple* Apple)
 
     ZPixel* const buffer = z_screen_getPixels();
 
-    const int a100 = Apple->alpha;
+    const int a100 = Z_APPLE_ALPHA_MIN
+        + (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / 2
+        + z_fix_toInt(z_fix_sinf(Apple->alphaAngle)
+                        * (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / 2);
     const int a050 = (128 * a100) >> 8;
     const int r = z_colors[Apple->color].r;
     const int g = z_colors[Apple->color].g;
