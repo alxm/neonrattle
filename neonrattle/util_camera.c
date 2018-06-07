@@ -44,3 +44,9 @@ void z_camera_getOrigin(ZFix* X, ZFix* Y)
     *X = g_camera.x;
     *Y = g_camera.y;
 }
+
+void z_camera_coordsToScreen(ZFix WorldX, ZFix WorldY, int* ScreenX, int* ScreenY)
+{
+    *ScreenX = Z_SCREEN_W / 2 + z_fix_toInt(WorldX) - z_fix_toInt(g_camera.x);
+    *ScreenY = Z_SCREEN_H / 2 + z_fix_toInt(WorldY) - z_fix_toInt(g_camera.y);
+}

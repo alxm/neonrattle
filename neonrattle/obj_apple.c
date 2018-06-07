@@ -114,11 +114,8 @@ void z_apple_draw(ZPoolObjHeader* Apple)
 {
     ZApple* apple = (ZApple*)Apple;
 
-    ZFix originX, originY;
-    z_camera_getOrigin(&originX, &originY);
-
-    const int x = Z_SCREEN_W / 2 + z_fix_toInt(apple->x - originX);
-    const int y = Z_SCREEN_H / 2 + z_fix_toInt(apple->y - originY);
+    int x, y;
+    z_camera_coordsToScreen(apple->x, apple->y, &x, &y);
 
     ZPixel* const buffer = z_screen_getPixels();
 

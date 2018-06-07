@@ -22,3 +22,4 @@
 extern void z_camera_tick(const ZSnake* Snake);
 
 extern void z_camera_getOrigin(ZFix* X, ZFix* Y);
+extern void z_camera_coordsToScreen(ZFix WorldX, ZFix WorldY, int* ScreenX, int* ScreenY);

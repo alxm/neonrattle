@@ -178,14 +178,11 @@ void z_snake_draw(ZPoolObjHeader* Snake)
     unsigned len = ((snake->head - snake->tail) & Z_SNAKE_LEN_MASK) + 1;
     ZPixel* const buffer = z_screen_getPixels();
 
-    ZFix originX, originY;
-    z_camera_getOrigin(&originX, &originY);
-
     for(unsigned i = snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
         ZSegment* s = &snake->body[i];
 
-        const int x = Z_SCREEN_W / 2 + z_fix_toInt(s->x - originX);
-        const int y = Z_SCREEN_H / 2 + z_fix_toInt(s->y - originY);
+        int x, y;
+        z_camera_coordsToScreen(s->x, s->y, &x, &y);
 
         safePixel(buffer, x, y, s->r, s->g, s->b, 192);
         safePixel(buffer, x-1, y, s->r, s->g, s->b, 192);
