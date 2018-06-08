@@ -19,21 +19,6 @@
 
 typedef APixel ZPixel;
 
-#include "util_graphics.h"
-#include "util_sound.h"
-
-#define Z_SCREEN_W 80
-#define Z_SCREEN_H 64
-
-#define z_sprite_load(Index, Id) \
-    z_platform__loadSprite(Index, "assets/gfx/" #Id ".png");
-
-#define z_sfx_load(Index, Id) \
-    z_platform__loadSfx(Index, "assets/sfx/" #Id ".wav");
-
-extern void z_platform__loadSprite(ZSpriteId Sprite, const char* Path);
-extern void z_platform__loadSfx(ZSfxId Sfx, const char* Path);
-
 static inline void z_pixel_toRGB(ZPixel Pixel, int* Red, int* Green, int* Blue)
 {
     a_pixel_toRgb(Pixel, Red, Green, Blue);
@@ -56,3 +41,18 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
 {
     return a_pixel_fromHex(Hexcode);
 }
+
+#include "util_graphics.h"
+#include "util_sound.h"
+
+#define Z_SCREEN_W 80
+#define Z_SCREEN_H 64
+
+#define z_sprite_load(Index, Id) \
+    z_platform__loadSprite(Index, "assets/gfx/" #Id ".png");
+
+#define z_sfx_load(Index, Id) \
+    z_platform__loadSfx(Index, "assets/sfx/" #Id ".wav");
+
+extern void z_platform__loadSprite(ZSpriteId Sprite, const char* Path);
+extern void z_platform__loadSfx(ZSfxId Sfx, const char* Path);

@@ -22,7 +22,6 @@
 #include "util_camera.h"
 #include "util_collision.h"
 #include "util_input.h"
-#include "util_pixel.h"
 #include "util_pool.h"
 
 #define Z_SNAKE_LEN 256

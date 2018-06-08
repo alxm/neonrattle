@@ -18,8 +18,6 @@
 #include "platform.h"
 #include "util_graphics.h"
 
-#include "util_pixel.h"
-
 #include "generated/data_gfx_palette.h"
 
 #include "generated/data_gfx_map0.h"

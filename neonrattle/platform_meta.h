@@ -25,26 +25,6 @@ Z_EXTERN_C_START
 
 typedef uint16_t ZPixel;
 
-#include "util_graphics.h"
-#include "util_sound.h"
-
-#define Z_SCREEN_W 80
-#define Z_SCREEN_H 64
-
-#define z_sprite_load(Index, Id)                             \
-    z_platform__loadSprite(Index, z_data_gfx_##Id##_buffer);
-
-#define z_sfx_load(Index, Id)                     \
-    z_platform__loadSfx(Index,                    \
-                        z_data_sfx_##Id##_buffer, \
-                        z_data_sfx_##Id##_size);
-
-extern void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer);
-extern void z_platform__loadSfx(ZSfxId Sfx, const uint8_t* Buffer, uint32_t Size);
-
-extern void z_platform_meta_fillLights(ZColorId BgColorId, ZColorId ColorId, int Alpha);
-extern void z_platform_meta_drawLights(ZColorId ColorId, int Alpha, int X, int Y);
-
 static inline void z_pixel_toRGB(ZPixel Pixel, int* R, int* G, int* B)
 {
     *R = ((Pixel >> 11)                 ) << 3;
@@ -70,5 +50,25 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
          ((((Hexcode >> 8)  & 0xff) >> 2) << 5)   |
          ((((Hexcode)       & 0xff) >> 3) << 0));
 }
+
+#include "util_graphics.h"
+#include "util_sound.h"
+
+#define Z_SCREEN_W 80
+#define Z_SCREEN_H 64
+
+#define z_sprite_load(Index, Id)                             \
+    z_platform__loadSprite(Index, z_data_gfx_##Id##_buffer);
+
+#define z_sfx_load(Index, Id)                     \
+    z_platform__loadSfx(Index,                    \
+                        z_data_sfx_##Id##_buffer, \
+                        z_data_sfx_##Id##_size);
+
+extern void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer);
+extern void z_platform__loadSfx(ZSfxId Sfx, const uint8_t* Buffer, uint32_t Size);
+
+extern void z_platform_meta_fillLights(ZColorId BgColorId, ZColorId ColorId, int Alpha);
+extern void z_platform_meta_drawLights(ZColorId ColorId, int Alpha, int X, int Y);
 
 Z_EXTERN_C_END

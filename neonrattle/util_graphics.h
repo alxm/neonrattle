@@ -123,4 +123,14 @@ extern void z_draw_hline(int X1, int X2, int Y, ZColorId ColorId);
 extern void z_draw_vline(int X, int Y1, int Y2, ZColorId ColorId);
 extern void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId);
 
+static inline void z_pixel_drawAlpha(ZPixel* Dst, int Red, int Green, int Blue, int Alpha)
+{
+    int r, g, b;
+    z_pixel_toRGB(*Dst, &r, &g, &b);
+
+    *Dst = z_pixel_fromRGB(r + (((Red   - r) * Alpha) >> 8),
+                           g + (((Green - g) * Alpha) >> 8),
+                           b + (((Blue  - b) * Alpha) >> 8));
+}
+
 Z_EXTERN_C_END

@@ -21,7 +21,6 @@
 #include "obj_snake.h"
 #include "util_camera.h"
 #include "util_list.h"
-#include "util_pixel.h"
 #include "util_pool.h"
 
 #define Z_APPLE_ALPHA_DEG_STEP 8
