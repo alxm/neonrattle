@@ -175,7 +175,7 @@ void z_snake_draw(ZSnake* Snake)
                                    s->r,
                                    s->g,
                                    s->b,
-                                   256);
+                                   128);
     }
 }
 
