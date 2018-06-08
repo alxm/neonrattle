@@ -39,6 +39,14 @@ static inline void z_pixel_toRGB(ZPixel Pixel, int* Red, int* Green, int* Blue)
     a_pixel_toRgb(Pixel, Red, Green, Blue);
 }
 
+static inline int z_pixel_toR(ZPixel Pixel)
+{
+    int red;
+    a_pixel_toRgb(Pixel, &red, NULL, NULL);
+
+    return red;
+}
+
 static inline ZPixel z_pixel_fromRGB(int Red, int Green, int Blue)
 {
     return a_pixel_fromRgb(Red, Green, Blue);

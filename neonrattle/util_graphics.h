@@ -81,6 +81,12 @@ typedef enum Z_ENUM_PACK {
     // Tiles
     Z_SPRITE_TILES,
 
+    // Snake
+    Z_SPRITE_SNAKE_ALPHAMASK,
+
+    // Apples
+    Z_SPRITE_APPLE_ALPHAMASK,
+
     // Misc
     Z_SPRITE_ALXM,
     Z_SPRITE_ALXM_WING,
@@ -104,6 +110,8 @@ extern const ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame);
 extern ZPixel z_sprite_getPixel(ZSpriteId Sprite, unsigned Frame, int X, int Y);
 extern void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame);
 extern void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame);
+extern void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha);
+extern void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, int R, int G, int B, int Alpha);
 extern int z_sprite_getWidth(ZSpriteId Sprite);
 extern int z_sprite_getHeight(ZSpriteId Sprite);
 extern uint8_t z_sprite_getNumFrames(ZSpriteId Sprite);

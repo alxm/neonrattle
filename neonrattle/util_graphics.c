@@ -18,11 +18,17 @@
 #include "platform.h"
 #include "util_graphics.h"
 
+#include "util_pixel.h"
+
 #include "generated/data_gfx_palette.h"
 
 #include "generated/data_gfx_map0.h"
 
 #include "generated/data_gfx_tiles.h"
+
+#include "generated/data_gfx_snake_alphamask1.h"
+
+#include "generated/data_gfx_apple_alphamask1.h"
 
 #include "generated/data_gfx_alxm.h"
 #include "generated/data_gfx_alxm_wing.h"
@@ -34,6 +40,10 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_MAP0, map0);
 
     z_sprite_load(Z_SPRITE_TILES, tiles);
+
+    z_sprite_load(Z_SPRITE_SNAKE_ALPHAMASK, snake_alphamask1);
+
+    z_sprite_load(Z_SPRITE_APPLE_ALPHAMASK, apple_alphamask1);
 
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
@@ -62,6 +72,83 @@ void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame)
                   X - z_sprite_getWidth(Sprite) / 2,
                   Y - z_sprite_getHeight(Sprite) / 2,
                   Frame);
+}
+
+void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha)
+{
+    z_sprite_blitAlphaMaskRGBA(AlphaMask,
+                               X,
+                               Y,
+                               Frame,
+                               z_colors[Fill].r,
+                               z_colors[Fill].g,
+                               z_colors[Fill].b,
+                               Alpha);
+}
+
+void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, int R, int G, int B, int Alpha)
+{
+    if(Alpha == 0) {
+        return;
+    }
+
+    const int spriteW = z_sprite_getWidth(AlphaMask);
+    const int spriteH = z_sprite_getHeight(AlphaMask);
+
+    X -= spriteW / 2;
+    Y -= spriteH / 2;
+
+    if(X >= Z_SCREEN_W || X + spriteW <= 0
+        || Y >= Z_SCREEN_H || Y + spriteH <= 0) {
+
+        return;
+    }
+
+    ZPixel* screenPixels = z_screen_getPixels();
+    const ZPixel* spritePixels = z_sprite_getPixels(AlphaMask, Frame);
+
+    int spriteDrawW = spriteW;
+    int spriteDrawH = spriteH;
+
+    if(Y < 0) {
+        spritePixels += -Y * spriteW;
+        spriteDrawH -= -Y;
+        Y = 0;
+    }
+
+    if(Y + spriteDrawH > Z_SCREEN_H) {
+        spriteDrawH -= Y + spriteDrawH - Z_SCREEN_H;
+    }
+
+    if(X < 0) {
+        spritePixels += -X;
+        spriteDrawW -= -X;
+        X = 0;
+    }
+
+    if(X + spriteDrawW > Z_SCREEN_W) {
+        spriteDrawW -= X + spriteDrawW - Z_SCREEN_W;
+    }
+
+    screenPixels += Y * Z_SCREEN_W + X;
+
+    for(int y = spriteDrawH; y--; ) {
+        ZPixel* screenPixels2 = screenPixels;
+        const ZPixel* spritePixels2 = spritePixels;
+
+        for(int x = spriteDrawW; x--; ) {
+            int a = (Alpha * z_pixel_toR(*spritePixels2++)) >> 8;
+
+            if(a != 0) {
+                z_pixel_drawAlpha(screenPixels2, R, G, B, a);
+            }
+
+            screenPixels2++;
+        }
+
+        screenPixels += Z_SCREEN_W;
+        spritePixels += spriteW;
+    }
 }
 
 void z_draw_hline(int X1, int X2, int Y, ZColorId ColorId)

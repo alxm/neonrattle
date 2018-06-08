@@ -159,19 +159,9 @@ bool z_snake_tick(ZSnake* Snake)
     return true;
 }
 
-static void safePixel(ZPixel* Buffer, int X, int Y, int R, int G, int B, int A)
-{
-    if(X < 0 || X >= Z_SCREEN_W || Y < 0 || Y >= Z_SCREEN_H) {
-        return;
-    }
-
-    z_pixel_drawAlpha(Buffer + Y * Z_SCREEN_W + X, R, G, B, A);
-}
-
 void z_snake_draw(ZSnake* Snake)
 {
     unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
-    ZPixel* const buffer = z_screen_getPixels();
 
     for(unsigned i = Snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
         ZSegment* s = &Snake->body[i];
@@ -179,27 +169,14 @@ void z_snake_draw(ZSnake* Snake)
         int x, y;
         z_camera_coordsToScreen(s->x, s->y, &x, &y);
 
-        safePixel(buffer, x, y, s->r, s->g, s->b, 192);
-        safePixel(buffer, x-1, y, s->r, s->g, s->b, 192);
-        safePixel(buffer, x, y-1, s->r, s->g, s->b, 192);
-        safePixel(buffer, x-1, y-1, s->r, s->g, s->b, 192);
-
-        safePixel(buffer, x-1, y-2, s->r, s->g, s->b, 80);
-        safePixel(buffer, x, y-2, s->r, s->g, s->b, 80);
-
-        safePixel(buffer, x-1, y+1, s->r, s->g, s->b, 80);
-        safePixel(buffer, x, y+1, s->r, s->g, s->b, 80);
-
-        safePixel(buffer, x-2, y-1, s->r, s->g, s->b, 80);
-        safePixel(buffer, x-2, y, s->r, s->g, s->b, 80);
-
-        safePixel(buffer, x+1, y-1, s->r, s->g, s->b, 80);
-        safePixel(buffer, x+1, y, s->r, s->g, s->b, 80);
-
-        safePixel(buffer, x+1, y-2, s->r, s->g, s->b, 32);
-        safePixel(buffer, x+1, y+1, s->r, s->g, s->b, 32);
-        safePixel(buffer, x-2, y+1, s->r, s->g, s->b, 32);
-        safePixel(buffer, x-2, y-2, s->r, s->g, s->b, 32);
+        z_sprite_blitAlphaMaskRGBA(Z_SPRITE_SNAKE_ALPHAMASK,
+                                   x,
+                                   y,
+                                   0,
+                                   s->r,
+                                   s->g,
+                                   s->b,
+                                   256);
     }
 }
 

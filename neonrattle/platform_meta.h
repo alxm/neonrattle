@@ -47,9 +47,14 @@ extern void z_platform_meta_drawLights(ZColorId ColorId, int Alpha, int X, int Y
 
 static inline void z_pixel_toRGB(ZPixel Pixel, int* R, int* G, int* B)
 {
-    *R = ((Pixel >> 11) & ((1 << 5) - 1)) << 3;
+    *R = ((Pixel >> 11)                 ) << 3;
     *G = ((Pixel >> 5)  & ((1 << 6) - 1)) << 2;
     *B = ((Pixel >> 0)  & ((1 << 5) - 1)) << 3;
+}
+
+static inline int z_pixel_toR(ZPixel Pixel)
+{
+    return (Pixel >> 11) << 3;
 }
 
 static inline ZPixel z_pixel_fromRGB(int Red, int Green, int Blue)
