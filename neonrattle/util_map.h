@@ -21,8 +21,10 @@
 #include "util_fix.h"
 #include "util_list.h"
 
-#define Z_MAP_W 32
-#define Z_MAP_H 16
+#define Z_MAP_W_SHIFT (4)
+#define Z_MAP_H_SHIFT (4)
+#define Z_MAP_W (1 << Z_MAP_W_SHIFT)
+#define Z_MAP_H (1 << Z_MAP_H_SHIFT)
 
 #define Z_TILE_SHIFT 4
 #define Z_TILE_DIM (1 << Z_TILE_SHIFT)
