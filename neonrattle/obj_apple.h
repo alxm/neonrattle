@@ -36,6 +36,10 @@ extern const size_t z_apple_listNodeOffsets[Z_APPLE_LIST_NUM];
 extern void z_apple_setup(void);
 
 extern ZApple* z_apple_new(ZFix X, ZFix Y);
+extern void z_apple_free(ZApple* Apple);
 
-extern void z_apple_tick(ZApple* Apple, ZSnake* Snake);
+extern void z_apple_getCoords(const ZApple* Apple, ZFix* X, ZFix* Y);
+extern int z_apple_getDim(const ZApple* Apple);
+
+extern void z_apple_tick(ZApple* Apple);
 extern void z_apple_draw(ZApple* Apple);

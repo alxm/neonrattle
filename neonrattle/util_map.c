@@ -21,6 +21,7 @@
 #include "obj_apple.h"
 #include "obj_snake.h"
 #include "util_camera.h"
+#include "util_collision.h"
 #include "util_pool.h"
 
 #define Z_GRID_W_SHIFT (Z_MAP_W_SHIFT - 1)
@@ -194,7 +195,28 @@ void z_map_tick(ZSnake* Snake)
     for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
             Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
-                z_apple_tick(apple, Snake);
+                ZFix appleX, appleY;
+                z_apple_getCoords(apple, &appleX, &appleY);
+
+                ZFix snakeX, snakeY;
+                z_snake_getCoords(Snake, &snakeX, &snakeY);
+
+                if(z_collision_sqAndSq(z_fix_toInt(snakeX),
+                                       z_fix_toInt(snakeY),
+                                       z_snake_getDim(Snake),
+                                       z_fix_toInt(appleX),
+                                       z_fix_toInt(appleY),
+                                       z_apple_getDim(apple))) {
+
+                    z_snake_grow(Snake, Z_APPLE_GROW_PER);
+
+                    Z_LIST_REMOVE_CURRENT();
+                    z_apple_free(apple);
+
+                    continue;
+                }
+
+                z_apple_tick(apple);
             }
         }
     }

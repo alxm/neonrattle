@@ -59,8 +59,14 @@ void z_list_addLast(ZList* List, void* Object)
 
 void z_list_remove(ZListNode* Node)
 {
+    if(Node->prev == NULL) {
+        return;
+    }
+
     Node->prev->next = Node->next;
     Node->next->prev = Node->prev;
+
+    Node->prev = NULL;
 }
 
 ZListIt z_listit__new(ZList* List)

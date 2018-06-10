@@ -20,7 +20,6 @@
 
 #include "obj_apple.h"
 #include "util_camera.h"
-#include "util_collision.h"
 #include "util_input.h"
 #include "util_pool.h"
 
@@ -81,6 +80,18 @@ void z_snake_getCoords(const ZSnake* Snake, ZFix* X, ZFix* Y)
 
     *X = head->x;
     *Y = head->y;
+}
+
+int z_snake_getDim(const ZSnake* Snake)
+{
+    Z_UNUSED(Snake);
+
+    return z_sprite_getWidth(Z_SPRITE_SNAKE_ALPHAMASK);
+}
+
+void z_snake_grow(ZSnake* Snake, int Amount)
+{
+    Snake->grow += Amount;
 }
 
 bool z_snake_tick(ZSnake* Snake)
@@ -165,24 +176,4 @@ void z_snake_draw(ZSnake* Snake)
                                    s->b,
                                    128);
     }
-}
-
-bool z_snake_collides(ZSnake* Snake, ZFix X, ZFix Y, int Dim)
-{
-    ZSegment* head = &Snake->body[Snake->head];
-
-    if(z_collision_boxAndBox(z_fix_toInt(head->x),
-                             z_fix_toInt(head->y),
-                             4,
-                             4,
-                             z_fix_toInt(X),
-                             z_fix_toInt(Y),
-                             Dim,
-                             Dim)) {
-
-        Snake->grow += Z_APPLE_GROW_PER;
-        return true;
-    }
-
-    return false;
 }

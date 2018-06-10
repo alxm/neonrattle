@@ -27,3 +27,14 @@ static inline bool z_collision_boxAndBox(int X1, int Y1, int W1, int H1, int X2,
 
     return !(Y1 >= Y2 + H2 || Y2 >= Y1 + H1 || X1 >= X2 + W2 || X2 >= X1 + W1);
 }
+
+static inline bool z_collision_sqAndSq(int X1, int Y1, int Dim1, int X2, int Y2, int Dim2)
+{
+    X1 = X1 - Dim1 / 2;
+    Y1 = Y1 - Dim1 / 2;
+
+    X2 = X2 - Dim2 / 2;
+    Y2 = Y2 - Dim2 / 2;
+
+    return !(Y1 >= Y2 + Dim2 || Y2 >= Y1 + Dim1 || X1 >= X2 + Dim2 || X2 >= X1 + Dim1);
+}

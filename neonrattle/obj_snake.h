@@ -24,9 +24,10 @@ typedef struct ZSnake ZSnake;
 extern void z_snake_setup(void);
 
 extern ZSnake* z_snake_new(ZFix X, ZFix Y);
+
 extern void z_snake_getCoords(const ZSnake* Snake, ZFix* X, ZFix* Y);
+extern int z_snake_getDim(const ZSnake* Snake);
+extern void z_snake_grow(ZSnake* Snake, int Amount);
 
 extern bool z_snake_tick(ZSnake* Snake);
 extern void z_snake_draw(ZSnake* Snake);
-
-extern bool z_snake_collides(ZSnake* Snake, ZFix X, ZFix Y, int Dim);

@@ -18,7 +18,6 @@
 #include "platform.h"
 #include "obj_apple.h"
 
-#include "obj_snake.h"
 #include "util_camera.h"
 #include "util_list.h"
 #include "util_pool.h"
@@ -59,20 +58,28 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
     return a;
 }
 
-static void z_apple_free(ZApple* Apple)
+void z_apple_free(ZApple* Apple)
 {
     z_list_remove(&Apple->nodeGrid);
     z_pool_free(Z_POOL_APPLE, Apple);
 }
 
-void z_apple_tick(ZApple* Apple, ZSnake* Snake)
+void z_apple_getCoords(const ZApple* Apple, ZFix* X, ZFix* Y)
+{
+    *X = Apple->x;
+    *Y = Apple->y;
+}
+
+int z_apple_getDim(const ZApple* Apple)
+{
+    Z_UNUSED(Apple);
+
+    return z_sprite_getWidth(Z_SPRITE_APPLE_ALPHAMASK);
+}
+
+void z_apple_tick(ZApple* Apple)
 {
     Apple->alphaAngle += Z_APPLE_ALPHA_DEG_STEP * Z_FIX_DEG_001;
-    int dim = z_sprite_getWidth(Z_SPRITE_APPLE_ALPHAMASK);
-
-    if(z_snake_collides(Snake, Apple->x, Apple->y, dim)) {
-        z_apple_free(Apple);
-    }
 }
 
 void z_apple_draw(ZApple* Apple)
