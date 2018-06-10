@@ -27,6 +27,12 @@ void z_list_init(ZList* List, size_t NodeOffset)
     List->nodeOffset = NodeOffset;
 }
 
+void z_list_reset(ZList* List)
+{
+    List->root.prev = &List->root;
+    List->root.next = &List->root;
+}
+
 void z_list_addFirst(ZList* List, void* Object)
 {
     ZListNode* rootNode = &List->root;
