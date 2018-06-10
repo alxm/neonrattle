@@ -22,7 +22,13 @@
 
 typedef struct ZApple ZApple;
 
-extern const size_t z_apple_listNodeOffset0;
+typedef enum {
+    Z_APPLE_LIST_INVALID = -1,
+    Z_APPLE_LIST_GRID,
+    Z_APPLE_LIST_NUM
+} ZAppleListId;
+
+extern const size_t z_apple_listNodeOffsets[Z_APPLE_LIST_NUM];
 
 extern void z_apple_setup(void);
 

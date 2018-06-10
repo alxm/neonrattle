@@ -27,35 +27,23 @@
 #include "util_screen.h"
 
 static struct {
-    ZList apples;
     ZSnake* snake;
 } g_context;
 
 void z_state_play_init(void)
 {
-    z_list_init(&g_context.apples, z_apple_listNodeOffset0);
-
-    // place apples and player on map
-    z_map_init(&g_context.apples, &g_context.snake);
+    z_map_init(&g_context.snake);
 }
 
 void z_state_play_tick(void)
 {
     z_snake_tick(g_context.snake);
     z_camera_tick(g_context.snake);
-
-    Z_LIST_ITERATE(&g_context.apples, ZApple*, apple) {
-        z_apple_tick(apple, g_context.snake);
-    }
+    z_map_tick(g_context.snake);
 }
 
 void z_state_play_draw(void)
 {
     z_map_draw();
-
     z_snake_draw(g_context.snake);
-
-    Z_LIST_ITERATE(&g_context.apples, ZApple*, apple) {
-        z_apple_draw(apple);
-    }
 }

@@ -28,16 +28,18 @@
 #define Z_APPLE_ALPHA_MAX 256
 
 struct ZApple {
-    ZListNode applesListNode;
+    ZListNode nodeGrid;
     ZFix x, y;
     int dim;
     ZFixu alphaAngle;
     ZColorId color;
 };
 
-const size_t z_apple_listNodeOffset0 = offsetof(ZApple, applesListNode);
+const size_t z_apple_listNodeOffsets[Z_APPLE_LIST_NUM] = {
+    [Z_APPLE_LIST_GRID] = offsetof(ZApple, nodeGrid),
+};
 
-#define Z_APPLE_NUM_MAX (256)
+#define Z_APPLE_NUM_MAX (128)
 Z_POOL_DECLARE(ZApple, Z_APPLE_NUM_MAX, g_pool);
 
 void z_apple_setup(void)
@@ -62,7 +64,7 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
 
 static void z_apple_free(ZApple* Apple)
 {
-    z_list_remove(&Apple->applesListNode);
+    z_list_remove(&Apple->nodeGrid);
     z_pool_free(Z_POOL_APPLE, Apple);
 }
 

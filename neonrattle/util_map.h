@@ -31,5 +31,6 @@
 #define Z_TILE_MASK (Z_TILE_DIM - 1)
 
 extern void z_map_setup(void);
-extern void z_map_init(ZList* Apples, ZSnake** Snake);
+extern void z_map_init(ZSnake** Snake);
+extern void z_map_tick(ZSnake* Snake);
 extern void z_map_draw(void);

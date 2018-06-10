@@ -23,11 +23,27 @@
 #include "util_camera.h"
 #include "util_pool.h"
 
+#define Z_GRID_W_SHIFT (Z_MAP_W_SHIFT - 1)
+#define Z_GRID_H_SHIFT (Z_MAP_H_SHIFT - 1)
+#define Z_GRID_W (1 << Z_GRID_W_SHIFT)
+#define Z_GRID_H (1 << Z_GRID_H_SHIFT)
+
+static inline void z_grid_fromTile(int TileX, int TileY, int* GridX, int* GridY)
+{
+    *GridX = TileX >> (Z_MAP_W_SHIFT - Z_GRID_W_SHIFT);
+    *GridY = TileY >> (Z_MAP_H_SHIFT - Z_GRID_H_SHIFT);
+}
+
 typedef struct {
     bool wall;
 } ZTile;
 
-static ZTile g_map[Z_MAP_H][Z_MAP_W];
+typedef struct {
+    ZTile tiles[Z_MAP_H][Z_MAP_W];
+    ZList grid[Z_GRID_H][Z_GRID_W];
+} ZMap;
+
+static ZMap g_map;
 
 void z_map_setup(void)
 {
@@ -37,14 +53,27 @@ void z_map_setup(void)
 
     for(int y = 0; y < Z_MAP_H; y++) {
         for(int x = 0; x < Z_MAP_W; x++) {
-            g_map[y][x].wall = *pixels++ == white;
+            g_map.tiles[y][x].wall = *pixels++ == white;
+        }
+    }
+
+    for(int y = Z_GRID_H; y--; ) {
+        for(int x = Z_GRID_W; x--; ) {
+            z_list_init(&g_map.grid[y][x],
+                        z_apple_listNodeOffsets[Z_APPLE_LIST_GRID]);
         }
     }
 }
 
-void z_map_init(ZList* Apples, ZSnake** Snake)
+void z_map_init(ZSnake** Snake)
 {
     z_pool_reset(Z_POOL_APPLE);
+
+    for(int y = Z_GRID_H; y--; ) {
+        for(int x = Z_GRID_W; x--; ) {
+            z_list_reset(&g_map.grid[y][x]);
+        }
+    }
 
     const ZPixel red25 = z_pixel_fromRGB(63, 0, 0);
     const ZPixel red50 = z_pixel_fromRGB(127, 0, 0);
@@ -72,20 +101,28 @@ void z_map_init(ZList* Apples, ZSnake** Snake)
             }
 
             while(num--) {
-                int ax = x * Z_TILE_DIM + 2 + z_random_int(Z_TILE_DIM - 4);
-                int ay = y * Z_TILE_DIM + 2 + z_random_int(Z_TILE_DIM - 4);
+                int w = z_sprite_getWidth(Z_SPRITE_APPLE_ALPHAMASK);
+                int h = z_sprite_getHeight(Z_SPRITE_APPLE_ALPHAMASK);
+                int ax = x * Z_TILE_DIM + w / 2 + z_random_int(Z_TILE_DIM - w);
+                int ay = y * Z_TILE_DIM + h / 2 + z_random_int(Z_TILE_DIM - h);
 
                 ZApple* a = z_apple_new(z_fix_fromInt(ax), z_fix_fromInt(ay));
 
                 if(a != NULL) {
-                    z_list_addLast(Apples, a);
+                    int gridX, gridY;
+                    z_grid_fromTile(x, y, &gridX, &gridY);
+
+                    z_list_addLast(&g_map.grid[gridY][gridX], a);
                 }
             }
         }
     }
 }
 
-void z_map_draw(void)
+static void z_map_getVisibleBounds(
+    int* TileStartX, int* TileStartY, int* TileEndX, int* TileEndY,
+    int* GridStartX, int* GridStartY, int* GridEndX, int* GridEndY,
+    int* ScreenStartX, int* ScreenStartY)
 {
     ZFix originX, originY;
     z_camera_getOrigin(&originX, &originY);
@@ -114,18 +151,92 @@ void z_map_draw(void)
     int tileEndY = z_math_min(topLeftTileY + (Z_SCREEN_H / Z_TILE_DIM + 1),
                               Z_MAP_H);
 
-    for(int tileY = topLeftTileY, screenY = topLeftScreenY;
+    if(TileStartX != NULL) {
+        *TileStartX = topLeftTileX;
+        *TileStartY = topLeftTileY;
+        *TileEndX = tileEndX;
+        *TileEndY = tileEndY;
+    }
+
+    if(GridStartX != NULL) {
+        z_grid_fromTile(topLeftTileX, topLeftTileY, GridStartX, GridStartY);
+        z_grid_fromTile(tileEndX, tileEndY, GridEndX, GridEndY);
+
+        if(tileEndX & ((1 << (Z_MAP_W_SHIFT - Z_GRID_W_SHIFT)) - 1)) {
+            *GridEndX += 1;
+        }
+
+        if(tileEndY & ((1 << (Z_MAP_H_SHIFT - Z_GRID_H_SHIFT)) - 1)) {
+            *GridEndY += 1;
+        }
+    }
+
+    if(ScreenStartX != NULL) {
+        *ScreenStartX = topLeftScreenX;
+        *ScreenStartY = topLeftScreenY;
+    }
+}
+
+void z_map_tick(ZSnake* Snake)
+{
+    int gridStartX, gridStartY, gridEndX, gridEndY;
+    z_map_getVisibleBounds(NULL,
+                           NULL,
+                           NULL,
+                           NULL,
+                           &gridStartX,
+                           &gridStartY,
+                           &gridEndX,
+                           &gridEndY,
+                           NULL,
+                           NULL);
+
+    for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
+        for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
+            Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
+                z_apple_tick(apple, Snake);
+            }
+        }
+    }
+}
+
+void z_map_draw(void)
+{
+    int tileStartX, tileStartY, tileEndX, tileEndY;
+    int gridStartX, gridStartY, gridEndX, gridEndY;
+    int screenStartX, screenStartY;
+    z_map_getVisibleBounds(&tileStartX,
+                           &tileStartY,
+                           &tileEndX,
+                           &tileEndY,
+                           &gridStartX,
+                           &gridStartY,
+                           &gridEndX,
+                           &gridEndY,
+                           &screenStartX,
+                           &screenStartY);
+
+    for(int tileY = tileStartY, screenY = screenStartY;
         tileY < tileEndY;
         tileY++, screenY += Z_TILE_DIM) {
 
-        for(int tileX = topLeftTileX, screenX = topLeftScreenX;
+        for(int tileX = tileStartX, screenX = screenStartX;
             tileX < tileEndX;
             tileX++, screenX += Z_TILE_DIM) {
 
             z_sprite_blit(Z_SPRITE_TILES,
                           screenX,
                           screenY,
-                          (unsigned)(g_map[tileY][tileX].wall * 4 + (tileY & 1) * 2 + (tileX & 1)));
+                          (unsigned)(g_map.tiles[tileY][tileX].wall * 4
+                                        + (tileY & 1) * 2 + (tileX & 1)));
+        }
+    }
+
+    for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
+        for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
+            Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
+                z_apple_draw(apple);
+            }
         }
     }
 }
