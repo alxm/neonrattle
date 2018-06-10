@@ -30,7 +30,6 @@
 struct ZApple {
     ZListNode nodeGrid;
     ZFix x, y;
-    int dim;
     ZFixu alphaAngle;
     ZColorId color;
 };
@@ -39,7 +38,6 @@ const size_t z_apple_listNodeOffsets[Z_APPLE_LIST_NUM] = {
     [Z_APPLE_LIST_GRID] = offsetof(ZApple, nodeGrid),
 };
 
-#define Z_APPLE_NUM_MAX (128)
 Z_POOL_DECLARE(ZApple, Z_APPLE_NUM_MAX, g_pool);
 
 void z_apple_setup(void)
@@ -54,7 +52,6 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
     if(a != NULL) {
         a->x = X;
         a->y = Y;
-        a->dim = 4;
         a->alphaAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
         a->color = z_color_getRandomApple();
     }
@@ -71,8 +68,9 @@ static void z_apple_free(ZApple* Apple)
 void z_apple_tick(ZApple* Apple, ZSnake* Snake)
 {
     Apple->alphaAngle += Z_APPLE_ALPHA_DEG_STEP * Z_FIX_DEG_001;
+    int dim = z_sprite_getWidth(Z_SPRITE_APPLE_ALPHAMASK);
 
-    if(z_snake_collides(Snake, Apple->x, Apple->y, Apple->dim)) {
+    if(z_snake_collides(Snake, Apple->x, Apple->y, dim)) {
         z_apple_free(Apple);
     }
 }

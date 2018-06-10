@@ -24,7 +24,7 @@
 #include "util_input.h"
 #include "util_pool.h"
 
-#define Z_SNAKE_LEN 256
+#define Z_SNAKE_LEN (Z_APPLE_NUM_MAX * Z_APPLE_GROW_PER)
 #define Z_SNAKE_LEN_MASK (Z_SNAKE_LEN - 1)
 
 typedef struct {
@@ -38,7 +38,6 @@ struct ZSnake {
     unsigned head, tail;
     ZFixu angle;
     int grow;
-
 };
 
 Z_POOL_DECLARE(ZSnake, 1, g_pool);
@@ -46,6 +45,18 @@ Z_POOL_DECLARE(ZSnake, 1, g_pool);
 void z_snake_setup(void)
 {
     z_pool_register(Z_POOL_SNAKE, g_pool);
+}
+
+static void z_snake_addHead(ZSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
+{
+    ZSegment* s = &Snake->body[Snake->head];
+
+    s->x = X;
+    s->y = Y;
+    s->r = z_colors[Color].r;
+    s->g = z_colors[Color].g;
+    s->b = z_colors[Color].b;
+    s->targetColor = z_color_getRandomSnake();
 }
 
 ZSnake* z_snake_new(ZFix X, ZFix Y)
@@ -56,16 +67,9 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
         s->head = 0;
         s->tail = 0;
         s->angle = Z_FIX_DEG_022;
-        s->grow = 4;
+        s->grow = 3;
 
-        ZColorId c = z_color_getRandomSnake();
-
-        s->body[0].x = X;
-        s->body[0].y = Y;
-        s->body[0].r = z_colors[c].r;
-        s->body[0].g = z_colors[c].g;
-        s->body[0].b = z_colors[c].b;
-        s->body[0].targetColor = c;
+        z_snake_addHead(s, X, Y, z_color_getRandomSnake());
     }
 
     return s;
@@ -103,29 +107,13 @@ bool z_snake_tick(ZSnake* Snake)
             Snake->grow--;
             Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
 
-            ZSegment* s = &Snake->body[Snake->head];
-            ZColorId c = z_color_getRandomApple();
-
-            s->x = x;
-            s->y = y;
-            s->r = z_colors[c].r;
-            s->g = z_colors[c].g;
-            s->b = z_colors[c].b;
-            s->targetColor = z_color_getRandomSnake();
+            z_snake_addHead(Snake, x, y, z_color_getRandomApple());
         }
     } else {
         Snake->tail = (Snake->tail + 1) & Z_SNAKE_LEN_MASK;
         Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
 
-        ZSegment* s = &Snake->body[Snake->head];
-        ZColorId c = z_color_getRandomSnake();
-
-        s->x = x;
-        s->y = y;
-        s->r = z_colors[c].r;
-        s->g = z_colors[c].g;
-        s->b = z_colors[c].b;
-        s->targetColor = c;
+        z_snake_addHead(Snake, x, y, z_color_getRandomSnake());
     }
 
     if(z_button_pressed(Z_BUTTON_LEFT)) {
@@ -192,7 +180,7 @@ bool z_snake_collides(ZSnake* Snake, ZFix X, ZFix Y, int Dim)
                              Dim,
                              Dim)) {
 
-        Snake->grow += 4;
+        Snake->grow += Z_APPLE_GROW_PER;
         return true;
     }
 
