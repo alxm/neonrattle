@@ -26,6 +26,8 @@
 #define Z_SNAKE_LEN (Z_APPLE_NUM_MAX * Z_APPLE_GROW_PER)
 #define Z_SNAKE_LEN_MASK (Z_SNAKE_LEN - 1)
 
+#define Z_SNAKE_TURN_DEG (Z_FIX_DEG_001 * 10)
+
 typedef struct {
     ZFix x, y;
     int r, g, b;
@@ -128,11 +130,11 @@ bool z_snake_tick(ZSnake* Snake)
     }
 
     if(z_button_pressed(Z_BUTTON_LEFT)) {
-        Snake->angle += Z_FIX_DEG_001 * 8;
+        Snake->angle += Z_SNAKE_TURN_DEG;
     }
 
     if(z_button_pressed(Z_BUTTON_RIGHT)) {
-        Snake->angle -= Z_FIX_DEG_001 * 8;
+        Snake->angle -= Z_SNAKE_TURN_DEG;
     }
 
     unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
