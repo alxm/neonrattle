@@ -24,6 +24,7 @@
 #include "util_fix.h"
 #include "util_list.h"
 #include "util_map.h"
+#include "util_pool.h"
 #include "util_screen.h"
 
 static struct {
@@ -46,4 +47,10 @@ void z_state_play_draw(void)
 {
     z_map_draw();
     z_snake_draw(g_context.snake);
+}
+
+void z_state_play_free(void)
+{
+    z_pool_reset(Z_POOL_APPLE);
+    z_pool_reset(Z_POOL_SNAKE);
 }

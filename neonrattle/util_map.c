@@ -20,6 +20,7 @@
 
 #include "obj_apple.h"
 #include "obj_snake.h"
+#include "state.h"
 #include "util_camera.h"
 #include "util_collision.h"
 #include "util_coords.h"
@@ -58,8 +59,6 @@ void z_map_setup(void)
 
 void z_map_init(ZSnake** Snake)
 {
-    z_pool_reset(Z_POOL_APPLE);
-
     for(int y = Z_GRID_H; y--; ) {
         for(int x = Z_GRID_W; x--; ) {
             z_list_reset(&g_map.grid[y][x]);
@@ -247,6 +246,13 @@ void z_map_tick(ZSnake* Snake)
                 }
             }
         }
+    }
+
+    int snakeTileX, snakeTileY;
+    z_coords_fixToTile(snakeX, snakeY, &snakeTileX, &snakeTileY);
+
+    if(g_map.tiles[snakeTileY][snakeTileX].wall) {
+        z_state_set(Z_STATE_PLAY, false);
     }
 }
 

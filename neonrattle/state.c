@@ -52,7 +52,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_play_init,
         z_state_play_tick,
         z_state_play_draw,
-        NULL,
+        z_state_play_free,
         Z_SWIPE_SHOW,
         Z_SWIPE_HIDE,
     },

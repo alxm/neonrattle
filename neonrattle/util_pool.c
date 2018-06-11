@@ -55,6 +55,7 @@ void* z_pool_alloc(ZPoolId Pool)
                 [Z_POOL_APPLE] = "Z_POOL_APPLE",
                 [Z_POOL_CIRCLE] = "Z_POOL_CIRCLE",
                 [Z_POOL_PARTICLE] = "Z_POOL_PARTICLE",
+                [Z_POOL_SNAKE] = "Z_POOL_SNAKE",
             };
 
             printf("Can't allocate from %s (%d)\n", names[Pool], ++fails[Pool]);

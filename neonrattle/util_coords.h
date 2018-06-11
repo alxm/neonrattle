@@ -37,6 +37,12 @@
 #define Z_CELL_DIM (1 << Z_CELL_SHIFT)
 #define Z_CELL_MASK (Z_CELL_DIM - 1)
 
+static inline void z_coords_fixToTile(ZFix X, ZFix Y, int* TileX, int* TileY)
+{
+    *TileX = z_fix_toInt(X) >> Z_TILE_SHIFT;
+    *TileY = z_fix_toInt(Y) >> Z_TILE_SHIFT;
+}
+
 static inline void z_coords_tileToGrid(int TileX, int TileY, int* GridX, int* GridY)
 {
     *GridX = TileX >> Z_GRID_MAP_SHIFT_DIFF;
