@@ -18,7 +18,7 @@
 #include "platform.h"
 #include "util_camera.h"
 
-#include "util_map.h"
+#include "util_coords.h"
 
 static struct {
     ZFix x, y;

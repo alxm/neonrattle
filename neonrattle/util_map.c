@@ -22,18 +22,8 @@
 #include "obj_snake.h"
 #include "util_camera.h"
 #include "util_collision.h"
+#include "util_coords.h"
 #include "util_pool.h"
-
-#define Z_GRID_W_SHIFT (Z_MAP_W_SHIFT - 1)
-#define Z_GRID_H_SHIFT (Z_MAP_H_SHIFT - 1)
-#define Z_GRID_W (1 << Z_GRID_W_SHIFT)
-#define Z_GRID_H (1 << Z_GRID_H_SHIFT)
-
-static inline void z_grid_fromTile(int TileX, int TileY, int* GridX, int* GridY)
-{
-    *GridX = TileX >> (Z_MAP_W_SHIFT - Z_GRID_W_SHIFT);
-    *GridY = TileY >> (Z_MAP_H_SHIFT - Z_GRID_H_SHIFT);
-}
 
 typedef struct {
     bool wall;
@@ -111,7 +101,7 @@ void z_map_init(ZSnake** Snake)
 
                 if(a != NULL) {
                     int gridX, gridY;
-                    z_grid_fromTile(x, y, &gridX, &gridY);
+                    z_coords_tileToGrid(x, y, &gridX, &gridY);
 
                     z_list_addLast(&g_map.grid[gridY][gridX], a);
                 }
@@ -160,14 +150,14 @@ static void z_map_getVisibleBounds(
     }
 
     if(GridStartX != NULL) {
-        z_grid_fromTile(topLeftTileX, topLeftTileY, GridStartX, GridStartY);
-        z_grid_fromTile(tileEndX, tileEndY, GridEndX, GridEndY);
+        z_coords_tileToGrid(topLeftTileX, topLeftTileY, GridStartX, GridStartY);
+        z_coords_tileToGrid(tileEndX, tileEndY, GridEndX, GridEndY);
 
-        if(tileEndX & ((1 << (Z_MAP_W_SHIFT - Z_GRID_W_SHIFT)) - 1)) {
+        if(tileEndX & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1)) {
             *GridEndX += 1;
         }
 
-        if(tileEndY & ((1 << (Z_MAP_H_SHIFT - Z_GRID_H_SHIFT)) - 1)) {
+        if(tileEndY & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1)) {
             *GridEndY += 1;
         }
     }
@@ -195,11 +185,53 @@ void z_map_tick(ZSnake* Snake)
     for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
             Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
+                z_apple_tick(apple);
+            }
+        }
+    }
+
+    ZFix snakeX, snakeY;
+    z_snake_getCoords(Snake, &snakeX, &snakeY);
+
+    int snakeGridX, snakeGridY;
+    z_coords_fixToGrid(snakeX, snakeY, &snakeGridX, &snakeGridY);
+
+    int snakeGridXOffset, snakeGridYOffset;
+    z_coords_fixToGridOffset(snakeX, snakeY, &snakeGridXOffset, &snakeGridYOffset);
+
+    if(snakeGridX > 0 && snakeGridXOffset < Z_TILE_DIM / 2) {
+        gridStartX = snakeGridX - 1;
+    } else {
+        gridStartX = snakeGridX;
+    }
+
+    if(snakeGridY > 0 && snakeGridYOffset < Z_TILE_DIM / 2) {
+        gridStartY = snakeGridY - 1;
+    } else {
+        gridStartY = snakeGridY;
+    }
+
+    if(snakeGridX < Z_GRID_W - 1
+        && snakeGridXOffset > Z_CELL_DIM - Z_TILE_DIM / 2) {
+
+        gridEndX = snakeGridX + 1;
+    } else {
+        gridEndX = snakeGridX;
+    }
+
+    if(snakeGridY < Z_GRID_H - 1
+        && snakeGridYOffset > Z_CELL_DIM - Z_TILE_DIM / 2) {
+
+        gridEndY = snakeGridY + 1;
+    } else {
+        gridEndY = snakeGridY;
+    }
+
+    for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
+        for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
+            Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
                 ZFix appleX, appleY;
                 z_apple_getCoords(apple, &appleX, &appleY);
-
-                ZFix snakeX, snakeY;
-                z_snake_getCoords(Snake, &snakeX, &snakeY);
 
                 if(z_collision_sqAndSq(z_fix_toInt(snakeX),
                                        z_fix_toInt(snakeY),
@@ -212,11 +244,7 @@ void z_map_tick(ZSnake* Snake)
 
                     Z_LIST_REMOVE_CURRENT();
                     z_apple_free(apple);
-
-                    continue;
                 }
-
-                z_apple_tick(apple);
             }
         }
     }
