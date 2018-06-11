@@ -28,8 +28,12 @@ typedef struct {
 } ZTile;
 
 typedef struct {
+    ZList apples;
+} ZCell;
+
+typedef struct {
     ZTile tiles[Z_MAP_H][Z_MAP_W];
-    ZList grid[Z_GRID_H][Z_GRID_W];
+    ZCell grid[Z_GRID_H][Z_GRID_W];
 } ZMap;
 
 static ZMap g_map;
@@ -48,7 +52,7 @@ void z_map_setup(void)
 
     for(int y = Z_GRID_H; y--; ) {
         for(int x = Z_GRID_W; x--; ) {
-            z_list_init(&g_map.grid[y][x],
+            z_list_init(&g_map.grid[y][x].apples,
                         z_apple_listNodeOffsets[Z_APPLE_LIST_GRID]);
         }
     }
@@ -58,7 +62,7 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
 {
     for(int y = Z_GRID_H; y--; ) {
         for(int x = Z_GRID_W; x--; ) {
-            z_list_reset(&g_map.grid[y][x]);
+            z_list_reset(&g_map.grid[y][x].apples);
         }
     }
 
@@ -97,7 +101,7 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
                     int gridX, gridY;
                     z_coords_tileToGrid(x, y, &gridX, &gridY);
 
-                    z_list_addLast(&g_map.grid[gridY][gridX], a);
+                    z_list_addLast(&g_map.grid[gridY][gridX].apples, a);
                 }
             }
         }
@@ -161,7 +165,7 @@ void z_map_draw(void)
 
     for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
-            Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
+            Z_LIST_ITERATE(&g_map.grid[gridY][gridX].apples, ZApple*, apple) {
                 z_apple_draw(apple);
             }
         }
@@ -228,7 +232,7 @@ void z_map_getVisibleBounds(
 
 ZList* z_map_getApples(int GridX, int GridY)
 {
-    return &g_map.grid[GridY][GridX];
+    return &g_map.grid[GridY][GridX].apples;
 }
 
 bool z_map_isWall(int TileX, int TileY)
