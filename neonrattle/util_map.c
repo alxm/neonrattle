@@ -19,10 +19,7 @@
 #include "util_map.h"
 
 #include "obj_apple.h"
-#include "obj_snake.h"
-#include "state.h"
 #include "util_camera.h"
-#include "util_collision.h"
 #include "util_coords.h"
 #include "util_pool.h"
 
@@ -57,7 +54,7 @@ void z_map_setup(void)
     }
 }
 
-void z_map_init(ZSnake** Snake)
+void z_map_init(ZFix* StartX, ZFix* StartY)
 {
     for(int y = Z_GRID_H; y--; ) {
         for(int x = Z_GRID_W; x--; ) {
@@ -78,10 +75,8 @@ void z_map_init(ZSnake** Snake)
             int num = 0;
 
             if(p == green100) {
-                int sx = x * Z_TILE_DIM + Z_TILE_DIM / 2;
-                int sy = y * Z_TILE_DIM + Z_TILE_DIM / 2;
-
-                *Snake = z_snake_new(z_fix_fromInt(sx), z_fix_fromInt(sy));
+                *StartX = z_fix_fromInt(x * Z_TILE_DIM + Z_TILE_DIM / 2);
+                *StartY = z_fix_fromInt(y * Z_TILE_DIM + Z_TILE_DIM / 2);
             } else if(p == red25) {
                 num = 1;
             } else if(p == red50) {
@@ -109,7 +104,71 @@ void z_map_init(ZSnake** Snake)
     }
 }
 
-static void z_map_getVisibleBounds(
+void z_map_tick(void)
+{
+    int gridStartX, gridStartY, gridEndX, gridEndY;
+    z_map_getVisibleBounds(NULL,
+                           NULL,
+                           NULL,
+                           NULL,
+                           &gridStartX,
+                           &gridStartY,
+                           &gridEndX,
+                           &gridEndY,
+                           NULL,
+                           NULL);
+
+    for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
+        for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
+            Z_LIST_ITERATE(z_map_getApples(gridX, gridY), ZApple*, apple) {
+                z_apple_tick(apple);
+            }
+        }
+    }
+}
+
+void z_map_draw(void)
+{
+    int tileStartX, tileStartY, tileEndX, tileEndY;
+    int gridStartX, gridStartY, gridEndX, gridEndY;
+    int screenStartX, screenStartY;
+    z_map_getVisibleBounds(&tileStartX,
+                           &tileStartY,
+                           &tileEndX,
+                           &tileEndY,
+                           &gridStartX,
+                           &gridStartY,
+                           &gridEndX,
+                           &gridEndY,
+                           &screenStartX,
+                           &screenStartY);
+
+    for(int tileY = tileStartY, screenY = screenStartY;
+        tileY < tileEndY;
+        tileY++, screenY += Z_TILE_DIM) {
+
+        for(int tileX = tileStartX, screenX = screenStartX;
+            tileX < tileEndX;
+            tileX++, screenX += Z_TILE_DIM) {
+
+            z_sprite_blit(Z_SPRITE_TILES,
+                          screenX,
+                          screenY,
+                          (unsigned)(g_map.tiles[tileY][tileX].wall * 4
+                                        + (tileY & 1) * 2 + (tileX & 1)));
+        }
+    }
+
+    for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
+        for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
+            Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
+                z_apple_draw(apple);
+            }
+        }
+    }
+}
+
+void z_map_getVisibleBounds(
     int* TileStartX, int* TileStartY, int* TileEndX, int* TileEndY,
     int* GridStartX, int* GridStartY, int* GridEndX, int* GridEndY,
     int* ScreenStartX, int* ScreenStartY)
@@ -167,132 +226,12 @@ static void z_map_getVisibleBounds(
     }
 }
 
-void z_map_tick(ZSnake* Snake)
+ZList* z_map_getApples(int GridX, int GridY)
 {
-    int gridStartX, gridStartY, gridEndX, gridEndY;
-    z_map_getVisibleBounds(NULL,
-                           NULL,
-                           NULL,
-                           NULL,
-                           &gridStartX,
-                           &gridStartY,
-                           &gridEndX,
-                           &gridEndY,
-                           NULL,
-                           NULL);
-
-    for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
-        for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
-            Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
-                z_apple_tick(apple);
-            }
-        }
-    }
-
-    ZFix snakeX, snakeY;
-    z_snake_getCoords(Snake, &snakeX, &snakeY);
-
-    int snakeGridX, snakeGridY;
-    z_coords_fixToGrid(snakeX, snakeY, &snakeGridX, &snakeGridY);
-
-    int snakeGridXOffset, snakeGridYOffset;
-    z_coords_fixToGridOffset(snakeX, snakeY, &snakeGridXOffset, &snakeGridYOffset);
-
-    if(snakeGridX > 0 && snakeGridXOffset < Z_TILE_DIM / 2) {
-        gridStartX = snakeGridX - 1;
-    } else {
-        gridStartX = snakeGridX;
-    }
-
-    if(snakeGridY > 0 && snakeGridYOffset < Z_TILE_DIM / 2) {
-        gridStartY = snakeGridY - 1;
-    } else {
-        gridStartY = snakeGridY;
-    }
-
-    if(snakeGridX < Z_GRID_W - 1
-        && snakeGridXOffset > Z_CELL_DIM - Z_TILE_DIM / 2) {
-
-        gridEndX = snakeGridX + 1;
-    } else {
-        gridEndX = snakeGridX;
-    }
-
-    if(snakeGridY < Z_GRID_H - 1
-        && snakeGridYOffset > Z_CELL_DIM - Z_TILE_DIM / 2) {
-
-        gridEndY = snakeGridY + 1;
-    } else {
-        gridEndY = snakeGridY;
-    }
-
-    for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
-        for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
-            Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
-                ZFix appleX, appleY;
-                z_apple_getCoords(apple, &appleX, &appleY);
-
-                if(z_collision_sqAndSq(z_fix_toInt(snakeX),
-                                       z_fix_toInt(snakeY),
-                                       z_snake_getDim(Snake),
-                                       z_fix_toInt(appleX),
-                                       z_fix_toInt(appleY),
-                                       z_apple_getDim(apple))) {
-
-                    z_snake_grow(Snake, Z_APPLE_GROW_PER);
-
-                    Z_LIST_REMOVE_CURRENT();
-                    z_apple_free(apple);
-                }
-            }
-        }
-    }
-
-    int snakeTileX, snakeTileY;
-    z_coords_fixToTile(snakeX, snakeY, &snakeTileX, &snakeTileY);
-
-    if(g_map.tiles[snakeTileY][snakeTileX].wall) {
-        z_state_set(Z_STATE_PLAY, false);
-    }
+    return &g_map.grid[GridY][GridX];
 }
 
-void z_map_draw(void)
+bool z_map_isWall(int TileX, int TileY)
 {
-    int tileStartX, tileStartY, tileEndX, tileEndY;
-    int gridStartX, gridStartY, gridEndX, gridEndY;
-    int screenStartX, screenStartY;
-    z_map_getVisibleBounds(&tileStartX,
-                           &tileStartY,
-                           &tileEndX,
-                           &tileEndY,
-                           &gridStartX,
-                           &gridStartY,
-                           &gridEndX,
-                           &gridEndY,
-                           &screenStartX,
-                           &screenStartY);
-
-    for(int tileY = tileStartY, screenY = screenStartY;
-        tileY < tileEndY;
-        tileY++, screenY += Z_TILE_DIM) {
-
-        for(int tileX = tileStartX, screenX = screenStartX;
-            tileX < tileEndX;
-            tileX++, screenX += Z_TILE_DIM) {
-
-            z_sprite_blit(Z_SPRITE_TILES,
-                          screenX,
-                          screenY,
-                          (unsigned)(g_map.tiles[tileY][tileX].wall * 4
-                                        + (tileY & 1) * 2 + (tileX & 1)));
-        }
-    }
-
-    for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
-        for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
-            Z_LIST_ITERATE(&g_map.grid[gridY][gridX], ZApple*, apple) {
-                z_apple_draw(apple);
-            }
-        }
-    }
+    return g_map.tiles[TileY][TileX].wall;
 }

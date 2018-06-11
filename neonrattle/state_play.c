@@ -18,14 +18,10 @@
 #include "platform.h"
 #include "state_play.h"
 
-#include "obj_apple.h"
 #include "obj_snake.h"
 #include "util_camera.h"
-#include "util_fix.h"
-#include "util_list.h"
 #include "util_map.h"
 #include "util_pool.h"
-#include "util_screen.h"
 
 static struct {
     ZSnake* snake;
@@ -33,14 +29,17 @@ static struct {
 
 void z_state_play_init(void)
 {
-    z_map_init(&g_context.snake);
+    ZFix startX, startY;
+    z_map_init(&startX, &startY);
+
+    g_context.snake = z_snake_new(startX, startY);
 }
 
 void z_state_play_tick(void)
 {
+    z_map_tick();
     z_snake_tick(g_context.snake);
     z_camera_tick(g_context.snake);
-    z_map_tick(g_context.snake);
 }
 
 void z_state_play_draw(void)

@@ -19,8 +19,12 @@
 #include "obj_snake.h"
 
 #include "obj_apple.h"
+#include "state.h"
 #include "util_camera.h"
+#include "util_collision.h"
+#include "util_coords.h"
 #include "util_input.h"
+#include "util_map.h"
 #include "util_pool.h"
 
 #define Z_SNAKE_LEN (Z_APPLE_NUM_MAX * Z_APPLE_GROW_PER)
@@ -84,37 +88,17 @@ void z_snake_getCoords(const ZSnake* Snake, ZFix* X, ZFix* Y)
     *Y = head->y;
 }
 
-int z_snake_getDim(const ZSnake* Snake)
+static void moveSnake(ZSnake* Snake)
 {
-    Z_UNUSED(Snake);
-
-    return z_sprite_getWidth(Z_SPRITE_SNAKE_ALPHAMASK);
-}
-
-void z_snake_grow(ZSnake* Snake, int Amount)
-{
-    Snake->grow += Amount;
-}
-
-bool z_snake_tick(ZSnake* Snake)
-{
-    static bool move = false;
-
-    if(z_button_pressed(Z_BUTTON_A)) {
-        move = true;
-    }
-
-    if(!move) {
-        return true;
-    }
-
-    ZSegment* head = &Snake->body[Snake->head];
+    const ZSegment* head = &Snake->body[Snake->head];
 
     ZFix x = head->x + z_fix_cosf(Snake->angle);
     ZFix y = head->y - z_fix_sinf(Snake->angle);
 
     if(Snake->grow > 0) {
-        if(((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) == Z_SNAKE_LEN_MASK) {
+        unsigned len = (Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK;
+
+        if(len == Z_SNAKE_LEN_MASK) {
             Snake->grow = 0;
         } else {
             Snake->grow--;
@@ -136,12 +120,15 @@ bool z_snake_tick(ZSnake* Snake)
     if(z_button_pressed(Z_BUTTON_RIGHT)) {
         Snake->angle -= Z_SNAKE_TURN_DEG;
     }
+}
 
+static void updateColors(ZSnake* Snake)
+{
     unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
 
     for(unsigned i = Snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
         ZSegment* s = &Snake->body[i];
-        ZColor* targetColor = &z_colors[s->targetColor];
+        const ZColor* targetColor = &z_colors[s->targetColor];
 
         if(s->r != targetColor->r) {
             s->r += (targetColor->r - s->r) / 16;
@@ -155,8 +142,101 @@ bool z_snake_tick(ZSnake* Snake)
             s->b += (targetColor->b - s->b) / 16;
         }
     }
+}
 
-    return true;
+static void checkWall(ZSnake* Snake)
+{
+    const ZSegment* head = &Snake->body[Snake->head];
+
+    int tileX, tileY;
+    z_coords_fixToTile(head->x, head->y, &tileX, &tileY);
+
+    if(z_map_isWall(tileX, tileY)) {
+        z_state_set(Z_STATE_PLAY, false);
+    }
+}
+
+static void checkApples(ZSnake* Snake)
+{
+    const ZSegment* head = &Snake->body[Snake->head];
+
+    int snakeGridX, snakeGridY;
+    z_coords_fixToGrid(head->x, head->y, &snakeGridX, &snakeGridY);
+
+    int snakeGridXOffset, snakeGridYOffset;
+    z_coords_fixToGridOffset(
+        head->x, head->y, &snakeGridXOffset, &snakeGridYOffset);
+
+    int gridStartX, gridStartY, gridEndX, gridEndY;
+
+    if(snakeGridX > 0 && snakeGridXOffset < Z_TILE_DIM / 2) {
+        gridStartX = snakeGridX - 1;
+    } else {
+        gridStartX = snakeGridX;
+    }
+
+    if(snakeGridY > 0 && snakeGridYOffset < Z_TILE_DIM / 2) {
+        gridStartY = snakeGridY - 1;
+    } else {
+        gridStartY = snakeGridY;
+    }
+
+    if(snakeGridX < Z_GRID_W - 1
+        && snakeGridXOffset > Z_CELL_DIM - Z_TILE_DIM / 2) {
+
+        gridEndX = snakeGridX + 1;
+    } else {
+        gridEndX = snakeGridX;
+    }
+
+    if(snakeGridY < Z_GRID_H - 1
+        && snakeGridYOffset > Z_CELL_DIM - Z_TILE_DIM / 2) {
+
+        gridEndY = snakeGridY + 1;
+    } else {
+        gridEndY = snakeGridY;
+    }
+
+    for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
+        for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
+            Z_LIST_ITERATE(z_map_getApples(gridX, gridY), ZApple*, apple) {
+                ZFix appleX, appleY;
+                z_apple_getCoords(apple, &appleX, &appleY);
+
+                if(z_collision_sqAndSq(z_fix_toInt(head->x),
+                                       z_fix_toInt(head->y),
+                                       z_sprite_getWidth(
+                                            Z_SPRITE_SNAKE_ALPHAMASK),
+                                       z_fix_toInt(appleX),
+                                       z_fix_toInt(appleY),
+                                       z_apple_getDim(apple))) {
+
+                    Snake->grow += Z_APPLE_GROW_PER;
+
+                    Z_LIST_REMOVE_CURRENT();
+                    z_apple_free(apple);
+                }
+            }
+        }
+    }
+}
+
+void z_snake_tick(ZSnake* Snake)
+{
+    static bool move = false;
+
+    if(z_button_pressed(Z_BUTTON_A)) {
+        move = true;
+    }
+
+    if(!move) {
+        return;
+    }
+
+    moveSnake(Snake);
+    updateColors(Snake);
+    checkWall(Snake);
+    checkApples(Snake);
 }
 
 void z_snake_draw(ZSnake* Snake)
@@ -164,7 +244,7 @@ void z_snake_draw(ZSnake* Snake)
     unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
 
     for(unsigned i = Snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
-        ZSegment* s = &Snake->body[i];
+        const ZSegment* s = &Snake->body[i];
 
         int x, y;
         z_camera_coordsToScreen(s->x, s->y, &x, &y);
