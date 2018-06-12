@@ -20,6 +20,7 @@
 
 #include "obj_snake.h"
 #include "util_camera.h"
+#include "util_effects.h"
 #include "util_map.h"
 #include "util_pool.h"
 
@@ -29,6 +30,8 @@ static struct {
 
 void z_state_play_init(void)
 {
+    z_effects_init();
+
     ZFix startX, startY;
     z_map_init(&startX, &startY);
 
@@ -40,12 +43,14 @@ void z_state_play_tick(void)
     z_map_tick();
     z_snake_tick(g_context.snake);
     z_camera_tick(g_context.snake);
+    z_effects_tick();
 }
 
 void z_state_play_draw(void)
 {
     z_map_draw();
     z_snake_draw(g_context.snake);
+    z_effects_draw();
 }
 
 void z_state_play_free(void)

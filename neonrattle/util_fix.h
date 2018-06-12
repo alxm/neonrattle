@@ -295,3 +295,13 @@ static inline unsigned z_random_intu(unsigned Max)
 {
     return (unsigned)rand() % Max;
 }
+
+static inline int z_random_range(int Min, int Max)
+{
+    return Min + (rand() % (Max - Min));
+}
+
+static inline unsigned z_random_rangeu(unsigned Min, unsigned Max)
+{
+    return Min + ((unsigned)rand() % (Max - Min));
+}

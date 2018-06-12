@@ -18,64 +18,66 @@
 #include "platform.h"
 #include "obj_particle.h"
 
+#include "util_camera.h"
 #include "util_fps.h"
+#include "util_list.h"
 #include "util_pool.h"
 #include "util_screen.h"
 
 struct ZParticle {
+    ZListNode particlesList;
     ZFix x, y;
+    ZFix speed;
     unsigned angle;
-    unsigned splitNum;
-    int ticks;
+    int alpha;
 };
 
-Z_POOL_DECLARE(ZParticle, 24, g_pool);
+Z_POOL_DECLARE(ZParticle, 64, g_pool);
 
 void z_particle_setup(void)
 {
     z_pool_register(Z_POOL_PARTICLE, g_pool);
 }
 
-void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y)
+ZParticle* z_particle_new(ZFix X, ZFix Y)
 {
-    Particle->x = X;
-    Particle->y = Y;
-    Particle->angle = z_fix_wrapAngleInt(z_random_intu(Z_ANGLES_NUM));
-    Particle->splitNum = u2(z_random_intu(4));
-    Particle->ticks = 0;
+    ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+
+    if(p != NULL) {
+        p->x = X;
+        p->y = Y;
+        p->speed = z_random_range(Z_FIX_ONE / 2, Z_FIX_ONE);
+        p->angle = z_fix_wrapAngleInt(z_random_intu(Z_ANGLES_NUM));
+        p->alpha = 256;
+    }
+
+    return p;
+}
+
+void z_particle_free(ZParticle* Particle)
+{
+    z_pool_free(Z_POOL_PARTICLE, Particle);
 }
 
 bool z_particle_tick(ZParticle* Particle)
 {
-    Particle->ticks++;
+    Particle->x += z_fix_mul(Particle->speed, z_fix_cos(Particle->angle));
+    Particle->y -= z_fix_mul(Particle->speed, z_fix_sin(Particle->angle));
 
-    return Particle->ticks < Z_FPS / 4
-        || (Particle->ticks < Z_FPS && z_random_int(4) != 0);
+    Particle->alpha -= 16;
+
+    return Particle->alpha > 0;
 }
 
-void z_particle_draw(ZParticle* Particle)
+void z_particle_draw(const ZParticle* Particle)
 {
-    unsigned splitNum = 1 + Particle->splitNum;
-    unsigned angle = Particle->angle;
+    int x, y;
+    z_camera_coordsToScreen(Particle->x, Particle->y, &x, &y);
 
-    static const unsigned incs[4] = {
-        Z_INT_DEG_112, Z_INT_DEG_090, Z_INT_DEG_067, Z_INT_DEG_090
-    };
+    x += z_screen_getXShake();
+    y += z_screen_getYShake();
 
-    for(unsigned i = 0; i < splitNum; i++) {
-        int x =
-            z_fix_toInt(Particle->x + z_fix_cos(angle) * Particle->ticks)
-                + z_screen_getXShake();
-        int y =
-            z_fix_toInt(Particle->y - z_fix_sin(angle) * Particle->ticks)
-                + z_screen_getYShake();
-
-        z_draw_pixel(x,
-                     y,
-                     z_fps_getCounter() & 2
-                        ? Z_COLOR_BG_GREEN_04
-                        : Z_COLOR_BG_GREEN_03);
-
-        angle = z_fix_wrapAngleInt(angle + incs[i]);
+    if(x >= 0 && x < Z_SCREEN_W && y >= 0 && y < Z_SCREEN_H) {
+        z_pixel_drawAlpha2(x, y, z_color_getRandomApple(), Particle->alpha);
     }
 }

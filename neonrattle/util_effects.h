@@ -19,5 +19,9 @@
 
 #include "util_fix.h"
 
-extern void z_effect_particles(ZFix X, ZFix Y, uint8_t Num);
-extern void z_effect_circles(ZFix X, ZFix Y);
+extern void z_effects_particles(ZFix X, ZFix Y, unsigned Num);
+extern void z_effects_circles(ZFix X, ZFix Y);
+
+extern void z_effects_init(void);
+extern void z_effects_tick(void);
+extern void z_effects_draw(void);

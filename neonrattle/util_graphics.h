@@ -20,6 +20,7 @@
 Z_EXTERN_C_START
 
 #include "util_fix.h"
+#include "util_screen.h"
 
 typedef enum Z_ENUM_PACK {
     Z_COLOR_INVALID = -1,
@@ -131,6 +132,15 @@ static inline void z_pixel_drawAlpha(ZPixel* Dst, int Red, int Green, int Blue, 
     *Dst = z_pixel_fromRGB(r + (((Red   - r) * Alpha) >> 8),
                            g + (((Green - g) * Alpha) >> 8),
                            b + (((Blue  - b) * Alpha) >> 8));
+}
+
+static inline void z_pixel_drawAlpha2(int X, int Y, ZColorId ColorId, int Alpha)
+{
+    z_pixel_drawAlpha(z_screen_getPixels() + Y * Z_SCREEN_W + X,
+                      z_colors[ColorId].r,
+                      z_colors[ColorId].g,
+                      z_colors[ColorId].b,
+                      Alpha);
 }
 
 Z_EXTERN_C_END

@@ -42,11 +42,11 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
     return a_pixel_fromHex(Hexcode);
 }
 
-#include "util_graphics.h"
-#include "util_sound.h"
-
 #define Z_SCREEN_W 80
 #define Z_SCREEN_H 64
+
+#include "util_graphics.h"
+#include "util_sound.h"
 
 #define z_sprite_load(Index, Id) \
     z_platform__loadSprite(Index, "assets/gfx/" #Id ".png");

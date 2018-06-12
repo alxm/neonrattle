@@ -23,4 +23,8 @@ typedef struct ZParticle ZParticle;
 
 extern void z_particle_setup(void);
 
-extern void z_particle_init(ZParticle* Particle, ZFix X, ZFix Y);
+extern ZParticle* z_particle_new(ZFix X, ZFix Y);
+extern void z_particle_free(ZParticle* Particle);
+
+extern bool z_particle_tick(ZParticle* Particle);
+extern void z_particle_draw(const ZParticle* Particle);

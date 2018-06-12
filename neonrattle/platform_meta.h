@@ -51,11 +51,11 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
          ((((Hexcode)       & 0xff) >> 3) << 0));
 }
 
-#include "util_graphics.h"
-#include "util_sound.h"
-
 #define Z_SCREEN_W 80
 #define Z_SCREEN_H 64
+
+#include "util_graphics.h"
+#include "util_sound.h"
 
 #define z_sprite_load(Index, Id)                             \
     z_platform__loadSprite(Index, z_data_gfx_##Id##_buffer);

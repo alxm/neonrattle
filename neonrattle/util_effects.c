@@ -20,26 +20,50 @@
 
 #include "obj_circle.h"
 #include "obj_particle.h"
+#include "util_list.h"
 #include "util_pool.h"
 
-void z_effect_particles(ZFix X, ZFix Y, uint8_t Num)
+static ZList g_particles;
+
+void z_effects_particles(ZFix X, ZFix Y, unsigned Num)
 {
     while(Num--) {
-        ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+        ZParticle* p = z_particle_new(X, Y);
 
-        if(p == NULL) {
-            return;
+        if(p != NULL) {
+            z_list_addLast(&g_particles, p);
         }
-
-        z_particle_init(p, X, Y);
     }
 }
 
-void z_effect_circles(ZFix X, ZFix Y)
+void z_effects_circles(ZFix X, ZFix Y)
 {
     ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
 
     if(c) {
         z_circle_init(c, X, Y);
+    }
+}
+
+void z_effects_init(void)
+{
+    z_list_init(&g_particles, 0);
+    z_pool_reset(Z_POOL_PARTICLE);
+}
+
+void z_effects_tick(void)
+{
+    Z_LIST_ITERATE(&g_particles, ZParticle*, p) {
+        if(!z_particle_tick(p)) {
+            Z_LIST_REMOVE_CURRENT();
+            z_particle_free(p);
+        }
+    }
+}
+
+void z_effects_draw(void)
+{
+    Z_LIST_ITERATE(&g_particles, ZParticle*, p) {
+        z_particle_draw(p);
     }
 }
