@@ -89,18 +89,48 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
                 num = 4;
             }
 
+            if(num == 0) {
+                continue;
+            }
+
+            int gridX, gridY;
+            z_coords_tileToGrid(x, y, &gridX, &gridY);
+
+            int gridTileOffsetX, gridTileOffsetY;
+            z_coords_tileToGridTileOffset(
+                x, y, &gridTileOffsetX, &gridTileOffsetY);
+
+            int w = z_sprite_getWidth(Z_SPRITE_APPLE_ALPHAMASK);
+            int h = z_sprite_getHeight(Z_SPRITE_APPLE_ALPHAMASK);
+
+            int startX = w / 2;
+            int endX = Z_TILE_DIM - w / 2 + 1;
+            int startY = h / 2;
+            int endY = Z_TILE_DIM - h / 2 + 1;
+
+            if(gridTileOffsetX > 0 && !g_map.tiles[y][x - 1].wall) {
+                startX = 0;
+            } else if(gridTileOffsetX < Z_TILES_PER_CELL - 1
+                && !g_map.tiles[y][x + 1].wall) {
+
+                endX = Z_TILE_DIM + 1;
+            }
+
+            if(gridTileOffsetY > 0 && !g_map.tiles[y - 1][x].wall) {
+                startY = 0;
+            } else if(gridTileOffsetY < Z_TILES_PER_CELL - 1
+                && !g_map.tiles[y + 1][x].wall) {
+
+                endY = Z_TILE_DIM + 1;
+            }
+
             while(num--) {
-                int w = z_sprite_getWidth(Z_SPRITE_APPLE_ALPHAMASK);
-                int h = z_sprite_getHeight(Z_SPRITE_APPLE_ALPHAMASK);
-                int ax = x * Z_TILE_DIM + w / 2 + z_random_int(Z_TILE_DIM - w);
-                int ay = y * Z_TILE_DIM + h / 2 + z_random_int(Z_TILE_DIM - h);
+                int ax = x * Z_TILE_DIM + z_random_range(startX, endX);
+                int ay = y * Z_TILE_DIM + z_random_range(startY, endY);
 
                 ZApple* a = z_apple_new(z_fix_fromInt(ax), z_fix_fromInt(ay));
 
                 if(a != NULL) {
-                    int gridX, gridY;
-                    z_coords_tileToGrid(x, y, &gridX, &gridY);
-
                     z_list_addLast(&g_map.grid[gridY][gridX].apples, a);
                 }
             }
@@ -215,15 +245,15 @@ void z_map_getVisibleBounds(
         z_coords_tileToGrid(topLeftTileX, topLeftTileY, GridStartX, GridStartY);
         z_coords_tileToGrid(tileEndX, tileEndY, GridEndX, GridEndY);
 
-        int gridOffsetX, gridOffsetY;
+        int gridTileOffsetX, gridTileOffsetY;
         z_coords_tileToGridTileOffset(
-            tileEndX, tileEndY, &gridOffsetX, &gridOffsetY);
+            tileEndX, tileEndY, &gridTileOffsetX, &gridTileOffsetY);
 
-        if(gridOffsetX > 0) {
+        if(gridTileOffsetX > 0) {
             *GridEndX += 1;
         }
 
-        if(gridOffsetY > 0) {
+        if(gridTileOffsetY > 0) {
             *GridEndY += 1;
         }
     }
