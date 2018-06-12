@@ -49,6 +49,8 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
     ZApple* a = z_pool_alloc(Z_POOL_APPLE);
 
     if(a != NULL) {
+        z_list_clearNode(&a->nodeGrid);
+
         a->x = X;
         a->y = Y;
         a->alphaAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));

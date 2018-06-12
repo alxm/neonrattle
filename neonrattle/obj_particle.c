@@ -44,6 +44,8 @@ ZParticle* z_particle_new(ZFix X, ZFix Y)
     ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
 
     if(p != NULL) {
+        z_list_clearNode(&p->particlesList);
+
         p->x = X;
         p->y = Y;
         p->speed = z_random_range(Z_FIX_ONE / 2, Z_FIX_ONE);
@@ -56,6 +58,7 @@ ZParticle* z_particle_new(ZFix X, ZFix Y)
 
 void z_particle_free(ZParticle* Particle)
 {
+    z_list_remove(&Particle->particlesList);
     z_pool_free(Z_POOL_PARTICLE, Particle);
 }
 

@@ -30,6 +30,7 @@ typedef struct ZList {
 typedef struct ZListIt {
     ZList* list;
     ZListNode* current;
+    ZListNode* next;
 } ZListIt;
 
 extern void z_list_init(ZList* List, size_t NodeOffset);
@@ -40,7 +41,6 @@ extern void z_list_remove(ZListNode* Node);
 
 extern ZListIt z_listit__new(ZList* List);
 extern bool z_listit__getNext(ZListIt* Iterator);
-extern void z_listit__removeCurrent(ZListIt* Iterator);
 
 #define Z_LIST_ITERATE(List, PtrType, VarName)                 \
     for(PtrType VarName = (PtrType)1; VarName; VarName = NULL) \
@@ -51,4 +51,9 @@ extern void z_listit__removeCurrent(ZListIt* Iterator);
                                     - (List)->nodeOffset),     \
                     true); )
 
-#define Z_LIST_REMOVE_CURRENT() z_listit__removeCurrent(&z__it)
+#define Z_LIST_REMOVE_CURRENT() z_list_remove(z__it.current)
+
+static inline void z_list_clearNode(ZListNode* Node)
+{
+    *Node = (ZListNode){NULL, NULL};
+}

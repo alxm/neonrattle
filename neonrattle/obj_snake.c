@@ -218,7 +218,6 @@ static void checkApples(ZSnake* Snake)
 
                     Snake->grow += Z_APPLE_GROW_PER;
 
-                    Z_LIST_REMOVE_CURRENT();
                     z_apple_free(apple);
 
                     z_effects_particles(head->x, head->y, 16);

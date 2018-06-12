@@ -71,21 +71,13 @@ void z_list_remove(ZListNode* Node)
 
 ZListIt z_listit__new(ZList* List)
 {
-    return (ZListIt){List, &List->root};
+    return (ZListIt){List, &List->root, List->root.next};
 }
 
 bool z_listit__getNext(ZListIt* Iterator)
 {
-    Iterator->current = Iterator->current->next;
+    Iterator->current = Iterator->next;
+    Iterator->next = Iterator->next->next;
 
     return Iterator->current != &Iterator->list->root;
-}
-
-void z_listit__removeCurrent(ZListIt* Iterator)
-{
-    ZListNode* n = Iterator->current;
-
-    Iterator->current = n->prev;
-
-    z_list_remove(n);
 }

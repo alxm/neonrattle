@@ -55,7 +55,6 @@ void z_effects_tick(void)
 {
     Z_LIST_ITERATE(&g_particles, ZParticle*, p) {
         if(!z_particle_tick(p)) {
-            Z_LIST_REMOVE_CURRENT();
             z_particle_free(p);
         }
     }
