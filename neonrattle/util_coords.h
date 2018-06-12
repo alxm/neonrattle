@@ -49,6 +49,12 @@ static inline void z_coords_tileToGrid(int TileX, int TileY, int* GridX, int* Gr
     *GridY = TileY >> Z_GRID_MAP_SHIFT_DIFF;
 }
 
+static inline void z_coords_tileToGridTileOffset(int TileX, int TileY, int* GridTileOffsetX, int* GridTileOffsetY)
+{
+    *GridTileOffsetX = TileX & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1);
+    *GridTileOffsetY = TileY & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1);
+}
+
 static inline void z_coords_fixToGrid(ZFix X, ZFix Y, int* GridX, int* GridY)
 {
     *GridX = z_fix_toInt(X) >> Z_CELL_SHIFT;

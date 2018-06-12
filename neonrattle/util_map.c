@@ -215,11 +215,15 @@ void z_map_getVisibleBounds(
         z_coords_tileToGrid(topLeftTileX, topLeftTileY, GridStartX, GridStartY);
         z_coords_tileToGrid(tileEndX, tileEndY, GridEndX, GridEndY);
 
-        if(tileEndX & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1)) {
+        int gridOffsetX, gridOffsetY;
+        z_coords_tileToGridTileOffset(
+            tileEndX, tileEndY, &gridOffsetX, &gridOffsetY);
+
+        if(gridOffsetX > 0) {
             *GridEndX += 1;
         }
 
-        if(tileEndY & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1)) {
+        if(gridOffsetY > 0) {
             *GridEndY += 1;
         }
     }
