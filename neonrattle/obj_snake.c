@@ -32,6 +32,10 @@
 
 #define Z_SNAKE_TURN_DEG (Z_FIX_DEG_001 * 10)
 
+#define Z_SNAKE_ALPHA_MIN 8
+#define Z_SNAKE_ALPHA_MAX 128
+#define Z_SNAKE_TAIL_FADE_RATIO 4
+
 typedef struct {
     ZFix x, y;
     int r, g, b;
@@ -242,12 +246,19 @@ void z_snake_tick(ZSnake* Snake)
 void z_snake_draw(ZSnake* Snake)
 {
     unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
+    int alpha = Z_SNAKE_ALPHA_MIN;
+    int alphaInc = (Z_SNAKE_ALPHA_MAX - Z_SNAKE_ALPHA_MIN)
+                        / z_math_max(1, (int)len / Z_SNAKE_TAIL_FADE_RATIO);
 
     for(unsigned i = Snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
         const ZSegment* s = &Snake->body[i];
 
         int x, y;
         z_camera_coordsToScreen(s->x, s->y, &x, &y);
+
+        if(alpha < Z_SNAKE_ALPHA_MAX) {
+            alpha += alphaInc;
+        }
 
         z_sprite_blitAlphaMaskRGBA(Z_SPRITE_SNAKE_ALPHAMASK,
                                    x,
@@ -256,6 +267,6 @@ void z_snake_draw(ZSnake* Snake)
                                    s->r,
                                    s->g,
                                    s->b,
-                                   128);
+                                   alpha);
     }
 }
