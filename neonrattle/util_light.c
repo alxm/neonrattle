@@ -25,8 +25,7 @@ static const struct {
     ZColorId color;
     unsigned counterSpeed[2];
 } g_patterns[Z_LIGHT_NUM] = {
-    [Z_LIGHT_EXPLOSION] = {Z_COLOR_BG_GREEN_04, {8, 2}},
-    [Z_LIGHT_PLAYER_SHOOTING] = {Z_COLOR_BG_GREEN_03, {16, 8}},
+    [Z_LIGHT_APPLE_EAT] = {Z_COLOR_BG_GREEN_03, {8, 2}},
 };
 
 static struct {
@@ -59,8 +58,7 @@ void z_light_tick(void)
 
     if(g_light.pulseId != Z_LIGHT_INVALID) {
         bool goingDown = g_light.counter >= Z_INT_DEG_090;
-        unsigned speed = g_patterns[g_light.pulseId].counterSpeed[goingDown];
-        g_light.counter = u8(g_light.counter + speed);
+        g_light.counter += g_patterns[g_light.pulseId].counterSpeed[goingDown];
 
         if(g_light.counter >= Z_INT_DEG_180) {
             g_light.pulseId = Z_LIGHT_INVALID;

@@ -19,8 +19,7 @@
 
 typedef enum Z_ENUM_PACK {
     Z_LIGHT_INVALID = -1,
-    Z_LIGHT_EXPLOSION,
-    Z_LIGHT_PLAYER_SHOOTING,
+    Z_LIGHT_APPLE_EAT,
     Z_LIGHT_NUM
 } ZLightId;
 

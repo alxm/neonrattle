@@ -25,6 +25,7 @@
 #include "util_coords.h"
 #include "util_effects.h"
 #include "util_input.h"
+#include "util_light.h"
 #include "util_map.h"
 #include "util_pool.h"
 
@@ -222,6 +223,7 @@ static void checkApples(ZSnake* Snake)
                     z_apple_free(apple);
 
                     z_effects_circles(head->x, head->y);
+                    z_light_setPulse(Z_LIGHT_APPLE_EAT);
                     z_sfx_play(Z_SFX_APPLE_EAT);
                 }
             }
