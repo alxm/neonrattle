@@ -47,7 +47,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_died_draw,
         z_state_died_free,
         Z_SWIPE_INVALID,
-        Z_SWIPE_INVALID,
+        Z_SWIPE_HIDE,
     },
     [Z_STATE_INTRO] = {
         z_state_intro_init,
@@ -63,7 +63,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_play_draw,
         NULL,
         Z_SWIPE_SHOW,
-        Z_SWIPE_HIDE,
+        Z_SWIPE_INVALID,
     },
 };
 
