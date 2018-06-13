@@ -278,6 +278,9 @@ void z_snake_draw(const ZSnake* Snake)
         int x, y;
         z_camera_coordsToScreen(s->x, s->y, &x, &y);
 
+        x += z_screen_getXShake();
+        y += z_screen_getYShake();
+
         if(alpha < Z_SNAKE_ALPHA_MAX) {
             alpha += alphaInc;
         }

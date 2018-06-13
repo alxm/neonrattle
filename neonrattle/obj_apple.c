@@ -96,6 +96,9 @@ void z_apple_draw(const ZApple* Apple)
     x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
     y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
 
+    x += z_screen_getXShake();
+    y += z_screen_getYShake();
+
     int alpha = Z_APPLE_ALPHA_MIN
         + (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / 2
         + z_fix_toInt(z_fix_sinf(Apple->alphaAngle)

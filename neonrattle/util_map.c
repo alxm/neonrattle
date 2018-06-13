@@ -177,11 +177,12 @@ void z_map_draw(void)
                            &screenStartX,
                            &screenStartY);
 
-    for(int tileY = tileStartY, screenY = screenStartY;
+    for(int tileY = tileStartY, screenY = screenStartY + z_screen_getYShake();
         tileY < tileEndY;
         tileY++, screenY += Z_TILE_DIM) {
 
-        for(int tileX = tileStartX, screenX = screenStartX;
+        for(int tileX = tileStartX,
+                screenX = screenStartX + z_screen_getXShake();
             tileX < tileEndX;
             tileX++, screenX += Z_TILE_DIM) {
 
