@@ -240,6 +240,7 @@ void z_platform__loadSfx(ZSfxId Sfx, const uint8_t* Buffer, uint32_t Size)
 
 void z_sfx_play(ZSfxId Sfx)
 {
+    gb.sound.stop(0);
     gb.sound.play(g_sfx[Sfx].buffer, g_sfx[Sfx].size);
 }
 #endif // Z_PLATFORM_META
