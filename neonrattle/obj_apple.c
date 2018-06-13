@@ -22,13 +22,15 @@
 #include "util_list.h"
 #include "util_pool.h"
 
-#define Z_APPLE_ALPHA_DEG_STEP 8
+#define Z_APPLE_BOUNCE_DEG_STEP (8 * Z_FIX_DEG_001)
+#define Z_APPLE_ALPHA_DEG_STEP (8 * Z_FIX_DEG_001)
 #define Z_APPLE_ALPHA_MIN 128
 #define Z_APPLE_ALPHA_MAX 256
 
 struct ZApple {
     ZListNode nodeGrid;
     ZFix x, y;
+    ZFixu bounceAngle;
     ZFixu alphaAngle;
     ZColorId color;
 };
@@ -53,6 +55,7 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
 
         a->x = X;
         a->y = Y;
+        a->bounceAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
         a->alphaAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
         a->color = z_color_getRandomApple();
     }
@@ -81,13 +84,17 @@ int z_apple_getDim(const ZApple* Apple)
 
 void z_apple_tick(ZApple* Apple)
 {
-    Apple->alphaAngle += Z_APPLE_ALPHA_DEG_STEP * Z_FIX_DEG_001;
+    Apple->bounceAngle += Z_APPLE_BOUNCE_DEG_STEP;
+    Apple->alphaAngle += Z_APPLE_ALPHA_DEG_STEP;
 }
 
 void z_apple_draw(ZApple* Apple)
 {
     int x, y;
     z_camera_coordsToScreen(Apple->x, Apple->y, &x, &y);
+
+    x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
+    y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
 
     int alpha = Z_APPLE_ALPHA_MIN
         + (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / 2
