@@ -15,44 +15,11 @@
     along with Neon Rattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
-#include "state_play.h"
+#pragma once
 
-#include "obj_snake.h"
-#include "util_camera.h"
-#include "util_effects.h"
-#include "util_map.h"
-#include "util_pool.h"
+#include "state.h"
 
-static ZSnake* g_snake;
-
-void z_state_play_init(void)
-{
-    z_effects_init();
-
-    ZFix startX, startY;
-    z_map_init(&startX, &startY);
-
-    g_snake = z_snake_new(startX, startY);
-}
-
-void z_state_play_tick(void)
-{
-    z_map_tick();
-    z_snake_tick(g_snake);
-    z_camera_tick(g_snake);
-    z_effects_tick();
-}
-
-void z_state_play_draw(void)
-{
-    z_map_draw();
-    z_effects_draw1();
-    z_snake_draw(g_snake);
-    z_effects_draw2();
-}
-
-ZSnake* z_state_play_getSnake(void)
-{
-    return g_snake;
-}
+extern ZStateInit z_state_died_init;
+extern ZStateTick z_state_died_tick;
+extern ZStateDraw z_state_died_draw;
+extern ZStateFree z_state_died_free;

@@ -58,6 +58,11 @@ void z_snake_setup(void)
     z_pool_register(Z_POOL_SNAKE, g_pool);
 }
 
+static inline unsigned getLength(const ZSnake* Snake)
+{
+    return ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
+}
+
 static void z_snake_addHead(ZSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
 {
     ZSegment* s = &Snake->body[Snake->head];
@@ -102,9 +107,7 @@ static void moveSnake(ZSnake* Snake)
     ZFix y = head->y - z_fix_sinf(Snake->angle);
 
     if(Snake->grow > 0) {
-        unsigned len = (Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK;
-
-        if(len == Z_SNAKE_LEN_MASK) {
+        if(getLength(Snake) == Z_SNAKE_LEN) {
             Snake->grow = 0;
         } else {
             Snake->grow--;
@@ -130,9 +133,10 @@ static void moveSnake(ZSnake* Snake)
 
 static void updateColors(ZSnake* Snake)
 {
-    unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
+    for(unsigned len = getLength(Snake), i = Snake->tail;
+        len--;
+        i = (i + 1) & Z_SNAKE_LEN_MASK) {
 
-    for(unsigned i = Snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
         ZSegment* s = &Snake->body[i];
         const ZColor* targetColor = &z_colors[s->targetColor];
 
@@ -158,8 +162,15 @@ static void checkWall(ZSnake* Snake)
     z_coords_fixToTile(head->x, head->y, &tileX, &tileY);
 
     if(z_map_isWall(tileX, tileY)) {
+        for(unsigned len = getLength(Snake), i = Snake->tail;
+            len--;
+            i = (i + 1) & Z_SNAKE_LEN_MASK) {
+
+            Snake->body[i].targetColor = Z_COLOR_BG_GREEN_03;
+        }
+
         z_sfx_play(Z_SFX_HIT_WALL);
-        z_state_set(Z_STATE_PLAY, false);
+        z_state_set(Z_STATE_DIED, false);
     }
 }
 
@@ -249,9 +260,14 @@ void z_snake_tick(ZSnake* Snake)
     checkApples(Snake);
 }
 
+void z_snake_tickDied(ZSnake* Snake)
+{
+    updateColors(Snake);
+}
+
 void z_snake_draw(const ZSnake* Snake)
 {
-    unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
+    unsigned len = getLength(Snake);
     int alpha = Z_SNAKE_ALPHA_MIN;
     int alphaInc = (Z_SNAKE_ALPHA_MAX - Z_SNAKE_ALPHA_MIN)
                         / z_math_max(1, (int)len / Z_SNAKE_TAIL_FADE_RATIO);

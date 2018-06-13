@@ -18,6 +18,7 @@
 #include "platform.h"
 #include "state.h"
 
+#include "state_died.h"
 #include "state_intro.h"
 #include "state_play.h"
 #include "obj_apple.h"
@@ -40,6 +41,14 @@ typedef struct {
 } ZState;
 
 static const ZState g_states[Z_STATE_NUM] = {
+    [Z_STATE_DIED] = {
+        z_state_died_init,
+        z_state_died_tick,
+        z_state_died_draw,
+        z_state_died_free,
+        Z_SWIPE_INVALID,
+        Z_SWIPE_INVALID,
+    },
     [Z_STATE_INTRO] = {
         z_state_intro_init,
         z_state_intro_tick,
@@ -52,7 +61,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         z_state_play_init,
         z_state_play_tick,
         z_state_play_draw,
-        z_state_play_free,
+        NULL,
         Z_SWIPE_SHOW,
         Z_SWIPE_HIDE,
     },
