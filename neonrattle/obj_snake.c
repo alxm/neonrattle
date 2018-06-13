@@ -157,6 +157,7 @@ static void checkWall(ZSnake* Snake)
     z_coords_fixToTile(head->x, head->y, &tileX, &tileY);
 
     if(z_map_isWall(tileX, tileY)) {
+        z_sfx_play(Z_SFX_HIT_WALL);
         z_state_set(Z_STATE_PLAY, false);
     }
 }

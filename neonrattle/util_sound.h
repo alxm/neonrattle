@@ -22,6 +22,7 @@ Z_EXTERN_C_START
 typedef enum Z_ENUM_PACK {
     Z_SFX_INVALID = -1,
     Z_SFX_APPLE_EAT,
+    Z_SFX_HIT_WALL,
     Z_SFX_PAUSE,
     Z_SFX_PRESSED_A,
     Z_SFX_RESUME,

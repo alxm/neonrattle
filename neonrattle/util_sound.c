@@ -19,6 +19,7 @@
 #include "util_sound.h"
 
 #include "generated/data_sfx_apple_eat.h"
+#include "generated/data_sfx_hit_wall.h"
 #include "generated/data_sfx_pause.h"
 #include "generated/data_sfx_pressed_a.h"
 #include "generated/data_sfx_resume.h"
@@ -28,6 +29,7 @@
 void z_sound_setup(void)
 {
     z_sfx_load(Z_SFX_APPLE_EAT, apple_eat);
+    z_sfx_load(Z_SFX_HIT_WALL, hit_wall);
     z_sfx_load(Z_SFX_PAUSE, pause);
     z_sfx_load(Z_SFX_PRESSED_A, pressed_a);
     z_sfx_load(Z_SFX_RESUME, resume);
