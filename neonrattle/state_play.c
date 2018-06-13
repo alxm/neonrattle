@@ -39,7 +39,11 @@ void z_state_play_init(void)
 void z_state_play_tick(void)
 {
     z_map_tick();
-    z_snake_tick(g_snake);
+
+    if(z_snake_tick(g_snake)) {
+        z_state_set(Z_STATE_DIED, false);
+    }
+
     z_camera_tick(g_snake);
     z_effects_tick();
 }

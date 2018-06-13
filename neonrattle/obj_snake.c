@@ -19,7 +19,6 @@
 #include "obj_snake.h"
 
 #include "obj_apple.h"
-#include "state.h"
 #include "util_camera.h"
 #include "util_collision.h"
 #include "util_coords.h"
@@ -154,7 +153,7 @@ static void updateColors(ZSnake* Snake)
     }
 }
 
-static void checkWall(ZSnake* Snake)
+static bool checkWall(ZSnake* Snake)
 {
     const ZSegment* head = &Snake->body[Snake->head];
 
@@ -170,8 +169,11 @@ static void checkWall(ZSnake* Snake)
         }
 
         z_sfx_play(Z_SFX_HIT_WALL);
-        z_state_set(Z_STATE_DIED, false);
+
+        return true;
     }
+
+    return false;
 }
 
 static void checkApples(ZSnake* Snake)
@@ -242,7 +244,7 @@ static void checkApples(ZSnake* Snake)
     }
 }
 
-void z_snake_tick(ZSnake* Snake)
+bool z_snake_tick(ZSnake* Snake)
 {
     static bool move = false;
 
@@ -251,13 +253,15 @@ void z_snake_tick(ZSnake* Snake)
     }
 
     if(!move) {
-        return;
+        return false;
     }
 
     moveSnake(Snake);
     updateColors(Snake);
-    checkWall(Snake);
+    bool hitWall = checkWall(Snake);
     checkApples(Snake);
+
+    return hitWall;
 }
 
 void z_snake_tickDied(ZSnake* Snake)

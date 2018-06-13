@@ -27,6 +27,6 @@ extern ZSnake* z_snake_new(ZFix X, ZFix Y);
 
 extern void z_snake_getCoords(const ZSnake* Snake, ZFix* X, ZFix* Y);
 
-extern void z_snake_tick(ZSnake* Snake);
+extern bool z_snake_tick(ZSnake* Snake);
 extern void z_snake_tickDied(ZSnake* Snake);
 extern void z_snake_draw(const ZSnake* Snake);
