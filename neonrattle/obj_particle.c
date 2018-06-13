@@ -69,7 +69,7 @@ bool z_particle_tick(ZParticle* Particle)
 
     Particle->alpha -= 16;
 
-    return Particle->alpha > 0;
+    return Particle->alpha <= 0;
 }
 
 void z_particle_draw(const ZParticle* Particle)

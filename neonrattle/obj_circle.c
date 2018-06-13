@@ -64,7 +64,7 @@ bool z_circle_tick(ZCircle* Circle)
 {
     Circle->alpha -= Z_CIRCLE_ALPHA_DEC;
 
-    return Circle->alpha > 0;
+    return Circle->alpha <= 0;
 }
 
 void z_circle_draw(const ZCircle* Circle)

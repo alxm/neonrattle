@@ -58,13 +58,13 @@ void z_effects_init(void)
 void z_effects_tick(void)
 {
     Z_LIST_ITERATE(&g_circles, ZCircle*, c) {
-        if(!z_circle_tick(c)) {
+        if(z_circle_tick(c)) {
             z_circle_free(c);
         }
     }
 
     Z_LIST_ITERATE(&g_particles, ZParticle*, p) {
-        if(!z_particle_tick(p)) {
+        if(z_particle_tick(p)) {
             z_particle_free(p);
         }
     }
