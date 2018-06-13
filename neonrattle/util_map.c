@@ -189,7 +189,7 @@ void z_map_draw(void)
                           screenX,
                           screenY,
                           (unsigned)(g_map.tiles[tileY][tileX].wall * 4
-                                        + (tileY & 1) * 2 + (tileX & 1)));
+                                        + !(tileY & 1) * 2 + !(tileX & 1)));
         }
     }
 
