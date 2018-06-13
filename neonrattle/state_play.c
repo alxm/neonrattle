@@ -49,8 +49,9 @@ void z_state_play_tick(void)
 void z_state_play_draw(void)
 {
     z_map_draw();
+    z_effects_draw1();
     z_snake_draw(g_context.snake);
-    z_effects_draw();
+    z_effects_draw2();
 }
 
 void z_state_play_free(void)

@@ -221,7 +221,7 @@ static void checkApples(ZSnake* Snake)
 
                     z_apple_free(apple);
 
-                    z_effects_particles(head->x, head->y, 16);
+                    z_effects_circles(head->x, head->y);
                     z_sfx_play(Z_SFX_APPLE_EAT);
                 }
             }

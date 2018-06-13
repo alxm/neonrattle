@@ -24,4 +24,5 @@ extern void z_effects_circles(ZFix X, ZFix Y);
 
 extern void z_effects_init(void);
 extern void z_effects_tick(void);
-extern void z_effects_draw(void);
+extern void z_effects_draw1(void);
+extern void z_effects_draw2(void);

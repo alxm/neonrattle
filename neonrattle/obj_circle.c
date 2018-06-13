@@ -18,43 +18,67 @@
 #include "platform.h"
 #include "obj_circle.h"
 
-#include "util_light.h"
+#include "util_camera.h"
+#include "util_list.h"
 #include "util_pool.h"
 #include "util_screen.h"
 
-#define Z_CIRCLE_RADIUS_MAX (4)
+#define Z_CIRCLE_ALPHA_START 256
+#define Z_CIRCLE_ALPHA_DEC 32
 
 struct ZCircle {
+    ZListNode circlesList;
     ZFix x, y;
-    uint8_t radius;
+    int alpha;
 };
 
-Z_POOL_DECLARE(ZCircle, 2, g_pool);
+Z_POOL_DECLARE(ZCircle, 4, g_pool);
 
 void z_circle_setup(void)
 {
     z_pool_register(Z_POOL_CIRCLE, g_pool);
 }
 
-void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y)
+ZCircle* z_circle_new(ZFix X, ZFix Y)
 {
-    Circle->x = X;
-    Circle->y = Y;
-    Circle->radius = 0;
+    ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
 
-    z_light_setPulse(Z_LIGHT_EXPLOSION);
+    if(c) {
+        z_list_clearNode(&c->circlesList);
+
+        c->x = X;
+        c->y = Y;
+        c->alpha = Z_CIRCLE_ALPHA_START;
+    }
+
+    return c;
+}
+
+void z_circle_free(ZCircle* Circle)
+{
+    z_list_remove(&Circle->circlesList);
+    z_pool_free(Z_POOL_CIRCLE, Circle);
 }
 
 bool z_circle_tick(ZCircle* Circle)
 {
-    return Circle->radius++ < Z_CIRCLE_RADIUS_MAX;
+    Circle->alpha -= Z_CIRCLE_ALPHA_DEC;
+
+    return Circle->alpha > 0;
 }
 
-void z_circle_draw(ZCircle* Circle)
+void z_circle_draw(const ZCircle* Circle)
 {
-    int x = z_fix_toInt(Circle->x) + z_screen_getXShake();
-    int y = z_fix_toInt(Circle->y) + z_screen_getYShake();
+    int x, y;
+    z_camera_coordsToScreen(Circle->x, Circle->y, &x, &y);
 
-    z_draw_circle(x, y, Circle->radius, Z_COLOR_BG_GREEN_04);
-    z_draw_circle(x, y, u8(Circle->radius * 2), Z_COLOR_BG_GREEN_04);
+    x += z_screen_getXShake();
+    y += z_screen_getYShake();
+
+    z_sprite_blitAlphaMask(Z_SPRITE_APPLE_HALO,
+                           x,
+                           y,
+                           0,
+                           Z_COLOR_BG_GREEN_03,
+                           Circle->alpha);
 }

@@ -23,4 +23,8 @@ typedef struct ZCircle ZCircle;
 
 extern void z_circle_setup(void);
 
-extern void z_circle_init(ZCircle* Circle, ZFix X, ZFix Y);
+extern ZCircle* z_circle_new(ZFix X, ZFix Y);
+extern void z_circle_free(ZCircle* Circle);
+
+extern bool z_circle_tick(ZCircle* Circle);
+extern void z_circle_draw(const ZCircle* Circle);

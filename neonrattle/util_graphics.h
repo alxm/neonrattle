@@ -87,6 +87,7 @@ typedef enum Z_ENUM_PACK {
 
     // Apples
     Z_SPRITE_APPLE_ALPHAMASK,
+    Z_SPRITE_APPLE_HALO,
 
     // Misc
     Z_SPRITE_ALXM,

@@ -23,6 +23,7 @@
 #include "util_list.h"
 #include "util_pool.h"
 
+static ZList g_circles;
 static ZList g_particles;
 
 void z_effects_particles(ZFix X, ZFix Y, unsigned Num)
@@ -30,7 +31,7 @@ void z_effects_particles(ZFix X, ZFix Y, unsigned Num)
     while(Num--) {
         ZParticle* p = z_particle_new(X, Y);
 
-        if(p != NULL) {
+        if(p) {
             z_list_addLast(&g_particles, p);
         }
     }
@@ -38,21 +39,30 @@ void z_effects_particles(ZFix X, ZFix Y, unsigned Num)
 
 void z_effects_circles(ZFix X, ZFix Y)
 {
-    ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
+    ZCircle* c = z_circle_new(X, Y);
 
     if(c) {
-        z_circle_init(c, X, Y);
+        z_list_addLast(&g_circles, c);
     }
 }
 
 void z_effects_init(void)
 {
+    z_list_init(&g_circles, 0);
     z_list_init(&g_particles, 0);
+
+    z_pool_reset(Z_POOL_CIRCLE);
     z_pool_reset(Z_POOL_PARTICLE);
 }
 
 void z_effects_tick(void)
 {
+    Z_LIST_ITERATE(&g_circles, ZCircle*, c) {
+        if(!z_circle_tick(c)) {
+            z_circle_free(c);
+        }
+    }
+
     Z_LIST_ITERATE(&g_particles, ZParticle*, p) {
         if(!z_particle_tick(p)) {
             z_particle_free(p);
@@ -60,7 +70,14 @@ void z_effects_tick(void)
     }
 }
 
-void z_effects_draw(void)
+void z_effects_draw1(void)
+{
+    Z_LIST_ITERATE(&g_circles, ZCircle*, c) {
+        z_circle_draw(c);
+    }
+}
+
+void z_effects_draw2(void)
 {
     Z_LIST_ITERATE(&g_particles, ZParticle*, p) {
         z_particle_draw(p);

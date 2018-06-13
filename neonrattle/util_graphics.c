@@ -27,6 +27,7 @@
 #include "generated/data_gfx_snake_alphamask1.h"
 
 #include "generated/data_gfx_apple_alphamask1.h"
+#include "generated/data_gfx_apple_halo.h"
 
 #include "generated/data_gfx_alxm.h"
 #include "generated/data_gfx_alxm_wing.h"
@@ -42,6 +43,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_SNAKE_ALPHAMASK, snake_alphamask1);
 
     z_sprite_load(Z_SPRITE_APPLE_ALPHAMASK, apple_alphamask1);
+    z_sprite_load(Z_SPRITE_APPLE_HALO, apple_halo);
 
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
