@@ -41,4 +41,4 @@ extern void z_apple_getCoords(const ZApple* Apple, ZFix* X, ZFix* Y);
 extern int z_apple_getDim(const ZApple* Apple);
 
 extern void z_apple_tick(ZApple* Apple);
-extern void z_apple_draw(ZApple* Apple);
+extern void z_apple_draw(const ZApple* Apple);

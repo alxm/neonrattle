@@ -88,7 +88,7 @@ void z_apple_tick(ZApple* Apple)
     Apple->alphaAngle += Z_APPLE_ALPHA_DEG_STEP;
 }
 
-void z_apple_draw(ZApple* Apple)
+void z_apple_draw(const ZApple* Apple)
 {
     int x, y;
     z_camera_coordsToScreen(Apple->x, Apple->y, &x, &y);

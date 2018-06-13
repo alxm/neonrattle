@@ -249,7 +249,7 @@ void z_snake_tick(ZSnake* Snake)
     checkApples(Snake);
 }
 
-void z_snake_draw(ZSnake* Snake)
+void z_snake_draw(const ZSnake* Snake)
 {
     unsigned len = ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
     int alpha = Z_SNAKE_ALPHA_MIN;
