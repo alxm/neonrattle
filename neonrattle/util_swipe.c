@@ -24,10 +24,10 @@ typedef void (ZSwipeInit)(void);
 typedef bool (ZSwipeTick)(void);
 typedef void (ZSwipeDraw)(void);
 
-#define Z_SLIDE_CLOSE_INC (64)
-#define Z_SLIDE_OPEN_INC  (64)
+#define Z_SLIDE_CLOSE_INC (Z_FIX_DEG_090 / 16)
+#define Z_SLIDE_OPEN_INC  (Z_FIX_DEG_090 / 16)
 
-static unsigned g_counter;
+static ZFixu g_counter;
 static ZSwipeId* g_swipePtr;
 
 static void swipeHideInit(void)
@@ -39,12 +39,12 @@ static bool swipeHideTick(void)
 {
     g_counter += Z_SLIDE_CLOSE_INC;
 
-    return g_counter == Z_INT_DEG_090;
+    return g_counter > Z_FIX_DEG_090;
 }
 
 static void swipeShowInit(void)
 {
-    g_counter = Z_INT_DEG_090;
+    g_counter = Z_FIX_DEG_090;
 }
 
 static bool swipeShowTick(void)
@@ -56,16 +56,14 @@ static bool swipeShowTick(void)
 
 static void swipeDraw(void)
 {
-    int h = z_fix_toInt(z_fix_sin(g_counter) * (Z_SCREEN_H / 2));
+    int h = z_fix_toInt(z_fix_sinf(g_counter) * (Z_SCREEN_H / 2 - 1));
 
-    if(h > 0) {
-        int rH = h - 1;
+    if(h >= 0) {
+        z_draw_rectangle(0, 0, Z_SCREEN_W, h, Z_COLOR_BG_GREEN_01);
+        z_draw_hline(0, Z_SCREEN_W - 1, h, Z_COLOR_BG_GREEN_02);
 
-        z_draw_rectangle(0, 0, Z_SCREEN_W, rH, Z_COLOR_BG_GREEN_01);
-        z_draw_hline(0, Z_SCREEN_W - 1, rH, Z_COLOR_BG_GREEN_03);
-
-        z_draw_hline(0, Z_SCREEN_W - 1, Z_SCREEN_H - h, Z_COLOR_BG_GREEN_03);
-        z_draw_rectangle(0, Z_SCREEN_H - rH, Z_SCREEN_W, rH, Z_COLOR_BG_GREEN_01);
+        z_draw_hline(0, Z_SCREEN_W - 1, Z_SCREEN_H - h - 1, Z_COLOR_BG_GREEN_02);
+        z_draw_rectangle(0, Z_SCREEN_H - h, Z_SCREEN_W, h, Z_COLOR_BG_GREEN_01);
     }
 }
 
