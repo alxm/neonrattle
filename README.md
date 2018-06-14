@@ -1,14 +1,15 @@
-# Neon Rattle
+# Neonrattle
 
-*Neon Rattle* is a 360-degree snake game for the Gamebuino META.
+*Neonrattle* is a 360-degree snake game for the Gamebuino META.
 
 ## Install
 
-Copy the `NeonRattle` folder to your SD card.
+Copy the `Neonrattle` folder to your SD card.
 
 ## Controls
 
-* Move with the dpad left and right
+* Press A to start moving
+* Steer with dpad left and right
 
 ## License
 
