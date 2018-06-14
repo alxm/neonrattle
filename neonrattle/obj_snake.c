@@ -168,6 +168,7 @@ static bool checkWall(ZSnake* Snake)
             Snake->body[i].targetColor = Z_COLOR_BG_GREEN_03;
         }
 
+        z_light_setPulse(Z_LIGHT_SNAKE_HIT_WALL);
         z_sfx_play(Z_SFX_HIT_WALL);
 
         return true;

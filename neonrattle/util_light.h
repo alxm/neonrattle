@@ -20,6 +20,7 @@
 typedef enum Z_ENUM_PACK {
     Z_LIGHT_INVALID = -1,
     Z_LIGHT_APPLE_EAT,
+    Z_LIGHT_SNAKE_HIT_WALL,
     Z_LIGHT_NUM
 } ZLightId;
 

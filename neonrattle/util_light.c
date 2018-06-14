@@ -29,6 +29,10 @@ static const struct {
         Z_COLOR_BG_GREEN_03,
         {Z_FIX_DEG_090 / 4, Z_FIX_DEG_090 / 2}
     },
+    [Z_LIGHT_SNAKE_HIT_WALL] = {
+        Z_COLOR_APPLE_01,
+        {Z_FIX_DEG_090 / 2, Z_FIX_DEG_090 / 16}
+    },
 };
 
 static struct {
