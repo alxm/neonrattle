@@ -20,7 +20,7 @@
 #include "util_fix.h"
 
 #define Z_APPLE_NUM_MAX 128
-#define Z_APPLE_GROW_PER 2
+#define Z_APPLE_GROW_PER 1
 
 typedef struct ZApple ZApple;
 

@@ -81,7 +81,7 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
     if(s != NULL) {
         s->head = 0;
         s->tail = 0;
-        s->angle = Z_FIX_DEG_022;
+        s->angle = Z_FIX_DEG_090;
         s->grow = 3;
 
         z_snake_addHead(s, X, Y, z_color_getRandomSnake());
