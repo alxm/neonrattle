@@ -21,6 +21,7 @@
 #include "obj_snake.h"
 #include "util_camera.h"
 #include "util_effects.h"
+#include "util_light.h"
 #include "util_map.h"
 #include "util_pool.h"
 
@@ -29,6 +30,7 @@ static ZSnake* g_snake;
 void z_state_play_init(void)
 {
     z_effects_init();
+    z_light_reset();
 
     ZFix startX, startY;
     z_map_init(&startX, &startY);

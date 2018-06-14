@@ -23,15 +23,18 @@
 
 static const struct {
     ZColorId color;
-    unsigned counterSpeed[2];
+    ZFixu counterSpeed[2];
 } g_patterns[Z_LIGHT_NUM] = {
-    [Z_LIGHT_APPLE_EAT] = {Z_COLOR_BG_GREEN_03, {8, 2}},
+    [Z_LIGHT_APPLE_EAT] = {
+        Z_COLOR_BG_GREEN_03,
+        {Z_FIX_DEG_090 / 4, Z_FIX_DEG_090 / 2}
+    },
 };
 
 static struct {
     ZColorId bgColor;
     ZLightId pulseId;
-    unsigned counter;
+    ZFixu counter;
 } g_light;
 
 static struct {
@@ -57,14 +60,14 @@ void z_light_tick(void)
     int alpha = 0;
 
     if(g_light.pulseId != Z_LIGHT_INVALID) {
-        bool goingDown = g_light.counter >= Z_INT_DEG_090;
+        bool goingDown = g_light.counter >= Z_FIX_DEG_090;
         g_light.counter += g_patterns[g_light.pulseId].counterSpeed[goingDown];
 
-        if(g_light.counter >= Z_INT_DEG_180) {
+        if(g_light.counter >= Z_FIX_DEG_180) {
             g_light.pulseId = Z_LIGHT_INVALID;
         } else {
             color = g_patterns[g_light.pulseId].color;
-            alpha = z_fix_toInt(z_fix_sin(g_light.counter) * 255);
+            alpha = z_fix_toInt(z_fix_sinf(g_light.counter) * 256);
         }
     }
 
