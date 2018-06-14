@@ -60,6 +60,10 @@ void z_map_setup(void)
 
 void z_map_init(ZFix* StartX, ZFix* StartY)
 {
+    #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
+        int total = 0;
+    #endif
+
     for(int y = Z_GRID_H; y--; ) {
         for(int x = Z_GRID_W; x--; ) {
             z_list_reset(&g_map.grid[y][x].apples);
@@ -92,6 +96,10 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
             if(num == 0) {
                 continue;
             }
+
+            #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
+                total += num;
+            #endif
 
             int gridX, gridY;
             z_coords_tileToGrid(x, y, &gridX, &gridY);
@@ -136,6 +144,10 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
             }
         }
     }
+
+    #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
+        printf("Placed %d apples\n", total);
+    #endif
 }
 
 void z_map_tick(void)
