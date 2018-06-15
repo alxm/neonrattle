@@ -21,11 +21,13 @@
 #include "obj_snake.h"
 #include "util_camera.h"
 #include "util_effects.h"
+#include "util_input.h"
 #include "util_light.h"
 #include "util_map.h"
 #include "util_pool.h"
 
 static ZSnake* g_snake;
+static bool g_canMove;
 
 void z_state_play_init(void)
 {
@@ -36,13 +38,21 @@ void z_state_play_init(void)
     z_map_init(&startX, &startY);
 
     g_snake = z_snake_new(startX, startY);
+    g_canMove = false;
 }
 
 void z_state_play_tick(void)
 {
     z_map_tick();
 
-    if(z_snake_tick(g_snake)) {
+    if(!g_canMove
+        && (z_button_pressed(Z_BUTTON_A) || z_button_pressed(Z_BUTTON_B))) {
+
+        g_canMove = true;
+        z_sfx_play(Z_SFX_PRESSED_A);
+    }
+
+    if(g_canMove && z_snake_tick(g_snake)) {
         z_state_set(Z_STATE_DIED, false);
     }
 
@@ -56,6 +66,11 @@ void z_state_play_draw(void)
     z_effects_draw1();
     z_snake_draw(g_snake);
     z_effects_draw2();
+}
+
+void z_state_play_free(void)
+{
+    g_canMove = false;
 }
 
 ZSnake* z_state_play_getSnake(void)

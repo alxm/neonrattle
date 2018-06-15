@@ -247,16 +247,6 @@ static void checkApples(ZSnake* Snake)
 
 bool z_snake_tick(ZSnake* Snake)
 {
-    static bool move = false;
-
-    if(z_button_pressed(Z_BUTTON_A)) {
-        move = true;
-    }
-
-    if(!move) {
-        return false;
-    }
-
     moveSnake(Snake);
     updateColors(Snake);
     bool hitWall = checkWall(Snake);

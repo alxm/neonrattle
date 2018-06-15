@@ -23,5 +23,6 @@
 extern ZStateInit z_state_play_init;
 extern ZStateTick z_state_play_tick;
 extern ZStateDraw z_state_play_draw;
+extern ZStateFree z_state_play_free;
 
 extern ZSnake* z_state_play_getSnake(void);
