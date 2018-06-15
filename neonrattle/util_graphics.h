@@ -120,6 +120,7 @@ extern uint8_t z_sprite_getNumFrames(ZSpriteId Sprite);
 
 extern void z_draw_fill(ZColorId ColorId);
 extern void z_draw_rectangle(int X, int Y, int W, int H, ZColorId ColorId);
+extern void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId ColorId, int Alpha);
 extern void z_draw_pixel(int X, int Y, ZColorId ColorId);
 extern void z_draw_hline(int X1, int X2, int Y, ZColorId ColorId);
 extern void z_draw_vline(int X, int Y1, int Y2, ZColorId ColorId);

@@ -151,6 +151,49 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
     }
 }
 
+void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId ColorId, int Alpha)
+{
+    if(Alpha == 0
+        || X >= Z_SCREEN_W || X + W <= 0 || Y >= Z_SCREEN_H || Y + H <= 0) {
+
+        return;
+    }
+
+    if(X < 0) {
+        W -= -X;
+        X = 0;
+    }
+
+    if(X + W > Z_SCREEN_W) {
+        W -= X + W - Z_SCREEN_W;
+    }
+
+    if(Y < 0) {
+        H -= -Y;
+        Y = 0;
+    }
+
+    if(Y + H > Z_SCREEN_H) {
+        H -= Y + H - Z_SCREEN_H;
+    }
+
+    const int r = z_colors[ColorId].r;
+    const int g = z_colors[ColorId].g;
+    const int b = z_colors[ColorId].b;
+
+    ZPixel* screenPixels = z_screen_getPixels() + Y * Z_SCREEN_W + X;
+
+    for(int y = H; y--; ) {
+        ZPixel* screenPixels2 = screenPixels;
+
+        for(int x = W; x--; ) {
+            z_pixel_drawAlpha(screenPixels2++, r, g, b, Alpha);
+        }
+
+        screenPixels += Z_SCREEN_W;
+    }
+}
+
 void z_draw_hline(int X1, int X2, int Y, ZColorId ColorId)
 {
     z_draw_rectangle(X1, Y, X2 - X1 + 1, 1, ColorId);
