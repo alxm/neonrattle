@@ -31,6 +31,9 @@
 #define Z_SNAKE_LEN (Z_APPLE_NUM_MAX * Z_APPLE_GROW_PER)
 #define Z_SNAKE_LEN_MASK (Z_SNAKE_LEN - 1)
 
+#define Z_SNAKE_START_LEN 4
+#define Z_SNAKE_START_ANGLE Z_FIX_DEG_090
+
 #define Z_SNAKE_TURN_DEG (Z_FIX_DEG_001 * 10)
 
 #define Z_SNAKE_ALPHA_MIN 8
@@ -62,7 +65,7 @@ static inline unsigned getLength(const ZSnake* Snake)
     return ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
 }
 
-static void z_snake_addHead(ZSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
+static void setHead(ZSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
 {
     ZSegment* s = &Snake->body[Snake->head];
 
@@ -79,12 +82,18 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
     ZSnake* s = z_pool_alloc(Z_POOL_SNAKE);
 
     if(s != NULL) {
-        s->head = 0;
+        s->head = (unsigned)-1;
         s->tail = 0;
-        s->angle = Z_FIX_DEG_090;
-        s->grow = 3;
+        s->angle = Z_SNAKE_START_ANGLE;
+        s->grow = 0;
 
-        z_snake_addHead(s, X, Y, z_color_getRandomSnake());
+        for(int i = Z_SNAKE_START_LEN; i--; ) {
+            s->head = (s->head + 1) & Z_SNAKE_LEN_MASK;
+            setHead(s, X, Y, z_color_getRandomSnake());
+
+            X += z_fix_cosf(s->angle);
+            Y -=z_fix_sinf(s->angle);
+        }
     }
 
     return s;
@@ -112,13 +121,13 @@ static void moveSnake(ZSnake* Snake)
             Snake->grow--;
             Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
 
-            z_snake_addHead(Snake, x, y, z_color_getRandomApple());
+            setHead(Snake, x, y, z_color_getRandomApple());
         }
     } else {
         Snake->tail = (Snake->tail + 1) & Z_SNAKE_LEN_MASK;
         Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
 
-        z_snake_addHead(Snake, x, y, z_color_getRandomSnake());
+        setHead(Snake, x, y, z_color_getRandomSnake());
     }
 
     if(z_button_pressed(Z_BUTTON_LEFT)) {
