@@ -21,6 +21,7 @@
 #include "obj_snake.h"
 #include "util_camera.h"
 #include "util_effects.h"
+#include "util_hud.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_map.h"
@@ -66,6 +67,7 @@ void z_state_play_draw(void)
     z_effects_draw1();
     z_snake_draw(g_snake);
     z_effects_draw2();
+    z_hud_draw(g_snake);
 }
 
 void z_state_play_free(void)

@@ -22,6 +22,7 @@
 #include "state_play.h"
 #include "util_camera.h"
 #include "util_effects.h"
+#include "util_hud.h"
 #include "util_map.h"
 #include "util_pool.h"
 #include "util_timer.h"
@@ -53,6 +54,7 @@ void z_state_died_draw(void)
     z_effects_draw1();
     z_snake_draw(g_snake);
     z_effects_draw2();
+    z_hud_draw(g_snake);
 }
 
 void z_state_died_free(void)

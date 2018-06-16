@@ -51,6 +51,7 @@ struct ZSnake {
     unsigned head, tail;
     ZFixu angle;
     int grow;
+    int eaten;
 };
 
 Z_POOL_DECLARE(ZSnake, 1, g_pool);
@@ -86,6 +87,7 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
         s->tail = 0;
         s->angle = Z_SNAKE_START_ANGLE;
         s->grow = 0;
+        s->eaten = 0;
 
         for(int i = Z_SNAKE_START_LEN; i--; ) {
             s->head = (s->head + 1) & Z_SNAKE_LEN_MASK;
@@ -105,6 +107,11 @@ void z_snake_getCoords(const ZSnake* Snake, ZFix* X, ZFix* Y)
 
     *X = head->x;
     *Y = head->y;
+}
+
+int z_snake_getEaten(const ZSnake* Snake)
+{
+    return Snake->eaten;
 }
 
 static void moveSnake(ZSnake* Snake)
@@ -242,6 +249,7 @@ static void checkApples(ZSnake* Snake)
                                        z_apple_getDim(apple))) {
 
                     Snake->grow += Z_APPLE_GROW_PER;
+                    Snake->eaten++;
 
                     z_apple_free(apple);
 

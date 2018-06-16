@@ -34,6 +34,7 @@ typedef struct {
 typedef struct {
     ZTile tiles[Z_MAP_H][Z_MAP_W];
     ZCell grid[Z_GRID_H][Z_GRID_W];
+    int totalApples;
 } ZMap;
 
 static ZMap g_map;
@@ -60,9 +61,7 @@ void z_map_setup(void)
 
 void z_map_init(ZFix* StartX, ZFix* StartY)
 {
-    #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
-        int total = 0;
-    #endif
+    g_map.totalApples = 0;
 
     for(int y = Z_GRID_H; y--; ) {
         for(int x = Z_GRID_W; x--; ) {
@@ -97,9 +96,7 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
                 continue;
             }
 
-            #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
-                total += num;
-            #endif
+            g_map.totalApples += num;
 
             int gridX, gridY;
             z_coords_tileToGrid(x, y, &gridX, &gridY);
@@ -146,7 +143,7 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
     }
 
     #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
-        printf("Placed %d apples\n", total);
+        printf("Placed %d apples\n", g_map.totalApples);
     #endif
 }
 
@@ -280,6 +277,11 @@ void z_map_getVisibleBounds(
 ZList* z_map_getApples(int GridX, int GridY)
 {
     return &g_map.grid[GridY][GridX].apples;
+}
+
+int z_map_getApplesNum(void)
+{
+    return g_map.totalApples;
 }
 
 bool z_map_isWall(int TileX, int TileY)

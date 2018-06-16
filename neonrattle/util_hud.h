@@ -17,17 +17,6 @@
 
 #pragma once
 
-#include "util_list.h"
+#include "obj_snake.h"
 
-extern void z_map_setup(void);
-extern void z_map_init(ZFix* StartX, ZFix* StartY);
-extern void z_map_tick(void);
-extern void z_map_draw(void);
-
-extern void z_map_getVisibleBounds(
-    int* TileStartX, int* TileStartY, int* TileEndX, int* TileEndY,
-    int* GridStartX, int* GridStartY, int* GridEndX, int* GridEndY,
-    int* ScreenStartX, int* ScreenStartY);
-extern ZList* z_map_getApples(int GridX, int GridY);
-extern int z_map_getApplesNum(void);
-extern bool z_map_isWall(int TileX, int TileY);
+extern void z_hud_draw(ZSnake* Snake);
