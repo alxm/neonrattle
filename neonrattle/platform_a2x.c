@@ -37,7 +37,7 @@ A_SETUP
     a_settings_set("video.color.border", "0x042a26");
     a_settings_set("video.width", A_STRINGIFY(Z_SCREEN_W));
     a_settings_set("video.height", A_STRINGIFY(Z_SCREEN_H));
-    a_settings_set("sound.sfx.scale", "25");
+    a_settings_set("sound.sfx.scale", "50");
     a_settings_set("fps.tick", A_STRINGIFY(Z_FPS));
     a_settings_set("fps.draw", A_STRINGIFY(Z_FPS));
 }
@@ -48,8 +48,8 @@ A_STATE(run)
     {
         g_buttons[Z_BUTTON_UP] = a_button_new("key.up gamepad.b.up");
         g_buttons[Z_BUTTON_DOWN] = a_button_new("key.down gamepad.b.down");
-        g_buttons[Z_BUTTON_LEFT] = a_button_new("key.left gamepad.b.left");
-        g_buttons[Z_BUTTON_RIGHT] = a_button_new("key.right gamepad.b.right");
+        g_buttons[Z_BUTTON_LEFT] = a_button_new("key.left gamepad.b.left gamepad.b.l");
+        g_buttons[Z_BUTTON_RIGHT] = a_button_new("key.right gamepad.b.right gamepad.b.r");
         g_buttons[Z_BUTTON_A] = a_button_new("key.z gamepad.b.a");
         g_buttons[Z_BUTTON_B] = a_button_new("key.x gamepad.b.b");
         g_buttons[Z_BUTTON_MENU] = a_button_new("key.enter gamepad.b.start");
