@@ -26,7 +26,7 @@ def main(SfxName, UniqueName):
                             '-loglevel', 'quiet',
                             '-i', SfxName,
                             '-ac', '1',
-                            '-ar', '11025',
+                            '-ar', '22050',
                             '-acodec', 'pcm_u8',
                             '-f', 'u8',
                             'pipe:1'],
