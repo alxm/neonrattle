@@ -36,7 +36,8 @@ void z_list_reset(ZList* List)
 void z_list_addFirst(ZList* List, void* Object)
 {
     ZListNode* rootNode = &List->root;
-    ZListNode* objectNode = (ZListNode*)((uint8_t*)Object + List->nodeOffset);
+    ZListNode* objectNode = (ZListNode*)(void*)
+                                ((uint8_t*)Object + List->nodeOffset);
 
     objectNode->prev = rootNode;
     objectNode->next = rootNode->next;
@@ -48,7 +49,8 @@ void z_list_addFirst(ZList* List, void* Object)
 void z_list_addLast(ZList* List, void* Object)
 {
     ZListNode* rootNode = &List->root;
-    ZListNode* objectNode = (ZListNode*)((uint8_t*)Object + List->nodeOffset);
+    ZListNode* objectNode = (ZListNode*)(void*)
+                                ((uint8_t*)Object + List->nodeOffset);
 
     objectNode->prev = rootNode->prev;
     objectNode->next = rootNode;

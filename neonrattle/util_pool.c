@@ -34,7 +34,7 @@ void z_pool_reset(ZPoolId Pool)
     pool->freeList = current;
 
     for(size_t numObjects = pool->capacity; numObjects > 1; numObjects--) {
-        ZPoolFreeObject* next = (ZPoolFreeObject*)
+        ZPoolFreeObject* next = (ZPoolFreeObject*)(void*)
                                     ((uint8_t*)current + pool->objSize);
 
         current->next = next;
