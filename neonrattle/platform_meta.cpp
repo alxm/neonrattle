@@ -224,7 +224,7 @@ void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId)
 
 uint16_t z_fps_getCounter(void)
 {
-    return u16(gb.frameCount);
+    return (uint16_t)gb.frameCount;
 }
 
 bool z_fps_isNthFrame(uint8_t N)

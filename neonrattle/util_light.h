@@ -17,7 +17,7 @@
 
 #pragma once
 
-typedef enum Z_ENUM_PACK {
+typedef enum {
     Z_LIGHT_INVALID = -1,
     Z_LIGHT_APPLE_EAT,
     Z_LIGHT_SNAKE_HIT_WALL,

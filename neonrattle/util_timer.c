@@ -20,22 +20,22 @@
 
 typedef struct {
     uint8_t base;
-    uint8_t period : 7;
-    bool expired : 1;
+    uint8_t period;
+    bool expired;
 } ZTimer;
 
 static ZTimer g_timers[Z_TIMER_NUM];
 
 void z_timer_tick(void)
 {
-    uint8_t now = u8(z_fps_getCounter());
+    uint8_t now = (uint8_t)z_fps_getCounter();
 
     for(ZTimerId t = 0; t < Z_TIMER_NUM; t++) {
         ZTimer* timer = &g_timers[t];
 
         if(timer->period == 0) {
             continue;
-        } else if(u8(now - timer->base) < timer->period) {
+        } else if((uint8_t)(now - timer->base) < timer->period) {
             timer->expired = false;
         } else {
             timer->base = now;
@@ -48,8 +48,8 @@ void z_timer_start(ZTimerId Timer, uint8_t Ds)
 {
     ZTimer* timer = &g_timers[Timer];
 
-    timer->base = u8(z_fps_getCounter());
-    timer->period = u7(z_timer_dsToTicks(Ds));
+    timer->base = (uint8_t)z_fps_getCounter();
+    timer->period = z_timer_dsToTicks(Ds);
     timer->expired = false;
 }
 
@@ -65,7 +65,7 @@ void z_timer_restart(ZTimerId Timer)
 {
     ZTimer* timer = &g_timers[Timer];
 
-    timer->base = u8(z_fps_getCounter());
+    timer->base = (uint8_t)z_fps_getCounter();
     timer->expired = false;
 }
 

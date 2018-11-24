@@ -17,7 +17,7 @@
 
 #pragma once
 
-typedef enum Z_ENUM_PACK {
+typedef enum {
     Z_SWIPE_INVALID = -1,
     Z_SWIPE_HIDE,
     Z_SWIPE_SHOW,

@@ -22,7 +22,7 @@ Z_EXTERN_C_START
 #include "util_fix.h"
 #include "util_screen.h"
 
-typedef enum Z_ENUM_PACK {
+typedef enum {
     Z_COLOR_INVALID = -1,
 
     Z_COLOR_ALXM_BG,
@@ -73,7 +73,7 @@ static inline ZColorId z_color_getRandomSnake(void)
     return (ZColorId)(Z_COLOR_SNAKE_01 + z_random_int(Z_COLOR_SNAKE_NUM));
 }
 
-typedef enum Z_ENUM_PACK {
+typedef enum {
     Z_SPRITE_PALETTE,
 
     // Maps

@@ -21,7 +21,7 @@
 
 Z_EXTERN_C_START
 
-typedef enum Z_ENUM_PACK {
+typedef enum {
     Z_STATE_INVALID = -1,
     Z_STATE_DIED,
     Z_STATE_INTRO,

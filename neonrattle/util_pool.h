@@ -17,7 +17,7 @@
 
 #pragma once
 
-typedef enum Z_ENUM_PACK {
+typedef enum {
     Z_POOL_INVALID = -1,
     Z_POOL_APPLE,
     Z_POOL_CIRCLE,

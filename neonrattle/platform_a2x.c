@@ -173,7 +173,7 @@ int z_sprite_getHeight(ZSpriteId Sprite)
 
 uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
 {
-    return u8(a_spriteframes_numGet(g_sprites[Sprite]));
+    return (uint8_t)a_spriteframes_numGet(g_sprites[Sprite]);
 }
 
 void z_draw_fill(ZColorId ColorId)
@@ -207,7 +207,7 @@ void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId)
 
 uint16_t z_fps_getCounter(void)
 {
-    return u16(a_fps_ticksGet());
+    return (uint16_t)a_fps_ticksGet();
 }
 
 bool z_fps_isNthFrame(uint8_t N)

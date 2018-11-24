@@ -39,8 +39,6 @@
 #include <stdint.h>
 #include <limits.h>
 
-#define Z_ENUM_PACK
-
 #if Z_PLATFORM_A2X
     #include "platform_a2x.h"
 #elif Z_PLATFORM_META
@@ -48,17 +46,6 @@
 #endif
 
 Z_EXTERN_C_START
-
-#define uN(X, Bits) (uint8_t)((X) & ((1 << (Bits)) - 1))
-#define u1(X) uN(X, 1)
-#define u2(X) uN(X, 2)
-#define u3(X) uN(X, 3)
-#define u4(X) uN(X, 4)
-#define u5(X) uN(X, 5)
-#define u6(X) uN(X, 6)
-#define u7(X) uN(X, 7)
-#define u8(X) (uint8_t)(X)
-#define u16(X) (uint16_t)(X)
 
 #define Z_UNUSED(X) (X = X)
 #define Z_ARRAY_LEN(A) (sizeof(A) / sizeof(A[0]))

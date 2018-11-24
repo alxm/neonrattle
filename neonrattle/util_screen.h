@@ -18,8 +18,7 @@
 #pragma once
 
 typedef struct {
-    uint8_t xShake : 4;
-    uint8_t yShake : 4;
+    int xShake, yShake;
 } ZScreen;
 
 extern ZScreen z_screen;

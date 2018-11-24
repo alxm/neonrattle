@@ -19,7 +19,7 @@
 
 #include "util_fps.h"
 
-typedef enum Z_ENUM_PACK {
+typedef enum {
     Z_TIMER_INVALID = -1,
     Z_TIMER_VM,
     Z_TIMER_ENEMY_FRAME,
@@ -47,5 +47,5 @@ extern bool z_timer_expired(ZTimerId Timer);
 
 static inline uint8_t z_timer_dsToTicks(uint8_t Ds)
 {
-    return u8(Z_FPS * Ds / 10);
+    return (uint8_t)(Z_FPS * Ds / 10);
 }
