@@ -51,8 +51,12 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
 #define z_sprite_load(Index, Id) \
     z_platform__loadSprite(Index, "assets/gfx/" #Id ".png");
 
+#define z_sprite_loadGrid(Index, Id, W, H) \
+    z_platform__loadSpriteGrid(Index, "assets/gfx/" #Id ".png", W, H);
+
 #define z_sfx_load(Index, Id) \
     z_platform__loadSfx(Index, "assets/sfx/" #Id ".wav");
 
 extern void z_platform__loadSprite(ZSpriteId Sprite, const char* Path);
+extern void z_platform__loadSpriteGrid(ZSpriteId Sprite, const char* Path, int W, int H);
 extern void z_platform__loadSfx(ZSfxId Sfx, const char* Path);

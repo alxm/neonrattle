@@ -33,7 +33,7 @@ static struct {
 A_SETUP
 {
     a_settings_stringSet(A_SETTING_APP_TITLE, "Neonrattle");
-    a_settings_stringSet(A_SETTING_APP_VERSION, "0.1.0");
+    a_settings_stringSet(A_SETTING_APP_VERSION, "0.2.0");
     a_settings_stringSet(A_SETTING_APP_AUTHOR, "alxm");
     a_settings_boolSet(A_SETTING_OUTPUT_ON, true);
     a_settings_boolSet(A_SETTING_OUTPUT_VERBOSE, true);
@@ -129,6 +129,11 @@ ZPixel* z_screen_getPixels(void)
 void z_platform__loadSprite(ZSpriteId Sprite, const char* Path)
 {
     g_sprites[Sprite] = a_spriteframes_newFromFile(Path, 0);
+}
+
+void z_platform__loadSpriteGrid(ZSpriteId Sprite, const char* Path, int W, int H)
+{
+    g_sprites[Sprite] = a_spriteframes_newFromFileGrid(Path, W, H, 0);
 }
 
 ZPixel z_sprite_getTransparentColor(void)

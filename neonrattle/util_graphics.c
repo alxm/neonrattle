@@ -22,7 +22,7 @@
 
 #include "generated/data_gfx_map0.h"
 
-#include "generated/data_gfx_tiles.h"
+#include "generated/data_gfx_tiles_grid16x16.h"
 
 #include "generated/data_gfx_snake_alphamask1.h"
 
@@ -38,7 +38,7 @@ void z_graphics_setup(void)
 
     z_sprite_load(Z_SPRITE_MAP0, map0);
 
-    z_sprite_load(Z_SPRITE_TILES, tiles);
+    z_sprite_loadGrid(Z_SPRITE_TILES, tiles_grid16x16, 16, 16);
 
     z_sprite_load(Z_SPRITE_SNAKE_ALPHAMASK, snake_alphamask1);
 

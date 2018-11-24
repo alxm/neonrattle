@@ -60,6 +60,8 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
 #define z_sprite_load(Index, Id)                             \
     z_platform__loadSprite(Index, z_data_gfx_##Id##_buffer);
 
+#define z_sprite_loadGrid(Index, Id, W, H) z_sprite_load(Index, Id)
+
 #define z_sfx_load(Index, Id)                     \
     z_platform__loadSfx(Index,                    \
                         z_data_sfx_##Id##_buffer, \

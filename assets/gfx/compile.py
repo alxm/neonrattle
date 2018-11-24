@@ -17,8 +17,10 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+import re
 import sys
 import time
+
 from PIL import Image
 
 class Palette:
@@ -33,7 +35,6 @@ class Palette:
         pixels = image.load()
 
         self.transparent = pixels[0, 0]
-        self.limit = pixels[1, 0]
 
 class Sheet:
     def __init__(self, ImageName, Palette):
@@ -45,38 +46,19 @@ class Sheet:
         self.frameWidth = 0
         self.frameHeight = 0
 
-        self.transparentColor = 0
-
         if Palette.transparent in image.getdata():
             self.transparentColor = self.rgb888ToRgb565(Palette.transparent)
+        else:
+            self.transparentColor = 0
 
-        for x in range(0, self.width):
-            if self.pixels[x, 0] == Palette.limit:
-                foundGap = False
+        grid_match = re.match('^.*_grid([0-9]+)x([0-9]+)\..*$', ImageName)
 
-                for y in range(1, self.height):
-                    if self.pixels[x, y] != Palette.limit:
-                        foundGap = True
-                        break
-
-                if not foundGap:
-                    break
-
-            self.frameWidth += 1
-
-        for y in range(0, self.height):
-            if self.pixels[0, y] == Palette.limit:
-                foundGap = False
-
-                for x in range(1, self.width):
-                    if self.pixels[x, y] != Palette.limit:
-                        foundGap = True
-                        break
-
-                if not foundGap:
-                    break
-
-            self.frameHeight += 1
+        if grid_match:
+            self.frameWidth = int(grid_match.group(1))
+            self.frameHeight = int(grid_match.group(2))
+        else:
+            self.frameWidth = self.width
+            self.frameHeight = self.height
 
     def rgb888ToRgb565(self, Pixel):
         r, g, b = Pixel
@@ -102,23 +84,11 @@ def main(PaletteName, ImageName, UniqueName):
     metaSpriteBytes = []
     numFrames = 0
 
-    for x in range(0, sheet.width, sheet.frameWidth + 1):
-        frame = Frame(palette, sheet, x, 0)
-
-        metaSpriteBytes += frame.metaSpriteBytes
-
-        numFrames += 1
-
-    def formatBytes8(Bytes):
-        formattedBytes = ''
-
-        for index, byte in enumerate(Bytes):
-            """if index % 15 == 0:
-                formattedBytes += '\n    '"""
-
-            formattedBytes += '0x{:0>2x},'.format(byte)
-
-        return formattedBytes
+    for y in range(0, sheet.height, sheet.frameHeight):
+        for x in range(0, sheet.width, sheet.frameWidth):
+            frame = Frame(palette, sheet, x, y)
+            metaSpriteBytes += frame.metaSpriteBytes
+            numFrames += 1
 
     def formatBytes16(Bytes):
         formattedBytes = ''
