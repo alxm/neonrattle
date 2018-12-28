@@ -103,6 +103,27 @@ void z_state_setup(void)
     #endif
 }
 
+static void checkNewState(void)
+{
+    if(g_state.next == Z_STATE_INVALID || g_swipe.swipeOut != Z_SWIPE_INVALID) {
+        return;
+    }
+
+    if(g_state.current != Z_STATE_INVALID && g_states[g_state.current].free) {
+        g_states[g_state.current].free();
+    }
+
+    g_state.current = g_state.next;
+    g_state.next = Z_STATE_INVALID;
+
+    if(g_states[g_state.current].init) {
+        g_states[g_state.current].init();
+    }
+
+    z_swipe_init(&g_swipe.swipeIn);
+    z_input_reset();
+}
+
 void z_state_tick(void)
 {
     z_screen_tick();
@@ -110,26 +131,12 @@ void z_state_tick(void)
     z_timer_tick();
     z_light_tick();
 
-    if(g_state.next != Z_STATE_INVALID && g_swipe.swipeOut == Z_SWIPE_INVALID) {
-        if(g_state.current != Z_STATE_INVALID
-            && g_states[g_state.current].free) {
-
-            g_states[g_state.current].free();
-        }
-
-        g_state.current = g_state.next;
-        g_state.next = Z_STATE_INVALID;
-
-        if(g_states[g_state.current].init) {
-            g_states[g_state.current].init();
-        }
-
-        z_swipe_init(&g_swipe.swipeIn);
-        z_input_reset();
-    }
+    checkNewState();
 
     if(g_states[g_state.current].tick) {
         g_states[g_state.current].tick();
+
+        checkNewState();
     }
 }
 
