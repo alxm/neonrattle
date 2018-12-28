@@ -128,12 +128,12 @@ ZPixel* z_screen_getPixels(void)
 
 void z_platform__loadSprite(ZSpriteId Sprite, const char* Path)
 {
-    g_sprites[Sprite] = a_spriteframes_newFromFile(Path, 0);
+    g_sprites[Sprite] = a_spriteframes_newFromPng(Path);
 }
 
 void z_platform__loadSpriteGrid(ZSpriteId Sprite, const char* Path, int W, int H)
 {
-    g_sprites[Sprite] = a_spriteframes_newFromFileGrid(Path, W, H, 0);
+    g_sprites[Sprite] = a_spriteframes_newFromPngGrid(Path, W, H);
 }
 
 ZPixel z_sprite_getTransparentColor(void)
