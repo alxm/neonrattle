@@ -15,9 +15,9 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "util_hud.h"
 
+#include "util_graphics.h"
 #include "util_map.h"
 
 void z_hud_draw(ZSnake* Snake)

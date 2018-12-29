@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 Z_EXTERN_C_START
 
 typedef enum Z_PACK_ENUM {

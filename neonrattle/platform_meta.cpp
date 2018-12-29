@@ -19,7 +19,9 @@
 
 #include "state.h"
 #include "util_fps.h"
+#include "util_graphics.h"
 #include "util_input.h"
+#include "util_sound.h"
 
 #include "generated/data_gfx_palette.h"
 
@@ -138,19 +140,19 @@ static void prepLights(ZColorId BgColorId, ZColorId ColorId, int Alpha)
     gb.lights.setColor((Color)color);
 }
 
-void z_platform_meta_lightsFill(ZColorId BgColorId, ZColorId ColorId, int Alpha)
+void z_platform_meta_lightsFill(int BgColorId, int ColorId, int Alpha)
 {
-    prepLights(BgColorId, ColorId, Alpha);
+    prepLights((ZColorId)BgColorId, (ZColorId)ColorId, Alpha);
     gb.lights.fill();
 }
 
-void z_platform_meta_lightsDraw(ZColorId ColorId, int Alpha, int X, int Y)
+void z_platform_meta_lightsDraw(int ColorId, int Alpha, int X, int Y)
 {
-    prepLights(Z_COLOR_INVALID, ColorId, Alpha);
+    prepLights(Z_COLOR_INVALID, (ZColorId)ColorId, Alpha);
     gb.lights.drawPixel(X, Y);
 }
 
-void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer)
+void z_platform__loadSprite(int Sprite, const uint16_t* Buffer)
 {
     g_sprites[Sprite].image.init(Buffer);
     g_sprites[Sprite].buffer = Buffer;
@@ -232,7 +234,7 @@ bool z_fps_ticksNth(uint8_t N)
     return (gb.frameCount % N) == 0;
 }
 
-void z_platform__loadSfx(ZSfxId Sfx, const uint8_t* Buffer, uint32_t Size)
+void z_platform__loadSfx(int Sfx, const uint8_t* Buffer, uint32_t Size)
 {
     g_sfx[Sfx].buffer = Buffer;
     g_sfx[Sfx].size = Size;

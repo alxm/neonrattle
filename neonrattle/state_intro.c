@@ -15,9 +15,9 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "state_intro.h"
 
+#include "util_graphics.h"
 #include "util_timer.h"
 
 #define Z_LOGO_WAIT_DS (8)

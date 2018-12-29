@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 #include "util_fix.h"
 
 typedef struct ZParticle ZParticle;

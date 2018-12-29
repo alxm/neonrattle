@@ -15,6 +15,8 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 #ifdef A2X
     #define Z_PLATFORM_A2X 1
 #endif

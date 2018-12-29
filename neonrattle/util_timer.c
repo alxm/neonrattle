@@ -15,7 +15,6 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "util_timer.h"
 
 typedef struct {

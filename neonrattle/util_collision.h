@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 static inline bool z_collision_boxAndBox(int X1, int Y1, int W1, int H1, int X2, int Y2, int W2, int H2)
 {
     X1 = X1 - W1 / 2;

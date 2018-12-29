@@ -15,7 +15,6 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "state_died.h"
 
 #include "obj_snake.h"
@@ -25,6 +24,7 @@
 #include "util_hud.h"
 #include "util_map.h"
 #include "util_pool.h"
+#include "util_screen.h"
 #include "util_timer.h"
 
 static ZSnake* g_snake;

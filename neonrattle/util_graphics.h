@@ -17,10 +17,11 @@
 
 #pragma once
 
+#include "platform.h"
+
 Z_EXTERN_C_START
 
 #include "util_fix.h"
-#include "util_screen.h"
 
 typedef enum {
     Z_COLOR_INVALID = -1,

@@ -54,9 +54,6 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
 #define Z_SCREEN_W 80
 #define Z_SCREEN_H 64
 
-#include "util_graphics.h"
-#include "util_sound.h"
-
 #define z_sprite_load(Index, Id)                             \
     z_platform__loadSprite(Index, z_data_gfx_##Id##_buffer);
 
@@ -67,10 +64,10 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
                         z_data_sfx_##Id##_buffer, \
                         z_data_sfx_##Id##_size);
 
-extern void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer);
-extern void z_platform__loadSfx(ZSfxId Sfx, const uint8_t* Buffer, uint32_t Size);
+extern void z_platform__loadSprite(int Sprite, const uint16_t* Buffer);
+extern void z_platform__loadSfx(int Sfx, const uint8_t* Buffer, uint32_t Size);
 
-extern void z_platform_meta_lightsFill(ZColorId BgColorId, ZColorId ColorId, int Alpha);
-extern void z_platform_meta_lightsDraw(ZColorId ColorId, int Alpha, int X, int Y);
+extern void z_platform_meta_lightsFill(int BgColorId, int ColorId, int Alpha);
+extern void z_platform_meta_lightsDraw(int ColorId, int Alpha, int X, int Y);
 
 Z_EXTERN_C_END

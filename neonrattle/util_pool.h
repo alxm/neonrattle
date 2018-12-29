@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 typedef enum {
     Z_POOL_INVALID = -1,
     Z_POOL_APPLE,

@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 #include "util_fix.h"
 
 #define Z_APPLE_NUM_MAX 128

@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 typedef enum {
     Z_SWIPE_INVALID = -1,
     Z_SWIPE_HIDE,

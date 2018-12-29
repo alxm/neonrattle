@@ -15,11 +15,11 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "obj_particle.h"
 
 #include "util_camera.h"
 #include "util_fps.h"
+#include "util_graphics.h"
 #include "util_list.h"
 #include "util_pool.h"
 #include "util_screen.h"

@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 #include "state.h"
 
 extern ZStateInit z_state_intro_init;

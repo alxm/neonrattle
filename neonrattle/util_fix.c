@@ -15,7 +15,6 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "util_fix.h"
 
 const ZFix z_fix__sin[Z_ANGLES_NUM] = {

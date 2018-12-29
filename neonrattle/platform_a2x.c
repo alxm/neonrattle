@@ -19,7 +19,9 @@
 
 #include "state.h"
 #include "util_fps.h"
+#include "util_graphics.h"
 #include "util_input.h"
+#include "util_sound.h"
 
 #if Z_PLATFORM_A2X
 ZColor z_colors[Z_COLOR_NUM];
@@ -126,12 +128,12 @@ ZPixel* z_screen_pixelsGet(void)
     return a_screen_pixelsGetBuffer();
 }
 
-void z_platform__loadSprite(ZSpriteId Sprite, const char* Path)
+void z_platform__loadSprite(int Sprite, const char* Path)
 {
     g_sprites[Sprite] = a_spriteframes_newFromPng(Path);
 }
 
-void z_platform__loadSpriteGrid(ZSpriteId Sprite, const char* Path, int W, int H)
+void z_platform__loadSpriteGrid(int Sprite, const char* Path, int W, int H)
 {
     g_sprites[Sprite] = a_spriteframes_newFromPngGrid(Path, W, H);
 }
@@ -215,7 +217,7 @@ bool z_fps_ticksNth(uint8_t N)
     return a_fps_ticksNth(N);
 }
 
-void z_platform__loadSfx(ZSfxId Sfx, const char* Path)
+void z_platform__loadSfx(int Sfx, const char* Path)
 {
     g_sfx[Sfx].sample = a_sample_new(Path);
     g_sfx[Sfx].channel = a_channel_new();

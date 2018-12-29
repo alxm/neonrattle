@@ -15,7 +15,6 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "obj_snake.h"
 
 #include "obj_apple.h"
@@ -27,6 +26,8 @@
 #include "util_light.h"
 #include "util_map.h"
 #include "util_pool.h"
+#include "util_screen.h"
+#include "util_sound.h"
 
 #define Z_SNAKE_LEN (Z_APPLE_NUM_MAX * Z_APPLE_GROW_PER)
 #define Z_SNAKE_LEN_MASK (Z_SNAKE_LEN - 1)

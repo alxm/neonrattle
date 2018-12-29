@@ -45,9 +45,6 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
 #define Z_SCREEN_W 80
 #define Z_SCREEN_H 64
 
-#include "util_graphics.h"
-#include "util_sound.h"
-
 #define z_sprite_load(Index, Id) \
     z_platform__loadSprite(Index, "assets/gfx/" #Id ".png");
 
@@ -57,6 +54,6 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
 #define z_sfx_load(Index, Id) \
     z_platform__loadSfx(Index, "assets/sfx/" #Id ".wav");
 
-extern void z_platform__loadSprite(ZSpriteId Sprite, const char* Path);
-extern void z_platform__loadSpriteGrid(ZSpriteId Sprite, const char* Path, int W, int H);
-extern void z_platform__loadSfx(ZSfxId Sfx, const char* Path);
+extern void z_platform__loadSprite(int Sprite, const char* Path);
+extern void z_platform__loadSpriteGrid(int Sprite, const char* Path, int W, int H);
+extern void z_platform__loadSfx(int Sfx, const char* Path);

@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 #include "util_fps.h"
 
 typedef enum {

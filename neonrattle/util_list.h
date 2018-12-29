@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 typedef struct ZListNode {
     struct ZListNode* prev;
     struct ZListNode* next;

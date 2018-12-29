@@ -17,6 +17,10 @@
 
 #pragma once
 
+#include "platform.h"
+
+#include "util_graphics.h"
+
 typedef enum {
     Z_LIGHT_INVALID = -1,
     Z_LIGHT_APPLE_EAT,

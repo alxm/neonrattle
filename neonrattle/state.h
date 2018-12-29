@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "util_swipe.h"
+#include "platform.h"
 
 Z_EXTERN_C_START
 

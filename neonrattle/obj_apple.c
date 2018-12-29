@@ -15,12 +15,13 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "obj_apple.h"
 
 #include "util_camera.h"
+#include "util_graphics.h"
 #include "util_list.h"
 #include "util_pool.h"
+#include "util_screen.h"
 
 #define Z_APPLE_BOUNCE_DEG_STEP (8 * Z_FIX_DEG_001)
 #define Z_APPLE_ALPHA_DEG_STEP (8 * Z_FIX_DEG_001)

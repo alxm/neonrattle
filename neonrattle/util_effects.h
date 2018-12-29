@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 #include "util_fix.h"
 
 extern void z_effects_particles(ZFix X, ZFix Y, unsigned Num);

@@ -15,6 +15,10 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
+#include "platform.h"
+
 #include "util_fix.h"
 
 #define Z_MAP_W_SHIFT (4)

@@ -17,8 +17,9 @@
 
 #pragma once
 
-#include "obj_snake.h"
+#include "platform.h"
 
+#include "obj_snake.h"
 #include "util_fix.h"
 
 extern void z_camera_tick(const ZSnake* Snake);

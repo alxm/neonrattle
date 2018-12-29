@@ -17,8 +17,6 @@
 
 #pragma once
 
-Z_EXTERN_C_START
-
 typedef enum {
     Z_SFX_INVALID = -1,
     Z_SFX_APPLE_EAT,
@@ -28,6 +26,10 @@ typedef enum {
     Z_SFX_SWIPE_SHOW,
     Z_SFX_NUM
 } ZSfxId;
+
+#include "platform.h"
+
+Z_EXTERN_C_START
 
 extern void z_sound_setup(void);
 

@@ -15,7 +15,6 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "state_play.h"
 
 #include "obj_snake.h"
@@ -26,6 +25,7 @@
 #include "util_light.h"
 #include "util_map.h"
 #include "util_pool.h"
+#include "util_sound.h"
 
 static ZSnake* g_snake;
 static bool g_canMove;

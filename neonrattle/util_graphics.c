@@ -15,36 +15,25 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "util_graphics.h"
 
 #include "generated/data_gfx_palette.h"
-
 #include "generated/data_gfx_map0.h"
-
 #include "generated/data_gfx_tiles_grid16x16.h"
-
 #include "generated/data_gfx_snake_alphamask1.h"
-
 #include "generated/data_gfx_apple_alphamask1.h"
 #include "generated/data_gfx_apple_halo.h"
-
 #include "generated/data_gfx_alxm.h"
 #include "generated/data_gfx_alxm_wing.h"
 
 void z_graphics_setup(void)
 {
     z_sprite_load(Z_SPRITE_PALETTE, palette);
-
     z_sprite_load(Z_SPRITE_MAP0, map0);
-
     z_sprite_loadGrid(Z_SPRITE_TILES, tiles_grid16x16, 16, 16);
-
     z_sprite_load(Z_SPRITE_SNAKE_ALPHAMASK, snake_alphamask1);
-
     z_sprite_load(Z_SPRITE_APPLE_ALPHAMASK, apple_alphamask1);
     z_sprite_load(Z_SPRITE_APPLE_HALO, apple_halo);
-
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
 

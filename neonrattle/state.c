@@ -15,7 +15,6 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "state.h"
 
 #include "state_died.h"
@@ -29,6 +28,8 @@
 #include "util_light.h"
 #include "util_map.h"
 #include "util_screen.h"
+#include "util_sound.h"
+#include "util_swipe.h"
 #include "util_timer.h"
 
 typedef struct {

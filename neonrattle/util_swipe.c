@@ -15,10 +15,10 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "util_swipe.h"
 
-#include "util_fix.h"
+#include "util_graphics.h"
+#include "util_sound.h"
 
 typedef void (ZSwipeInit)(void);
 typedef bool (ZSwipeTick)(void);

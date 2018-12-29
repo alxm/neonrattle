@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 #include "obj_snake.h"
 #include "state.h"
 

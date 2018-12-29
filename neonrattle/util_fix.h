@@ -17,6 +17,8 @@
 
 #pragma once
 
+#include "platform.h"
+
 typedef int32_t ZFix;
 typedef uint32_t ZFixu;
 

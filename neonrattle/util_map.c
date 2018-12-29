@@ -15,13 +15,14 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "platform.h"
 #include "util_map.h"
 
 #include "obj_apple.h"
 #include "util_camera.h"
 #include "util_coords.h"
+#include "util_graphics.h"
 #include "util_pool.h"
+#include "util_screen.h"
 
 typedef struct {
     bool wall;
