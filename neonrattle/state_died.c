@@ -28,15 +28,15 @@
 
 static OSnake* g_snake;
 
-void z_state_died_init(void)
+void s_died_init(void)
 {
-    g_snake = z_state_play_getSnake();
+    g_snake = s_play_getSnake();
 
     z_timer_start(Z_TIMER_G1, 8);
     z_camera_shakeSet(2);
 }
 
-void z_state_died_tick(void)
+void s_died_tick(void)
 {
     z_map_tick();
     o_snake_tickDied(g_snake);
@@ -48,7 +48,7 @@ void z_state_died_tick(void)
     }
 }
 
-void z_state_died_draw(void)
+void s_died_draw(void)
 {
     z_map_draw();
     z_effects_draw1();
@@ -57,7 +57,7 @@ void z_state_died_draw(void)
     z_hud_draw(g_snake);
 }
 
-void z_state_died_free(void)
+void s_died_free(void)
 {
     z_timer_stop(Z_TIMER_G1);
 

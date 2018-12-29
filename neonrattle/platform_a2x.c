@@ -17,11 +17,11 @@
 
 #include "platform.h"
 
-#include "state.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
 #include "util_sound.h"
+#include "util_state.h"
 
 #if Z_PLATFORM_A2X
 ZColor z_colors[Z_COLOR_NUM];

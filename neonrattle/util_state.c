@@ -15,15 +15,15 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "state.h"
+#include "util_state.h"
 
-#include "state_died.h"
-#include "state_intro.h"
-#include "state_play.h"
 #include "obj_apple.h"
 #include "obj_circle.h"
 #include "obj_particle.h"
 #include "obj_snake.h"
+#include "state_died.h"
+#include "state_intro.h"
+#include "state_play.h"
 #include "util_camera.h"
 #include "util_input.h"
 #include "util_light.h"
@@ -43,26 +43,26 @@ typedef struct {
 
 static const ZState g_states[Z_STATE_NUM] = {
     [Z_STATE_DIED] = {
-        z_state_died_init,
-        z_state_died_tick,
-        z_state_died_draw,
-        z_state_died_free,
+        s_died_init,
+        s_died_tick,
+        s_died_draw,
+        s_died_free,
         Z_SWIPE_INVALID,
         Z_SWIPE_HIDE,
     },
     [Z_STATE_INTRO] = {
-        z_state_intro_init,
-        z_state_intro_tick,
-        z_state_intro_draw,
-        z_state_intro_free,
+        s_intro_init,
+        s_intro_tick,
+        s_intro_draw,
+        s_intro_free,
         Z_SWIPE_INVALID,
         Z_SWIPE_HIDE,
     },
     [Z_STATE_PLAY] = {
-        z_state_play_init,
-        z_state_play_tick,
-        z_state_play_draw,
-        z_state_play_free,
+        s_play_init,
+        s_play_tick,
+        s_play_draw,
+        s_play_free,
         Z_SWIPE_SHOW,
         Z_SWIPE_INVALID,
     },

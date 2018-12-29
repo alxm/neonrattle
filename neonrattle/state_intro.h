@@ -19,9 +19,9 @@
 
 #include "platform.h"
 
-#include "state.h"
+#include "util_state.h"
 
-extern ZStateInit z_state_intro_init;
-extern ZStateTick z_state_intro_tick;
-extern ZStateDraw z_state_intro_draw;
-extern ZStateFree z_state_intro_free;
+extern ZStateInit s_intro_init;
+extern ZStateTick s_intro_tick;
+extern ZStateDraw s_intro_draw;
+extern ZStateFree s_intro_free;

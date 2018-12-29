@@ -30,7 +30,7 @@
 static OSnake* g_snake;
 static bool g_canMove;
 
-void z_state_play_init(void)
+void s_play_init(void)
 {
     z_effects_init();
     z_light_reset();
@@ -42,7 +42,7 @@ void z_state_play_init(void)
     g_canMove = false;
 }
 
-void z_state_play_tick(void)
+void s_play_tick(void)
 {
     z_map_tick();
 
@@ -61,7 +61,7 @@ void z_state_play_tick(void)
     z_effects_tick();
 }
 
-void z_state_play_draw(void)
+void s_play_draw(void)
 {
     z_map_draw();
     z_effects_draw1();
@@ -70,12 +70,12 @@ void z_state_play_draw(void)
     z_hud_draw(g_snake);
 }
 
-void z_state_play_free(void)
+void s_play_free(void)
 {
     g_canMove = false;
 }
 
-OSnake* z_state_play_getSnake(void)
+OSnake* s_play_getSnake(void)
 {
     return g_snake;
 }

@@ -20,11 +20,11 @@
 #include "platform.h"
 
 #include "obj_snake.h"
-#include "state.h"
+#include "util_state.h"
 
-extern ZStateInit z_state_play_init;
-extern ZStateTick z_state_play_tick;
-extern ZStateDraw z_state_play_draw;
-extern ZStateFree z_state_play_free;
+extern ZStateInit s_play_init;
+extern ZStateTick s_play_tick;
+extern ZStateDraw s_play_draw;
+extern ZStateFree s_play_free;
 
-extern OSnake* z_state_play_getSnake(void);
+extern OSnake* s_play_getSnake(void);

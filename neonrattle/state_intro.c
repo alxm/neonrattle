@@ -20,12 +20,12 @@
 #include "util_graphics.h"
 #include "util_timer.h"
 
-#define Z_LOGO_WAIT_DS (8)
+#define S_LOGO_WAIT_DS (8)
 
 static uint8_t g_stage;
 static int g_height;
 
-void z_state_intro_init(void)
+void s_intro_init(void)
 {
     g_stage = 0;
     g_height = z_sprite_heightGet(Z_SPRITE_ALXM);
@@ -34,7 +34,7 @@ void z_state_intro_init(void)
     z_timer_start(Z_TIMER_G1, 1);
 }
 
-void z_state_intro_tick(void)
+void s_intro_tick(void)
 {
     if(z_timer_expired(Z_TIMER_G1)) {
         switch(g_stage) {
@@ -45,7 +45,7 @@ void z_state_intro_tick(void)
             } break;
 
             case 1: {
-                if(++g_height == Z_LOGO_WAIT_DS) {
+                if(++g_height == S_LOGO_WAIT_DS) {
                     g_stage = 2;
                     g_height = 0;
                     z_state_set(Z_STATE_PLAY);
@@ -61,7 +61,7 @@ void z_state_intro_tick(void)
     }
 }
 
-void z_state_intro_draw(void)
+void s_intro_draw(void)
 {
     int spriteW = z_sprite_widthGet(Z_SPRITE_ALXM);
     int spriteH = z_sprite_heightGet(Z_SPRITE_ALXM);
@@ -87,7 +87,7 @@ void z_state_intro_draw(void)
     }
 }
 
-void z_state_intro_free(void)
+void s_intro_free(void)
 {
     z_timer_stop(Z_TIMER_G1);
 }
