@@ -40,16 +40,11 @@ extern void z_list_addLast(ZList* List, void* Object);
 extern void z_list_remove(ZListNode* Node);
 
 extern ZListIt z_listit__new(ZList* List);
-extern bool z_listit__getNext(ZListIt* Iterator);
+extern bool z_listit__getNext(ZListIt* Iterator, void* UserPtrAddress);
 
-#define Z_LIST_ITERATE(List, PtrType, VarName)                 \
-    for(PtrType VarName = (PtrType)1; VarName; VarName = NULL) \
-        for(ZListIt z__it = z_listit__new(List);               \
-            z_listit__getNext(&z__it)                          \
-                && (VarName =                                  \
-                        (PtrType)((uint8_t*)z__it.current      \
-                                    - (List)->nodeOffset),     \
-                    true); )
+#define Z_LIST_ITERATE(List, PtrType, VarName)                              \
+    for(ZListIt z__it = z_listit__new(List); z__it.list; z__it.list = NULL) \
+        for(PtrType VarName; z_listit__getNext(&z__it, (void*)&VarName); )
 
 #define Z_LIST_REMOVE_CURRENT() z_list_remove(z__it.current)
 

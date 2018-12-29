@@ -76,10 +76,13 @@ ZListIt z_listit__new(ZList* List)
     return (ZListIt){List, &List->root, List->root.next};
 }
 
-bool z_listit__getNext(ZListIt* Iterator)
+bool z_listit__getNext(ZListIt* Iterator, void* UserPtrAddress)
 {
     Iterator->current = Iterator->next;
     Iterator->next = Iterator->next->next;
+
+    *(void**)UserPtrAddress =
+        (uint8_t*)Iterator->current - Iterator->list->nodeOffset;
 
     return Iterator->current != &Iterator->list->root;
 }
