@@ -206,50 +206,93 @@ static inline ZFixu z_fixu_truncate(ZFixu X)
     return X & (ZFixu)~Z_FIX_FRACTION_MASK;
 }
 
-static inline unsigned z_fix_wrapAngleInt(unsigned Angle)
+static inline ZFixu z_fixu_fraction(ZFixu X)
+{
+    return X & Z_FIX_FRACTION_MASK;
+}
+
+static inline unsigned z_fix_angleWrap(unsigned Angle)
 {
     return Angle & (Z_ANGLES_NUM - 1);
 }
 
-static inline ZFixu z_fix_wrapAngleFix(ZFixu Angle)
+static inline ZFixu z_fix_angleWrapf(ZFixu Angle)
 {
     return Angle & (Z_ANGLES_NUM * Z_FIX_ONE - 1);
 }
 
+static inline unsigned z_fix_angleFromDeg(unsigned Degrees)
+{
+    return Z_ANGLES_NUM * Degrees / 360;
+}
+
+static inline ZFixu z_fix_angleFromDegf(unsigned Degrees)
+{
+    return (ZFixu)((uint64_t)(Z_FIX_ONE * Z_ANGLES_NUM) * Degrees / 360);
+}
+
 static inline ZFix z_fix_sin(unsigned Angle)
 {
-    return z_fix__sin[z_fix_wrapAngleInt(Angle)];
+    return z_fix__sin[z_fix_angleWrap(Angle)];
 }
 
 static inline ZFix z_fix_cos(unsigned Angle)
 {
-    return z_fix__sin[z_fix_wrapAngleInt(Angle + Z_INT_DEG_090)];
+    return z_fix__sin[z_fix_angleWrap(Angle + Z_INT_DEG_090)];
 }
 
 static inline ZFix z_fix_sinf(ZFixu Angle)
 {
-    return z_fix__sin[z_fix_wrapAngleInt(z_fixu_toInt(Angle))];
+    return z_fix__sin[z_fix_angleWrap(z_fixu_toInt(Angle))];
 }
 
 static inline ZFix z_fix_cosf(ZFixu Angle)
 {
-    return z_fix__sin[z_fix_wrapAngleInt(z_fixu_toInt(Angle + Z_FIX_DEG_090))];
+    return z_fix__sin[z_fix_angleWrap(z_fixu_toInt(Angle + Z_FIX_DEG_090))];
 }
 
 static inline ZFix z_fix_cscf(ZFixu Angle)
 {
-    return z_fix__csc[z_fix_wrapAngleInt(z_fixu_toInt(Angle))];
+    return z_fix__csc[z_fix_angleWrap(z_fixu_toInt(Angle))];
 }
 
 static inline ZFix z_fix_secf(ZFixu Angle)
 {
-    return z_fix__csc[z_fix_wrapAngleInt(z_fixu_toInt(Angle + Z_FIX_DEG_090))];
+    return z_fix__csc[z_fix_angleWrap(z_fixu_toInt(Angle + Z_FIX_DEG_090))];
 }
 
 extern unsigned z_fix_atan(ZFix X1, ZFix Y1, ZFix X2, ZFix Y2);
 
 extern void z_fix_rotateCounter(ZFix X, ZFix Y, unsigned Angle, ZFix* NewX, ZFix* NewY);
 extern void z_fix_rotateClockwise(ZFix X, ZFix Y, unsigned Angle, ZFix* NewX, ZFix* NewY);
+
+typedef struct {
+    ZFix x, y;
+} ZVectorFix;
+
+typedef struct {
+    int x, y;
+} ZVectorInt;
+
+static inline ZVectorInt z_vectorfix_toInt(const ZVectorFix Fix)
+{
+    return (ZVectorInt){z_fix_toInt(Fix.x), z_fix_toInt(Fix.y)};
+}
+
+static inline ZVectorFix z_vectorint_toFix(const ZVectorInt Int)
+{
+    return (ZVectorFix){z_fix_fromInt(Int.x), z_fix_fromInt(Int.y)};
+}
+
+static inline bool z_vectorfix_equal(ZVectorFix A, ZVectorFix B)
+{
+    return A.x == B.x && A.y == B.y;
+}
+
+static inline bool z_vectorint_equal(ZVectorInt A, ZVectorInt B)
+{
+    return A.x == B.x && A.y == B.y;
+}
 
 static inline int z_math_min(int X, int Y)
 {

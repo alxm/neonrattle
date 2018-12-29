@@ -49,7 +49,7 @@ ZParticle* z_particle_new(ZFix X, ZFix Y)
         p->x = X;
         p->y = Y;
         p->speed = z_random_range(Z_FIX_ONE / 2, Z_FIX_ONE);
-        p->angle = z_fix_wrapAngleInt(z_random_intu(Z_ANGLES_NUM));
+        p->angle = z_fix_angleWrap(z_random_intu(Z_ANGLES_NUM));
         p->alpha = 256;
     }
 
