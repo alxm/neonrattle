@@ -119,13 +119,13 @@ extern int z_sprite_widthGet(ZSpriteId Sprite);
 extern int z_sprite_heightGet(ZSpriteId Sprite);
 extern uint8_t z_sprite_framesNumGet(ZSpriteId Sprite);
 
-extern void z_draw_fill(ZColorId ColorId);
-extern void z_draw_rectangle(int X, int Y, int W, int H, ZColorId ColorId);
-extern void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId ColorId, int Alpha);
-extern void z_draw_pixel(int X, int Y, ZColorId ColorId);
-extern void z_draw_hline(int X1, int X2, int Y, ZColorId ColorId);
-extern void z_draw_vline(int X, int Y1, int Y2, ZColorId ColorId);
-extern void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId);
+extern void z_draw_fill(ZColorId Color);
+extern void z_draw_rectangle(int X, int Y, int W, int H, ZColorId Color);
+extern void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId Color, int Alpha);
+extern void z_draw_pixel(int X, int Y, ZColorId Color);
+extern void z_draw_hline(int X1, int X2, int Y, ZColorId Color);
+extern void z_draw_vline(int X, int Y1, int Y2, ZColorId Color);
+extern void z_draw_circle(int X, int Y, int Radius, ZColorId Color);
 
 static inline void z_pixel_drawAlpha(ZPixel* Dst, int Red, int Green, int Blue, int Alpha)
 {
@@ -137,12 +137,12 @@ static inline void z_pixel_drawAlpha(ZPixel* Dst, int Red, int Green, int Blue, 
                            b + (((Blue  - b) * Alpha) >> 8));
 }
 
-static inline void z_pixel_drawAlpha2(int X, int Y, ZColorId ColorId, int Alpha)
+static inline void z_pixel_drawAlpha2(int X, int Y, ZColorId Color, int Alpha)
 {
     z_pixel_drawAlpha(z_screen_pixelsGet() + Y * Z_SCREEN_W + X,
-                      z_colors[ColorId].r,
-                      z_colors[ColorId].g,
-                      z_colors[ColorId].b,
+                      z_colors[Color].r,
+                      z_colors[Color].g,
+                      z_colors[Color].b,
                       Alpha);
 }
 

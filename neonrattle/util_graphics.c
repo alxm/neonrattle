@@ -140,7 +140,7 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
     }
 }
 
-void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId ColorId, int Alpha)
+void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId Color, int Alpha)
 {
     if(Alpha == 0
         || X >= Z_SCREEN_W || X + W <= 0 || Y >= Z_SCREEN_H || Y + H <= 0) {
@@ -166,9 +166,9 @@ void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId ColorId, int Alp
         H -= Y + H - Z_SCREEN_H;
     }
 
-    const int r = z_colors[ColorId].r;
-    const int g = z_colors[ColorId].g;
-    const int b = z_colors[ColorId].b;
+    const int r = z_colors[Color].r;
+    const int g = z_colors[Color].g;
+    const int b = z_colors[Color].b;
 
     ZPixel* screenPixels = z_screen_pixelsGet() + Y * Z_SCREEN_W + X;
 
@@ -183,12 +183,12 @@ void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId ColorId, int Alp
     }
 }
 
-void z_draw_hline(int X1, int X2, int Y, ZColorId ColorId)
+void z_draw_hline(int X1, int X2, int Y, ZColorId Color)
 {
-    z_draw_rectangle(X1, Y, X2 - X1 + 1, 1, ColorId);
+    z_draw_rectangle(X1, Y, X2 - X1 + 1, 1, Color);
 }
 
-void z_draw_vline(int X, int Y1, int Y2, ZColorId ColorId)
+void z_draw_vline(int X, int Y1, int Y2, ZColorId Color)
 {
-    z_draw_rectangle(X, Y1, 1, Y2 - Y1 + 1, ColorId);
+    z_draw_rectangle(X, Y1, 1, Y2 - Y1 + 1, Color);
 }

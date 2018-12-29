@@ -178,29 +178,29 @@ uint8_t z_sprite_framesNumGet(ZSpriteId Sprite)
     return (uint8_t)a_spriteframes_numGet(g_sprites[Sprite]);
 }
 
-void z_draw_fill(ZColorId ColorId)
+void z_draw_fill(ZColorId Color)
 {
-    a_pixel_colorSetPixel(z_colors[ColorId].pixel);
+    a_pixel_colorSetPixel(z_colors[Color].pixel);
     a_draw_fill();
 }
 
-void z_draw_rectangle(int X, int Y, int W, int H, ZColorId ColorId)
+void z_draw_rectangle(int X, int Y, int W, int H, ZColorId Color)
 {
-    a_pixel_colorSetPixel(z_colors[ColorId].pixel);
+    a_pixel_colorSetPixel(z_colors[Color].pixel);
     a_draw_rectangle(X, Y, W, H);
 }
 
-void z_draw_pixel(int X, int Y, ZColorId ColorId)
+void z_draw_pixel(int X, int Y, ZColorId Color)
 {
-    a_pixel_colorSetPixel(z_colors[ColorId].pixel);
+    a_pixel_colorSetPixel(z_colors[Color].pixel);
     a_draw_pixel(X, Y);
 }
 
-void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId)
+void z_draw_circle(int X, int Y, int Radius, ZColorId Color)
 {
     a_pixel_push();
 
-    a_pixel_colorSetPixel(z_colors[ColorId].pixel);
+    a_pixel_colorSetPixel(z_colors[Color].pixel);
     a_pixel_fillDrawSet(false);
     a_draw_circle(X, Y, Radius);
 

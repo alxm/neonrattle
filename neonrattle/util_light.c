@@ -96,7 +96,7 @@ void z_light_pulseSet(ZLightId Light)
     g_light.counter = 0;
 }
 
-void z_light_backgroundSet(ZColorId ColorId)
+void z_light_backgroundSet(ZColorId Color)
 {
-    g_light.bgColor = ColorId;
+    g_light.bgColor = Color;
 }

@@ -32,4 +32,4 @@ extern void z_light_reset(void);
 extern void z_light_tick(void);
 
 extern void z_light_pulseSet(ZLightId Light);
-extern void z_light_backgroundSet(ZColorId ColorId);
+extern void z_light_backgroundSet(ZColorId Color);
