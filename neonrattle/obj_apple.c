@@ -21,7 +21,6 @@
 #include "util_graphics.h"
 #include "util_list.h"
 #include "util_pool.h"
-#include "util_screen.h"
 
 #define Z_APPLE_BOUNCE_DEG_STEP (8 * Z_FIX_DEG_001)
 #define Z_APPLE_ALPHA_DEG_STEP (8 * Z_FIX_DEG_001)
@@ -90,7 +89,7 @@ void z_apple_tick(ZApple* Apple)
 void z_apple_draw(const ZApple* Apple)
 {
     ZVectorInt screen = z_camera_coordsToScreen(Apple->coords);
-    ZVectorInt shake = z_screen_shakeGet();
+    ZVectorInt shake = z_camera_shakeGet();
 
     screen.x += shake.x;
     screen.y += shake.y;

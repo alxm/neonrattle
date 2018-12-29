@@ -22,7 +22,6 @@
 #include "util_coords.h"
 #include "util_graphics.h"
 #include "util_pool.h"
-#include "util_screen.h"
 
 typedef struct {
     bool wall;
@@ -166,7 +165,7 @@ void z_map_draw(void)
     ZVectorInt screenStart;
     z_map_visibleGet(&tileStart, &tileEnd, &gridStart, &gridEnd, &screenStart);
 
-    ZVectorInt shake = z_screen_shakeGet();
+    ZVectorInt shake = z_camera_shakeGet();
 
     for(int tileY = tileStart.y, screenY = screenStart.y + shake.y;
         tileY < tileEnd.y;

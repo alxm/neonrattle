@@ -24,7 +24,6 @@
 #include "util_hud.h"
 #include "util_map.h"
 #include "util_pool.h"
-#include "util_screen.h"
 #include "util_timer.h"
 
 static ZSnake* g_snake;
@@ -34,13 +33,14 @@ void z_state_died_init(void)
     g_snake = z_state_play_getSnake();
 
     z_timer_start(Z_TIMER_G1, 8);
-    z_screen_shakeSet(2);
+    z_camera_shakeSet(2);
 }
 
 void z_state_died_tick(void)
 {
     z_map_tick();
     z_snake_tickDied(g_snake);
+    z_camera_tick(g_snake);
     z_effects_tick();
 
     if(z_timer_expired(Z_TIMER_G1)) {

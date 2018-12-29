@@ -21,7 +21,6 @@
 #include "util_graphics.h"
 #include "util_list.h"
 #include "util_pool.h"
-#include "util_screen.h"
 
 #define Z_CIRCLE_ALPHA_START 256
 #define Z_CIRCLE_ALPHA_DEC 32
@@ -69,7 +68,7 @@ bool z_circle_tick(ZCircle* Circle)
 void z_circle_draw(const ZCircle* Circle)
 {
     ZVectorInt screen = z_camera_coordsToScreen(Circle->coords);
-    ZVectorInt shake = z_screen_shakeGet();
+    ZVectorInt shake = z_camera_shakeGet();
 
     screen.x += shake.x;
     screen.y += shake.y;

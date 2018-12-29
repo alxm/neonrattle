@@ -22,7 +22,6 @@
 #include "util_graphics.h"
 #include "util_list.h"
 #include "util_pool.h"
-#include "util_screen.h"
 
 struct ZParticle {
     ZListNode particlesList;
@@ -76,7 +75,7 @@ bool z_particle_tick(ZParticle* Particle)
 void z_particle_draw(const ZParticle* Particle)
 {
     ZVectorInt screen = z_camera_coordsToScreen(Particle->coords);
-    ZVectorInt shake = z_screen_shakeGet();
+    ZVectorInt shake = z_camera_shakeGet();
 
     screen.x += shake.x;
     screen.y += shake.y;

@@ -26,7 +26,6 @@
 #include "util_light.h"
 #include "util_map.h"
 #include "util_pool.h"
-#include "util_screen.h"
 #include "util_sound.h"
 
 #define Z_SNAKE_LEN (Z_APPLE_NUM_MAX * Z_APPLE_GROW_PER)
@@ -280,7 +279,7 @@ void z_snake_draw(const ZSnake* Snake)
         const ZSegment* s = &Snake->body[i];
 
         ZVectorInt screen = z_camera_coordsToScreen(s->coords);
-        ZVectorInt shake = z_screen_shakeGet();
+        ZVectorInt shake = z_camera_shakeGet();
 
         screen.x += shake.x;
         screen.y += shake.y;

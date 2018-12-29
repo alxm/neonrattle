@@ -24,10 +24,10 @@
 #include "obj_circle.h"
 #include "obj_particle.h"
 #include "obj_snake.h"
+#include "util_camera.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_map.h"
-#include "util_screen.h"
 #include "util_sound.h"
 #include "util_swipe.h"
 #include "util_timer.h"
@@ -78,10 +78,10 @@ static struct {
 
 void z_state_setup(void)
 {
+    z_camera_reset();
     z_graphics_setup();
     z_light_reset();
     z_map_setup();
-    z_screen_reset();
     z_sound_setup();
 
     z_apple_setup();
@@ -119,7 +119,6 @@ static void checkNewState(void)
 
 void z_state_tick(void)
 {
-    z_screen_tick();
     z_swipe_tick();
     z_timer_tick();
     z_light_tick();
