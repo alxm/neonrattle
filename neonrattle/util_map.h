@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include "util_fix.h"
 #include "util_list.h"
 
 extern void z_map_setup(void);
@@ -24,10 +25,7 @@ extern void z_map_init(ZFix* StartX, ZFix* StartY);
 extern void z_map_tick(void);
 extern void z_map_draw(void);
 
-extern void z_map_getVisibleBounds(
-    int* TileStartX, int* TileStartY, int* TileEndX, int* TileEndY,
-    int* GridStartX, int* GridStartY, int* GridEndX, int* GridEndY,
-    int* ScreenStartX, int* ScreenStartY);
+extern void z_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart);
 extern ZList* z_map_getApples(int GridX, int GridY);
 extern int z_map_getApplesNum(void);
 extern bool z_map_isWall(int TileX, int TileY);

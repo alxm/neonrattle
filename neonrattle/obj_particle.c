@@ -26,7 +26,7 @@
 
 struct ZParticle {
     ZListNode particlesList;
-    ZFix x, y;
+    ZVectorFix coords;
     ZFix speed;
     unsigned angle;
     int alpha;
@@ -46,8 +46,7 @@ ZParticle* z_particle_new(ZFix X, ZFix Y)
     if(p != NULL) {
         z_list_clearNode(&p->particlesList);
 
-        p->x = X;
-        p->y = Y;
+        p->coords = (ZVectorFix){X, Y};
         p->speed = z_random_range(Z_FIX_ONE / 2, Z_FIX_ONE);
         p->angle = z_fix_angleWrap(z_random_intu(Z_ANGLES_NUM));
         p->alpha = 256;
@@ -64,8 +63,10 @@ void z_particle_free(ZParticle* Particle)
 
 bool z_particle_tick(ZParticle* Particle)
 {
-    Particle->x += z_fix_mul(Particle->speed, z_fix_cos(Particle->angle));
-    Particle->y -= z_fix_mul(Particle->speed, z_fix_sin(Particle->angle));
+    Particle->coords.x += z_fix_mul(
+                            Particle->speed, z_fix_cos(Particle->angle));
+    Particle->coords.y -= z_fix_mul(
+                            Particle->speed, z_fix_sin(Particle->angle));
 
     Particle->alpha -= 16;
 
@@ -74,15 +75,16 @@ bool z_particle_tick(ZParticle* Particle)
 
 void z_particle_draw(const ZParticle* Particle)
 {
-    int x, y;
-    z_camera_coordsToScreen(Particle->x, Particle->y, &x, &y);
-
+    ZVectorInt screen = z_camera_coordsToScreen(Particle->coords);
     ZVectorInt shake = z_screen_shakeGet();
 
-    x += shake.x;
-    y += shake.y;
+    screen.x += shake.x;
+    screen.y += shake.y;
 
-    if(x >= 0 && x < Z_SCREEN_W && y >= 0 && y < Z_SCREEN_H) {
-        z_pixel_drawAlpha2(x, y, z_color_getRandomApple(), Particle->alpha);
+    if(screen.x >= 0 && screen.x < Z_SCREEN_W
+        && screen.y >= 0 && screen.y < Z_SCREEN_H) {
+
+        z_pixel_drawAlpha2(
+            screen.x, screen.y, z_color_getRandomApple(), Particle->alpha);
     }
 }

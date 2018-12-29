@@ -29,7 +29,7 @@
 
 struct ZApple {
     ZListNode nodeGrid;
-    ZFix x, y;
+    ZVectorFix coords;
     ZFixu bounceAngle;
     ZFixu alphaAngle;
     ZColorId color;
@@ -53,8 +53,7 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
     if(a != NULL) {
         z_list_clearNode(&a->nodeGrid);
 
-        a->x = X;
-        a->y = Y;
+        a->coords = (ZVectorFix){X, Y};
         a->bounceAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
         a->alphaAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
         a->color = z_color_getRandomApple();
@@ -69,10 +68,9 @@ void z_apple_free(ZApple* Apple)
     z_pool_free(Z_POOL_APPLE, Apple);
 }
 
-void z_apple_getCoords(const ZApple* Apple, ZFix* X, ZFix* Y)
+ZVectorFix z_apple_getCoords(const ZApple* Apple)
 {
-    *X = Apple->x;
-    *Y = Apple->y;
+    return Apple->coords;
 }
 
 int z_apple_getDim(const ZApple* Apple)
@@ -90,13 +88,14 @@ void z_apple_tick(ZApple* Apple)
 
 void z_apple_draw(const ZApple* Apple)
 {
-    int x, y;
-    z_camera_coordsToScreen(Apple->x, Apple->y, &x, &y);
-
+    ZVectorInt screen = z_camera_coordsToScreen(Apple->coords);
     ZVectorInt shake = z_screen_shakeGet();
 
-    x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090)) + shake.x;
-    y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2) + shake.y;
+    screen.x += shake.x;
+    screen.y += shake.y;
+
+    screen.x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
+    screen.y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
 
     int alpha = Z_APPLE_ALPHA_MIN
         + (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / 2
@@ -104,5 +103,5 @@ void z_apple_draw(const ZApple* Apple)
                         * (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / 2);
 
     z_sprite_blitAlphaMask(
-        Z_SPRITE_APPLE_ALPHAMASK, x, y, 0, Apple->color, alpha);
+        Z_SPRITE_APPLE_ALPHAMASK, screen.x, screen.y, 0, Apple->color, alpha);
 }

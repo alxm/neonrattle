@@ -20,33 +20,31 @@
 
 #include "util_coords.h"
 
-static struct {
-    ZFix x, y;
-} g_camera;
+static ZVectorFix g_coords;
 
 void z_camera_tick(const ZSnake* Snake)
 {
-    ZFix x, y;
-    z_snake_getCoords(Snake, &x, &y);
+    ZVectorFix coords = z_snake_getCoords(Snake);
 
-    g_camera.x = z_math_clamp(x,
+    g_coords.x = z_math_clamp(coords.x,
                               z_fix_fromInt(Z_SCREEN_W / 2),
                               z_fix_fromInt(Z_MAP_W * Z_TILE_DIM
                                                 - Z_SCREEN_W / 2));
-    g_camera.y = z_math_clamp(y,
+    g_coords.y = z_math_clamp(coords.y,
                               z_fix_fromInt(Z_SCREEN_H / 2),
                               z_fix_fromInt(Z_MAP_H * Z_TILE_DIM
                                                 - Z_SCREEN_H / 2));
 }
 
-void z_camera_getOrigin(ZFix* X, ZFix* Y)
+ZVectorFix z_camera_getOrigin(void)
 {
-    *X = g_camera.x;
-    *Y = g_camera.y;
+    return g_coords;
 }
 
-void z_camera_coordsToScreen(ZFix WorldX, ZFix WorldY, int* ScreenX, int* ScreenY)
+ZVectorInt z_camera_coordsToScreen(ZVectorFix WorldCoords)
 {
-    *ScreenX = Z_SCREEN_W / 2 + z_fix_toInt(WorldX) - z_fix_toInt(g_camera.x);
-    *ScreenY = Z_SCREEN_H / 2 + z_fix_toInt(WorldY) - z_fix_toInt(g_camera.y);
+    return (ZVectorInt){
+        Z_SCREEN_W / 2 + z_fix_toInt(WorldCoords.x - g_coords.x),
+        Z_SCREEN_H / 2 + z_fix_toInt(WorldCoords.y - g_coords.y)
+    };
 }

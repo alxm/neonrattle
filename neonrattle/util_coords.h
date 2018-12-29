@@ -39,32 +39,32 @@
 
 #define Z_TILES_PER_CELL (1 << Z_GRID_MAP_SHIFT_DIFF)
 
-static inline void z_coords_fixToTile(ZFix X, ZFix Y, int* TileX, int* TileY)
+static inline ZVectorInt z_coords_fixToTile(ZVectorFix Coords)
 {
-    *TileX = z_fix_toInt(X) >> Z_TILE_SHIFT;
-    *TileY = z_fix_toInt(Y) >> Z_TILE_SHIFT;
+    return (ZVectorInt){z_fix_toInt(Coords.x) >> Z_TILE_SHIFT,
+                        z_fix_toInt(Coords.y) >> Z_TILE_SHIFT};
 }
 
-static inline void z_coords_tileToGrid(int TileX, int TileY, int* GridX, int* GridY)
+static inline ZVectorInt z_coords_tileToGrid(ZVectorInt Tile)
 {
-    *GridX = TileX >> Z_GRID_MAP_SHIFT_DIFF;
-    *GridY = TileY >> Z_GRID_MAP_SHIFT_DIFF;
+    return (ZVectorInt){Tile.x >> Z_GRID_MAP_SHIFT_DIFF,
+                        Tile.y >> Z_GRID_MAP_SHIFT_DIFF};
 }
 
-static inline void z_coords_tileToGridTileOffset(int TileX, int TileY, int* GridTileOffsetX, int* GridTileOffsetY)
+static inline ZVectorInt z_coords_tileToGridTileOffset(ZVectorInt Tile)
 {
-    *GridTileOffsetX = TileX & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1);
-    *GridTileOffsetY = TileY & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1);
+    return (ZVectorInt){Tile.x & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1),
+                        Tile.y & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1)};
 }
 
-static inline void z_coords_fixToGrid(ZFix X, ZFix Y, int* GridX, int* GridY)
+static inline ZVectorInt z_coords_fixToGrid(ZVectorFix Coords)
 {
-    *GridX = z_fix_toInt(X) >> Z_CELL_SHIFT;
-    *GridY = z_fix_toInt(Y) >> Z_CELL_SHIFT;
+    return (ZVectorInt){z_fix_toInt(Coords.x) >> Z_CELL_SHIFT,
+                        z_fix_toInt(Coords.y) >> Z_CELL_SHIFT};
 }
 
-static inline void z_coords_fixToGridOffset(ZFix X, ZFix Y, int* GridOffsetX, int* GridOffsetY)
+static inline ZVectorInt z_coords_fixToGridOffset(ZVectorFix Coords)
 {
-    *GridOffsetX = z_fix_toInt(X) & Z_CELL_MASK;
-    *GridOffsetY = z_fix_toInt(Y) & Z_CELL_MASK;
+    return (ZVectorInt){z_fix_toInt(Coords.x) & Z_CELL_MASK,
+                        z_fix_toInt(Coords.y) & Z_CELL_MASK};
 }

@@ -98,12 +98,9 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
 
             g_map.totalApples += num;
 
-            int gridX, gridY;
-            z_coords_tileToGrid(x, y, &gridX, &gridY);
-
-            int gridTileOffsetX, gridTileOffsetY;
-            z_coords_tileToGridTileOffset(
-                x, y, &gridTileOffsetX, &gridTileOffsetY);
+            ZVectorInt grid = z_coords_tileToGrid((ZVectorInt){x, y});
+            ZVectorInt gridTileOffset = z_coords_tileToGridTileOffset(
+                                            (ZVectorInt){x, y});
 
             int w = z_sprite_getWidth(Z_SPRITE_APPLE_ALPHAMASK);
             int h = z_sprite_getHeight(Z_SPRITE_APPLE_ALPHAMASK);
@@ -113,17 +110,17 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
             int startY = h / 2;
             int endY = Z_TILE_DIM - h / 2 + 1;
 
-            if(gridTileOffsetX > 0 && !g_map.tiles[y][x - 1].wall) {
+            if(gridTileOffset.x > 0 && !g_map.tiles[y][x - 1].wall) {
                 startX = 0;
-            } else if(gridTileOffsetX < Z_TILES_PER_CELL - 1
+            } else if(gridTileOffset.x < Z_TILES_PER_CELL - 1
                 && !g_map.tiles[y][x + 1].wall) {
 
                 endX = Z_TILE_DIM + 1;
             }
 
-            if(gridTileOffsetY > 0 && !g_map.tiles[y - 1][x].wall) {
+            if(gridTileOffset.y > 0 && !g_map.tiles[y - 1][x].wall) {
                 startY = 0;
-            } else if(gridTileOffsetY < Z_TILES_PER_CELL - 1
+            } else if(gridTileOffset.y < Z_TILES_PER_CELL - 1
                 && !g_map.tiles[y + 1][x].wall) {
 
                 endY = Z_TILE_DIM + 1;
@@ -136,7 +133,7 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
                 ZApple* a = z_apple_new(z_fix_fromInt(ax), z_fix_fromInt(ay));
 
                 if(a != NULL) {
-                    z_list_addLast(&g_map.grid[gridY][gridX].apples, a);
+                    z_list_addLast(&g_map.grid[grid.y][grid.x].apples, a);
                 }
             }
         }
@@ -149,20 +146,11 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
 
 void z_map_tick(void)
 {
-    int gridStartX, gridStartY, gridEndX, gridEndY;
-    z_map_getVisibleBounds(NULL,
-                           NULL,
-                           NULL,
-                           NULL,
-                           &gridStartX,
-                           &gridStartY,
-                           &gridEndX,
-                           &gridEndY,
-                           NULL,
-                           NULL);
+    ZVectorInt gridStart, gridEnd;
+    z_map_visibleGet(NULL, NULL, &gridStart, &gridEnd, NULL);
 
-    for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
-        for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
+    for(int gridY = gridStart.y; gridY < gridEnd.y; gridY++) {
+        for(int gridX = gridStart.x; gridX < gridEnd.x; gridX++) {
             Z_LIST_ITERATE(z_map_getApples(gridX, gridY), ZApple*, apple) {
                 z_apple_tick(apple);
             }
@@ -172,27 +160,19 @@ void z_map_tick(void)
 
 void z_map_draw(void)
 {
-    ZVectorInt shake = z_screen_shakeGet();
-    int tileStartX, tileStartY, tileEndX, tileEndY;
-    int gridStartX, gridStartY, gridEndX, gridEndY;
-    int screenStartX, screenStartY;
-    z_map_getVisibleBounds(&tileStartX,
-                           &tileStartY,
-                           &tileEndX,
-                           &tileEndY,
-                           &gridStartX,
-                           &gridStartY,
-                           &gridEndX,
-                           &gridEndY,
-                           &screenStartX,
-                           &screenStartY);
+    ZVectorInt tileStart, tileEnd;
+    ZVectorInt gridStart, gridEnd;
+    ZVectorInt screenStart;
+    z_map_visibleGet(&tileStart, &tileEnd, &gridStart, &gridEnd, &screenStart);
 
-    for(int tileY = tileStartY, screenY = screenStartY + shake.y;
-        tileY < tileEndY;
+    ZVectorInt shake = z_screen_shakeGet();
+
+    for(int tileY = tileStart.y, screenY = screenStart.y + shake.y;
+        tileY < tileEnd.y;
         tileY++, screenY += Z_TILE_DIM) {
 
-        for(int tileX = tileStartX, screenX = screenStartX + shake.x;
-            tileX < tileEndX;
+        for(int tileX = tileStart.x, screenX = screenStart.x + shake.x;
+            tileX < tileEnd.x;
             tileX++, screenX += Z_TILE_DIM) {
 
             z_sprite_blit(Z_SPRITE_TILES,
@@ -203,8 +183,8 @@ void z_map_draw(void)
         }
     }
 
-    for(int gridY = gridStartY; gridY < gridEndY; gridY++) {
-        for(int gridX = gridStartX; gridX < gridEndX; gridX++) {
+    for(int gridY = gridStart.y; gridY < gridEnd.y; gridY++) {
+        for(int gridX = gridStart.x; gridX < gridEnd.x; gridX++) {
             Z_LIST_ITERATE(&g_map.grid[gridY][gridX].apples, ZApple*, apple) {
                 z_apple_draw(apple);
             }
@@ -212,65 +192,56 @@ void z_map_draw(void)
     }
 }
 
-void z_map_getVisibleBounds(
-    int* TileStartX, int* TileStartY, int* TileEndX, int* TileEndY,
-    int* GridStartX, int* GridStartY, int* GridEndX, int* GridEndY,
-    int* ScreenStartX, int* ScreenStartY)
+void z_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)
 {
-    ZFix originX, originY;
-    z_camera_getOrigin(&originX, &originY);
+    ZVectorFix origin = z_camera_getOrigin();
 
-    int topLeftMapPixelX = z_fix_toInt(originX) - Z_SCREEN_W / 2;
-    int topLeftMapPixelY = z_fix_toInt(originY) - Z_SCREEN_H / 2;
+    ZVectorInt topLeftMapPixel = {z_fix_toInt(origin.x) - Z_SCREEN_W / 2,
+                                  z_fix_toInt(origin.y) - Z_SCREEN_H / 2};
 
-    int topLeftTileX = topLeftMapPixelX >> Z_TILE_SHIFT;
-    int topLeftTileY = topLeftMapPixelY >> Z_TILE_SHIFT;
+    ZVectorInt topLeftScreen = {0 - (topLeftMapPixel.x & Z_TILE_MASK),
+                                0 - (topLeftMapPixel.y & Z_TILE_MASK)};
 
-    int topLeftScreenX = 0 - (topLeftMapPixelX & Z_TILE_MASK);
-    int topLeftScreenY = 0 - (topLeftMapPixelY & Z_TILE_MASK);
+    ZVectorInt topLeftTile = {topLeftMapPixel.x >> Z_TILE_SHIFT,
+                              topLeftMapPixel.y >> Z_TILE_SHIFT};
 
-    if(topLeftMapPixelX < 0) {
-        topLeftScreenX += -topLeftTileX * Z_TILE_DIM;
-        topLeftTileX = 0;
+    if(topLeftMapPixel.x < 0) {
+        topLeftScreen.x += -topLeftTile.x * Z_TILE_DIM;
+        topLeftTile.x = 0;
     }
 
-    if(topLeftMapPixelY < 0) {
-        topLeftScreenY += -topLeftTileY * Z_TILE_DIM;
-        topLeftTileY = 0;
+    if(topLeftMapPixel.y < 0) {
+        topLeftScreen.y += -topLeftTile.y * Z_TILE_DIM;
+        topLeftTile.y = 0;
     }
 
-    int tileEndX = z_math_min(topLeftTileX + (Z_SCREEN_W / Z_TILE_DIM + 1),
-                              Z_MAP_W);
-    int tileEndY = z_math_min(topLeftTileY + (Z_SCREEN_H / Z_TILE_DIM + 1),
-                              Z_MAP_H);
+    ZVectorInt tileEnd = {
+        z_math_min(topLeftTile.x + (Z_SCREEN_W / Z_TILE_DIM + 1), Z_MAP_W),
+        z_math_min(topLeftTile.y + (Z_SCREEN_H / Z_TILE_DIM + 1), Z_MAP_H)
+    };
 
-    if(TileStartX != NULL) {
-        *TileStartX = topLeftTileX;
-        *TileStartY = topLeftTileY;
-        *TileEndX = tileEndX;
-        *TileEndY = tileEndY;
+    if(TileStart != NULL) {
+        *TileStart = topLeftTile;
+        *TileEnd = tileEnd;
     }
 
-    if(GridStartX != NULL) {
-        z_coords_tileToGrid(topLeftTileX, topLeftTileY, GridStartX, GridStartY);
-        z_coords_tileToGrid(tileEndX, tileEndY, GridEndX, GridEndY);
+    if(GridStart != NULL) {
+        *GridStart = z_coords_tileToGrid(topLeftTile);
+        *GridEnd = z_coords_tileToGrid(tileEnd);
 
-        int gridTileOffsetX, gridTileOffsetY;
-        z_coords_tileToGridTileOffset(
-            tileEndX, tileEndY, &gridTileOffsetX, &gridTileOffsetY);
+        ZVectorInt gridTileOffset = z_coords_tileToGridTileOffset(tileEnd);
 
-        if(gridTileOffsetX > 0) {
-            *GridEndX += 1;
+        if(gridTileOffset.x > 0) {
+            GridEnd->x += 1;
         }
 
-        if(gridTileOffsetY > 0) {
-            *GridEndY += 1;
+        if(gridTileOffset.y > 0) {
+            GridEnd->y += 1;
         }
     }
 
-    if(ScreenStartX != NULL) {
-        *ScreenStartX = topLeftScreenX;
-        *ScreenStartY = topLeftScreenY;
+    if(ScreenStart != NULL) {
+        *ScreenStart = topLeftScreen;
     }
 }
 

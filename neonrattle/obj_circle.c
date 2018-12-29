@@ -28,7 +28,7 @@
 
 struct ZCircle {
     ZListNode circlesList;
-    ZFix x, y;
+    ZVectorFix coords;
     int alpha;
 };
 
@@ -46,8 +46,7 @@ ZCircle* z_circle_new(ZFix X, ZFix Y)
     if(c) {
         z_list_clearNode(&c->circlesList);
 
-        c->x = X;
-        c->y = Y;
+        c->coords = (ZVectorFix){X, Y};
         c->alpha = Z_CIRCLE_ALPHA_START;
     }
 
@@ -69,17 +68,15 @@ bool z_circle_tick(ZCircle* Circle)
 
 void z_circle_draw(const ZCircle* Circle)
 {
-    int x, y;
-    z_camera_coordsToScreen(Circle->x, Circle->y, &x, &y);
-
+    ZVectorInt screen = z_camera_coordsToScreen(Circle->coords);
     ZVectorInt shake = z_screen_shakeGet();
 
-    x += shake.x;
-    y += shake.y;
+    screen.x += shake.x;
+    screen.y += shake.y;
 
     z_sprite_blitAlphaMask(Z_SPRITE_APPLE_HALO,
-                           x,
-                           y,
+                           screen.x,
+                           screen.y,
                            0,
                            Z_COLOR_BG_GREEN_03,
                            Circle->alpha);
