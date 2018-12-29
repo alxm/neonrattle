@@ -85,6 +85,6 @@ void z_particle_draw(const ZParticle* Particle)
         && screen.y >= 0 && screen.y < Z_SCREEN_H) {
 
         z_pixel_drawAlpha2(
-            screen.x, screen.y, z_color_getRandomApple(), Particle->alpha);
+            screen.x, screen.y, z_color_appleGet(), Particle->alpha);
     }
 }

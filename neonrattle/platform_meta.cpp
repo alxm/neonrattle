@@ -93,18 +93,18 @@ void loop(void)
     #endif
 }
 
-bool z_button_pressed(ZButtonId Button)
+bool z_button_pressGet(ZButtonId Button)
 {
     return g_buttons[Button].pressed;
 }
 
-void z_button_release(ZButtonId Button)
+void z_button_pressClear(ZButtonId Button)
 {
     g_buttons[Button].pressed = false;
     g_buttons[Button].released = true;
 }
 
-ZPixel* z_screen_getPixels(void)
+ZPixel* z_screen_pixelsGet(void)
 {
     return gb.display._buffer;
 }
@@ -138,13 +138,13 @@ static void prepLights(ZColorId BgColorId, ZColorId ColorId, int Alpha)
     gb.lights.setColor((Color)color);
 }
 
-void z_platform_meta_fillLights(ZColorId BgColorId, ZColorId ColorId, int Alpha)
+void z_platform_meta_lightsFill(ZColorId BgColorId, ZColorId ColorId, int Alpha)
 {
     prepLights(BgColorId, ColorId, Alpha);
     gb.lights.fill();
 }
 
-void z_platform_meta_drawLights(ZColorId ColorId, int Alpha, int X, int Y)
+void z_platform_meta_lightsDraw(ZColorId ColorId, int Alpha, int X, int Y)
 {
     prepLights(Z_COLOR_INVALID, ColorId, Alpha);
     gb.lights.drawPixel(X, Y);
@@ -156,19 +156,19 @@ void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer)
     g_sprites[Sprite].buffer = Buffer;
 }
 
-ZPixel z_sprite_getTransparentColor(void)
+ZPixel z_sprite_transparentColorGet(void)
 {
     return g_sprites[Z_SPRITE_PALETTE].buffer[4];
 }
 
-const ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
+const ZPixel* z_sprite_pixelsGet(ZSpriteId Sprite, unsigned Frame)
 {
     unsigned dim = g_sprites[Sprite].buffer[0] * g_sprites[Sprite].buffer[1];
 
     return g_sprites[Sprite].buffer + Z_META_IMAGE_HEADER_LEN + dim * Frame;
 }
 
-ZPixel z_sprite_getPixel(ZSpriteId Sprite, unsigned Frame, int X, int Y)
+ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y)
 {
     unsigned w = g_sprites[Sprite].buffer[0];
     unsigned dim = w * g_sprites[Sprite].buffer[1];
@@ -183,17 +183,17 @@ void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
     gb.display.drawImage(X, Y, g_sprites[Sprite].image);
 }
 
-int z_sprite_getWidth(ZSpriteId Sprite)
+int z_sprite_widthGet(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].buffer[0];
 }
 
-int z_sprite_getHeight(ZSpriteId Sprite)
+int z_sprite_heightGet(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].buffer[1];
 }
 
-uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
+uint8_t z_sprite_framesNumGet(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].buffer[2];
 }
@@ -222,12 +222,12 @@ void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId)
     gb.display.drawCircle(X, Y, Radius);
 }
 
-uint16_t z_fps_getCounter(void)
+uint16_t z_fps_ticksGet(void)
 {
     return (uint16_t)gb.frameCount;
 }
 
-bool z_fps_isNthFrame(uint8_t N)
+bool z_fps_ticksNth(uint8_t N)
 {
     return (gb.frameCount % N) == 0;
 }

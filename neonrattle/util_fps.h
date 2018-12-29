@@ -19,7 +19,7 @@ Z_EXTERN_C_START
 
 #define Z_FPS 30
 
-extern uint16_t z_fps_getCounter(void);
-extern bool z_fps_isNthFrame(uint8_t N);
+extern uint16_t z_fps_ticksGet(void);
+extern bool z_fps_ticksNth(uint8_t N);
 
 Z_EXTERN_C_END

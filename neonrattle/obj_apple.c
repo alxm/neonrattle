@@ -56,7 +56,7 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
         a->coords = (ZVectorFix){X, Y};
         a->bounceAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
         a->alphaAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
-        a->color = z_color_getRandomApple();
+        a->color = z_color_appleGet();
     }
 
     return a;
@@ -68,16 +68,16 @@ void z_apple_free(ZApple* Apple)
     z_pool_free(Z_POOL_APPLE, Apple);
 }
 
-ZVectorFix z_apple_getCoords(const ZApple* Apple)
+ZVectorFix z_apple_coordsGet(const ZApple* Apple)
 {
     return Apple->coords;
 }
 
-int z_apple_getDim(const ZApple* Apple)
+int z_apple_dimGet(const ZApple* Apple)
 {
     Z_UNUSED(Apple);
 
-    return z_sprite_getWidth(Z_SPRITE_APPLE_ALPHAMASK);
+    return z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK);
 }
 
 void z_apple_tick(ZApple* Apple)

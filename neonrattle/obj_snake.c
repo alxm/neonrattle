@@ -74,7 +74,7 @@ static void setHead(ZSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
     s->r = z_colors[Color].r;
     s->g = z_colors[Color].g;
     s->b = z_colors[Color].b;
-    s->targetColor = z_color_getRandomSnake();
+    s->targetColor = z_color_snakeGet();
 }
 
 ZSnake* z_snake_new(ZFix X, ZFix Y)
@@ -90,7 +90,7 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
 
         for(int i = Z_SNAKE_START_LEN; i--; ) {
             s->head = (s->head + 1) & Z_SNAKE_LEN_MASK;
-            setHead(s, X, Y, z_color_getRandomSnake());
+            setHead(s, X, Y, z_color_snakeGet());
 
             X += z_fix_cosf(s->angle);
             Y -=z_fix_sinf(s->angle);
@@ -100,14 +100,14 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
     return s;
 }
 
-ZVectorFix z_snake_getCoords(const ZSnake* Snake)
+ZVectorFix z_snake_coordsGet(const ZSnake* Snake)
 {
     const ZSegment* head = &Snake->body[Snake->head];
 
     return head->coords;
 }
 
-int z_snake_getEaten(const ZSnake* Snake)
+int z_snake_eatenNumGet(const ZSnake* Snake)
 {
     return Snake->eaten;
 }
@@ -126,20 +126,20 @@ static void moveSnake(ZSnake* Snake)
             Snake->grow--;
             Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
 
-            setHead(Snake, x, y, z_color_getRandomApple());
+            setHead(Snake, x, y, z_color_appleGet());
         }
     } else {
         Snake->tail = (Snake->tail + 1) & Z_SNAKE_LEN_MASK;
         Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
 
-        setHead(Snake, x, y, z_color_getRandomSnake());
+        setHead(Snake, x, y, z_color_snakeGet());
     }
 
-    if(z_button_pressed(Z_BUTTON_LEFT)) {
+    if(z_button_pressGet(Z_BUTTON_LEFT)) {
         Snake->angle += Z_SNAKE_TURN_DEG;
     }
 
-    if(z_button_pressed(Z_BUTTON_RIGHT)) {
+    if(z_button_pressGet(Z_BUTTON_RIGHT)) {
         Snake->angle -= Z_SNAKE_TURN_DEG;
     }
 }
@@ -180,7 +180,7 @@ static bool checkWall(ZSnake* Snake)
             Snake->body[i].targetColor = Z_COLOR_BG_GREEN_03;
         }
 
-        z_light_setPulse(Z_LIGHT_SNAKE_HIT_WALL);
+        z_light_pulseSet(Z_LIGHT_SNAKE_HIT_WALL);
         z_sfx_play(Z_SFX_HIT_WALL);
 
         return true;
@@ -228,16 +228,16 @@ static void checkApples(ZSnake* Snake)
 
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
-            Z_LIST_ITERATE(z_map_getApples(gridX, gridY), ZApple*, apple) {
-                ZVectorFix coords = z_apple_getCoords(apple);
+            Z_LIST_ITERATE(z_map_applesListGet(gridX, gridY), ZApple*, apple) {
+                ZVectorFix coords = z_apple_coordsGet(apple);
 
                 if(z_collision_sqAndSq(z_fix_toInt(head->coords.x),
                                        z_fix_toInt(head->coords.y),
-                                       z_sprite_getWidth(
+                                       z_sprite_widthGet(
                                             Z_SPRITE_SNAKE_ALPHAMASK),
                                        z_fix_toInt(coords.x),
                                        z_fix_toInt(coords.y),
-                                       z_apple_getDim(apple))) {
+                                       z_apple_dimGet(apple))) {
 
                     Snake->grow += Z_APPLE_GROW_PER;
                     Snake->eaten++;
@@ -245,7 +245,7 @@ static void checkApples(ZSnake* Snake)
                     z_apple_free(apple);
 
                     z_effects_circles(head->coords.x, head->coords.y);
-                    z_light_setPulse(Z_LIGHT_APPLE_EAT);
+                    z_light_pulseSet(Z_LIGHT_APPLE_EAT);
                     z_sfx_play(Z_SFX_APPLE_EAT);
                 }
             }

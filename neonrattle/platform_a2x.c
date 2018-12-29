@@ -111,17 +111,17 @@ A_MAIN
     a_state_push(run, "Neonrattle");
 }
 
-bool z_button_pressed(ZButtonId Button)
+bool z_button_pressGet(ZButtonId Button)
 {
     return a_button_pressGet(g_buttons[Button]);
 }
 
-void z_button_release(ZButtonId Button)
+void z_button_pressClear(ZButtonId Button)
 {
     a_button_pressClear(g_buttons[Button]);
 }
 
-ZPixel* z_screen_getPixels(void)
+ZPixel* z_screen_pixelsGet(void)
 {
     return a_screen_pixelsGetBuffer();
 }
@@ -136,7 +136,7 @@ void z_platform__loadSpriteGrid(ZSpriteId Sprite, const char* Path, int W, int H
     g_sprites[Sprite] = a_spriteframes_newFromPngGrid(Path, W, H);
 }
 
-ZPixel z_sprite_getTransparentColor(void)
+ZPixel z_sprite_transparentColorGet(void)
 {
     return a_sprite_colorKeyGet();
 }
@@ -146,12 +146,12 @@ static inline ASprite* getCurrentSprite(ZSpriteId Sprite, unsigned Frame)
     return a_spriteframes_getByIndex(g_sprites[Sprite], Frame);
 }
 
-const ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame)
+const ZPixel* z_sprite_pixelsGet(ZSpriteId Sprite, unsigned Frame)
 {
     return a_sprite_pixelsGetBuffer(getCurrentSprite(Sprite, Frame));
 }
 
-ZPixel z_sprite_getPixel(ZSpriteId Sprite, unsigned Frame, int X, int Y)
+ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y)
 {
     return a_sprite_pixelsGetPixel(getCurrentSprite(Sprite, Frame), X, Y);
 }
@@ -161,17 +161,17 @@ void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
     a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }
 
-int z_sprite_getWidth(ZSpriteId Sprite)
+int z_sprite_widthGet(ZSpriteId Sprite)
 {
     return a_sprite_widthGet(getCurrentSprite(Sprite, 0));
 }
 
-int z_sprite_getHeight(ZSpriteId Sprite)
+int z_sprite_heightGet(ZSpriteId Sprite)
 {
     return a_sprite_heightGet(getCurrentSprite(Sprite, 0));
 }
 
-uint8_t z_sprite_getNumFrames(ZSpriteId Sprite)
+uint8_t z_sprite_framesNumGet(ZSpriteId Sprite)
 {
     return (uint8_t)a_spriteframes_numGet(g_sprites[Sprite]);
 }
@@ -205,12 +205,12 @@ void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId)
     a_pixel_pop();
 }
 
-uint16_t z_fps_getCounter(void)
+uint16_t z_fps_ticksGet(void)
 {
     return (uint16_t)a_fps_ticksGet();
 }
 
-bool z_fps_isNthFrame(uint8_t N)
+bool z_fps_ticksNth(uint8_t N)
 {
     return a_fps_ticksNth(N);
 }

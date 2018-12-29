@@ -47,7 +47,7 @@ void z_state_play_tick(void)
     z_map_tick();
 
     if(!g_canMove
-        && (z_button_pressed(Z_BUTTON_A) || z_button_pressed(Z_BUTTON_B))) {
+        && (z_button_pressGet(Z_BUTTON_A) || z_button_pressGet(Z_BUTTON_B))) {
 
         g_canMove = true;
         z_sfx_play(Z_SFX_PRESSED_A);

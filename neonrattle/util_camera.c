@@ -24,7 +24,7 @@ static ZVectorFix g_coords;
 
 void z_camera_tick(const ZSnake* Snake)
 {
-    ZVectorFix coords = z_snake_getCoords(Snake);
+    ZVectorFix coords = z_snake_coordsGet(Snake);
 
     g_coords.x = z_math_clamp(coords.x,
                               z_fix_fromInt(Z_SCREEN_W / 2),
@@ -36,7 +36,7 @@ void z_camera_tick(const ZSnake* Snake)
                                                 - Z_SCREEN_H / 2));
 }
 
-ZVectorFix z_camera_getOrigin(void)
+ZVectorFix z_camera_originGet(void)
 {
     return g_coords;
 }

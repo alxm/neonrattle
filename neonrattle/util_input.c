@@ -21,16 +21,16 @@
 void z_input_reset(void)
 {
     for(uint8_t b = 0; b < Z_BUTTON_NUM; b++) {
-        z_button_release(b);
+        z_button_pressClear(b);
     }
 }
 
-bool z_button_pressedOnce(ZButtonId Button)
+bool z_button_pressGetOnce(ZButtonId Button)
 {
-    bool pressed = z_button_pressed(Button);
+    bool pressed = z_button_pressGet(Button);
 
     if(pressed) {
-        z_button_release(Button);
+        z_button_pressClear(Button);
     }
 
     return pressed;

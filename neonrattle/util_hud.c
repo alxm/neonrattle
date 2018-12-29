@@ -27,7 +27,7 @@ void z_hud_draw(ZSnake* Snake)
     #define BAR_W (Z_SCREEN_W - BAR_X * 2)
     #define BAR_H (4)
 
-    int width = BAR_W * z_snake_getEaten(Snake) / z_map_getApplesNum();
+    int width = BAR_W * z_snake_eatenNumGet(Snake) / z_map_applesNumGet();
 
     z_draw_rectangleAlpha(BAR_X, BAR_Y - 1, BAR_W, 1, Z_COLOR_APPLE_03, 96);
 

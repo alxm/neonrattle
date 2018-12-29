@@ -70,7 +70,7 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
 extern void z_platform__loadSprite(ZSpriteId Sprite, const uint16_t* Buffer);
 extern void z_platform__loadSfx(ZSfxId Sfx, const uint8_t* Buffer, uint32_t Size);
 
-extern void z_platform_meta_fillLights(ZColorId BgColorId, ZColorId ColorId, int Alpha);
-extern void z_platform_meta_drawLights(ZColorId ColorId, int Alpha, int X, int Y);
+extern void z_platform_meta_lightsFill(ZColorId BgColorId, ZColorId ColorId, int Alpha);
+extern void z_platform_meta_lightsDraw(ZColorId ColorId, int Alpha, int X, int Y);
 
 Z_EXTERN_C_END

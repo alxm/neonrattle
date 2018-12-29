@@ -52,12 +52,12 @@ void z_graphics_setup(void)
     int col = 0;
 
     for(ZColorId c = 0; c < Z_COLOR_NUM; c++, col++) {
-        ZPixel pixel = z_sprite_getPixel(Z_SPRITE_PALETTE, 0, col, row);
+        ZPixel pixel = z_sprite_pixelGet(Z_SPRITE_PALETTE, 0, col, row);
 
         while(pixel == 0) {
             row++;
             col = 0;
-            pixel = z_sprite_getPixel(Z_SPRITE_PALETTE, 0, col, row);
+            pixel = z_sprite_pixelGet(Z_SPRITE_PALETTE, 0, col, row);
         }
 
         z_colors[c].pixel = pixel;
@@ -69,8 +69,8 @@ void z_graphics_setup(void)
 void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame)
 {
     z_sprite_blit(Sprite,
-                  X - z_sprite_getWidth(Sprite) / 2,
-                  Y - z_sprite_getHeight(Sprite) / 2,
+                  X - z_sprite_widthGet(Sprite) / 2,
+                  Y - z_sprite_heightGet(Sprite) / 2,
                   Frame);
 }
 
@@ -92,8 +92,8 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
         return;
     }
 
-    const int spriteW = z_sprite_getWidth(AlphaMask);
-    const int spriteH = z_sprite_getHeight(AlphaMask);
+    const int spriteW = z_sprite_widthGet(AlphaMask);
+    const int spriteH = z_sprite_heightGet(AlphaMask);
 
     X -= spriteW / 2;
     Y -= spriteH / 2;
@@ -104,8 +104,8 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
         return;
     }
 
-    ZPixel* screenPixels = z_screen_getPixels();
-    const ZPixel* spritePixels = z_sprite_getPixels(AlphaMask, Frame);
+    ZPixel* screenPixels = z_screen_pixelsGet();
+    const ZPixel* spritePixels = z_sprite_pixelsGet(AlphaMask, Frame);
 
     int spriteDrawW = spriteW;
     int spriteDrawH = spriteH;
@@ -181,7 +181,7 @@ void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId ColorId, int Alp
     const int g = z_colors[ColorId].g;
     const int b = z_colors[ColorId].b;
 
-    ZPixel* screenPixels = z_screen_getPixels() + Y * Z_SCREEN_W + X;
+    ZPixel* screenPixels = z_screen_pixelsGet() + Y * Z_SCREEN_W + X;
 
     for(int y = H; y--; ) {
         ZPixel* screenPixels2 = screenPixels;

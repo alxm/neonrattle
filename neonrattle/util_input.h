@@ -33,8 +33,8 @@ typedef enum Z_PACK_ENUM {
 
 extern void z_input_reset(void);
 
-extern bool z_button_pressed(ZButtonId Button);
-extern void z_button_release(ZButtonId Button);
-extern bool z_button_pressedOnce(ZButtonId Button);
+extern bool z_button_pressGet(ZButtonId Button);
+extern bool z_button_pressGetOnce(ZButtonId Button);
+extern void z_button_pressClear(ZButtonId Button);
 
 Z_EXTERN_C_END

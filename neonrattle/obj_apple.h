@@ -37,8 +37,8 @@ extern void z_apple_setup(void);
 extern ZApple* z_apple_new(ZFix X, ZFix Y);
 extern void z_apple_free(ZApple* Apple);
 
-extern ZVectorFix z_apple_getCoords(const ZApple* Apple);
-extern int z_apple_getDim(const ZApple* Apple);
+extern ZVectorFix z_apple_coordsGet(const ZApple* Apple);
+extern int z_apple_dimGet(const ZApple* Apple);
 
 extern void z_apple_tick(ZApple* Apple);
 extern void z_apple_draw(const ZApple* Apple);

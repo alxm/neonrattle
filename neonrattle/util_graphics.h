@@ -63,12 +63,12 @@ typedef enum {
 #define Z_COLOR_APPLE_NUM 5
 #define Z_COLOR_SNAKE_NUM 3
 
-static inline ZColorId z_color_getRandomApple(void)
+static inline ZColorId z_color_appleGet(void)
 {
     return (ZColorId)(Z_COLOR_APPLE_01 + z_random_int(Z_COLOR_APPLE_NUM));
 }
 
-static inline ZColorId z_color_getRandomSnake(void)
+static inline ZColorId z_color_snakeGet(void)
 {
     return (ZColorId)(Z_COLOR_SNAKE_01 + z_random_int(Z_COLOR_SNAKE_NUM));
 }
@@ -105,18 +105,18 @@ extern ZColor z_colors[Z_COLOR_NUM];
 
 extern void z_graphics_setup(void);
 
-extern ZPixel* z_screen_getPixels(void);
+extern ZPixel* z_screen_pixelsGet(void);
 
-extern ZPixel z_sprite_getTransparentColor(void);
-extern const ZPixel* z_sprite_getPixels(ZSpriteId Sprite, unsigned Frame);
-extern ZPixel z_sprite_getPixel(ZSpriteId Sprite, unsigned Frame, int X, int Y);
+extern ZPixel z_sprite_transparentColorGet(void);
+extern const ZPixel* z_sprite_pixelsGet(ZSpriteId Sprite, unsigned Frame);
+extern ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y);
 extern void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame);
 extern void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame);
 extern void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha);
 extern void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, int R, int G, int B, int Alpha);
-extern int z_sprite_getWidth(ZSpriteId Sprite);
-extern int z_sprite_getHeight(ZSpriteId Sprite);
-extern uint8_t z_sprite_getNumFrames(ZSpriteId Sprite);
+extern int z_sprite_widthGet(ZSpriteId Sprite);
+extern int z_sprite_heightGet(ZSpriteId Sprite);
+extern uint8_t z_sprite_framesNumGet(ZSpriteId Sprite);
 
 extern void z_draw_fill(ZColorId ColorId);
 extern void z_draw_rectangle(int X, int Y, int W, int H, ZColorId ColorId);
@@ -138,7 +138,7 @@ static inline void z_pixel_drawAlpha(ZPixel* Dst, int Red, int Green, int Blue, 
 
 static inline void z_pixel_drawAlpha2(int X, int Y, ZColorId ColorId, int Alpha)
 {
-    z_pixel_drawAlpha(z_screen_getPixels() + Y * Z_SCREEN_W + X,
+    z_pixel_drawAlpha(z_screen_pixelsGet() + Y * Z_SCREEN_W + X,
                       z_colors[ColorId].r,
                       z_colors[ColorId].g,
                       z_colors[ColorId].b,

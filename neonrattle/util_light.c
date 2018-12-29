@@ -83,7 +83,7 @@ void z_light_tick(void)
             g_last.pulseColor = color;
             g_last.alpha = alpha;
 
-            z_platform_meta_fillLights(g_light.bgColor, color, alpha);
+            z_platform_meta_lightsFill(g_light.bgColor, color, alpha);
         }
     #else
         Z_UNUSED(color);
@@ -91,13 +91,13 @@ void z_light_tick(void)
     #endif
 }
 
-void z_light_setPulse(ZLightId Light)
+void z_light_pulseSet(ZLightId Light)
 {
     g_light.pulseId = Light;
     g_light.counter = 0;
 }
 
-void z_light_setBackground(ZColorId ColorId)
+void z_light_backgroundSet(ZColorId ColorId)
 {
     g_light.bgColor = ColorId;
 }

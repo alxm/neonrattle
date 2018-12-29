@@ -28,7 +28,7 @@ static ZTimer g_timers[Z_TIMER_NUM];
 
 void z_timer_tick(void)
 {
-    uint8_t now = (uint8_t)z_fps_getCounter();
+    uint8_t now = (uint8_t)z_fps_ticksGet();
 
     for(ZTimerId t = 0; t < Z_TIMER_NUM; t++) {
         ZTimer* timer = &g_timers[t];
@@ -48,7 +48,7 @@ void z_timer_start(ZTimerId Timer, uint8_t Ds)
 {
     ZTimer* timer = &g_timers[Timer];
 
-    timer->base = (uint8_t)z_fps_getCounter();
+    timer->base = (uint8_t)z_fps_ticksGet();
     timer->period = z_timer_dsToTicks(Ds);
     timer->expired = false;
 }
@@ -65,7 +65,7 @@ void z_timer_restart(ZTimerId Timer)
 {
     ZTimer* timer = &g_timers[Timer];
 
-    timer->base = (uint8_t)z_fps_getCounter();
+    timer->base = (uint8_t)z_fps_ticksGet();
     timer->expired = false;
 }
 

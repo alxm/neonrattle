@@ -28,7 +28,7 @@ static int g_height;
 void z_state_intro_init(void)
 {
     g_stage = 0;
-    g_height = z_sprite_getHeight(Z_SPRITE_ALXM);
+    g_height = z_sprite_heightGet(Z_SPRITE_ALXM);
 
     z_draw_fill(Z_COLOR_ALXM_BG);
     z_timer_start(Z_TIMER_G1, 1);
@@ -53,7 +53,7 @@ void z_state_intro_tick(void)
             } break;
 
             case 2: {
-                if(g_height < z_sprite_getHeight(Z_SPRITE_ALXM)) {
+                if(g_height < z_sprite_heightGet(Z_SPRITE_ALXM)) {
                     g_height = g_height + 2;
                 }
             } break;
@@ -63,8 +63,8 @@ void z_state_intro_tick(void)
 
 void z_state_intro_draw(void)
 {
-    int spriteW = z_sprite_getWidth(Z_SPRITE_ALXM);
-    int spriteH = z_sprite_getHeight(Z_SPRITE_ALXM);
+    int spriteW = z_sprite_widthGet(Z_SPRITE_ALXM);
+    int spriteH = z_sprite_heightGet(Z_SPRITE_ALXM);
 
     z_sprite_blitCentered(Z_SPRITE_ALXM, Z_SCREEN_W / 2, Z_SCREEN_H / 2, 0);
 

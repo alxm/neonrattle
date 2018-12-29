@@ -43,7 +43,7 @@ void z_map_setup(void)
 {
     const ZPixel white = z_pixel_fromRGB(255, 255, 255);
 
-    const ZPixel* pixels = z_sprite_getPixels(Z_SPRITE_MAP0, 0);
+    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAP0, 0);
 
     for(int y = 0; y < Z_MAP_H; y++) {
         for(int x = 0; x < Z_MAP_W; x++) {
@@ -74,7 +74,7 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
     const ZPixel red100 = z_pixel_fromRGB(255, 0, 0);
     const ZPixel green100 = z_pixel_fromRGB(0, 255, 0);
 
-    const ZPixel* pixels = z_sprite_getPixels(Z_SPRITE_MAP0, 0);
+    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAP0, 0);
 
     for(int y = 0; y < Z_MAP_H; y++) {
         for(int x = 0; x < Z_MAP_W; x++) {
@@ -102,8 +102,8 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
             ZVectorInt gridTileOffset = z_coords_tileToGridTileOffset(
                                             (ZVectorInt){x, y});
 
-            int w = z_sprite_getWidth(Z_SPRITE_APPLE_ALPHAMASK);
-            int h = z_sprite_getHeight(Z_SPRITE_APPLE_ALPHAMASK);
+            int w = z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK);
+            int h = z_sprite_heightGet(Z_SPRITE_APPLE_ALPHAMASK);
 
             int startX = w / 2;
             int endX = Z_TILE_DIM - w / 2 + 1;
@@ -151,7 +151,7 @@ void z_map_tick(void)
 
     for(int gridY = gridStart.y; gridY < gridEnd.y; gridY++) {
         for(int gridX = gridStart.x; gridX < gridEnd.x; gridX++) {
-            Z_LIST_ITERATE(z_map_getApples(gridX, gridY), ZApple*, apple) {
+            Z_LIST_ITERATE(z_map_applesListGet(gridX, gridY), ZApple*, apple) {
                 z_apple_tick(apple);
             }
         }
@@ -194,7 +194,7 @@ void z_map_draw(void)
 
 void z_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)
 {
-    ZVectorFix origin = z_camera_getOrigin();
+    ZVectorFix origin = z_camera_originGet();
 
     ZVectorInt topLeftMapPixel = {z_fix_toInt(origin.x) - Z_SCREEN_W / 2,
                                   z_fix_toInt(origin.y) - Z_SCREEN_H / 2};
@@ -245,12 +245,12 @@ void z_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
     }
 }
 
-ZList* z_map_getApples(int GridX, int GridY)
+ZList* z_map_applesListGet(int GridX, int GridY)
 {
     return &g_map.grid[GridY][GridX].apples;
 }
 
-int z_map_getApplesNum(void)
+int z_map_applesNumGet(void)
 {
     return g_map.totalApples;
 }
