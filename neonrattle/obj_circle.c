@@ -72,8 +72,10 @@ void z_circle_draw(const ZCircle* Circle)
     int x, y;
     z_camera_coordsToScreen(Circle->x, Circle->y, &x, &y);
 
-    x += z_screen_getXShake();
-    y += z_screen_getYShake();
+    ZVectorInt shake = z_screen_shakeGet();
+
+    x += shake.x;
+    y += shake.y;
 
     z_sprite_blitAlphaMask(Z_SPRITE_APPLE_HALO,
                            x,

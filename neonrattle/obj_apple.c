@@ -93,11 +93,10 @@ void z_apple_draw(const ZApple* Apple)
     int x, y;
     z_camera_coordsToScreen(Apple->x, Apple->y, &x, &y);
 
-    x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
-    y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
+    ZVectorInt shake = z_screen_shakeGet();
 
-    x += z_screen_getXShake();
-    y += z_screen_getYShake();
+    x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090)) + shake.x;
+    y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2) + shake.y;
 
     int alpha = Z_APPLE_ALPHA_MIN
         + (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / 2

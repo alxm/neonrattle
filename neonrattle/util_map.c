@@ -172,6 +172,7 @@ void z_map_tick(void)
 
 void z_map_draw(void)
 {
+    ZVectorInt shake = z_screen_shakeGet();
     int tileStartX, tileStartY, tileEndX, tileEndY;
     int gridStartX, gridStartY, gridEndX, gridEndY;
     int screenStartX, screenStartY;
@@ -186,12 +187,11 @@ void z_map_draw(void)
                            &screenStartX,
                            &screenStartY);
 
-    for(int tileY = tileStartY, screenY = screenStartY + z_screen_getYShake();
+    for(int tileY = tileStartY, screenY = screenStartY + shake.y;
         tileY < tileEndY;
         tileY++, screenY += Z_TILE_DIM) {
 
-        for(int tileX = tileStartX,
-                screenX = screenStartX + z_screen_getXShake();
+        for(int tileX = tileStartX, screenX = screenStartX + shake.x;
             tileX < tileEndX;
             tileX++, screenX += Z_TILE_DIM) {
 

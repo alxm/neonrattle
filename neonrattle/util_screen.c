@@ -18,18 +18,15 @@
 #include "platform.h"
 #include "util_screen.h"
 
-#include "util_fix.h"
 #include "util_input.h"
 #include "util_timer.h"
 
-ZScreen z_screen;
+ZVectorInt g_shake;
 static uint8_t g_shakeFrames;
 
 void z_screen_reset(void)
 {
-    z_screen.xShake = 1;
-    z_screen.yShake = 1;
-
+    g_shake = (ZVectorInt){0, 0};
     g_shakeFrames = 0;
 }
 
@@ -37,15 +34,18 @@ void z_screen_tick(void)
 {
     if(g_shakeFrames) {
         g_shakeFrames--;
-        z_screen.xShake = z_random_int(3);
-        z_screen.yShake = z_random_int(3);
+        g_shake = (ZVectorInt){-1 + z_random_int(3), -1 + z_random_int(3)};
     } else {
-        z_screen.xShake = 1;
-        z_screen.yShake = 1;
+        g_shake = (ZVectorInt){0, 0};
     }
 }
 
-void z_screen_shake(uint8_t Ds)
+ZVectorInt z_screen_shakeGet(void)
+{
+    return g_shake;
+}
+
+void z_screen_shakeSet(uint8_t Ds)
 {
     g_shakeFrames = z_timer_dsToTicks(Ds);
 }

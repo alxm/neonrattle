@@ -34,7 +34,7 @@ void z_state_died_init(void)
     g_snake = z_state_play_getSnake();
 
     z_timer_start(Z_TIMER_G1, 8);
-    z_screen_shake(2);
+    z_screen_shakeSet(2);
 }
 
 void z_state_died_tick(void)

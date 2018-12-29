@@ -17,23 +17,10 @@
 
 #pragma once
 
-typedef struct {
-    int xShake, yShake;
-} ZScreen;
-
-extern ZScreen z_screen;
+#include "util_fix.h"
 
 extern void z_screen_reset(void);
 extern void z_screen_tick(void);
 
-extern void z_screen_shake(uint8_t Ds);
-
-static inline int z_screen_getXShake(void)
-{
-    return -1 + z_screen.xShake;
-}
-
-static inline int z_screen_getYShake(void)
-{
-    return -1 + z_screen.yShake;
-}
+extern ZVectorInt z_screen_shakeGet(void);
+extern void z_screen_shakeSet(uint8_t Ds);

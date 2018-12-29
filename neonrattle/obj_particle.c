@@ -77,8 +77,10 @@ void z_particle_draw(const ZParticle* Particle)
     int x, y;
     z_camera_coordsToScreen(Particle->x, Particle->y, &x, &y);
 
-    x += z_screen_getXShake();
-    y += z_screen_getYShake();
+    ZVectorInt shake = z_screen_shakeGet();
+
+    x += shake.x;
+    y += shake.y;
 
     if(x >= 0 && x < Z_SCREEN_W && y >= 0 && y < Z_SCREEN_H) {
         z_pixel_drawAlpha2(x, y, z_color_getRandomApple(), Particle->alpha);
