@@ -44,7 +44,7 @@ void z_state_died_tick(void)
     z_effects_tick();
 
     if(z_timer_expired(Z_TIMER_G1)) {
-        z_state_set(Z_STATE_PLAY, true);
+        z_state_set(Z_STATE_PLAY);
     }
 }
 

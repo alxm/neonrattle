@@ -48,7 +48,7 @@ void z_state_intro_tick(void)
                 if(++g_height == Z_LOGO_WAIT_DS) {
                     g_stage = 2;
                     g_height = 0;
-                    z_state_set(Z_STATE_PLAY, true);
+                    z_state_set(Z_STATE_PLAY);
                 }
             } break;
 

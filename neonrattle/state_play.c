@@ -54,7 +54,7 @@ void z_state_play_tick(void)
     }
 
     if(g_canMove && z_snake_tick(g_snake)) {
-        z_state_set(Z_STATE_DIED, false);
+        z_state_set(Z_STATE_DIED);
     }
 
     z_camera_tick(g_snake);

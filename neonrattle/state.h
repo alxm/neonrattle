@@ -39,7 +39,7 @@ extern void z_state_setup(void);
 extern void z_state_tick(void);
 extern void z_state_draw(void);
 
-extern void z_state_set(ZStateId NewState, bool Transition);
+extern void z_state_set(ZStateId NewState);
 extern bool z_state_changed(void);
 
 Z_EXTERN_C_END

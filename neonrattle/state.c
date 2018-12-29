@@ -89,9 +89,9 @@ void z_state_setup(void)
     z_snake_setup();
 
     #if Z_DEBUG_STATS
-        z_state_set(Z_STATE_PLAY, false);
+        z_state_set(Z_STATE_PLAY);
     #else
-        z_state_set(Z_STATE_INTRO, false);
+        z_state_set(Z_STATE_INTRO);
     #endif
 }
 
@@ -141,7 +141,7 @@ void z_state_draw(void)
     z_swipe_draw();
 }
 
-void z_state_set(ZStateId NewState, bool Transition)
+void z_state_set(ZStateId NewState)
 {
     if(g_state.next != Z_STATE_INVALID) {
         return;
@@ -151,7 +151,7 @@ void z_state_set(ZStateId NewState, bool Transition)
 
     z_swipe_stop();
 
-    if(Transition) {
+    if(g_state.current != Z_STATE_INVALID) {
         z_swipe_start(g_states[g_state.current].outro);
     }
 }
