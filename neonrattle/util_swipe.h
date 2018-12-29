@@ -24,6 +24,9 @@ typedef enum {
     Z_SWIPE_NUM
 } ZSwipeId;
 
-extern void z_swipe_init(ZSwipeId* Swipe);
+extern void z_swipe_start(ZSwipeId Swipe);
+extern void z_swipe_stop(void);
+extern bool z_swipe_running(void);
+
 extern void z_swipe_tick(void);
 extern void z_swipe_draw(void);

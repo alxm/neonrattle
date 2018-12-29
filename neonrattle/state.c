@@ -70,21 +70,13 @@ static const ZState g_states[Z_STATE_NUM] = {
 static struct {
     ZStateId current;
     ZStateId next;
-} g_state;
-
-static struct {
-    ZSwipeId swipeOut;
-    ZSwipeId swipeIn;
-} g_swipe;
+} g_state = {
+    Z_STATE_INVALID,
+    Z_STATE_INVALID
+};
 
 void z_state_setup(void)
 {
-    g_state.current = Z_STATE_INVALID;
-    g_state.next = Z_STATE_INVALID;
-
-    g_swipe.swipeOut = Z_SWIPE_INVALID;
-    g_swipe.swipeIn = Z_SWIPE_INVALID;
-
     z_graphics_setup();
     z_light_reset();
     z_map_setup();
@@ -105,7 +97,7 @@ void z_state_setup(void)
 
 static void checkNewState(void)
 {
-    if(g_state.next == Z_STATE_INVALID || g_swipe.swipeOut != Z_SWIPE_INVALID) {
+    if(g_state.next == Z_STATE_INVALID || z_swipe_running()) {
         return;
     }
 
@@ -120,7 +112,7 @@ static void checkNewState(void)
         g_states[g_state.current].init();
     }
 
-    z_swipe_init(&g_swipe.swipeIn);
+    z_swipe_start(g_states[g_state.current].intro);
     z_input_reset();
 }
 
@@ -157,11 +149,10 @@ void z_state_set(ZStateId NewState, bool Transition)
 
     g_state.next = NewState;
 
-    if(Transition) {
-        g_swipe.swipeOut = g_states[g_state.current].outro;
-        g_swipe.swipeIn = g_states[g_state.next].intro;
+    z_swipe_stop();
 
-        z_swipe_init(&g_swipe.swipeOut);
+    if(Transition) {
+        z_swipe_start(g_states[g_state.current].outro);
     }
 }
 
