@@ -21,26 +21,26 @@
 
 #include "util_fix.h"
 
-#define Z_APPLE_NUM_MAX 128
-#define Z_APPLE_GROW_PER 1
+#define O_APPLE_NUM_MAX 128
+#define O_APPLE_GROW_PER 1
 
-typedef struct ZApple ZApple;
+typedef struct OApple OApple;
 
 typedef enum {
-    Z_APPLE_LIST_INVALID = -1,
-    Z_APPLE_LIST_GRID,
-    Z_APPLE_LIST_NUM
-} ZAppleListId;
+    O_APPLE_LIST_INVALID = -1,
+    O_APPLE_LIST_GRID,
+    O_APPLE_LIST_NUM
+} OAppleListId;
 
-extern const size_t z_apple_listNodeOffsets[Z_APPLE_LIST_NUM];
+extern const size_t o_apple_listNodeOffsets[O_APPLE_LIST_NUM];
 
-extern void z_apple_setup(void);
+extern void o_apple_setup(void);
 
-extern ZApple* z_apple_new(ZFix X, ZFix Y);
-extern void z_apple_free(ZApple* Apple);
+extern OApple* o_apple_new(ZFix X, ZFix Y);
+extern void o_apple_free(OApple* Apple);
 
-extern ZVectorFix z_apple_coordsGet(const ZApple* Apple);
-extern int z_apple_dimGet(const ZApple* Apple);
+extern ZVectorFix o_apple_coordsGet(const OApple* Apple);
+extern int o_apple_dimGet(const OApple* Apple);
 
-extern void z_apple_tick(ZApple* Apple);
-extern void z_apple_draw(const ZApple* Apple);
+extern void o_apple_tick(OApple* Apple);
+extern void o_apple_draw(const OApple* Apple);

@@ -84,10 +84,10 @@ void z_state_setup(void)
     z_map_setup();
     z_sound_setup();
 
-    z_apple_setup();
-    z_circle_setup();
-    z_particle_setup();
-    z_snake_setup();
+    o_apple_setup();
+    o_circle_setup();
+    o_particle_setup();
+    o_snake_setup();
 
     #if Z_DEBUG_STATS
         z_state_set(Z_STATE_PLAY);

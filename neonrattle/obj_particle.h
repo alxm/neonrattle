@@ -21,12 +21,12 @@
 
 #include "util_fix.h"
 
-typedef struct ZParticle ZParticle;
+typedef struct OParticle OParticle;
 
-extern void z_particle_setup(void);
+extern void o_particle_setup(void);
 
-extern ZParticle* z_particle_new(ZFix X, ZFix Y);
-extern void z_particle_free(ZParticle* Particle);
+extern OParticle* o_particle_new(ZFix X, ZFix Y);
+extern void o_particle_free(OParticle* Particle);
 
-extern bool z_particle_tick(ZParticle* Particle);
-extern void z_particle_draw(const ZParticle* Particle);
+extern bool o_particle_tick(OParticle* Particle);
+extern void o_particle_draw(const OParticle* Particle);

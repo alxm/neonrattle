@@ -21,12 +21,12 @@
 
 #include "util_fix.h"
 
-typedef struct ZCircle ZCircle;
+typedef struct OCircle OCircle;
 
-extern void z_circle_setup(void);
+extern void o_circle_setup(void);
 
-extern ZCircle* z_circle_new(ZFix X, ZFix Y);
-extern void z_circle_free(ZCircle* Circle);
+extern OCircle* o_circle_new(ZFix X, ZFix Y);
+extern void o_circle_free(OCircle* Circle);
 
-extern bool z_circle_tick(ZCircle* Circle);
-extern void z_circle_draw(const ZCircle* Circle);
+extern bool o_circle_tick(OCircle* Circle);
+extern void o_circle_draw(const OCircle* Circle);

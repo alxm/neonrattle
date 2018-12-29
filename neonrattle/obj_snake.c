@@ -28,47 +28,47 @@
 #include "util_pool.h"
 #include "util_sound.h"
 
-#define Z_SNAKE_LEN (Z_APPLE_NUM_MAX * Z_APPLE_GROW_PER)
-#define Z_SNAKE_LEN_MASK (Z_SNAKE_LEN - 1)
+#define O_SNAKE_LEN (O_APPLE_NUM_MAX * O_APPLE_GROW_PER)
+#define O_SNAKE_LEN_MASK (O_SNAKE_LEN - 1)
 
-#define Z_SNAKE_START_LEN 4
-#define Z_SNAKE_START_ANGLE Z_FIX_DEG_090
+#define O_SNAKE_START_LEN 4
+#define O_SNAKE_START_ANGLE Z_FIX_DEG_090
 
-#define Z_SNAKE_TURN_DEG (Z_FIX_DEG_001 * 12)
+#define O_SNAKE_TURN_DEG (Z_FIX_DEG_001 * 12)
 
-#define Z_SNAKE_ALPHA_MIN 8
-#define Z_SNAKE_ALPHA_MAX 128
-#define Z_SNAKE_TAIL_FADE_RATIO 4
+#define O_SNAKE_ALPHA_MIN 8
+#define O_SNAKE_ALPHA_MAX 128
+#define O_SNAKE_TAIL_FADE_RATIO 4
 
 typedef struct {
     ZVectorFix coords;
     int r, g, b;
     ZColorId targetColor;
-} ZSegment;
+} OSnakeSegment;
 
-struct ZSnake {
-    ZSegment body[Z_SNAKE_LEN];
+struct OSnake {
+    OSnakeSegment body[O_SNAKE_LEN];
     unsigned head, tail;
     ZFixu angle;
     int grow;
     int eaten;
 };
 
-Z_POOL_DECLARE(ZSnake, 1, g_pool);
+Z_POOL_DECLARE(OSnake, 1, g_pool);
 
-void z_snake_setup(void)
+void o_snake_setup(void)
 {
     z_pool_register(Z_POOL_SNAKE, g_pool);
 }
 
-static inline unsigned getLength(const ZSnake* Snake)
+static inline unsigned getLength(const OSnake* Snake)
 {
-    return ((Snake->head - Snake->tail) & Z_SNAKE_LEN_MASK) + 1;
+    return ((Snake->head - Snake->tail) & O_SNAKE_LEN_MASK) + 1;
 }
 
-static void setHead(ZSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
+static void setHead(OSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
 {
-    ZSegment* s = &Snake->body[Snake->head];
+    OSnakeSegment* s = &Snake->body[Snake->head];
 
     s->coords = (ZVectorFix){X, Y};
     s->r = z_colors[Color].r;
@@ -77,19 +77,19 @@ static void setHead(ZSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
     s->targetColor = z_color_snakeGet();
 }
 
-ZSnake* z_snake_new(ZFix X, ZFix Y)
+OSnake* o_snake_new(ZFix X, ZFix Y)
 {
-    ZSnake* s = z_pool_alloc(Z_POOL_SNAKE);
+    OSnake* s = z_pool_alloc(Z_POOL_SNAKE);
 
     if(s != NULL) {
         s->head = (unsigned)-1;
         s->tail = 0;
-        s->angle = Z_SNAKE_START_ANGLE;
+        s->angle = O_SNAKE_START_ANGLE;
         s->grow = 0;
         s->eaten = 0;
 
-        for(int i = Z_SNAKE_START_LEN; i--; ) {
-            s->head = (s->head + 1) & Z_SNAKE_LEN_MASK;
+        for(int i = O_SNAKE_START_LEN; i--; ) {
+            s->head = (s->head + 1) & O_SNAKE_LEN_MASK;
             setHead(s, X, Y, z_color_snakeGet());
 
             X += z_fix_cosf(s->angle);
@@ -100,57 +100,57 @@ ZSnake* z_snake_new(ZFix X, ZFix Y)
     return s;
 }
 
-ZVectorFix z_snake_coordsGet(const ZSnake* Snake)
+ZVectorFix o_snake_coordsGet(const OSnake* Snake)
 {
-    const ZSegment* head = &Snake->body[Snake->head];
+    const OSnakeSegment* head = &Snake->body[Snake->head];
 
     return head->coords;
 }
 
-int z_snake_eatenNumGet(const ZSnake* Snake)
+int o_snake_eatenNumGet(const OSnake* Snake)
 {
     return Snake->eaten;
 }
 
-static void moveSnake(ZSnake* Snake)
+static void moveSnake(OSnake* Snake)
 {
-    const ZSegment* head = &Snake->body[Snake->head];
+    const OSnakeSegment* head = &Snake->body[Snake->head];
 
     ZFix x = head->coords.x + z_fix_cosf(Snake->angle);
     ZFix y = head->coords.y - z_fix_sinf(Snake->angle);
 
     if(Snake->grow > 0) {
-        if(getLength(Snake) == Z_SNAKE_LEN) {
+        if(getLength(Snake) == O_SNAKE_LEN) {
             Snake->grow = 0;
         } else {
             Snake->grow--;
-            Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
+            Snake->head = (Snake->head + 1) & O_SNAKE_LEN_MASK;
 
             setHead(Snake, x, y, z_color_appleGet());
         }
     } else {
-        Snake->tail = (Snake->tail + 1) & Z_SNAKE_LEN_MASK;
-        Snake->head = (Snake->head + 1) & Z_SNAKE_LEN_MASK;
+        Snake->tail = (Snake->tail + 1) & O_SNAKE_LEN_MASK;
+        Snake->head = (Snake->head + 1) & O_SNAKE_LEN_MASK;
 
         setHead(Snake, x, y, z_color_snakeGet());
     }
 
     if(z_button_pressGet(Z_BUTTON_LEFT)) {
-        Snake->angle += Z_SNAKE_TURN_DEG;
+        Snake->angle += O_SNAKE_TURN_DEG;
     }
 
     if(z_button_pressGet(Z_BUTTON_RIGHT)) {
-        Snake->angle -= Z_SNAKE_TURN_DEG;
+        Snake->angle -= O_SNAKE_TURN_DEG;
     }
 }
 
-static void updateColors(ZSnake* Snake)
+static void updateColors(OSnake* Snake)
 {
     for(unsigned len = getLength(Snake), i = Snake->tail;
         len--;
-        i = (i + 1) & Z_SNAKE_LEN_MASK) {
+        i = (i + 1) & O_SNAKE_LEN_MASK) {
 
-        ZSegment* s = &Snake->body[i];
+        OSnakeSegment* s = &Snake->body[i];
         const ZColor* targetColor = &z_colors[s->targetColor];
 
         if(s->r != targetColor->r) {
@@ -167,15 +167,15 @@ static void updateColors(ZSnake* Snake)
     }
 }
 
-static bool checkWall(ZSnake* Snake)
+static bool checkWall(OSnake* Snake)
 {
-    const ZSegment* head = &Snake->body[Snake->head];
+    const OSnakeSegment* head = &Snake->body[Snake->head];
     ZVectorInt tile = z_coords_fixToTile(head->coords);
 
     if(z_map_isWall(tile.x, tile.y)) {
         for(unsigned len = getLength(Snake), i = Snake->tail;
             len--;
-            i = (i + 1) & Z_SNAKE_LEN_MASK) {
+            i = (i + 1) & O_SNAKE_LEN_MASK) {
 
             Snake->body[i].targetColor = Z_COLOR_BG_GREEN_03;
         }
@@ -189,9 +189,9 @@ static bool checkWall(ZSnake* Snake)
     return false;
 }
 
-static void checkApples(ZSnake* Snake)
+static void checkApples(OSnake* Snake)
 {
-    const ZSegment* head = &Snake->body[Snake->head];
+    const OSnakeSegment* head = &Snake->body[Snake->head];
 
     ZVectorInt snakeGrid = z_coords_fixToGrid(head->coords);
     ZVectorInt snakeGridOffset = z_coords_fixToGridOffset(head->coords);
@@ -228,8 +228,8 @@ static void checkApples(ZSnake* Snake)
 
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
-            Z_LIST_ITERATE(z_map_applesListGet(gridX, gridY), ZApple*, apple) {
-                ZVectorFix coords = z_apple_coordsGet(apple);
+            Z_LIST_ITERATE(z_map_applesListGet(gridX, gridY), OApple*, apple) {
+                ZVectorFix coords = o_apple_coordsGet(apple);
 
                 if(z_collision_sqAndSq(z_fix_toInt(head->coords.x),
                                        z_fix_toInt(head->coords.y),
@@ -237,12 +237,12 @@ static void checkApples(ZSnake* Snake)
                                             Z_SPRITE_SNAKE_ALPHAMASK),
                                        z_fix_toInt(coords.x),
                                        z_fix_toInt(coords.y),
-                                       z_apple_dimGet(apple))) {
+                                       o_apple_dimGet(apple))) {
 
-                    Snake->grow += Z_APPLE_GROW_PER;
+                    Snake->grow += O_APPLE_GROW_PER;
                     Snake->eaten++;
 
-                    z_apple_free(apple);
+                    o_apple_free(apple);
 
                     z_effects_circles(head->coords.x, head->coords.y);
                     z_light_pulseSet(Z_LIGHT_APPLE_EAT);
@@ -253,7 +253,7 @@ static void checkApples(ZSnake* Snake)
     }
 }
 
-bool z_snake_tick(ZSnake* Snake)
+bool o_snake_tick(OSnake* Snake)
 {
     moveSnake(Snake);
     updateColors(Snake);
@@ -263,20 +263,20 @@ bool z_snake_tick(ZSnake* Snake)
     return hitWall;
 }
 
-void z_snake_tickDied(ZSnake* Snake)
+void o_snake_tickDied(OSnake* Snake)
 {
     updateColors(Snake);
 }
 
-void z_snake_draw(const ZSnake* Snake)
+void o_snake_draw(const OSnake* Snake)
 {
     unsigned len = getLength(Snake);
-    int alpha = Z_SNAKE_ALPHA_MIN;
-    int alphaInc = (Z_SNAKE_ALPHA_MAX - Z_SNAKE_ALPHA_MIN)
-                        / z_math_max(1, (int)len / Z_SNAKE_TAIL_FADE_RATIO);
+    int alpha = O_SNAKE_ALPHA_MIN;
+    int alphaInc = (O_SNAKE_ALPHA_MAX - O_SNAKE_ALPHA_MIN)
+                        / z_math_max(1, (int)len / O_SNAKE_TAIL_FADE_RATIO);
 
-    for(unsigned i = Snake->tail; len--; i = (i + 1) & Z_SNAKE_LEN_MASK) {
-        const ZSegment* s = &Snake->body[i];
+    for(unsigned i = Snake->tail; len--; i = (i + 1) & O_SNAKE_LEN_MASK) {
+        const OSnakeSegment* s = &Snake->body[i];
 
         ZVectorInt screen = z_camera_coordsToScreen(s->coords);
         ZVectorInt shake = z_camera_shakeGet();
@@ -284,7 +284,7 @@ void z_snake_draw(const ZSnake* Snake)
         screen.x += shake.x;
         screen.y += shake.y;
 
-        if(alpha < Z_SNAKE_ALPHA_MAX) {
+        if(alpha < O_SNAKE_ALPHA_MAX) {
             alpha += alphaInc;
         }
 

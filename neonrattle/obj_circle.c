@@ -22,50 +22,50 @@
 #include "util_list.h"
 #include "util_pool.h"
 
-#define Z_CIRCLE_ALPHA_START 256
-#define Z_CIRCLE_ALPHA_DEC 32
+#define O_CIRCLE_ALPHA_START 256
+#define O_CIRCLE_ALPHA_DEC 32
 
-struct ZCircle {
+struct OCircle {
     ZListNode circlesList;
     ZVectorFix coords;
     int alpha;
 };
 
-Z_POOL_DECLARE(ZCircle, 4, g_pool);
+Z_POOL_DECLARE(OCircle, 4, g_pool);
 
-void z_circle_setup(void)
+void o_circle_setup(void)
 {
     z_pool_register(Z_POOL_CIRCLE, g_pool);
 }
 
-ZCircle* z_circle_new(ZFix X, ZFix Y)
+OCircle* o_circle_new(ZFix X, ZFix Y)
 {
-    ZCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
+    OCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
 
     if(c) {
         z_list_clearNode(&c->circlesList);
 
         c->coords = (ZVectorFix){X, Y};
-        c->alpha = Z_CIRCLE_ALPHA_START;
+        c->alpha = O_CIRCLE_ALPHA_START;
     }
 
     return c;
 }
 
-void z_circle_free(ZCircle* Circle)
+void o_circle_free(OCircle* Circle)
 {
     z_list_remove(&Circle->circlesList);
     z_pool_free(Z_POOL_CIRCLE, Circle);
 }
 
-bool z_circle_tick(ZCircle* Circle)
+bool o_circle_tick(OCircle* Circle)
 {
-    Circle->alpha -= Z_CIRCLE_ALPHA_DEC;
+    Circle->alpha -= O_CIRCLE_ALPHA_DEC;
 
     return Circle->alpha <= 0;
 }
 
-void z_circle_draw(const ZCircle* Circle)
+void o_circle_draw(const OCircle* Circle)
 {
     ZVectorInt screen = z_camera_coordsToScreen(Circle->coords);
     ZVectorInt shake = z_camera_shakeGet();

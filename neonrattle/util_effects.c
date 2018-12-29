@@ -28,7 +28,7 @@ static ZList g_particles;
 void z_effects_particles(ZFix X, ZFix Y, unsigned Num)
 {
     while(Num--) {
-        ZParticle* p = z_particle_new(X, Y);
+        OParticle* p = o_particle_new(X, Y);
 
         if(p) {
             z_list_addLast(&g_particles, p);
@@ -38,7 +38,7 @@ void z_effects_particles(ZFix X, ZFix Y, unsigned Num)
 
 void z_effects_circles(ZFix X, ZFix Y)
 {
-    ZCircle* c = z_circle_new(X, Y);
+    OCircle* c = o_circle_new(X, Y);
 
     if(c) {
         z_list_addLast(&g_circles, c);
@@ -56,29 +56,29 @@ void z_effects_init(void)
 
 void z_effects_tick(void)
 {
-    Z_LIST_ITERATE(&g_circles, ZCircle*, c) {
-        if(z_circle_tick(c)) {
-            z_circle_free(c);
+    Z_LIST_ITERATE(&g_circles, OCircle*, c) {
+        if(o_circle_tick(c)) {
+            o_circle_free(c);
         }
     }
 
-    Z_LIST_ITERATE(&g_particles, ZParticle*, p) {
-        if(z_particle_tick(p)) {
-            z_particle_free(p);
+    Z_LIST_ITERATE(&g_particles, OParticle*, p) {
+        if(o_particle_tick(p)) {
+            o_particle_free(p);
         }
     }
 }
 
 void z_effects_draw1(void)
 {
-    Z_LIST_ITERATE(&g_circles, ZCircle*, c) {
-        z_circle_draw(c);
+    Z_LIST_ITERATE(&g_circles, OCircle*, c) {
+        o_circle_draw(c);
     }
 }
 
 void z_effects_draw2(void)
 {
-    Z_LIST_ITERATE(&g_particles, ZParticle*, p) {
-        z_particle_draw(p);
+    Z_LIST_ITERATE(&g_particles, OParticle*, p) {
+        o_particle_draw(p);
     }
 }

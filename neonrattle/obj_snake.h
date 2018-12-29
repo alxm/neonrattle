@@ -21,15 +21,15 @@
 
 #include "util_fix.h"
 
-typedef struct ZSnake ZSnake;
+typedef struct OSnake OSnake;
 
-extern void z_snake_setup(void);
+extern void o_snake_setup(void);
 
-extern ZSnake* z_snake_new(ZFix X, ZFix Y);
+extern OSnake* o_snake_new(ZFix X, ZFix Y);
 
-extern ZVectorFix z_snake_coordsGet(const ZSnake* Snake);
-extern int z_snake_eatenNumGet(const ZSnake* Snake);
+extern ZVectorFix o_snake_coordsGet(const OSnake* Snake);
+extern int o_snake_eatenNumGet(const OSnake* Snake);
 
-extern bool z_snake_tick(ZSnake* Snake);
-extern void z_snake_tickDied(ZSnake* Snake);
-extern void z_snake_draw(const ZSnake* Snake);
+extern bool o_snake_tick(OSnake* Snake);
+extern void o_snake_tickDied(OSnake* Snake);
+extern void o_snake_draw(const OSnake* Snake);

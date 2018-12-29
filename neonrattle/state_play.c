@@ -27,7 +27,7 @@
 #include "util_pool.h"
 #include "util_sound.h"
 
-static ZSnake* g_snake;
+static OSnake* g_snake;
 static bool g_canMove;
 
 void z_state_play_init(void)
@@ -38,7 +38,7 @@ void z_state_play_init(void)
     ZFix startX, startY;
     z_map_init(&startX, &startY);
 
-    g_snake = z_snake_new(startX, startY);
+    g_snake = o_snake_new(startX, startY);
     g_canMove = false;
 }
 
@@ -53,7 +53,7 @@ void z_state_play_tick(void)
         z_sfx_play(Z_SFX_PRESSED_A);
     }
 
-    if(g_canMove && z_snake_tick(g_snake)) {
+    if(g_canMove && o_snake_tick(g_snake)) {
         z_state_set(Z_STATE_DIED);
     }
 
@@ -65,7 +65,7 @@ void z_state_play_draw(void)
 {
     z_map_draw();
     z_effects_draw1();
-    z_snake_draw(g_snake);
+    o_snake_draw(g_snake);
     z_effects_draw2();
     z_hud_draw(g_snake);
 }
@@ -75,7 +75,7 @@ void z_state_play_free(void)
     g_canMove = false;
 }
 
-ZSnake* z_state_play_getSnake(void)
+OSnake* z_state_play_getSnake(void)
 {
     return g_snake;
 }

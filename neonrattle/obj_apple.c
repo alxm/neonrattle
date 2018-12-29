@@ -22,12 +22,12 @@
 #include "util_list.h"
 #include "util_pool.h"
 
-#define Z_APPLE_BOUNCE_DEG_STEP (8 * Z_FIX_DEG_001)
-#define Z_APPLE_ALPHA_DEG_STEP (8 * Z_FIX_DEG_001)
-#define Z_APPLE_ALPHA_MIN 128
-#define Z_APPLE_ALPHA_MAX 256
+#define O_APPLE_BOUNCE_DEG_STEP (8 * Z_FIX_DEG_001)
+#define O_APPLE_ALPHA_DEG_STEP (8 * Z_FIX_DEG_001)
+#define O_APPLE_ALPHA_MIN 128
+#define O_APPLE_ALPHA_MAX 256
 
-struct ZApple {
+struct OApple {
     ZListNode nodeGrid;
     ZVectorFix coords;
     ZFixu bounceAngle;
@@ -35,20 +35,20 @@ struct ZApple {
     ZColorId color;
 };
 
-const size_t z_apple_listNodeOffsets[Z_APPLE_LIST_NUM] = {
-    [Z_APPLE_LIST_GRID] = offsetof(ZApple, nodeGrid),
+const size_t o_apple_listNodeOffsets[O_APPLE_LIST_NUM] = {
+    [O_APPLE_LIST_GRID] = offsetof(OApple, nodeGrid),
 };
 
-Z_POOL_DECLARE(ZApple, Z_APPLE_NUM_MAX, g_pool);
+Z_POOL_DECLARE(OApple, O_APPLE_NUM_MAX, g_pool);
 
-void z_apple_setup(void)
+void o_apple_setup(void)
 {
     z_pool_register(Z_POOL_APPLE, g_pool);
 }
 
-ZApple* z_apple_new(ZFix X, ZFix Y)
+OApple* o_apple_new(ZFix X, ZFix Y)
 {
-    ZApple* a = z_pool_alloc(Z_POOL_APPLE);
+    OApple* a = z_pool_alloc(Z_POOL_APPLE);
 
     if(a != NULL) {
         z_list_clearNode(&a->nodeGrid);
@@ -62,31 +62,31 @@ ZApple* z_apple_new(ZFix X, ZFix Y)
     return a;
 }
 
-void z_apple_free(ZApple* Apple)
+void o_apple_free(OApple* Apple)
 {
     z_list_remove(&Apple->nodeGrid);
     z_pool_free(Z_POOL_APPLE, Apple);
 }
 
-ZVectorFix z_apple_coordsGet(const ZApple* Apple)
+ZVectorFix o_apple_coordsGet(const OApple* Apple)
 {
     return Apple->coords;
 }
 
-int z_apple_dimGet(const ZApple* Apple)
+int o_apple_dimGet(const OApple* Apple)
 {
     Z_UNUSED(Apple);
 
     return z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK);
 }
 
-void z_apple_tick(ZApple* Apple)
+void o_apple_tick(OApple* Apple)
 {
-    Apple->bounceAngle += Z_APPLE_BOUNCE_DEG_STEP;
-    Apple->alphaAngle += Z_APPLE_ALPHA_DEG_STEP;
+    Apple->bounceAngle += O_APPLE_BOUNCE_DEG_STEP;
+    Apple->alphaAngle += O_APPLE_ALPHA_DEG_STEP;
 }
 
-void z_apple_draw(const ZApple* Apple)
+void o_apple_draw(const OApple* Apple)
 {
     ZVectorInt screen = z_camera_coordsToScreen(Apple->coords);
     ZVectorInt shake = z_camera_shakeGet();
@@ -97,10 +97,10 @@ void z_apple_draw(const ZApple* Apple)
     screen.x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
     screen.y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
 
-    int alpha = Z_APPLE_ALPHA_MIN
-        + (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / 2
+    int alpha = O_APPLE_ALPHA_MIN
+        + (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2
         + z_fix_toInt(z_fix_sinf(Apple->alphaAngle)
-                        * (Z_APPLE_ALPHA_MAX - Z_APPLE_ALPHA_MIN) / 2);
+                        * (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2);
 
     z_sprite_blitAlphaMask(
         Z_SPRITE_APPLE_ALPHAMASK, screen.x, screen.y, 0, Apple->color, alpha);

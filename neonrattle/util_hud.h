@@ -21,4 +21,4 @@
 
 #include "obj_snake.h"
 
-extern void z_hud_draw(ZSnake* Snake);
+extern void z_hud_draw(OSnake* Snake);

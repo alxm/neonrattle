@@ -26,7 +26,7 @@
 #include "util_pool.h"
 #include "util_timer.h"
 
-static ZSnake* g_snake;
+static OSnake* g_snake;
 
 void z_state_died_init(void)
 {
@@ -39,7 +39,7 @@ void z_state_died_init(void)
 void z_state_died_tick(void)
 {
     z_map_tick();
-    z_snake_tickDied(g_snake);
+    o_snake_tickDied(g_snake);
     z_camera_tick(g_snake);
     z_effects_tick();
 
@@ -52,7 +52,7 @@ void z_state_died_draw(void)
 {
     z_map_draw();
     z_effects_draw1();
-    z_snake_draw(g_snake);
+    o_snake_draw(g_snake);
     z_effects_draw2();
     z_hud_draw(g_snake);
 }

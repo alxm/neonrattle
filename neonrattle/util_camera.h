@@ -23,7 +23,7 @@
 #include "util_fix.h"
 
 extern void z_camera_reset(void);
-extern void z_camera_tick(const ZSnake* Snake);
+extern void z_camera_tick(const OSnake* Snake);
 
 extern ZVectorFix z_camera_originGet(void);
 extern ZVectorInt z_camera_coordsToScreen(ZVectorFix WorldCoords);

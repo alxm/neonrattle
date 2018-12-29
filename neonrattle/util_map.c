@@ -54,7 +54,7 @@ void z_map_setup(void)
     for(int y = Z_GRID_H; y--; ) {
         for(int x = Z_GRID_W; x--; ) {
             z_list_init(&g_map.grid[y][x].apples,
-                        z_apple_listNodeOffsets[Z_APPLE_LIST_GRID]);
+                        o_apple_listNodeOffsets[O_APPLE_LIST_GRID]);
         }
     }
 }
@@ -130,7 +130,7 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
                 int ax = x * Z_TILE_DIM + z_random_range(startX, endX);
                 int ay = y * Z_TILE_DIM + z_random_range(startY, endY);
 
-                ZApple* a = z_apple_new(z_fix_fromInt(ax), z_fix_fromInt(ay));
+                OApple* a = o_apple_new(z_fix_fromInt(ax), z_fix_fromInt(ay));
 
                 if(a != NULL) {
                     z_list_addLast(&g_map.grid[grid.y][grid.x].apples, a);
@@ -151,8 +151,8 @@ void z_map_tick(void)
 
     for(int gridY = gridStart.y; gridY < gridEnd.y; gridY++) {
         for(int gridX = gridStart.x; gridX < gridEnd.x; gridX++) {
-            Z_LIST_ITERATE(z_map_applesListGet(gridX, gridY), ZApple*, apple) {
-                z_apple_tick(apple);
+            Z_LIST_ITERATE(z_map_applesListGet(gridX, gridY), OApple*, apple) {
+                o_apple_tick(apple);
             }
         }
     }
@@ -185,8 +185,8 @@ void z_map_draw(void)
 
     for(int gridY = gridStart.y; gridY < gridEnd.y; gridY++) {
         for(int gridX = gridStart.x; gridX < gridEnd.x; gridX++) {
-            Z_LIST_ITERATE(&g_map.grid[gridY][gridX].apples, ZApple*, apple) {
-                z_apple_draw(apple);
+            Z_LIST_ITERATE(&g_map.grid[gridY][gridX].apples, OApple*, apple) {
+                o_apple_draw(apple);
             }
         }
     }

@@ -23,7 +23,7 @@
 #include "util_list.h"
 #include "util_pool.h"
 
-struct ZParticle {
+struct OParticle {
     ZListNode particlesList;
     ZVectorFix coords;
     ZFix speed;
@@ -31,16 +31,16 @@ struct ZParticle {
     int alpha;
 };
 
-Z_POOL_DECLARE(ZParticle, 64, g_pool);
+Z_POOL_DECLARE(OParticle, 64, g_pool);
 
-void z_particle_setup(void)
+void o_particle_setup(void)
 {
     z_pool_register(Z_POOL_PARTICLE, g_pool);
 }
 
-ZParticle* z_particle_new(ZFix X, ZFix Y)
+OParticle* o_particle_new(ZFix X, ZFix Y)
 {
-    ZParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+    OParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
 
     if(p != NULL) {
         z_list_clearNode(&p->particlesList);
@@ -54,13 +54,13 @@ ZParticle* z_particle_new(ZFix X, ZFix Y)
     return p;
 }
 
-void z_particle_free(ZParticle* Particle)
+void o_particle_free(OParticle* Particle)
 {
     z_list_remove(&Particle->particlesList);
     z_pool_free(Z_POOL_PARTICLE, Particle);
 }
 
-bool z_particle_tick(ZParticle* Particle)
+bool o_particle_tick(OParticle* Particle)
 {
     Particle->coords.x += z_fix_mul(
                             Particle->speed, z_fix_cos(Particle->angle));
@@ -72,7 +72,7 @@ bool z_particle_tick(ZParticle* Particle)
     return Particle->alpha <= 0;
 }
 
-void z_particle_draw(const ZParticle* Particle)
+void o_particle_draw(const OParticle* Particle)
 {
     ZVectorInt screen = z_camera_coordsToScreen(Particle->coords);
     ZVectorInt shake = z_camera_shakeGet();
