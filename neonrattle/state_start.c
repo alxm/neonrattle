@@ -15,40 +15,45 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "state_died.h"
+#include "state_start.h"
 
 #include "obj_map.h"
 #include "obj_snake.h"
-#include "state_play.h"
 #include "util_camera.h"
 #include "util_effects.h"
 #include "util_hud.h"
+#include "util_input.h"
+#include "util_light.h"
 #include "util_pool.h"
-#include "util_timer.h"
+#include "util_sound.h"
 
 static OSnake* g_snake;
 
-void s_died_init(void)
+void s_start_init(void)
 {
-    g_snake = z_state_contextGet();
+    z_effects_init();
+    z_light_reset();
 
-    z_timer_start(Z_TIMER_G1, 8);
-    z_camera_shakeSet(2);
+    ZFix startX, startY;
+    o_map_init(&startX, &startY);
+
+    g_snake = o_snake_new(startX, startY);
+    z_state_contextSet(g_snake);
 }
 
-void s_died_tick(void)
+void s_start_tick(void)
 {
+    if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGet(Z_BUTTON_B)) {
+        z_sfx_play(Z_SFX_PRESSED_A);
+        z_state_set(Z_STATE_PLAY);
+    }
+
     o_map_tick();
-    o_snake_tickDied(g_snake);
     z_camera_tick(g_snake);
     z_effects_tick();
-
-    if(z_timer_expired(Z_TIMER_G1)) {
-        z_state_set(Z_STATE_START);
-    }
 }
 
-void s_died_draw(void)
+void s_start_draw(void)
 {
     o_map_draw();
     z_effects_draw1();
@@ -57,10 +62,7 @@ void s_died_draw(void)
     z_hud_draw(g_snake);
 }
 
-void s_died_free(void)
+void s_start_free(void)
 {
-    z_timer_stop(Z_TIMER_G1);
-
-    z_pool_reset(Z_POOL_APPLE);
-    z_pool_reset(Z_POOL_SNAKE);
+    //
 }

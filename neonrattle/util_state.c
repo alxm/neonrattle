@@ -25,6 +25,7 @@
 #include "state_died.h"
 #include "state_intro.h"
 #include "state_play.h"
+#include "state_start.h"
 #include "util_camera.h"
 #include "util_input.h"
 #include "util_light.h"
@@ -63,6 +64,14 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_play_tick,
         s_play_draw,
         s_play_free,
+        Z_SWIPE_INVALID,
+        Z_SWIPE_INVALID,
+    },
+    [Z_STATE_START] = {
+        s_start_init,
+        s_start_tick,
+        s_start_draw,
+        s_start_free,
         Z_SWIPE_SHOW,
         Z_SWIPE_INVALID,
     },
@@ -93,7 +102,7 @@ void z_state_setup(void)
     z_light_reset();
 
     #if Z_DEBUG_STATS
-        z_state_set(Z_STATE_PLAY);
+        z_state_set(Z_STATE_START);
     #else
         z_state_set(Z_STATE_INTRO);
     #endif

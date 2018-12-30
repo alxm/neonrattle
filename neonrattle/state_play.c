@@ -25,41 +25,25 @@
 #include "util_input.h"
 #include "util_light.h"
 #include "util_pool.h"
-#include "util_sound.h"
 
 static OSnake* g_snake;
-static bool g_canMove;
 
 void s_play_init(void)
 {
-    z_effects_init();
-    z_light_reset();
-
-    ZFix startX, startY;
-    o_map_init(&startX, &startY);
-
-    g_snake = o_snake_new(startX, startY);
-    g_canMove = false;
+    g_snake = z_state_contextGet();
 }
 
 void s_play_tick(void)
 {
     o_map_tick();
+    bool died = o_snake_tick(g_snake);
+    z_camera_tick(g_snake);
+    z_effects_tick();
 
-    if(!g_canMove
-        && (z_button_pressGet(Z_BUTTON_A) || z_button_pressGet(Z_BUTTON_B))) {
-
-        g_canMove = true;
-        z_sfx_play(Z_SFX_PRESSED_A);
-    }
-
-    if(g_canMove && o_snake_tick(g_snake)) {
+    if(died) {
         z_state_set(Z_STATE_DIED);
         z_state_contextSet(g_snake);
     }
-
-    z_camera_tick(g_snake);
-    z_effects_tick();
 }
 
 void s_play_draw(void)
@@ -73,5 +57,5 @@ void s_play_draw(void)
 
 void s_play_free(void)
 {
-    g_canMove = false;
+    //
 }
