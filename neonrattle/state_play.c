@@ -55,6 +55,7 @@ void s_play_tick(void)
 
     if(g_canMove && o_snake_tick(g_snake)) {
         z_state_set(Z_STATE_DIED);
+        z_state_contextSet(g_snake);
     }
 
     z_camera_tick(g_snake);
@@ -73,9 +74,4 @@ void s_play_draw(void)
 void s_play_free(void)
 {
     g_canMove = false;
-}
-
-OSnake* s_play_getSnake(void)
-{
-    return g_snake;
 }

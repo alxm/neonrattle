@@ -42,4 +42,7 @@ extern void z_state_draw(void);
 extern void z_state_set(ZStateId NewState);
 extern bool z_state_changed(void);
 
+extern void* z_state_contextGet(void);
+extern void z_state_contextSet(void* Context);
+
 Z_EXTERN_C_END

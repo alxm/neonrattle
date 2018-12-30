@@ -30,7 +30,7 @@ static OSnake* g_snake;
 
 void s_died_init(void)
 {
-    g_snake = s_play_getSnake();
+    g_snake = z_state_contextGet();
 
     z_timer_start(Z_TIMER_G1, 8);
     z_camera_shakeSet(2);

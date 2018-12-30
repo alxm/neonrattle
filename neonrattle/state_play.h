@@ -19,12 +19,9 @@
 
 #include "platform.h"
 
-#include "obj_snake.h"
 #include "util_state.h"
 
 extern ZStateInit s_play_init;
 extern ZStateTick s_play_tick;
 extern ZStateDraw s_play_draw;
 extern ZStateFree s_play_free;
-
-extern OSnake* s_play_getSnake(void);
