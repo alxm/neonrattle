@@ -35,7 +35,7 @@ Z_POOL_DECLARE(OCircle, 4, g_pool);
 
 void o_circle_setup(void)
 {
-    z_pool_register(Z_POOL_CIRCLE, g_pool);
+    z_pool_setup(Z_POOL_CIRCLE, g_pool);
 }
 
 OCircle* o_circle_new(ZFix X, ZFix Y)

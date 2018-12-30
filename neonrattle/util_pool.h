@@ -50,7 +50,7 @@ typedef struct ZPoolHeader {
     };                                                               \
     static ZPoolHeader* const VarName = &g_pool__##ObjectType.header
 
-extern void z_pool_register(ZPoolId Id, ZPoolHeader* Pool);
+extern void z_pool_setup(ZPoolId Id, ZPoolHeader* Pool);
 extern void z_pool_reset(ZPoolId Pool);
 
 extern void* z_pool_alloc(ZPoolId Pool);

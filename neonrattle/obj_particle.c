@@ -35,7 +35,7 @@ Z_POOL_DECLARE(OParticle, 64, g_pool);
 
 void o_particle_setup(void)
 {
-    z_pool_register(Z_POOL_PARTICLE, g_pool);
+    z_pool_setup(Z_POOL_PARTICLE, g_pool);
 }
 
 OParticle* o_particle_new(ZFix X, ZFix Y)

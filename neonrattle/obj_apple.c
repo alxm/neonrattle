@@ -43,7 +43,7 @@ Z_POOL_DECLARE(OApple, O_APPLE_NUM_MAX, g_pool);
 
 void o_apple_setup(void)
 {
-    z_pool_register(Z_POOL_APPLE, g_pool);
+    z_pool_setup(Z_POOL_APPLE, g_pool);
 }
 
 OApple* o_apple_new(ZFix X, ZFix Y)

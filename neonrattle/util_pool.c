@@ -19,7 +19,7 @@
 
 static ZPoolHeader* g_pools[Z_POOL_NUM];
 
-void z_pool_register(ZPoolId Id, ZPoolHeader* Pool)
+void z_pool_setup(ZPoolId Id, ZPoolHeader* Pool)
 {
     g_pools[Id] = Pool;
     z_pool_reset(Id);

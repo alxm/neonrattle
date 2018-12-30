@@ -58,7 +58,7 @@ Z_POOL_DECLARE(OSnake, 1, g_pool);
 
 void o_snake_setup(void)
 {
-    z_pool_register(Z_POOL_SNAKE, g_pool);
+    z_pool_setup(Z_POOL_SNAKE, g_pool);
 }
 
 static inline unsigned getLength(const OSnake* Snake)

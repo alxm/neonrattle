@@ -78,9 +78,7 @@ static struct {
 
 void z_state_setup(void)
 {
-    z_camera_reset();
     z_graphics_setup();
-    z_light_reset();
     z_map_setup();
     z_sound_setup();
 
@@ -88,6 +86,9 @@ void z_state_setup(void)
     o_circle_setup();
     o_particle_setup();
     o_snake_setup();
+
+    z_camera_reset();
+    z_light_reset();
 
     #if Z_DEBUG_STATS
         z_state_set(Z_STATE_PLAY);
