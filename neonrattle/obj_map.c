@@ -15,7 +15,7 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "util_map.h"
+#include "obj_map.h"
 
 #include "obj_apple.h"
 #include "util_camera.h"
@@ -25,24 +25,23 @@
 
 typedef struct {
     bool wall;
-} ZTile;
+} OMapTile;
 
 typedef struct {
     ZList apples;
-} ZCell;
+} OMapCell;
 
 typedef struct {
-    ZTile tiles[Z_MAP_H][Z_MAP_W];
-    ZCell grid[Z_GRID_H][Z_GRID_W];
+    OMapTile tiles[Z_MAP_H][Z_MAP_W];
+    OMapCell grid[Z_GRID_H][Z_GRID_W];
     int totalApples;
-} ZMap;
+} OMap;
 
-static ZMap g_map;
+static OMap g_map;
 
-void z_map_setup(void)
+void o_map_setup(void)
 {
     const ZPixel white = z_pixel_fromRGB(255, 255, 255);
-
     const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAP0, 0);
 
     for(int y = 0; y < Z_MAP_H; y++) {
@@ -59,7 +58,7 @@ void z_map_setup(void)
     }
 }
 
-void z_map_init(ZFix* StartX, ZFix* StartY)
+void o_map_init(ZFix* StartX, ZFix* StartY)
 {
     g_map.totalApples = 0;
 
@@ -144,26 +143,26 @@ void z_map_init(ZFix* StartX, ZFix* StartY)
     #endif
 }
 
-void z_map_tick(void)
+void o_map_tick(void)
 {
     ZVectorInt gridStart, gridEnd;
-    z_map_visibleGet(NULL, NULL, &gridStart, &gridEnd, NULL);
+    o_map_visibleGet(NULL, NULL, &gridStart, &gridEnd, NULL);
 
     for(int gridY = gridStart.y; gridY < gridEnd.y; gridY++) {
         for(int gridX = gridStart.x; gridX < gridEnd.x; gridX++) {
-            Z_LIST_ITERATE(z_map_applesListGet(gridX, gridY), OApple*, apple) {
+            Z_LIST_ITERATE(o_map_applesListGet(gridX, gridY), OApple*, apple) {
                 o_apple_tick(apple);
             }
         }
     }
 }
 
-void z_map_draw(void)
+void o_map_draw(void)
 {
     ZVectorInt tileStart, tileEnd;
     ZVectorInt gridStart, gridEnd;
     ZVectorInt screenStart;
-    z_map_visibleGet(&tileStart, &tileEnd, &gridStart, &gridEnd, &screenStart);
+    o_map_visibleGet(&tileStart, &tileEnd, &gridStart, &gridEnd, &screenStart);
 
     ZVectorInt shake = z_camera_shakeGet();
 
@@ -192,7 +191,7 @@ void z_map_draw(void)
     }
 }
 
-void z_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)
+void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)
 {
     ZVectorFix origin = z_camera_originGet();
 
@@ -245,17 +244,17 @@ void z_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
     }
 }
 
-ZList* z_map_applesListGet(int GridX, int GridY)
+ZList* o_map_applesListGet(int GridX, int GridY)
 {
     return &g_map.grid[GridY][GridX].apples;
 }
 
-int z_map_applesNumGet(void)
+int o_map_applesNumGet(void)
 {
     return g_map.totalApples;
 }
 
-bool z_map_isWall(int TileX, int TileY)
+bool o_map_isWall(int TileX, int TileY)
 {
     return g_map.tiles[TileY][TileX].wall;
 }

@@ -19,6 +19,7 @@
 
 #include "obj_apple.h"
 #include "obj_circle.h"
+#include "obj_map.h"
 #include "obj_particle.h"
 #include "obj_snake.h"
 #include "state_died.h"
@@ -27,7 +28,6 @@
 #include "util_camera.h"
 #include "util_input.h"
 #include "util_light.h"
-#include "util_map.h"
 #include "util_sound.h"
 #include "util_swipe.h"
 #include "util_timer.h"
@@ -79,7 +79,7 @@ static struct {
 void z_state_setup(void)
 {
     z_graphics_setup();
-    z_map_setup();
+    o_map_setup();
     z_sound_setup();
 
     o_apple_setup();

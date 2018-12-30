@@ -17,13 +17,13 @@
 
 #include "state_play.h"
 
+#include "obj_map.h"
 #include "obj_snake.h"
 #include "util_camera.h"
 #include "util_effects.h"
 #include "util_hud.h"
 #include "util_input.h"
 #include "util_light.h"
-#include "util_map.h"
 #include "util_pool.h"
 #include "util_sound.h"
 
@@ -36,7 +36,7 @@ void s_play_init(void)
     z_light_reset();
 
     ZFix startX, startY;
-    z_map_init(&startX, &startY);
+    o_map_init(&startX, &startY);
 
     g_snake = o_snake_new(startX, startY);
     g_canMove = false;
@@ -44,7 +44,7 @@ void s_play_init(void)
 
 void s_play_tick(void)
 {
-    z_map_tick();
+    o_map_tick();
 
     if(!g_canMove
         && (z_button_pressGet(Z_BUTTON_A) || z_button_pressGet(Z_BUTTON_B))) {
@@ -63,7 +63,7 @@ void s_play_tick(void)
 
 void s_play_draw(void)
 {
-    z_map_draw();
+    o_map_draw();
     z_effects_draw1();
     o_snake_draw(g_snake);
     z_effects_draw2();

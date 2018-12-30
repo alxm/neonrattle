@@ -18,13 +18,13 @@
 #include "obj_snake.h"
 
 #include "obj_apple.h"
+#include "obj_map.h"
 #include "util_camera.h"
 #include "util_collision.h"
 #include "util_coords.h"
 #include "util_effects.h"
 #include "util_input.h"
 #include "util_light.h"
-#include "util_map.h"
 #include "util_pool.h"
 #include "util_sound.h"
 
@@ -172,7 +172,7 @@ static bool checkWall(OSnake* Snake)
     const OSnakeSegment* head = &Snake->body[Snake->head];
     ZVectorInt tile = z_coords_fixToTile(head->coords);
 
-    if(z_map_isWall(tile.x, tile.y)) {
+    if(o_map_isWall(tile.x, tile.y)) {
         for(unsigned len = getLength(Snake), i = Snake->tail;
             len--;
             i = (i + 1) & O_SNAKE_LEN_MASK) {
@@ -228,7 +228,7 @@ static void checkApples(OSnake* Snake)
 
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
-            Z_LIST_ITERATE(z_map_applesListGet(gridX, gridY), OApple*, apple) {
+            Z_LIST_ITERATE(o_map_applesListGet(gridX, gridY), OApple*, apple) {
                 ZVectorFix coords = o_apple_coordsGet(apple);
 
                 if(z_collision_sqAndSq(z_fix_toInt(head->coords.x),

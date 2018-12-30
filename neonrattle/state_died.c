@@ -17,12 +17,12 @@
 
 #include "state_died.h"
 
+#include "obj_map.h"
 #include "obj_snake.h"
 #include "state_play.h"
 #include "util_camera.h"
 #include "util_effects.h"
 #include "util_hud.h"
-#include "util_map.h"
 #include "util_pool.h"
 #include "util_timer.h"
 
@@ -38,7 +38,7 @@ void s_died_init(void)
 
 void s_died_tick(void)
 {
-    z_map_tick();
+    o_map_tick();
     o_snake_tickDied(g_snake);
     z_camera_tick(g_snake);
     z_effects_tick();
@@ -50,7 +50,7 @@ void s_died_tick(void)
 
 void s_died_draw(void)
 {
-    z_map_draw();
+    o_map_draw();
     z_effects_draw1();
     o_snake_draw(g_snake);
     z_effects_draw2();
