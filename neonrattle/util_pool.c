@@ -17,6 +17,8 @@
 
 #include "util_pool.h"
 
+#include "util_fps.h"
+
 void z_pool_reset(ZPool* Pool)
 {
     ZPoolFreeObject* current = (ZPoolFreeObject*)(Pool + 1);
@@ -37,16 +39,11 @@ void z_pool_reset(ZPool* Pool)
 void* z_pool_alloc(ZPool* Pool)
 {
     if(Pool->freeList == NULL) {
-        #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
-            static uint32_t fails[Z_POOL_NUM];
-            static const char* names[Z_POOL_NUM] = {
-                [Z_POOL_APPLE] = "Z_POOL_APPLE",
-                [Z_POOL_CIRCLE] = "Z_POOL_CIRCLE",
-                [Z_POOL_PARTICLE] = "Z_POOL_PARTICLE",
-                [Z_POOL_SNAKE] = "Z_POOL_SNAKE",
-            };
-
-            printf("Can't allocate from %s (%d)\n", names[Pool], ++fails[Pool]);
+        #if Z_DEBUG_INSTRUMENT
+            printf("%05u: %s pool out of space (%d)\n",
+                   z_fps_ticksGet(),
+                   Pool->name,
+                   ++(Pool->fails));
         #endif
 
         return NULL;

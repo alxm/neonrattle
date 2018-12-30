@@ -27,7 +27,19 @@ typedef struct {
     ZPoolFreeObject* freeList;
     const size_t capacity;
     const size_t objSize;
+    #if Z_DEBUG_INSTRUMENT
+        const char* name;
+        int fails;
+    #endif
 } ZPool;
+
+#if Z_DEBUG_INSTRUMENT
+    #define Z__POOL_INIT_DEBUG(Name) \
+        .name = #Name,               \
+        .fails = 0,
+#else
+    #define Z__POOL_INIT_DEBUG(Name)
+#endif
 
 #define Z_POOL_DECLARE(ObjectType, NumObjects, VarName)              \
     static struct {                                                  \
@@ -36,7 +48,8 @@ typedef struct {
     } g_pool__##ObjectType = {                                       \
         .header = {                                                  \
             .capacity = NumObjects,                                  \
-            .objSize = sizeof(ObjectType)                            \
+            .objSize = sizeof(ObjectType),                           \
+            Z__POOL_INIT_DEBUG(ObjectType)                           \
         }                                                            \
     };                                                               \
     static ZPool* const VarName = &g_pool__##ObjectType.header

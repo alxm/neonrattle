@@ -137,7 +137,7 @@ void o_map_init(ZFix* StartX, ZFix* StartY)
         }
     }
 
-    #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
+    #if Z_DEBUG_INSTRUMENT
         printf("Placed %d apples\n", g_map.totalApples);
     #endif
 }

@@ -17,6 +17,10 @@
 
 #include <a2x.h>
 
+#if Z_DEBUG_STATS && A_BUILD_SYSTEM_DESKTOP
+    #define Z_DEBUG_INSTRUMENT 1
+#endif
+
 typedef APixel ZPixel;
 
 static inline void z_pixel_toRGB(ZPixel Pixel, int* Red, int* Green, int* Blue)
