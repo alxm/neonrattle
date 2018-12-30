@@ -17,8 +17,6 @@
 
 #include "util_list.h"
 
-#include "util_pool.h"
-
 void z_list_init(ZList* List, size_t NodeOffset)
 {
     List->root.prev = &List->root;
@@ -72,7 +70,7 @@ void z_list_remove(ZListNode* Node)
 
 ZListIt z_listit__new(ZList* List)
 {
-    return (ZListIt){List, &List->root, List->root.next};
+    return (ZListIt){List, NULL, List->root.next};
 }
 
 bool z_listit__getNext(ZListIt* Iterator, void* UserPtrAddress)

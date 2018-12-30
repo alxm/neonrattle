@@ -35,12 +35,12 @@ Z_POOL_DECLARE(OCircle, 4, g_pool);
 
 void o_circle_setup(void)
 {
-    z_pool_setup(Z_POOL_CIRCLE, g_pool);
+    z_pool_reset(g_pool);
 }
 
 OCircle* o_circle_new(ZFix X, ZFix Y)
 {
-    OCircle* c = z_pool_alloc(Z_POOL_CIRCLE);
+    OCircle* c = z_pool_alloc(g_pool);
 
     if(c) {
         z_list_clearNode(&c->circlesList);
@@ -55,7 +55,7 @@ OCircle* o_circle_new(ZFix X, ZFix Y)
 void o_circle_free(OCircle* Circle)
 {
     z_list_remove(&Circle->circlesList);
-    z_pool_free(Z_POOL_CIRCLE, Circle);
+    z_pool_free(g_pool, Circle);
 }
 
 bool o_circle_tick(OCircle* Circle)

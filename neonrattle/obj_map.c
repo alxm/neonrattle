@@ -21,7 +21,6 @@
 #include "util_camera.h"
 #include "util_coords.h"
 #include "util_graphics.h"
-#include "util_pool.h"
 
 typedef struct {
     bool wall;

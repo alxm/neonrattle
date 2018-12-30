@@ -20,7 +20,6 @@
 #include "obj_circle.h"
 #include "obj_particle.h"
 #include "util_list.h"
-#include "util_pool.h"
 
 static ZList g_circles;
 static ZList g_particles;
@@ -50,8 +49,8 @@ void z_effects_init(void)
     z_list_init(&g_circles, 0);
     z_list_init(&g_particles, 0);
 
-    z_pool_reset(Z_POOL_CIRCLE);
-    z_pool_reset(Z_POOL_PARTICLE);
+    o_circle_setup();
+    o_particle_setup();
 }
 
 void z_effects_tick(void)

@@ -24,7 +24,6 @@
 #include "util_hud.h"
 #include "util_input.h"
 #include "util_light.h"
-#include "util_pool.h"
 
 static OSnake* g_snake;
 

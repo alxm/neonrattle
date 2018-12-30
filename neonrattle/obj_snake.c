@@ -58,7 +58,7 @@ Z_POOL_DECLARE(OSnake, 1, g_pool);
 
 void o_snake_setup(void)
 {
-    z_pool_setup(Z_POOL_SNAKE, g_pool);
+    z_pool_reset(g_pool);
 }
 
 static inline unsigned getLength(const OSnake* Snake)
@@ -79,7 +79,7 @@ static void setHead(OSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
 
 OSnake* o_snake_new(ZFix X, ZFix Y)
 {
-    OSnake* s = z_pool_alloc(Z_POOL_SNAKE);
+    OSnake* s = z_pool_alloc(g_pool);
 
     if(s != NULL) {
         s->head = (unsigned)-1;

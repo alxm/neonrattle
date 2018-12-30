@@ -43,12 +43,12 @@ Z_POOL_DECLARE(OApple, O_APPLE_NUM_MAX, g_pool);
 
 void o_apple_setup(void)
 {
-    z_pool_setup(Z_POOL_APPLE, g_pool);
+    z_pool_reset(g_pool);
 }
 
 OApple* o_apple_new(ZFix X, ZFix Y)
 {
-    OApple* a = z_pool_alloc(Z_POOL_APPLE);
+    OApple* a = z_pool_alloc(g_pool);
 
     if(a != NULL) {
         z_list_clearNode(&a->nodeGrid);
@@ -65,7 +65,7 @@ OApple* o_apple_new(ZFix X, ZFix Y)
 void o_apple_free(OApple* Apple)
 {
     z_list_remove(&Apple->nodeGrid);
-    z_pool_free(Z_POOL_APPLE, Apple);
+    z_pool_free(g_pool, Apple);
 }
 
 ZVectorFix o_apple_coordsGet(const OApple* Apple)

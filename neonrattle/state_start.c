@@ -17,6 +17,7 @@
 
 #include "state_start.h"
 
+#include "obj_apple.h"
 #include "obj_map.h"
 #include "obj_snake.h"
 #include "util_camera.h"
@@ -24,13 +25,16 @@
 #include "util_hud.h"
 #include "util_input.h"
 #include "util_light.h"
-#include "util_pool.h"
 #include "util_sound.h"
 
 static OSnake* g_snake;
 
 void s_start_init(void)
 {
+    o_apple_setup();
+    o_snake_setup();
+
+    z_camera_reset();
     z_effects_init();
     z_light_reset();
 

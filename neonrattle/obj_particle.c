@@ -35,12 +35,12 @@ Z_POOL_DECLARE(OParticle, 64, g_pool);
 
 void o_particle_setup(void)
 {
-    z_pool_setup(Z_POOL_PARTICLE, g_pool);
+    z_pool_reset(g_pool);
 }
 
 OParticle* o_particle_new(ZFix X, ZFix Y)
 {
-    OParticle* p = z_pool_alloc(Z_POOL_PARTICLE);
+    OParticle* p = z_pool_alloc(g_pool);
 
     if(p != NULL) {
         z_list_clearNode(&p->particlesList);
@@ -57,7 +57,7 @@ OParticle* o_particle_new(ZFix X, ZFix Y)
 void o_particle_free(OParticle* Particle)
 {
     z_list_remove(&Particle->particlesList);
-    z_pool_free(Z_POOL_PARTICLE, Particle);
+    z_pool_free(g_pool, Particle);
 }
 
 bool o_particle_tick(OParticle* Particle)

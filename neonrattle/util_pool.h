@@ -19,28 +19,19 @@
 
 #include "platform.h"
 
-typedef enum {
-    Z_POOL_INVALID = -1,
-    Z_POOL_APPLE,
-    Z_POOL_CIRCLE,
-    Z_POOL_PARTICLE,
-    Z_POOL_SNAKE,
-    Z_POOL_NUM
-} ZPoolId;
-
 typedef struct ZPoolFreeObject {
     struct ZPoolFreeObject* next;
 } ZPoolFreeObject;
 
-typedef struct ZPoolHeader {
+typedef struct {
     ZPoolFreeObject* freeList;
     const size_t capacity;
     const size_t objSize;
-} ZPoolHeader;
+} ZPool;
 
 #define Z_POOL_DECLARE(ObjectType, NumObjects, VarName)              \
     static struct {                                                  \
-        ZPoolHeader header;                                          \
+        ZPool header;                                                \
         ObjectType data[NumObjects];                                 \
     } g_pool__##ObjectType = {                                       \
         .header = {                                                  \
@@ -48,10 +39,9 @@ typedef struct ZPoolHeader {
             .objSize = sizeof(ObjectType)                            \
         }                                                            \
     };                                                               \
-    static ZPoolHeader* const VarName = &g_pool__##ObjectType.header
+    static ZPool* const VarName = &g_pool__##ObjectType.header
 
-extern void z_pool_setup(ZPoolId Id, ZPoolHeader* Pool);
-extern void z_pool_reset(ZPoolId Pool);
+extern void z_pool_reset(ZPool* Pool);
 
-extern void* z_pool_alloc(ZPoolId Pool);
-extern void z_pool_free(ZPoolId Pool, void* Object);
+extern void* z_pool_alloc(ZPool* Pool);
+extern void z_pool_free(ZPool* Pool, void* Object);

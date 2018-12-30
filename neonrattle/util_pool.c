@@ -17,24 +17,15 @@
 
 #include "util_pool.h"
 
-static ZPoolHeader* g_pools[Z_POOL_NUM];
-
-void z_pool_setup(ZPoolId Id, ZPoolHeader* Pool)
+void z_pool_reset(ZPool* Pool)
 {
-    g_pools[Id] = Pool;
-    z_pool_reset(Id);
-}
+    ZPoolFreeObject* current = (ZPoolFreeObject*)(Pool + 1);
 
-void z_pool_reset(ZPoolId Pool)
-{
-    ZPoolHeader* pool = g_pools[Pool];
-    ZPoolFreeObject* current = (ZPoolFreeObject*)(pool + 1);
+    Pool->freeList = current;
 
-    pool->freeList = current;
-
-    for(size_t numObjects = pool->capacity; numObjects > 1; numObjects--) {
+    for(size_t numObjects = Pool->capacity; numObjects > 1; numObjects--) {
         ZPoolFreeObject* next = (ZPoolFreeObject*)(void*)
-                                    ((uint8_t*)current + pool->objSize);
+                                    ((uint8_t*)current + Pool->objSize);
 
         current->next = next;
         current = next;
@@ -43,11 +34,9 @@ void z_pool_reset(ZPoolId Pool)
     current->next = NULL;
 }
 
-void* z_pool_alloc(ZPoolId Pool)
+void* z_pool_alloc(ZPool* Pool)
 {
-    ZPoolHeader* pool = g_pools[Pool];
-
-    if(pool->freeList == NULL) {
+    if(Pool->freeList == NULL) {
         #if Z_DEBUG_STATS && A_PLATFORM_SYSTEM_DESKTOP
             static uint32_t fails[Z_POOL_NUM];
             static const char* names[Z_POOL_NUM] = {
@@ -63,18 +52,17 @@ void* z_pool_alloc(ZPoolId Pool)
         return NULL;
     }
 
-    ZPoolFreeObject* object = pool->freeList;
+    ZPoolFreeObject* object = Pool->freeList;
 
-    pool->freeList = object->next;
+    Pool->freeList = object->next;
 
     return object;
 }
 
-void z_pool_free(ZPoolId Pool, void* Object)
+void z_pool_free(ZPool* Pool, void* Object)
 {
-    ZPoolHeader* pool = g_pools[Pool];
     ZPoolFreeObject* block = Object;
 
-    block->next = pool->freeList;
-    pool->freeList = block;
+    block->next = Pool->freeList;
+    Pool->freeList = block;
 }

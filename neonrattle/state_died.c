@@ -23,7 +23,6 @@
 #include "util_camera.h"
 #include "util_effects.h"
 #include "util_hud.h"
-#include "util_pool.h"
 #include "util_timer.h"
 
 static OSnake* g_snake;
@@ -60,7 +59,4 @@ void s_died_draw(void)
 void s_died_free(void)
 {
     z_timer_stop(Z_TIMER_G1);
-
-    z_pool_reset(Z_POOL_APPLE);
-    z_pool_reset(Z_POOL_SNAKE);
 }
