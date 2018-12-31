@@ -75,10 +75,6 @@ bool o_particle_tick(OParticle* Particle)
 void o_particle_draw(const OParticle* Particle)
 {
     ZVectorInt screen = z_camera_coordsToScreen(Particle->coords);
-    ZVectorInt shake = z_camera_shakeGet();
-
-    screen.x += shake.x;
-    screen.y += shake.y;
 
     if(screen.x >= 0 && screen.x < Z_SCREEN_W
         && screen.y >= 0 && screen.y < Z_SCREEN_H) {

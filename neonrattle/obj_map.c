@@ -163,13 +163,11 @@ void o_map_draw(void)
     ZVectorInt screenStart;
     o_map_visibleGet(&tileStart, &tileEnd, &gridStart, &gridEnd, &screenStart);
 
-    ZVectorInt shake = z_camera_shakeGet();
-
-    for(int tileY = tileStart.y, screenY = screenStart.y + shake.y;
+    for(int tileY = tileStart.y, screenY = screenStart.y;
         tileY < tileEnd.y;
         tileY++, screenY += Z_COORDS_UNIT_PIXELS) {
 
-        for(int tileX = tileStart.x, screenX = screenStart.x + shake.x;
+        for(int tileX = tileStart.x, screenX = screenStart.x;
             tileX < tileEnd.x;
             tileX++, screenX += Z_COORDS_UNIT_PIXELS) {
 
@@ -245,6 +243,11 @@ void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
     }
 
     if(ScreenStart != NULL) {
+        ZVectorInt shake = z_camera_shakeGet();
+
+        topLeftScreen.x += shake.x;
+        topLeftScreen.y += shake.y;
+
         *ScreenStart = topLeftScreen;
     }
 }

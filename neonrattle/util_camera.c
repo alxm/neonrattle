@@ -61,8 +61,8 @@ ZVectorInt z_camera_coordsToScreen(ZVectorFix WorldCoords)
 
     ZVectorInt coords = z_coords_unitsToPixels(relative);
 
-    coords.x += Z_SCREEN_W / 2;
-    coords.y += Z_SCREEN_H / 2;
+    coords.x += Z_SCREEN_W / 2 + g_shake.x;
+    coords.y += Z_SCREEN_H / 2 + g_shake.y;
 
     return coords;
 }

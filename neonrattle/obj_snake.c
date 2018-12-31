@@ -281,12 +281,7 @@ void o_snake_draw(const OSnake* Snake)
 
     for(unsigned i = Snake->tail; len--; i = (i + 1) & O_SNAKE_LEN_MASK) {
         const OSnakeSegment* s = &Snake->body[i];
-
         ZVectorInt screen = z_camera_coordsToScreen(s->coords);
-        ZVectorInt shake = z_camera_shakeGet();
-
-        screen.x += shake.x;
-        screen.y += shake.y;
 
         if(alpha < O_SNAKE_ALPHA_MAX) {
             alpha += alphaInc;

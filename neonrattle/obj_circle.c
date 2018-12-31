@@ -68,10 +68,6 @@ bool o_circle_tick(OCircle* Circle)
 void o_circle_draw(const OCircle* Circle)
 {
     ZVectorInt screen = z_camera_coordsToScreen(Circle->coords);
-    ZVectorInt shake = z_camera_shakeGet();
-
-    screen.x += shake.x;
-    screen.y += shake.y;
 
     z_sprite_blitAlphaMask(Z_SPRITE_APPLE_HALO,
                            screen.x,
