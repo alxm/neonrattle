@@ -31,8 +31,8 @@ typedef struct {
 } OMapCell;
 
 typedef struct {
-    OMapTile tiles[Z_MAP_H][Z_MAP_W];
-    OMapCell grid[Z_GRID_H][Z_GRID_W];
+    OMapTile tiles[Z_COORDS_MAP_H][Z_COORDS_MAP_W];
+    OMapCell grid[Z_COORDS_GRID_H][Z_COORDS_GRID_W];
     int totalApples;
 } OMap;
 
@@ -43,14 +43,14 @@ void o_map_setup(void)
     const ZPixel white = z_pixel_fromRGB(255, 255, 255);
     const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAP0, 0);
 
-    for(int y = 0; y < Z_MAP_H; y++) {
-        for(int x = 0; x < Z_MAP_W; x++) {
+    for(int y = 0; y < Z_COORDS_MAP_H; y++) {
+        for(int x = 0; x < Z_COORDS_MAP_W; x++) {
             g_map.tiles[y][x].wall = *pixels++ == white;
         }
     }
 
-    for(int y = Z_GRID_H; y--; ) {
-        for(int x = Z_GRID_W; x--; ) {
+    for(int y = Z_COORDS_GRID_H; y--; ) {
+        for(int x = Z_COORDS_GRID_W; x--; ) {
             z_list_init(&g_map.grid[y][x].apples,
                         o_apple_listNodeOffsets[O_APPLE_LIST_GRID]);
         }
@@ -61,8 +61,8 @@ void o_map_init(ZFix* StartX, ZFix* StartY)
 {
     g_map.totalApples = 0;
 
-    for(int y = Z_GRID_H; y--; ) {
-        for(int x = Z_GRID_W; x--; ) {
+    for(int y = Z_COORDS_GRID_H; y--; ) {
+        for(int x = Z_COORDS_GRID_W; x--; ) {
             z_list_reset(&g_map.grid[y][x].apples);
         }
     }
@@ -74,14 +74,14 @@ void o_map_init(ZFix* StartX, ZFix* StartY)
 
     const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAP0, 0);
 
-    for(int y = 0; y < Z_MAP_H; y++) {
-        for(int x = 0; x < Z_MAP_W; x++) {
+    for(int y = 0; y < Z_COORDS_MAP_H; y++) {
+        for(int x = 0; x < Z_COORDS_MAP_W; x++) {
             const ZPixel p = *pixels++;
             int num = 0;
 
             if(p == green100) {
-                *StartX = z_fix_fromInt(x * Z_TILE_DIM + Z_TILE_DIM / 2);
-                *StartY = z_fix_fromInt(y * Z_TILE_DIM + Z_TILE_DIM / 2);
+                *StartX = z_fix_fromInt(x) + Z_FIX_ONE / 2;
+                *StartY = z_fix_fromInt(y) + Z_FIX_ONE / 2;
             } else if(p == red25) {
                 num = 1;
             } else if(p == red50) {
@@ -97,38 +97,38 @@ void o_map_init(ZFix* StartX, ZFix* StartY)
             g_map.totalApples += num;
 
             ZVectorInt grid = z_coords_tileToGrid((ZVectorInt){x, y});
-            ZVectorInt gridTileOffset = z_coords_tileToGridTileOffset(
+            ZVectorInt gridTileOffset = z_coords_tileToGridOffset(
                                             (ZVectorInt){x, y});
 
             int w = z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK);
             int h = z_sprite_heightGet(Z_SPRITE_APPLE_ALPHAMASK);
 
-            int startX = w / 2;
-            int endX = Z_TILE_DIM - w / 2 + 1;
-            int startY = h / 2;
-            int endY = Z_TILE_DIM - h / 2 + 1;
+            ZFix startX = z_coords_pixelsToUnits(w / 2);
+            ZFix endX = Z_FIX_ONE - z_coords_pixelsToUnits(w / 2 - 1);
+            ZFix startY = z_coords_pixelsToUnits(h / 2);
+            ZFix endY = Z_FIX_ONE - z_coords_pixelsToUnits(h / 2 - 1);
 
             if(gridTileOffset.x > 0 && !g_map.tiles[y][x - 1].wall) {
                 startX = 0;
-            } else if(gridTileOffset.x < Z_TILES_PER_CELL - 1
+            } else if(gridTileOffset.x < Z_COORDS_TILES_PER_GRID - 1
                 && !g_map.tiles[y][x + 1].wall) {
 
-                endX = Z_TILE_DIM + 1;
+                endX = Z_FIX_ONE + z_coords_pixelsToUnits(1);
             }
 
             if(gridTileOffset.y > 0 && !g_map.tiles[y - 1][x].wall) {
                 startY = 0;
-            } else if(gridTileOffset.y < Z_TILES_PER_CELL - 1
+            } else if(gridTileOffset.y < Z_COORDS_TILES_PER_GRID - 1
                 && !g_map.tiles[y + 1][x].wall) {
 
-                endY = Z_TILE_DIM + 1;
+                endY = Z_FIX_ONE + z_coords_pixelsToUnits(1);
             }
 
             while(num--) {
-                int ax = x * Z_TILE_DIM + z_random_range(startX, endX);
-                int ay = y * Z_TILE_DIM + z_random_range(startY, endY);
+                ZFix ax = z_fix_fromInt(x) + z_random_range(startX, endX);
+                ZFix ay = z_fix_fromInt(y) + z_random_range(startY, endY);
 
-                OApple* a = o_apple_new(z_fix_fromInt(ax), z_fix_fromInt(ay));
+                OApple* a = o_apple_new(ax, ay);
 
                 if(a != NULL) {
                     z_list_addLast(&g_map.grid[grid.y][grid.x].apples, a);
@@ -167,11 +167,11 @@ void o_map_draw(void)
 
     for(int tileY = tileStart.y, screenY = screenStart.y + shake.y;
         tileY < tileEnd.y;
-        tileY++, screenY += Z_TILE_DIM) {
+        tileY++, screenY += Z_COORDS_UNIT_PIXELS) {
 
         for(int tileX = tileStart.x, screenX = screenStart.x + shake.x;
             tileX < tileEnd.x;
-            tileX++, screenX += Z_TILE_DIM) {
+            tileX++, screenX += Z_COORDS_UNIT_PIXELS) {
 
             z_sprite_blit(Z_SPRITE_TILES,
                           screenX,
@@ -194,28 +194,34 @@ void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
 {
     ZVectorFix origin = z_camera_originGet();
 
-    ZVectorInt topLeftMapPixel = {z_fix_toInt(origin.x) - Z_SCREEN_W / 2,
-                                  z_fix_toInt(origin.y) - Z_SCREEN_H / 2};
+    ZVectorFix topLeftCoords = {
+        origin.x - z_coords_pixelsToUnits(Z_SCREEN_W / 2),
+        origin.y - z_coords_pixelsToUnits(Z_SCREEN_H / 2)
+    };
 
-    ZVectorInt topLeftScreen = {0 - (topLeftMapPixel.x & Z_TILE_MASK),
-                                0 - (topLeftMapPixel.y & Z_TILE_MASK)};
+    ZVectorInt topLeftTile = z_vectorfix_toInt(topLeftCoords);
+    ZVectorInt topLeftPixels = z_coords_unitsToPixels(topLeftCoords);
 
-    ZVectorInt topLeftTile = {topLeftMapPixel.x >> Z_TILE_SHIFT,
-                              topLeftMapPixel.y >> Z_TILE_SHIFT};
+    ZVectorInt topLeftScreen = {
+        0 - (topLeftPixels.x & (Z_COORDS_UNIT_PIXELS - 1)),
+        0 - (topLeftPixels.y & (Z_COORDS_UNIT_PIXELS - 1))
+    };
 
-    if(topLeftMapPixel.x < 0) {
-        topLeftScreen.x += -topLeftTile.x * Z_TILE_DIM;
+    if(topLeftCoords.x < 0) {
+        topLeftScreen.x += -topLeftTile.x * Z_COORDS_UNIT_PIXELS;
         topLeftTile.x = 0;
     }
 
-    if(topLeftMapPixel.y < 0) {
-        topLeftScreen.y += -topLeftTile.y * Z_TILE_DIM;
+    if(topLeftCoords.y < 0) {
+        topLeftScreen.y += -topLeftTile.y * Z_COORDS_UNIT_PIXELS;
         topLeftTile.y = 0;
     }
 
     ZVectorInt tileEnd = {
-        z_math_min(topLeftTile.x + (Z_SCREEN_W / Z_TILE_DIM + 1), Z_MAP_W),
-        z_math_min(topLeftTile.y + (Z_SCREEN_H / Z_TILE_DIM + 1), Z_MAP_H)
+        z_math_min(topLeftTile.x + (Z_SCREEN_W / Z_COORDS_UNIT_PIXELS + 1),
+                   Z_COORDS_MAP_W),
+        z_math_min(topLeftTile.y + (Z_SCREEN_H / Z_COORDS_UNIT_PIXELS + 1),
+                   Z_COORDS_MAP_H)
     };
 
     if(TileStart != NULL) {
@@ -227,7 +233,7 @@ void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
         *GridStart = z_coords_tileToGrid(topLeftTile);
         *GridEnd = z_coords_tileToGrid(tileEnd);
 
-        ZVectorInt gridTileOffset = z_coords_tileToGridTileOffset(tileEnd);
+        ZVectorInt gridTileOffset = z_coords_tileToGridOffset(tileEnd);
 
         if(gridTileOffset.x > 0) {
             GridEnd->x += 1;
@@ -253,7 +259,7 @@ int o_map_applesNumGet(void)
     return g_map.totalApples;
 }
 
-bool o_map_isWall(int TileX, int TileY)
+bool o_map_isWall(ZVectorInt Tile)
 {
-    return g_map.tiles[TileY][TileX].wall;
+    return g_map.tiles[Tile.y][Tile.x].wall;
 }

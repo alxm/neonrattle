@@ -18,6 +18,7 @@
 #include "obj_apple.h"
 
 #include "util_camera.h"
+#include "util_coords.h"
 #include "util_graphics.h"
 #include "util_list.h"
 #include "util_pool.h"
@@ -73,11 +74,11 @@ ZVectorFix o_apple_coordsGet(const OApple* Apple)
     return Apple->coords;
 }
 
-int o_apple_dimGet(const OApple* Apple)
+ZFix o_apple_dimGet(const OApple* Apple)
 {
     Z_UNUSED(Apple);
 
-    return z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK);
+    return z_coords_pixelsToUnits(z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK));
 }
 
 void o_apple_tick(OApple* Apple)

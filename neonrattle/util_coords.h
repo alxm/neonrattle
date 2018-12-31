@@ -21,54 +21,51 @@
 
 #include "util_fix.h"
 
-#define Z_MAP_W_SHIFT (4)
-#define Z_MAP_H_SHIFT (4)
-#define Z_MAP_W (1 << Z_MAP_W_SHIFT)
-#define Z_MAP_H (1 << Z_MAP_H_SHIFT)
+#define Z_COORDS_UNIT_PIXELS 16
+#define Z_COORDS_TILES_PER_GRID_SHIFT 1
+#define Z_COORDS_TILES_PER_GRID (1 << Z_COORDS_TILES_PER_GRID_SHIFT)
+#define Z_COORDS_MAP_W 16
+#define Z_COORDS_MAP_H 16
+#define Z_COORDS_GRID_W (Z_COORDS_MAP_W / Z_COORDS_TILES_PER_GRID)
+#define Z_COORDS_GRID_H (Z_COORDS_MAP_H / Z_COORDS_TILES_PER_GRID)
 
-#define Z_TILE_SHIFT 4
-#define Z_TILE_DIM (1 << Z_TILE_SHIFT)
-#define Z_TILE_MASK (Z_TILE_DIM - 1)
-
-#define Z_GRID_MAP_SHIFT_DIFF 1
-
-#define Z_GRID_W_SHIFT (Z_MAP_W_SHIFT - Z_GRID_MAP_SHIFT_DIFF)
-#define Z_GRID_H_SHIFT (Z_MAP_H_SHIFT - Z_GRID_MAP_SHIFT_DIFF)
-#define Z_GRID_W (1 << Z_GRID_W_SHIFT)
-#define Z_GRID_H (1 << Z_GRID_H_SHIFT)
-
-#define Z_CELL_SHIFT (Z_TILE_SHIFT + Z_GRID_MAP_SHIFT_DIFF)
-#define Z_CELL_DIM (1 << Z_CELL_SHIFT)
-#define Z_CELL_MASK (Z_CELL_DIM - 1)
-
-#define Z_TILES_PER_CELL (1 << Z_GRID_MAP_SHIFT_DIFF)
-
-static inline ZVectorInt z_coords_fixToTile(ZVectorFix Coords)
+static inline ZFix z_coords_pixelsToUnits(int Pixels)
 {
-    return (ZVectorInt){z_fix_toInt(Coords.x) >> Z_TILE_SHIFT,
-                        z_fix_toInt(Coords.y) >> Z_TILE_SHIFT};
+    return z_fix_fromInt(Pixels) / Z_COORDS_UNIT_PIXELS;
+}
+
+static inline ZVectorInt z_coords_unitsToPixels(ZVectorFix Units)
+{
+    return (ZVectorInt){z_fix_toInt(Units.x * Z_COORDS_UNIT_PIXELS),
+                        z_fix_toInt(Units.y * Z_COORDS_UNIT_PIXELS)};
+}
+
+static inline ZVectorInt z_coords_unitsToGrid(ZVectorFix Units)
+{
+    return (ZVectorInt){z_fix_toInt(Units.x) >> Z_COORDS_TILES_PER_GRID_SHIFT,
+                        z_fix_toInt(Units.y) >> Z_COORDS_TILES_PER_GRID_SHIFT};
+}
+
+static inline ZVectorFix z_coords_unitsToGridOffset(ZVectorFix Units)
+{
+    ZVectorInt grid = z_coords_unitsToGrid(Units);
+
+    return (ZVectorFix){
+        Units.x - z_fix_fromInt(grid.x * Z_COORDS_TILES_PER_GRID),
+        Units.y - z_fix_fromInt(grid.y * Z_COORDS_TILES_PER_GRID)
+    };
 }
 
 static inline ZVectorInt z_coords_tileToGrid(ZVectorInt Tile)
 {
-    return (ZVectorInt){Tile.x >> Z_GRID_MAP_SHIFT_DIFF,
-                        Tile.y >> Z_GRID_MAP_SHIFT_DIFF};
+    return (ZVectorInt){Tile.x >> Z_COORDS_TILES_PER_GRID_SHIFT,
+                        Tile.y >> Z_COORDS_TILES_PER_GRID_SHIFT};
 }
 
-static inline ZVectorInt z_coords_tileToGridTileOffset(ZVectorInt Tile)
+static inline ZVectorInt z_coords_tileToGridOffset(ZVectorInt Tile)
 {
-    return (ZVectorInt){Tile.x & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1),
-                        Tile.y & ((1 << Z_GRID_MAP_SHIFT_DIFF) - 1)};
-}
+    ZVectorInt grid = z_coords_tileToGrid(Tile);
 
-static inline ZVectorInt z_coords_fixToGrid(ZVectorFix Coords)
-{
-    return (ZVectorInt){z_fix_toInt(Coords.x) >> Z_CELL_SHIFT,
-                        z_fix_toInt(Coords.y) >> Z_CELL_SHIFT};
-}
-
-static inline ZVectorInt z_coords_fixToGridOffset(ZVectorFix Coords)
-{
-    return (ZVectorInt){z_fix_toInt(Coords.x) & Z_CELL_MASK,
-                        z_fix_toInt(Coords.y) & Z_CELL_MASK};
+    return (ZVectorInt){Tile.x - grid.x * Z_COORDS_TILES_PER_GRID,
+                        Tile.y - grid.y * Z_COORDS_TILES_PER_GRID};
 }

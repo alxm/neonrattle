@@ -32,4 +32,4 @@ extern void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVector
 
 extern ZList* o_map_applesListGet(int GridX, int GridY);
 extern int o_map_applesNumGet(void);
-extern bool o_map_isWall(int TileX, int TileY);
+extern bool o_map_isWall(ZVectorInt Tile);

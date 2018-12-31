@@ -92,8 +92,8 @@ OSnake* o_snake_new(ZFix X, ZFix Y)
             s->head = (s->head + 1) & O_SNAKE_LEN_MASK;
             setHead(s, X, Y, z_color_snakeGet());
 
-            X += z_fix_cosf(s->angle);
-            Y -=z_fix_sinf(s->angle);
+            X += z_fix_cosf(s->angle) / Z_COORDS_UNIT_PIXELS;
+            Y -= z_fix_sinf(s->angle) / Z_COORDS_UNIT_PIXELS;
         }
     }
 
@@ -116,8 +116,8 @@ static void moveSnake(OSnake* Snake)
 {
     const OSnakeSegment* head = &Snake->body[Snake->head];
 
-    ZFix x = head->coords.x + z_fix_cosf(Snake->angle);
-    ZFix y = head->coords.y - z_fix_sinf(Snake->angle);
+    ZFix x = head->coords.x + z_fix_cosf(Snake->angle) / Z_COORDS_UNIT_PIXELS;
+    ZFix y = head->coords.y - z_fix_sinf(Snake->angle) / Z_COORDS_UNIT_PIXELS;
 
     if(Snake->grow > 0) {
         if(getLength(Snake) == O_SNAKE_LEN) {
@@ -170,9 +170,9 @@ static void updateColors(OSnake* Snake)
 static bool checkWall(OSnake* Snake)
 {
     const OSnakeSegment* head = &Snake->body[Snake->head];
-    ZVectorInt tile = z_coords_fixToTile(head->coords);
+    ZVectorInt tile = z_vectorfix_toInt(head->coords);
 
-    if(o_map_isWall(tile.x, tile.y)) {
+    if(o_map_isWall(tile)) {
         for(unsigned len = getLength(Snake), i = Snake->tail;
             len--;
             i = (i + 1) & O_SNAKE_LEN_MASK) {
@@ -193,50 +193,54 @@ static void checkApples(OSnake* Snake)
 {
     const OSnakeSegment* head = &Snake->body[Snake->head];
 
-    ZVectorInt snakeGrid = z_coords_fixToGrid(head->coords);
-    ZVectorInt snakeGridOffset = z_coords_fixToGridOffset(head->coords);
+    ZVectorInt snakeGrid = z_coords_unitsToGrid(head->coords);
+    ZVectorFix snakeGridOffset = z_coords_unitsToGridOffset(head->coords);
 
     int gridStartX, gridStartY, gridEndX, gridEndY;
 
-    if(snakeGrid.x > 0 && snakeGridOffset.x < Z_TILE_DIM / 2) {
+    if(snakeGrid.x > 0 && snakeGridOffset.x < Z_FIX_ONE / 2) {
         gridStartX = snakeGrid.x - 1;
     } else {
         gridStartX = snakeGrid.x;
     }
 
-    if(snakeGrid.y > 0 && snakeGridOffset.y < Z_TILE_DIM / 2) {
+    if(snakeGrid.y > 0 && snakeGridOffset.y < Z_FIX_ONE / 2) {
         gridStartY = snakeGrid.y - 1;
     } else {
         gridStartY = snakeGrid.y;
     }
 
-    if(snakeGrid.x < Z_GRID_W - 1
-        && snakeGridOffset.x > Z_CELL_DIM - Z_TILE_DIM / 2) {
+    if(snakeGrid.x < Z_COORDS_GRID_W - 1
+        && snakeGridOffset.x
+            > Z_FIX_ONE * Z_COORDS_TILES_PER_GRID - Z_FIX_ONE / 2) {
 
         gridEndX = snakeGrid.x + 1;
     } else {
         gridEndX = snakeGrid.x;
     }
 
-    if(snakeGrid.y < Z_GRID_H - 1
-        && snakeGridOffset.y > Z_CELL_DIM - Z_TILE_DIM / 2) {
+    if(snakeGrid.y < Z_COORDS_GRID_H - 1
+        && snakeGridOffset.y
+            > Z_FIX_ONE * Z_COORDS_TILES_PER_GRID - Z_FIX_ONE / 2) {
 
         gridEndY = snakeGrid.y + 1;
     } else {
         gridEndY = snakeGrid.y;
     }
 
+    const ZFix snakeDim = z_coords_pixelsToUnits(
+                            z_sprite_widthGet(Z_SPRITE_SNAKE_ALPHAMASK));
+
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
             Z_LIST_ITERATE(o_map_applesListGet(gridX, gridY), OApple*, apple) {
                 ZVectorFix coords = o_apple_coordsGet(apple);
 
-                if(z_collision_sqAndSq(z_fix_toInt(head->coords.x),
-                                       z_fix_toInt(head->coords.y),
-                                       z_sprite_widthGet(
-                                            Z_SPRITE_SNAKE_ALPHAMASK),
-                                       z_fix_toInt(coords.x),
-                                       z_fix_toInt(coords.y),
+                if(z_collision_sqAndSq(head->coords.x,
+                                       head->coords.y,
+                                       snakeDim,
+                                       coords.x,
+                                       coords.y,
                                        o_apple_dimGet(apple))) {
 
                     Snake->grow += O_APPLE_GROW_PER;

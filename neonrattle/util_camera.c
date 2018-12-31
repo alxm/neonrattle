@@ -35,13 +35,13 @@ void z_camera_tick(const OSnake* Snake)
     ZVectorFix coords = o_snake_coordsGet(Snake);
 
     g_coords.x = z_math_clamp(coords.x,
-                              z_fix_fromInt(Z_SCREEN_W / 2),
-                              z_fix_fromInt(Z_MAP_W * Z_TILE_DIM
-                                                - Z_SCREEN_W / 2));
+                              z_coords_pixelsToUnits(Z_SCREEN_W / 2),
+                              z_fix_fromInt(Z_COORDS_MAP_W)
+                                - z_coords_pixelsToUnits(Z_SCREEN_W / 2));
     g_coords.y = z_math_clamp(coords.y,
-                              z_fix_fromInt(Z_SCREEN_H / 2),
-                              z_fix_fromInt(Z_MAP_H * Z_TILE_DIM
-                                                - Z_SCREEN_H / 2));
+                              z_coords_pixelsToUnits(Z_SCREEN_H / 2),
+                              z_fix_fromInt(Z_COORDS_MAP_H)
+                                - z_coords_pixelsToUnits(Z_SCREEN_H / 2));
 
     if(g_shakeFrames) {
         g_shakeFrames--;
@@ -58,10 +58,15 @@ ZVectorFix z_camera_originGet(void)
 
 ZVectorInt z_camera_coordsToScreen(ZVectorFix WorldCoords)
 {
-    return (ZVectorInt){
-        Z_SCREEN_W / 2 + z_fix_toInt(WorldCoords.x - g_coords.x),
-        Z_SCREEN_H / 2 + z_fix_toInt(WorldCoords.y - g_coords.y)
-    };
+    ZVectorFix relative = {WorldCoords.x - g_coords.x,
+                           WorldCoords.y - g_coords.y};
+
+    ZVectorInt coords = z_coords_unitsToPixels(relative);
+
+    coords.x += Z_SCREEN_W / 2;
+    coords.y += Z_SCREEN_H / 2;
+
+    return coords;
 }
 
 ZVectorInt z_camera_shakeGet(void)
