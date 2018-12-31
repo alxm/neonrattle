@@ -47,7 +47,7 @@ void s_start_init(void)
 
 void s_start_tick(void)
 {
-    if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGet(Z_BUTTON_B)) {
+    if(z_button_pressGetAny()) {
         z_sfx_play(Z_SFX_PRESSED_A);
         z_state_set(Z_STATE_PLAY);
     }

@@ -39,4 +39,6 @@ extern bool z_button_pressGet(ZButtonId Button);
 extern bool z_button_pressGetOnce(ZButtonId Button);
 extern void z_button_pressClear(ZButtonId Button);
 
+extern bool z_button_pressGetAny(void);
+
 Z_EXTERN_C_END

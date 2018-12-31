@@ -19,7 +19,7 @@
 
 void z_input_reset(void)
 {
-    for(uint8_t b = 0; b < Z_BUTTON_NUM; b++) {
+    for(int b = 0; b < Z_BUTTON_NUM; b++) {
         z_button_pressClear(b);
     }
 }
@@ -33,4 +33,15 @@ bool z_button_pressGetOnce(ZButtonId Button)
     }
 
     return pressed;
+}
+
+bool z_button_pressGetAny(void)
+{
+    for(int b = 0; b < Z_BUTTON_NUM; b++) {
+        if(z_button_pressGet(b)) {
+            return true;
+        }
+    }
+
+    return false;
 }
