@@ -20,7 +20,6 @@
 #include "obj_apple.h"
 #include "obj_map.h"
 #include "util_camera.h"
-#include "util_collision.h"
 #include "util_coords.h"
 #include "util_effects.h"
 #include "util_input.h"
@@ -234,14 +233,10 @@ static void checkApples(OSnake* Snake)
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
             Z_LIST_ITERATE(o_map_applesListGet(gridX, gridY), OApple*, apple) {
-                ZVectorFix coords = o_apple_coordsGet(apple);
-
-                if(z_collision_sqAndSq(head->coords.x,
-                                       head->coords.y,
-                                       snakeDim,
-                                       coords.x,
-                                       coords.y,
-                                       o_apple_dimGet(apple))) {
+                if(z_coords_collideSqAndSq(head->coords,
+                                           snakeDim,
+                                           o_apple_coordsGet(apple),
+                                           o_apple_dimGet(apple))) {
 
                     Snake->grow += O_APPLE_GROW_PER;
                     Snake->eaten++;

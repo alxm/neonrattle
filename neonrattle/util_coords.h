@@ -69,3 +69,17 @@ static inline ZVectorInt z_coords_tileToGridOffset(ZVectorInt Tile)
     return (ZVectorInt){Tile.x - grid.x * Z_COORDS_TILES_PER_GRID,
                         Tile.y - grid.y * Z_COORDS_TILES_PER_GRID};
 }
+
+static inline bool z_coords_collideSqAndSq(ZVectorFix Coords1, ZFix Dim1, ZVectorFix Coords2, ZFix Dim2)
+{
+    Coords1.x -= Dim1 / 2;
+    Coords1.y -= Dim1 / 2;
+
+    Coords2.x -= Dim2 / 2;
+    Coords2.y -= Dim2 / 2;
+
+    return !(Coords1.y >= Coords2.y + Dim2
+          || Coords2.y >= Coords1.y + Dim1
+          || Coords1.x >= Coords2.x + Dim2
+          || Coords2.x >= Coords1.x + Dim1);
+}
