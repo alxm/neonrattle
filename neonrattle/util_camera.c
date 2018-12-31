@@ -30,15 +30,13 @@ void z_camera_reset(void)
     g_shakeFrames = 0;
 }
 
-void z_camera_tick(const OSnake* Snake)
+void z_camera_tick(ZVectorFix Origin)
 {
-    ZVectorFix coords = o_snake_coordsGet(Snake);
-
-    g_coords.x = z_math_clamp(coords.x,
+    g_coords.x = z_math_clamp(Origin.x,
                               z_coords_pixelsToUnits(Z_SCREEN_W / 2),
                               z_fix_fromInt(Z_COORDS_MAP_W)
                                 - z_coords_pixelsToUnits(Z_SCREEN_W / 2));
-    g_coords.y = z_math_clamp(coords.y,
+    g_coords.y = z_math_clamp(Origin.y,
                               z_coords_pixelsToUnits(Z_SCREEN_H / 2),
                               z_fix_fromInt(Z_COORDS_MAP_H)
                                 - z_coords_pixelsToUnits(Z_SCREEN_H / 2));
