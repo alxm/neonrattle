@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,6 @@
 #include "state_play.h"
 #include "state_start.h"
 #include "util_camera.h"
-#include "util_input.h"
 #include "util_light.h"
 #include "util_sound.h"
 #include "util_swipe.h"
@@ -118,7 +117,6 @@ static void checkNewState(void)
     }
 
     z_swipe_start(g_states[g_state.current].intro);
-    z_input_reset();
 }
 
 void z_state_tick(void)

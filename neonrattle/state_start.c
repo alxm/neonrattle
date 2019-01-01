@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@ void s_start_init(void)
 
     z_camera_reset();
     z_effects_init();
+    z_input_reset();
     z_light_reset();
 
     ZFix startX, startY;
