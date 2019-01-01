@@ -19,7 +19,6 @@
 
 #include "util_camera.h"
 #include "util_coords.h"
-#include "util_graphics.h"
 #include "util_list.h"
 #include "util_pool.h"
 
@@ -79,6 +78,11 @@ ZFix o_apple_dimGet(const OApple* Apple)
     Z_UNUSED(Apple);
 
     return z_coords_pixelsToUnits(z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK));
+}
+
+ZColorId o_apple_colorGet(const OApple* Apple)
+{
+    return Apple->color;
 }
 
 void o_apple_tick(OApple* Apple)

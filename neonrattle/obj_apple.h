@@ -20,6 +20,7 @@
 #include "platform.h"
 
 #include "util_fix.h"
+#include "util_graphics.h"
 
 #define O_APPLE_NUM_MAX 128
 #define O_APPLE_GROW_PER 1
@@ -41,6 +42,7 @@ extern void o_apple_free(OApple* Apple);
 
 extern ZVectorFix o_apple_coordsGet(const OApple* Apple);
 extern ZFix o_apple_dimGet(const OApple* Apple);
+extern ZColorId o_apple_colorGet(const OApple* Apple);
 
 extern void o_apple_tick(OApple* Apple);
 extern void o_apple_draw(const OApple* Apple);

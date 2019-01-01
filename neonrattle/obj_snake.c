@@ -41,8 +41,6 @@
 
 typedef struct {
     ZVectorFix coords;
-    int r, g, b;
-    ZColorId targetColor;
 } OSnakeSegment;
 
 struct OSnake {
@@ -51,6 +49,8 @@ struct OSnake {
     ZFixu angle;
     int grow;
     int eaten;
+    int r, g, b;
+    ZColorId targetColor;
 };
 
 Z_POOL_DECLARE(OSnake, 1, g_pool);
@@ -65,15 +65,22 @@ static inline unsigned getLength(const OSnake* Snake)
     return ((Snake->head - Snake->tail) & O_SNAKE_LEN_MASK) + 1;
 }
 
-static void setHead(OSnake* Snake, ZFix X, ZFix Y, ZColorId Color)
+static void headSet(OSnake* Snake, ZFix X, ZFix Y)
 {
     OSnakeSegment* s = &Snake->body[Snake->head];
 
     s->coords = (ZVectorFix){X, Y};
-    s->r = z_colors[Color].r;
-    s->g = z_colors[Color].g;
-    s->b = z_colors[Color].b;
-    s->targetColor = z_color_snakeGet();
+}
+
+static void colorSet(OSnake* Snake, ZColorId CurrentColor, ZColorId TargetColor)
+{
+    if(CurrentColor != Z_COLOR_INVALID) {
+        Snake->r = z_colors[CurrentColor].r;
+        Snake->g = z_colors[CurrentColor].g;
+        Snake->b = z_colors[CurrentColor].b;
+    }
+
+    Snake->targetColor = TargetColor;
 }
 
 OSnake* o_snake_new(ZFix X, ZFix Y)
@@ -87,9 +94,11 @@ OSnake* o_snake_new(ZFix X, ZFix Y)
         s->grow = 0;
         s->eaten = 0;
 
+        colorSet(s, z_color_snakeGet(), z_color_snakeGet());
+
         for(int i = O_SNAKE_START_LEN; i--; ) {
             s->head = (s->head + 1) & O_SNAKE_LEN_MASK;
-            setHead(s, X, Y, z_color_snakeGet());
+            headSet(s, X, Y);
 
             X += z_fix_cosf(s->angle) / Z_COORDS_UNIT_PIXELS;
             Y -= z_fix_sinf(s->angle) / Z_COORDS_UNIT_PIXELS;
@@ -125,13 +134,13 @@ static void moveSnake(OSnake* Snake)
             Snake->grow--;
             Snake->head = (Snake->head + 1) & O_SNAKE_LEN_MASK;
 
-            setHead(Snake, x, y, z_color_appleGet());
+            headSet(Snake, x, y);
         }
     } else {
         Snake->tail = (Snake->tail + 1) & O_SNAKE_LEN_MASK;
         Snake->head = (Snake->head + 1) & O_SNAKE_LEN_MASK;
 
-        setHead(Snake, x, y, z_color_snakeGet());
+        headSet(Snake, x, y);
     }
 
     if(z_button_pressGet(Z_BUTTON_LEFT)) {
@@ -145,24 +154,18 @@ static void moveSnake(OSnake* Snake)
 
 static void updateColors(OSnake* Snake)
 {
-    for(unsigned len = getLength(Snake), i = Snake->tail;
-        len--;
-        i = (i + 1) & O_SNAKE_LEN_MASK) {
+    const ZColor* target = &z_colors[Snake->targetColor];
 
-        OSnakeSegment* s = &Snake->body[i];
-        const ZColor* targetColor = &z_colors[s->targetColor];
+    if(Snake->r != target->r) {
+        Snake->r += (target->r - Snake->r) >> 3;
+    }
 
-        if(s->r != targetColor->r) {
-            s->r += (targetColor->r - s->r) / 16;
-        }
+    if(Snake->g != target->g) {
+        Snake->g += (target->g - Snake->g) >> 3;
+    }
 
-        if(s->g != targetColor->g) {
-            s->g += (targetColor->g - s->g) / 16;
-        }
-
-        if(s->b != targetColor->b) {
-            s->b += (targetColor->b - s->b) / 16;
-        }
+    if(Snake->b != target->b) {
+        Snake->b += (target->b - Snake->b) >> 3;
     }
 }
 
@@ -172,12 +175,7 @@ static bool checkWall(OSnake* Snake)
     ZVectorInt tile = z_vectorfix_toInt(head->coords);
 
     if(o_map_isWall(tile)) {
-        for(unsigned len = getLength(Snake), i = Snake->tail;
-            len--;
-            i = (i + 1) & O_SNAKE_LEN_MASK) {
-
-            Snake->body[i].targetColor = Z_COLOR_BG_GREEN_03;
-        }
+        colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
 
         z_light_pulseSet(Z_LIGHT_SNAKE_HIT_WALL);
         z_sfx_play(Z_SFX_HIT_WALL);
@@ -241,6 +239,9 @@ static void checkApples(OSnake* Snake)
                     Snake->grow += O_APPLE_GROW_PER;
                     Snake->eaten++;
 
+                    colorSet(
+                        Snake, o_apple_colorGet(apple), z_color_snakeGet());
+
                     o_apple_free(apple);
 
                     z_effects_circles(head->coords.x, head->coords.y);
@@ -286,9 +287,9 @@ void o_snake_draw(const OSnake* Snake)
                                    screen.x,
                                    screen.y,
                                    0,
-                                   s->r,
-                                   s->g,
-                                   s->b,
+                                   Snake->r,
+                                   Snake->g,
+                                   Snake->b,
                                    alpha);
     }
 }
