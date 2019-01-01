@@ -35,7 +35,7 @@ void s_play_init(void)
 void s_play_tick(void)
 {
     o_map_tick();
-    bool died = o_snake_tick(g_snake);
+    bool died = o_snake_tickPlay(g_snake);
     z_camera_tick(o_snake_coordsGet(g_snake));
     z_effects_tick();
 

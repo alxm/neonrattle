@@ -152,7 +152,7 @@ static void moveSnake(OSnake* Snake)
     }
 }
 
-static void updateColors(OSnake* Snake)
+static void updateColors(OSnake* Snake, bool CycleColors)
 {
     const ZColor* target = &z_colors[Snake->targetColor];
 
@@ -166,6 +166,10 @@ static void updateColors(OSnake* Snake)
 
     if(Snake->b != target->b) {
         Snake->b += (target->b - Snake->b) >> 3;
+    }
+
+    if(CycleColors) {
+        colorSet(Snake, Z_COLOR_INVALID, z_color_snakeGet());
     }
 }
 
@@ -253,10 +257,15 @@ static void checkApples(OSnake* Snake)
     }
 }
 
-bool o_snake_tick(OSnake* Snake)
+void o_snake_tickStart(OSnake* Snake)
 {
+    updateColors(Snake, true);
+}
+
+bool o_snake_tickPlay(OSnake* Snake)
+{
+    updateColors(Snake, true);
     moveSnake(Snake);
-    updateColors(Snake);
     bool hitWall = checkWall(Snake);
     checkApples(Snake);
 
@@ -265,7 +274,7 @@ bool o_snake_tick(OSnake* Snake)
 
 void o_snake_tickDied(OSnake* Snake)
 {
-    updateColors(Snake);
+    updateColors(Snake, false);
 }
 
 void o_snake_draw(const OSnake* Snake)

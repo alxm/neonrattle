@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ extern OSnake* o_snake_new(ZFix X, ZFix Y);
 extern ZVectorFix o_snake_coordsGet(const OSnake* Snake);
 extern int o_snake_eatenNumGet(const OSnake* Snake);
 
-extern bool o_snake_tick(OSnake* Snake);
+extern void o_snake_tickStart(OSnake* Snake);
+extern bool o_snake_tickPlay(OSnake* Snake);
 extern void o_snake_tickDied(OSnake* Snake);
 extern void o_snake_draw(const OSnake* Snake);
