@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -70,16 +70,15 @@ void z_list_remove(ZListNode* Node)
 
 ZListIt z_listit__new(ZList* List)
 {
-    return (ZListIt){List, NULL, List->root.next};
+    return (ZListIt){List, List->root.next};
 }
 
 bool z_listit__getNext(ZListIt* Iterator, void* UserPtrAddress)
 {
-    Iterator->current = Iterator->next;
-    Iterator->next = Iterator->next->next;
+    ZListNode* current = Iterator->next;
+    Iterator->next = current->next;
 
-    *(void**)UserPtrAddress =
-        (uint8_t*)Iterator->current - Iterator->list->nodeOffset;
+    *(void**)UserPtrAddress = (uint8_t*)current - Iterator->list->nodeOffset;
 
-    return Iterator->current != &Iterator->list->root;
+    return current != &Iterator->list->root;
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ typedef struct ZList {
 
 typedef struct ZListIt {
     ZList* list;
-    ZListNode* current;
     ZListNode* next;
 } ZListIt;
 
