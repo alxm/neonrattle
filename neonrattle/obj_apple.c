@@ -77,7 +77,8 @@ ZFix o_apple_dimGet(const OApple* Apple)
 {
     Z_UNUSED(Apple);
 
-    return z_coords_pixelsToUnits(z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK));
+    return z_coords_pixelsToUnits(
+            z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK) - 2);
 }
 
 ZColorId o_apple_colorGet(const OApple* Apple)

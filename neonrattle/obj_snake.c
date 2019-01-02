@@ -231,7 +231,7 @@ static void checkApples(OSnake* Snake)
     }
 
     const ZFix snakeDim = z_coords_pixelsToUnits(
-                            z_sprite_widthGet(Z_SPRITE_SNAKE_ALPHAMASK));
+                            z_sprite_widthGet(Z_SPRITE_SNAKE_ALPHAMASK) - 2);
 
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
