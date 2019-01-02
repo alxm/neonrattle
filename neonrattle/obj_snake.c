@@ -266,10 +266,14 @@ bool o_snake_tickPlay(OSnake* Snake)
 {
     updateColors(Snake, true);
     moveSnake(Snake);
-    bool hitWall = checkWall(Snake);
+
+    if(checkWall(Snake)) {
+        return true;
+    }
+
     checkApples(Snake);
 
-    return hitWall;
+    return false;
 }
 
 void o_snake_tickDied(OSnake* Snake)
