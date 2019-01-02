@@ -22,6 +22,7 @@
 #include "util_camera.h"
 #include "util_coords.h"
 #include "util_effects.h"
+#include "util_fps.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_pool.h"
@@ -299,7 +300,7 @@ void o_snake_draw(const OSnake* Snake)
         z_sprite_blitAlphaMaskRGBA(Z_SPRITE_SNAKE_ALPHAMASK,
                                    screen.x,
                                    screen.y,
-                                   0,
+                                   ((z_fps_ticksGet() - len) >> 1) & 7,
                                    Snake->r,
                                    Snake->g,
                                    Snake->b,
