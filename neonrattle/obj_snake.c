@@ -84,44 +84,7 @@ static void colorSet(OSnake* Snake, ZColorId CurrentColor, ZColorId TargetColor)
     Snake->targetColor = TargetColor;
 }
 
-OSnake* o_snake_new(ZFix X, ZFix Y)
-{
-    OSnake* s = z_pool_alloc(g_pool);
-
-    if(s != NULL) {
-        s->head = (unsigned)-1;
-        s->tail = 0;
-        s->angle = O_SNAKE_START_ANGLE;
-        s->grow = 0;
-        s->eaten = 0;
-
-        colorSet(s, z_color_snakeGet(), z_color_snakeGet());
-
-        for(int i = O_SNAKE_START_LEN; i--; ) {
-            s->head = (s->head + 1) & O_SNAKE_LEN_MASK;
-            headSet(s, X, Y);
-
-            X += z_fix_cosf(s->angle) / Z_COORDS_UNIT_PIXELS;
-            Y -= z_fix_sinf(s->angle) / Z_COORDS_UNIT_PIXELS;
-        }
-    }
-
-    return s;
-}
-
-ZVectorFix o_snake_coordsGet(const OSnake* Snake)
-{
-    const OSnakeSegment* head = &Snake->body[Snake->head];
-
-    return head->coords;
-}
-
-int o_snake_eatenNumGet(const OSnake* Snake)
-{
-    return Snake->eaten;
-}
-
-static void moveSnake(OSnake* Snake)
+static void growAndAdvance(OSnake* Snake)
 {
     const OSnakeSegment* head = &Snake->body[Snake->head];
 
@@ -143,14 +106,40 @@ static void moveSnake(OSnake* Snake)
 
         headSet(Snake, x, y);
     }
+}
 
-    if(z_button_pressGet(Z_BUTTON_LEFT)) {
-        Snake->angle += O_SNAKE_TURN_DEG;
+OSnake* o_snake_new(ZFix X, ZFix Y)
+{
+    OSnake* s = z_pool_alloc(g_pool);
+
+    if(s != NULL) {
+        s->head = 0;
+        s->tail = 0;
+        s->angle = O_SNAKE_START_ANGLE;
+        s->grow = O_SNAKE_START_LEN - 1;
+        s->eaten = 0;
+
+        headSet(s, X, Y);
+        colorSet(s, z_color_snakeGet(), z_color_snakeGet());
+
+        while(s->grow > 0) {
+            growAndAdvance(s);
+        }
     }
 
-    if(z_button_pressGet(Z_BUTTON_RIGHT)) {
-        Snake->angle -= O_SNAKE_TURN_DEG;
-    }
+    return s;
+}
+
+ZVectorFix o_snake_coordsGet(const OSnake* Snake)
+{
+    const OSnakeSegment* head = &Snake->body[Snake->head];
+
+    return head->coords;
+}
+
+int o_snake_eatenNumGet(const OSnake* Snake)
+{
+    return Snake->eaten;
 }
 
 static void updateColors(OSnake* Snake, bool CycleColors)
@@ -265,8 +254,16 @@ void o_snake_tickStart(OSnake* Snake)
 
 bool o_snake_tickPlay(OSnake* Snake)
 {
+    if(z_button_pressGet(Z_BUTTON_LEFT)) {
+        Snake->angle += O_SNAKE_TURN_DEG;
+    }
+
+    if(z_button_pressGet(Z_BUTTON_RIGHT)) {
+        Snake->angle -= O_SNAKE_TURN_DEG;
+    }
+
     updateColors(Snake, true);
-    moveSnake(Snake);
+    growAndAdvance(Snake);
 
     if(checkWall(Snake)) {
         return true;
