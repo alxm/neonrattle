@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include "generated/data_gfx_snake_alphamask_grid8x8.h"
 #include "generated/data_gfx_apple_alphamask1.h"
 #include "generated/data_gfx_apple_halo.h"
+#include "generated/data_gfx_heart.h"
 #include "generated/data_gfx_alxm.h"
 #include "generated/data_gfx_alxm_wing.h"
 
@@ -34,6 +35,7 @@ void z_graphics_setup(void)
     z_sprite_loadGrid(Z_SPRITE_SNAKE_ALPHAMASK, snake_alphamask_grid8x8, 8, 8);
     z_sprite_load(Z_SPRITE_APPLE_ALPHAMASK, apple_alphamask1);
     z_sprite_load(Z_SPRITE_APPLE_HALO, apple_halo);
+    z_sprite_load(Z_SPRITE_HEART, heart);
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
 

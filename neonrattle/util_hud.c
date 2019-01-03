@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,30 +20,58 @@
 #include "obj_map.h"
 #include "util_graphics.h"
 
+static void drawIcon(ZVectorInt* Coords, ZSpriteId Sprite, unsigned Frame, ZColorId Color, int Alpha)
+{
+    int w = z_sprite_widthGet(Sprite);
+
+    z_sprite_blitAlphaMask(
+        Sprite, Coords->x + w / 2, Coords->y, Frame, Color, Alpha);
+
+    Coords->x += w + 2;
+}
+
+static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Height, ZColorId ProgressColor, ZColorId BackgroundColor, int Alpha)
+{
+    int progressWidth = Width * Value / Total;
+
+    z_draw_rectangleAlpha(Coords->x,
+                          Coords->y - Height / 2,
+                          progressWidth,
+                          Height,
+                          ProgressColor,
+                          Alpha);
+
+    z_draw_rectangleAlpha(Coords->x + progressWidth,
+                          Coords->y - Height / 2,
+                          Width - progressWidth,
+                          Height,
+                          BackgroundColor,
+                          Alpha);
+
+    Coords->x += Width + 2;
+}
+
 void z_hud_draw(OSnake* Snake)
 {
-    #define BAR_X (2)
-    #define BAR_Y (2)
-    #define BAR_W (Z_SCREEN_W - BAR_X * 2)
-    #define BAR_H (4)
+    ZVectorInt pos = {1, 5};
 
-    int width = BAR_W * o_snake_eatenNumGet(Snake) / o_map_applesNumGet();
+    drawIcon(&pos, Z_SPRITE_APPLE_ALPHAMASK, 0, Z_COLOR_SNAKE_01, 256);
+    drawBar(&pos,
+            o_snake_eatenNumGet(Snake),
+            o_map_applesNumGet(),
+            32,
+            4,
+            Z_COLOR_SNAKE_01,
+            Z_COLOR_BG_GREEN_03,
+            192);
 
-    z_draw_rectangleAlpha(BAR_X, BAR_Y - 1, BAR_W, 1, Z_COLOR_APPLE_03, 96);
-
-    z_draw_rectangleAlpha(BAR_X,
-                          BAR_Y,
-                          width,
-                          BAR_H,
-                          Z_COLOR_APPLE_05,
-                          208);
-
-    z_draw_rectangleAlpha(BAR_X + width,
-                          BAR_Y,
-                          BAR_W - width,
-                          BAR_H,
-                          Z_COLOR_APPLE_02,
-                          128);
-
-    z_draw_rectangleAlpha(BAR_X, BAR_Y + BAR_H, BAR_W, 1, Z_COLOR_APPLE_03, 96);
+    drawIcon(&pos, Z_SPRITE_HEART, 0, Z_COLOR_SNAKE_01, 256);
+    drawBar(&pos,
+            60,
+            100,
+            20,
+            4,
+            Z_COLOR_SNAKE_01,
+            Z_COLOR_BG_GREEN_03,
+            192);
 }

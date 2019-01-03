@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -75,6 +75,7 @@ static inline ZColorId z_color_snakeGet(void)
 }
 
 typedef enum {
+    Z_SPRITE_INVALID = -1,
     Z_SPRITE_PALETTE,
 
     // Maps
@@ -89,6 +90,9 @@ typedef enum {
     // Apples
     Z_SPRITE_APPLE_ALPHAMASK,
     Z_SPRITE_APPLE_HALO,
+
+    // Icons
+    Z_SPRITE_HEART,
 
     // Misc
     Z_SPRITE_ALXM,

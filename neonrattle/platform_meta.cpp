@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -86,11 +86,11 @@ void loop(void)
 
     #if Z_DEBUG_STATS
         gb.display.setColor(WHITE);
-        gb.display.setCursor(2, 2);
+        gb.display.setCursor(2, 46);
         gb.display.print(gb.getCpuLoad(), DEC);
-        gb.display.setCursor(2, 8);
+        gb.display.setCursor(2, 52);
         gb.display.print(gb.getFreeRam(), DEC);
-        gb.display.setCursor(2, 14);
+        gb.display.setCursor(2, 58);
         gb.display.print(SOUND_CHANNELS, DEC);
     #endif
 }
