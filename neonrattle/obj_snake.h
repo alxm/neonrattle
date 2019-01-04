@@ -21,6 +21,8 @@
 
 #include "util_fix.h"
 
+#define O_SNAKE_LIFE_MAX 64
+
 typedef struct OSnake OSnake;
 
 extern void o_snake_setup(void);
@@ -29,6 +31,7 @@ extern OSnake* o_snake_new(ZFix X, ZFix Y);
 
 extern ZVectorFix o_snake_coordsGet(const OSnake* Snake);
 extern int o_snake_eatenNumGet(const OSnake* Snake);
+extern int o_snake_lifeGet(const OSnake* Snake);
 
 extern void o_snake_tickStart(OSnake* Snake);
 extern bool o_snake_tickPlay(OSnake* Snake);

@@ -104,8 +104,8 @@ void z_hud_draw(OSnake* Snake)
 
     drawIcon(&pos, Z_SPRITE_HEART, 0, Z_COLOR_SNAKE_01, 256);
     drawBar(&pos,
-            60,
-            100,
+            o_snake_lifeGet(Snake),
+            O_SNAKE_LIFE_MAX,
             20,
             4,
             Z_COLOR_SNAKE_01,

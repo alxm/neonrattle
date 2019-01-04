@@ -50,6 +50,7 @@ struct OSnake {
     ZFixu angle;
     int grow;
     int eaten;
+    int life;
     int r, g, b;
     ZColorId targetColor;
 };
@@ -126,6 +127,7 @@ OSnake* o_snake_new(ZFix X, ZFix Y)
         s->angle = O_SNAKE_START_ANGLE;
         s->grow = O_SNAKE_START_LEN - 1;
         s->eaten = 0;
+        s->life = O_SNAKE_LIFE_MAX;
 
         headSet(s, X, Y);
         colorSet(s, z_color_snakeGet(), z_color_snakeGet());
@@ -148,6 +150,11 @@ ZVectorFix o_snake_coordsGet(const OSnake* Snake)
 int o_snake_eatenNumGet(const OSnake* Snake)
 {
     return Snake->eaten;
+}
+
+int o_snake_lifeGet(const OSnake* Snake)
+{
+    return Snake->life;
 }
 
 static void updateColors(OSnake* Snake, bool CycleColors)
