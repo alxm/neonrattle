@@ -171,7 +171,7 @@ static void updateColors(OSnake* Snake, bool CycleColors)
     }
 }
 
-static bool checkWall(OSnake* Snake)
+static bool checkWall(const OSnake* Snake)
 {
     const OSnakeSegment* head = &Snake->body[Snake->head];
     ZVectorInt tile = z_vectorfix_toInt(head->coords);
@@ -183,21 +183,25 @@ static bool checkWall(OSnake* Snake)
     return false;
 }
 
-static bool checkTail(OSnake* Snake)
+static bool checkTail(const OSnake* Snake)
 {
     unsigned len = getLength(Snake);
-    unsigned skipLen = 32;
+    unsigned skipFromTail = len / O_SNAKE_TAIL_FADE_RATIO;
+    unsigned skipFromHead = 32;
 
-    if(len <= skipLen) {
+    if(len <= skipFromTail + skipFromHead) {
         return false;
     }
-
-    len -= skipLen;
 
     ZVectorFix headCoords = Snake->body[Snake->head].coords;
     ZFix snakeDim = dimGet(Snake, 6);
 
-    for(unsigned i = Snake->tail; len--; i = (i + 1) & O_SNAKE_LEN_MASK) {
+    len -= skipFromTail + skipFromHead;
+
+    for(unsigned i = (Snake->tail + skipFromTail) & O_SNAKE_LEN_MASK;
+        len--;
+        i = (i + 1) & O_SNAKE_LEN_MASK) {
+
         if(z_coords_collideSquares(
             headCoords, snakeDim, Snake->body[i].coords, snakeDim)) {
 
