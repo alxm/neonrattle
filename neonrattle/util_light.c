@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,6 +31,10 @@ static const struct {
     [Z_LIGHT_SNAKE_HIT_WALL] = {
         Z_COLOR_APPLE_01,
         {Z_FIX_DEG_090 / 2, Z_FIX_DEG_090 / 16}
+    },
+    [Z_LIGHT_SNAKE_HIT_SELF] = {
+        Z_COLOR_APPLE_03,
+        {Z_FIX_DEG_090, Z_FIX_DEG_090}
     },
 };
 

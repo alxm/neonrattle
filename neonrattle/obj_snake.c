@@ -303,13 +303,25 @@ bool o_snake_tickPlay(OSnake* Snake)
     updateColors(Snake, true);
     growAndAdvance(Snake);
 
-    if(checkWall(Snake) || checkTail(Snake)) {
+    if(checkWall(Snake)) {
         colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
 
         z_light_pulseSet(Z_LIGHT_SNAKE_HIT_WALL);
         z_sfx_play(Z_SFX_HIT_WALL);
 
         return true;
+    }
+
+    if(checkTail(Snake)) {
+        z_camera_shakeSet(1);
+        z_light_pulseSet(Z_LIGHT_SNAKE_HIT_SELF);
+        z_sfx_play(Z_SFX_HIT_WALL);
+
+        if(--Snake->life == 0) {
+            colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
+
+            return true;
+        }
     }
 
     checkApples(Snake);

@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ typedef enum {
     Z_LIGHT_INVALID = -1,
     Z_LIGHT_APPLE_EAT,
     Z_LIGHT_SNAKE_HIT_WALL,
+    Z_LIGHT_SNAKE_HIT_SELF,
     Z_LIGHT_NUM
 } ZLightId;
 
