@@ -33,20 +33,57 @@ static void drawIcon(ZVectorInt* Coords, ZSpriteId Sprite, unsigned Frame, ZColo
 static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Height, ZColorId ProgressColor, ZColorId BackgroundColor, int Alpha)
 {
     int progressWidth = Width * Value / Total;
+    int borderAlpha = Alpha / 4;
 
+    z_draw_rectangleAlpha(Coords->x - 1,
+                          Coords->y - Height / 2,
+                          1,
+                          Height,
+                          Value > 0 ? ProgressColor : BackgroundColor,
+                          borderAlpha);
+    z_draw_rectangleAlpha(Coords->x,
+                          Coords->y - Height / 2 - 1,
+                          progressWidth,
+                          1,
+                          ProgressColor,
+                          borderAlpha);
     z_draw_rectangleAlpha(Coords->x,
                           Coords->y - Height / 2,
                           progressWidth,
                           Height,
                           ProgressColor,
                           Alpha);
+    z_draw_rectangleAlpha(Coords->x,
+                          Coords->y + Height / 2,
+                          progressWidth,
+                          1,
+                          ProgressColor,
+                          borderAlpha);
 
+    z_draw_rectangleAlpha(Coords->x + progressWidth,
+                          Coords->y - Height / 2 - 1,
+                          Width - progressWidth,
+                          1,
+                          BackgroundColor,
+                          borderAlpha);
     z_draw_rectangleAlpha(Coords->x + progressWidth,
                           Coords->y - Height / 2,
                           Width - progressWidth,
                           Height,
                           BackgroundColor,
                           Alpha);
+    z_draw_rectangleAlpha(Coords->x + progressWidth,
+                          Coords->y + Height / 2,
+                          Width - progressWidth,
+                          1,
+                          BackgroundColor,
+                          borderAlpha);
+    z_draw_rectangleAlpha(Coords->x + Width,
+                          Coords->y - Height / 2,
+                          1,
+                          Height,
+                          Value >= Total ? ProgressColor : BackgroundColor,
+                          borderAlpha);
 
     Coords->x += Width + 2;
 }
