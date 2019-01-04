@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ static inline ZVectorInt z_coords_tileToGridOffset(ZVectorInt Tile)
                         Tile.y - grid.y * Z_COORDS_TILES_PER_GRID};
 }
 
-static inline bool z_coords_collideSqAndSq(ZVectorFix Coords1, ZFix Dim1, ZVectorFix Coords2, ZFix Dim2)
+static inline bool z_coords_collideSquares(ZVectorFix Coords1, ZFix Dim1, ZVectorFix Coords2, ZFix Dim2)
 {
     Coords1.x -= Dim1 / 2;
     Coords1.y -= Dim1 / 2;

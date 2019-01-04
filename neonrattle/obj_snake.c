@@ -66,11 +66,19 @@ static inline unsigned getLength(const OSnake* Snake)
     return ((Snake->head - Snake->tail) & O_SNAKE_LEN_MASK) + 1;
 }
 
-static void headSet(OSnake* Snake, ZFix X, ZFix Y)
+static inline void headSet(OSnake* Snake, ZFix X, ZFix Y)
 {
     OSnakeSegment* s = &Snake->body[Snake->head];
 
     s->coords = (ZVectorFix){X, Y};
+}
+
+static inline ZFix dimGet(const OSnake* Snake, int Leeway)
+{
+    Z_UNUSED(Snake);
+
+    return z_coords_pixelsToUnits(
+            z_sprite_widthGet(Z_SPRITE_SNAKE_ALPHAMASK) - Leeway);
 }
 
 static void colorSet(OSnake* Snake, ZColorId CurrentColor, ZColorId TargetColor)
@@ -169,12 +177,32 @@ static bool checkWall(OSnake* Snake)
     ZVectorInt tile = z_vectorfix_toInt(head->coords);
 
     if(o_map_isWall(tile)) {
-        colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
-
-        z_light_pulseSet(Z_LIGHT_SNAKE_HIT_WALL);
-        z_sfx_play(Z_SFX_HIT_WALL);
-
         return true;
+    }
+
+    return false;
+}
+
+static bool checkTail(OSnake* Snake)
+{
+    unsigned len = getLength(Snake);
+    unsigned skipLen = 32;
+
+    if(len <= skipLen) {
+        return false;
+    }
+
+    len -= skipLen;
+
+    ZVectorFix headCoords = Snake->body[Snake->head].coords;
+    ZFix snakeDim = dimGet(Snake, 6);
+
+    for(unsigned i = Snake->tail; len--; i = (i + 1) & O_SNAKE_LEN_MASK) {
+        if(z_coords_collideSquares(
+            headCoords, snakeDim, Snake->body[i].coords, snakeDim)) {
+
+            return true;
+        }
     }
 
     return false;
@@ -219,13 +247,12 @@ static void checkApples(OSnake* Snake)
         gridEndY = snakeGrid.y;
     }
 
-    const ZFix snakeDim = z_coords_pixelsToUnits(
-                            z_sprite_widthGet(Z_SPRITE_SNAKE_ALPHAMASK) - 2);
+    const ZFix snakeDim = dimGet(Snake, 2);
 
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
             Z_LIST_ITERATE(o_map_applesListGet(gridX, gridY), OApple*, apple) {
-                if(z_coords_collideSqAndSq(head->coords,
+                if(z_coords_collideSquares(head->coords,
                                            snakeDim,
                                            o_apple_coordsGet(apple),
                                            o_apple_dimGet(apple))) {
@@ -265,7 +292,12 @@ bool o_snake_tickPlay(OSnake* Snake)
     updateColors(Snake, true);
     growAndAdvance(Snake);
 
-    if(checkWall(Snake)) {
+    if(checkWall(Snake) || checkTail(Snake)) {
+        colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
+
+        z_light_pulseSet(Z_LIGHT_SNAKE_HIT_WALL);
+        z_sfx_play(Z_SFX_HIT_WALL);
+
         return true;
     }
 
