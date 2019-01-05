@@ -40,6 +40,10 @@
 #define O_SNAKE_ALPHA_MAX 128
 #define O_SNAKE_TAIL_FADE_RATIO 4
 
+// May enter at most 1/2 inside a wall tile
+#define O_SNAKE_DAMAGE_WALL (O_SNAKE_LIFE_MAX / (Z_COORDS_UNIT_PIXELS / 2))
+#define O_SNAKE_DAMAGE_TAIL (O_SNAKE_LIFE_MAX / 32)
+
 typedef struct {
     ZVectorFix coords;
 } OSnakeSegment;
@@ -315,23 +319,28 @@ bool o_snake_tickPlay(OSnake* Snake)
     updateColors(Snake, true);
     growAndAdvance(Snake);
 
+    int damage = 0;
+
     if(checkWall(Snake)) {
-        colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
+        damage += O_SNAKE_DAMAGE_WALL;
 
         z_light_pulseSet(Z_LIGHT_SNAKE_HIT_WALL);
         z_sfx_play(Z_SFX_HIT_WALL);
-
-        return true;
     }
 
     if(checkTail(Snake)) {
-        z_camera_shakeSet(1);
+        damage += O_SNAKE_DAMAGE_TAIL;
+
         z_light_pulseSet(Z_LIGHT_SNAKE_HIT_SELF);
         z_sfx_play(Z_SFX_HIT_WALL);
+        z_camera_shakeSet(1);
+    }
 
+    if(damage > 0) {
         Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_HURT);
+        Snake->life = z_math_max(Snake->life - damage, 0);
 
-        if(--Snake->life == 0) {
+        if(Snake->life == 0) {
             colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
 
             return true;
