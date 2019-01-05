@@ -323,22 +323,20 @@ bool o_snake_tickPlay(OSnake* Snake)
 
     if(checkWall(Snake)) {
         damage += O_SNAKE_DAMAGE_WALL;
-
         z_light_pulseSet(Z_LIGHT_SNAKE_HIT_WALL);
-        z_sfx_play(Z_SFX_HIT_WALL);
     }
 
     if(checkTail(Snake)) {
         damage += O_SNAKE_DAMAGE_TAIL;
-
         z_light_pulseSet(Z_LIGHT_SNAKE_HIT_SELF);
-        z_sfx_play(Z_SFX_HIT_WALL);
-        z_camera_shakeSet(1);
     }
 
     if(damage > 0) {
         Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_HURT);
         Snake->life = z_math_max(Snake->life - damage, 0);
+
+        z_camera_shakeSet(1);
+        z_sfx_play(Z_SFX_HIT_WALL);
 
         if(Snake->life == 0) {
             colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
