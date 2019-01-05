@@ -32,8 +32,8 @@ void s_died_init(void)
 {
     g_snake = z_state_contextGet();
 
-    z_timer_start(Z_TIMER_G1, 8);
-    z_camera_shakeSet(2);
+    z_timer_start(Z_TIMER_G1, 12);
+    z_camera_shakeSet(3);
     z_sfx_play(Z_SFX_END);
 }
 
