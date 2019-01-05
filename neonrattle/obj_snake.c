@@ -348,6 +348,8 @@ void o_snake_tickDied(OSnake* Snake)
 void o_snake_draw(const OSnake* Snake)
 {
     unsigned len = getLength(Snake);
+    unsigned frameTicks = z_fps_ticksGet() >> 2;
+    unsigned frameMask = z_sprite_framesNumGet(Z_SPRITE_SNAKE_ALPHAMASK) - 1u;
     int alpha = O_SNAKE_ALPHA_MIN;
     int alphaInc = (O_SNAKE_ALPHA_MAX - O_SNAKE_ALPHA_MIN)
                         / z_math_max(1, (int)len / O_SNAKE_TAIL_FADE_RATIO);
@@ -360,10 +362,11 @@ void o_snake_draw(const OSnake* Snake)
             alpha += alphaInc;
         }
 
+        // frameTicks == animation speed, (len >> 3) == sprite frames cycle
         z_sprite_blitAlphaMaskRGBA(Z_SPRITE_SNAKE_ALPHAMASK,
                                    screen.x,
                                    screen.y,
-                                   ((z_fps_ticksGet() - len) >> 1) & 7,
+                                   (frameTicks - (len >> 3)) & frameMask,
                                    Snake->r,
                                    Snake->g,
                                    Snake->b,
