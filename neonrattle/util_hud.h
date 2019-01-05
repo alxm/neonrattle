@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,4 +21,5 @@
 
 #include "obj_snake.h"
 
-extern void z_hud_draw(OSnake* Snake);
+extern void z_hud_tick(const OSnake* Snake);
+extern void z_hud_draw(const OSnake* Snake);

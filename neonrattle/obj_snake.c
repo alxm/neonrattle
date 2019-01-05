@@ -51,6 +51,7 @@ struct OSnake {
     int grow;
     int eaten;
     int life;
+    OSnakeFlags flags;
     int r, g, b;
     ZColorId targetColor;
 };
@@ -128,6 +129,7 @@ OSnake* o_snake_new(ZFix X, ZFix Y)
         s->grow = O_SNAKE_START_LEN - 1;
         s->eaten = 0;
         s->life = O_SNAKE_LIFE_MAX;
+        s->flags = 0;
 
         headSet(s, X, Y);
         colorSet(s, z_color_snakeGet(), z_color_snakeGet());
@@ -155,6 +157,11 @@ int o_snake_eatenNumGet(const OSnake* Snake)
 int o_snake_lifeGet(const OSnake* Snake)
 {
     return Snake->life;
+}
+
+bool o_snake_flagsTest(const OSnake* Snake, OSnakeFlags Flags)
+{
+    return (Snake->flags & Flags) == Flags;
 }
 
 static void updateColors(OSnake* Snake, bool CycleColors)
@@ -317,11 +324,15 @@ bool o_snake_tickPlay(OSnake* Snake)
         z_light_pulseSet(Z_LIGHT_SNAKE_HIT_SELF);
         z_sfx_play(Z_SFX_HIT_WALL);
 
+        Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_HURT);
+
         if(--Snake->life == 0) {
             colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
 
             return true;
         }
+    } else {
+        Z_FLAG_CLEAR(Snake->flags, O_SNAKE_FLAG_HURT);
     }
 
     checkApples(Snake);

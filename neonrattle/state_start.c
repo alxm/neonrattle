@@ -57,6 +57,7 @@ void s_start_tick(void)
     o_snake_tickStart(g_snake);
     z_camera_tick(o_snake_coordsGet(g_snake));
     z_effects_tick();
+    z_hud_tick(g_snake);
 }
 
 void s_start_draw(void)

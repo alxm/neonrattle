@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,19 +23,8 @@
 
 typedef enum {
     Z_TIMER_INVALID = -1,
-    Z_TIMER_VM,
-    Z_TIMER_ENEMY_FRAME,
-    Z_TIMER_HUD_HEARTS,
-    Z_TIMER_HUD_ENERGY,
-    Z_TIMER_HUD_SCORE,
-    Z_TIMER_PLAYER_INVINCIBLE,
-    Z_TIMER_PLAYER_REGEN_ENERGY,
-    Z_TIMER_PLAYER_REGEN_SHIELD,
-    Z_TIMER_PLAYER_SHOOT_DELAY,
-    Z_TIMER_PLAYER_SHOOT_KICK,
     Z_TIMER_G1,
-    Z_TIMER_G2,
-    Z_TIMER_G3,
+    Z_TIMER_HUD_LIFE,
     Z_TIMER_NUM
 } ZTimerId;
 

@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -51,5 +51,9 @@ Z_EXTERN_C_START
 
 #define Z_UNUSED(X) (X = X)
 #define Z_ARRAY_LEN(A) (sizeof(A) / sizeof(A[0]))
+
+#define Z_FLAG_BIT(N) (1 << (N))
+#define Z_FLAG_SET(Value, Mask) ((Value) |= (Mask))
+#define Z_FLAG_CLEAR(Value, Mask) ((Value) &= ~(unsigned)(Mask))
 
 Z_EXTERN_C_END

@@ -19,6 +19,30 @@
 
 #include "obj_map.h"
 #include "util_graphics.h"
+#include "util_timer.h"
+
+#define Z_HUD_LIFE_BLINK_DS 1
+
+static const ZColorId g_lifeColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_APPLE_03};
+
+static struct {
+    int colorIndex;
+} g_life;
+
+void z_hud_tick(const OSnake* Snake)
+{
+    if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_HURT)) {
+        if(!z_timer_running(Z_TIMER_HUD_LIFE)) {
+            z_timer_start(Z_TIMER_HUD_LIFE, Z_HUD_LIFE_BLINK_DS);
+            g_life.colorIndex = 1;
+        } else if(z_timer_expired(Z_TIMER_HUD_LIFE)) {
+            g_life.colorIndex = !g_life.colorIndex;
+        }
+    } else {
+        z_timer_stop(Z_TIMER_HUD_LIFE);
+        g_life.colorIndex = 0;
+    }
+}
 
 static void drawIcon(ZVectorInt* Coords, ZSpriteId Sprite, unsigned Frame, ZColorId Color, int Alpha)
 {
@@ -88,7 +112,7 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
     Coords->x += Width + 2;
 }
 
-void z_hud_draw(OSnake* Snake)
+void z_hud_draw(const OSnake* Snake)
 {
     ZVectorInt pos = {1, 5};
 
@@ -102,13 +126,13 @@ void z_hud_draw(OSnake* Snake)
             Z_COLOR_BG_GREEN_03,
             192);
 
-    drawIcon(&pos, Z_SPRITE_HEART, 0, Z_COLOR_SNAKE_01, 256);
+    drawIcon(&pos, Z_SPRITE_HEART, 0, g_lifeColors[g_life.colorIndex], 256);
     drawBar(&pos,
             o_snake_lifeGet(Snake),
             O_SNAKE_LIFE_MAX,
             20,
             4,
-            Z_COLOR_SNAKE_01,
+            g_lifeColors[g_life.colorIndex],
             Z_COLOR_BG_GREEN_03,
             192);
 }

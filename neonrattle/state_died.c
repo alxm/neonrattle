@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ void s_died_tick(void)
     o_snake_tickDied(g_snake);
     z_camera_tick(o_snake_coordsGet(g_snake));
     z_effects_tick();
+    z_hud_tick(g_snake);
 
     if(z_timer_expired(Z_TIMER_G1)) {
         z_state_set(Z_STATE_START);
