@@ -226,7 +226,7 @@ static bool checkTail(const OSnake* Snake)
     return false;
 }
 
-static void checkApples(OSnake* Snake)
+static bool checkApples(OSnake* Snake)
 {
     const OSnakeSegment* head = &Snake->body[Snake->head];
 
@@ -266,6 +266,7 @@ static void checkApples(OSnake* Snake)
     }
 
     const ZFix snakeDim = dimGet(Snake, 2);
+    int eaten = Snake->eaten;
 
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
@@ -290,6 +291,8 @@ static void checkApples(OSnake* Snake)
             }
         }
     }
+
+    return Snake->eaten > eaten;
 }
 
 void o_snake_tickStart(OSnake* Snake)
@@ -306,6 +309,8 @@ bool o_snake_tickPlay(OSnake* Snake)
     if(z_button_pressGet(Z_BUTTON_RIGHT)) {
         Snake->angle -= O_SNAKE_TURN_DEG;
     }
+
+    Snake->flags = 0;
 
     updateColors(Snake, true);
     growAndAdvance(Snake);
@@ -331,11 +336,11 @@ bool o_snake_tickPlay(OSnake* Snake)
 
             return true;
         }
-    } else {
-        Z_FLAG_CLEAR(Snake->flags, O_SNAKE_FLAG_HURT);
     }
 
-    checkApples(Snake);
+    if(checkApples(Snake)) {
+        Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_ATE);
+    }
 
     return false;
 }

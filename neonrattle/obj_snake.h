@@ -25,6 +25,7 @@
 
 typedef enum {
     O_SNAKE_FLAG_HURT = Z_FLAG_BIT(1),
+    O_SNAKE_FLAG_ATE = Z_FLAG_BIT(2),
 } OSnakeFlags;
 
 typedef struct OSnake OSnake;

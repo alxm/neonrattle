@@ -21,9 +21,8 @@
 #include "util_graphics.h"
 #include "util_timer.h"
 
-#define Z_HUD_LIFE_BLINK_DS 1
-
-static const ZColorId g_lifeColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_APPLE_03};
+#define Z_HUD_APPLES_BLINK_DS 1
+#define Z_HUD_LIFE_BLINK_DS 2
 
 static struct {
     int colorIndex;
@@ -41,6 +40,14 @@ void z_hud_tick(const OSnake* Snake)
     } else {
         z_timer_stop(Z_TIMER_HUD_LIFE);
         g_life.colorIndex = 0;
+    }
+
+    if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_ATE)) {
+        if(!z_timer_running(Z_TIMER_HUD_APPLES)) {
+            z_timer_start(Z_TIMER_HUD_APPLES, Z_HUD_APPLES_BLINK_DS);
+        }
+    } else if(z_timer_expired(Z_TIMER_HUD_APPLES)) {
+        z_timer_stop(Z_TIMER_HUD_APPLES);
     }
 }
 
@@ -114,25 +121,31 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
 
 void z_hud_draw(const OSnake* Snake)
 {
+    static const ZColorId aColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_BG_GREEN_04};
+    static const ZColorId lColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_APPLE_03};
+
+    ZColorId aColor = aColors[z_timer_running(Z_TIMER_HUD_APPLES)];
+    ZColorId lColor = lColors[g_life.colorIndex];
+
     ZVectorInt pos = {1, 5};
 
-    drawIcon(&pos, Z_SPRITE_APPLE_ALPHAMASK, 0, Z_COLOR_SNAKE_01, 256);
+    drawIcon(&pos, Z_SPRITE_APPLE_ALPHAMASK, 0, aColor, 256);
     drawBar(&pos,
             o_snake_eatenNumGet(Snake),
             o_map_applesNumGet(),
             32,
             4,
-            Z_COLOR_SNAKE_01,
+            aColor,
             Z_COLOR_BG_GREEN_03,
             192);
 
-    drawIcon(&pos, Z_SPRITE_HEART, 0, g_lifeColors[g_life.colorIndex], 256);
+    drawIcon(&pos, Z_SPRITE_HEART, 0, lColor, 256);
     drawBar(&pos,
             o_snake_lifeGet(Snake),
             O_SNAKE_LIFE_MAX,
             20,
             4,
-            g_lifeColors[g_life.colorIndex],
+            lColor,
             Z_COLOR_BG_GREEN_03,
             192);
 }
