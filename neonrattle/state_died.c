@@ -23,6 +23,7 @@
 #include "util_camera.h"
 #include "util_effects.h"
 #include "util_hud.h"
+#include "util_sound.h"
 #include "util_timer.h"
 
 static OSnake* g_snake;
@@ -33,6 +34,7 @@ void s_died_init(void)
 
     z_timer_start(Z_TIMER_G1, 8);
     z_camera_shakeSet(2);
+    z_sfx_play(Z_SFX_END);
 }
 
 void s_died_tick(void)
