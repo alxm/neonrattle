@@ -36,11 +36,11 @@ typedef enum {
     Z_COLOR_ALXM_R1,
     Z_COLOR_ALXM_R2,
 
-    Z_COLOR_RED_100,
-    Z_COLOR_RED_050,
-    Z_COLOR_RED_025,
-    Z_COLOR_GREEN_100,
-    Z_COLOR_WHITE_100,
+    Z_COLOR_MAP_RED_100,
+    Z_COLOR_MAP_RED_050,
+    Z_COLOR_MAP_RED_025,
+    Z_COLOR_MAP_GREEN_100,
+    Z_COLOR_MAP_WHITE_100,
 
     Z_COLOR_APPLE_01,
     Z_COLOR_APPLE_02,
@@ -78,25 +78,18 @@ typedef enum {
     Z_SPRITE_INVALID = -1,
     Z_SPRITE_PALETTE,
 
-    // Maps
-    Z_SPRITE_MAP0,
-
-    // Tiles
-    Z_SPRITE_TILES,
-
-    // Snake
-    Z_SPRITE_SNAKE_ALPHAMASK,
-
-    // Apples
-    Z_SPRITE_APPLE_ALPHAMASK,
-    Z_SPRITE_APPLE_HALO,
-
-    // Icons
-    Z_SPRITE_HEART,
-
-    // Misc
     Z_SPRITE_ALXM,
     Z_SPRITE_ALXM_WING,
+
+    Z_SPRITE_MAPS,
+    Z_SPRITE_TILES,
+
+    Z_SPRITE_SNAKE_MASK,
+
+    Z_SPRITE_APPLE_MASK,
+    Z_SPRITE_APPLE_HALO,
+
+    Z_SPRITE_ICON_HEART,
 
     Z_SPRITE_NUM
 } ZSpriteId;

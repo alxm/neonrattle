@@ -129,7 +129,7 @@ void z_hud_draw(const OSnake* Snake)
 
     ZVectorInt pos = {1, 5};
 
-    drawIcon(&pos, Z_SPRITE_APPLE_ALPHAMASK, 0, aColor, 256);
+    drawIcon(&pos, Z_SPRITE_APPLE_MASK, 0, aColor, 256);
     drawBar(&pos,
             o_snake_eatenNumGet(Snake),
             o_map_applesNumGet(),
@@ -139,7 +139,7 @@ void z_hud_draw(const OSnake* Snake)
             Z_COLOR_BG_GREEN_03,
             192);
 
-    drawIcon(&pos, Z_SPRITE_HEART, 0, lColor, 256);
+    drawIcon(&pos, Z_SPRITE_ICON_HEART, 0, lColor, 256);
     drawBar(&pos,
             o_snake_lifeGet(Snake),
             O_SNAKE_LIFE_MAX,

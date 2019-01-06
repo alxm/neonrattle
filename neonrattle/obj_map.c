@@ -41,7 +41,7 @@ static OMap g_map;
 void o_map_setup(void)
 {
     const ZPixel white = z_pixel_fromRGB(255, 255, 255);
-    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAP0, 0);
+    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, 0);
 
     for(int y = 0; y < Z_COORDS_MAP_H; y++) {
         for(int x = 0; x < Z_COORDS_MAP_W; x++) {
@@ -72,7 +72,7 @@ void o_map_init(ZFix* StartX, ZFix* StartY)
     const ZPixel red100 = z_pixel_fromRGB(255, 0, 0);
     const ZPixel green100 = z_pixel_fromRGB(0, 255, 0);
 
-    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAP0, 0);
+    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, 0);
 
     for(int y = 0; y < Z_COORDS_MAP_H; y++) {
         for(int x = 0; x < Z_COORDS_MAP_W; x++) {
@@ -100,8 +100,8 @@ void o_map_init(ZFix* StartX, ZFix* StartY)
             ZVectorInt gridTileOffset = z_coords_tileToGridOffset(
                                             (ZVectorInt){x, y});
 
-            int w = z_sprite_widthGet(Z_SPRITE_APPLE_ALPHAMASK);
-            int h = z_sprite_heightGet(Z_SPRITE_APPLE_ALPHAMASK);
+            int w = z_sprite_widthGet(Z_SPRITE_APPLE_MASK);
+            int h = z_sprite_heightGet(Z_SPRITE_APPLE_MASK);
 
             ZFix startX = z_coords_pixelsToUnits(w / 2);
             ZFix endX = Z_FIX_ONE - z_coords_pixelsToUnits(w / 2 - 1);

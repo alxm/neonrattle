@@ -18,26 +18,26 @@
 #include "util_graphics.h"
 
 #include "generated/data_gfx_palette.h"
-#include "generated/data_gfx_map0.h"
-#include "generated/data_gfx_tiles_grid16x16.h"
-#include "generated/data_gfx_snake_alphamask_grid8x8.h"
-#include "generated/data_gfx_apple_alphamask1.h"
-#include "generated/data_gfx_apple_halo.h"
-#include "generated/data_gfx_heart.h"
 #include "generated/data_gfx_alxm.h"
 #include "generated/data_gfx_alxm_wing.h"
+#include "generated/data_gfx_maps.h"
+#include "generated/data_gfx_tiles_grid16x16.h"
+#include "generated/data_gfx_snake_mask_grid8x8.h"
+#include "generated/data_gfx_apple_mask.h"
+#include "generated/data_gfx_apple_halo.h"
+#include "generated/data_gfx_icon_heart.h"
 
 void z_graphics_setup(void)
 {
     z_sprite_load(Z_SPRITE_PALETTE, palette);
-    z_sprite_load(Z_SPRITE_MAP0, map0);
-    z_sprite_loadGrid(Z_SPRITE_TILES, tiles_grid16x16, 16, 16);
-    z_sprite_loadGrid(Z_SPRITE_SNAKE_ALPHAMASK, snake_alphamask_grid8x8, 8, 8);
-    z_sprite_load(Z_SPRITE_APPLE_ALPHAMASK, apple_alphamask1);
-    z_sprite_load(Z_SPRITE_APPLE_HALO, apple_halo);
-    z_sprite_load(Z_SPRITE_HEART, heart);
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
+    z_sprite_load(Z_SPRITE_MAPS, maps);
+    z_sprite_loadGrid(Z_SPRITE_TILES, tiles_grid16x16, 16, 16);
+    z_sprite_loadGrid(Z_SPRITE_SNAKE_MASK, snake_mask_grid8x8, 8, 8);
+    z_sprite_load(Z_SPRITE_APPLE_MASK, apple_mask);
+    z_sprite_load(Z_SPRITE_APPLE_HALO, apple_halo);
+    z_sprite_load(Z_SPRITE_ICON_HEART, icon_heart);
 
     int row = 1;
     int col = 0;
