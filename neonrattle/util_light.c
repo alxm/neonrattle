@@ -63,35 +63,37 @@ void z_light_reset(void)
 
 void z_light_tick(void)
 {
-    ZColorId color = Z_COLOR_INVALID;
-    int alpha = 0;
-
     if(g_light.pulseId != Z_LIGHT_INVALID) {
         bool goingDown = g_light.counter >= Z_FIX_DEG_090;
         g_light.counter += g_patterns[g_light.pulseId].counterSpeed[goingDown];
 
         if(g_light.counter >= Z_FIX_DEG_180) {
             g_light.pulseId = Z_LIGHT_INVALID;
-        } else {
-            color = g_patterns[g_light.pulseId].color;
-            alpha = z_fix_toInt(z_fix_sinf(g_light.counter) * 256);
         }
     }
+}
 
-    #if Z_PLATFORM_META
-        if(g_light.bgColor != g_last.bgColor
-            || color != g_last.pulseColor || alpha != g_last.alpha) {
+void z_light_draw(void)
+{
+    ZColorId color = Z_COLOR_INVALID;
+    int alpha = 0;
 
-            g_last.bgColor = g_light.bgColor;
-            g_last.pulseColor = color;
-            g_last.alpha = alpha;
+    if(g_light.pulseId != Z_LIGHT_INVALID) {
+        color = g_patterns[g_light.pulseId].color;
+        alpha = z_fix_toInt(z_fix_sinf(g_light.counter) * 256);
+    }
 
+    if(g_light.bgColor != g_last.bgColor
+        || color != g_last.pulseColor || alpha != g_last.alpha) {
+
+        g_last.bgColor = g_light.bgColor;
+        g_last.pulseColor = color;
+        g_last.alpha = alpha;
+
+        #if Z_PLATFORM_META
             z_platform_meta_lightsFill(g_light.bgColor, color, alpha);
-        }
-    #else
-        Z_UNUSED(color);
-        Z_UNUSED(alpha);
-    #endif
+        #endif
+    }
 }
 
 void z_light_pulseSet(ZLightId Light)

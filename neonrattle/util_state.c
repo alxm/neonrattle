@@ -121,8 +121,8 @@ static void checkNewState(void)
 
 void z_state_tick(void)
 {
-    z_swipe_tick();
     z_timer_tick();
+    z_swipe_tick();
     z_light_tick();
 
     checkNewState();
@@ -141,6 +141,7 @@ void z_state_draw(void)
     }
 
     z_swipe_draw();
+    z_light_draw();
 }
 
 void z_state_set(ZStateId NewState)
