@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -67,28 +67,23 @@ void o_map_init(ZFix* StartX, ZFix* StartY)
         }
     }
 
-    const ZPixel red25 = z_pixel_fromRGB(63, 0, 0);
-    const ZPixel red50 = z_pixel_fromRGB(127, 0, 0);
-    const ZPixel red100 = z_pixel_fromRGB(255, 0, 0);
-    const ZPixel green100 = z_pixel_fromRGB(0, 255, 0);
-
     const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, 0);
 
     for(int y = 0; y < Z_COORDS_MAP_H; y++) {
         for(int x = 0; x < Z_COORDS_MAP_W; x++) {
             const ZPixel p = *pixels++;
-            int num = 0;
 
-            if(p == green100) {
+            if(p == z_colors[Z_COLOR_MAP_GREEN_100].pixel) {
                 *StartX = z_fix_fromInt(x) + Z_FIX_ONE / 2;
                 *StartY = z_fix_fromInt(y) + Z_FIX_ONE / 2;
-            } else if(p == red25) {
-                num = 1;
-            } else if(p == red50) {
-                num = 2;
-            } else if(p == red100) {
-                num = 4;
+
+                continue;
             }
+
+            int r, g, b;
+            z_pixel_toRGB(p, &r, &g, &b);
+
+            int num = r > 0 && g == 0 && b == 0 ? 4 * r / 255 : 0;
 
             if(num == 0) {
                 continue;
