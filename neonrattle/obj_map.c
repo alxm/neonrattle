@@ -40,7 +40,7 @@ static OMap g_map;
 
 void o_map_setup(void)
 {
-    const ZPixel white = z_pixel_fromRGB(255, 255, 255);
+    const ZPixel white = z_pixel_fromRgb(255, 255, 255);
     const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, 0);
 
     for(int y = 0; y < Z_COORDS_MAP_H; y++) {
@@ -80,10 +80,11 @@ void o_map_init(ZFix* StartX, ZFix* StartY)
                 continue;
             }
 
-            int r, g, b;
-            z_pixel_toRGB(p, &r, &g, &b);
+            ZRgb rgb = z_pixel_toRgb(p);
 
-            int num = r > 0 && g == 0 && b == 0 ? 4 * r / 255 : 0;
+            int num = rgb.r > 0 && rgb.g == 0 && rgb.b == 0
+                        ? 4 * rgb.r / 255
+                        : 0;
 
             if(num == 0) {
                 continue;

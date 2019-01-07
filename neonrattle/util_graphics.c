@@ -52,8 +52,7 @@ void z_graphics_setup(void)
         }
 
         z_colors[c].pixel = pixel;
-        z_pixel_toRGB(
-            pixel, &z_colors[c].r, &z_colors[c].g, &z_colors[c].b);
+        z_colors[c].rgb = z_pixel_toRgb(pixel);
     }
 }
 
@@ -71,13 +70,11 @@ void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, Z
                                X,
                                Y,
                                Frame,
-                               z_colors[Fill].r,
-                               z_colors[Fill].g,
-                               z_colors[Fill].b,
+                               &z_colors[Fill].rgb,
                                Alpha);
 }
 
-void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, int R, int G, int B, int Alpha)
+void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, const ZRgb* Rgb, int Alpha)
 {
     if(Alpha == 0) {
         return;
@@ -131,7 +128,7 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
             int a = (Alpha * z_pixel_toR(*spritePixels2++)) >> 8;
 
             if(a != 0) {
-                z_pixel_drawAlpha(screenPixels2, R, G, B, a);
+                z_pixel_drawAlpha(screenPixels2, Rgb, a);
             }
 
             screenPixels2++;
@@ -168,17 +165,14 @@ void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId Color, int Alpha
         H -= Y + H - Z_SCREEN_H;
     }
 
-    const int r = z_colors[Color].r;
-    const int g = z_colors[Color].g;
-    const int b = z_colors[Color].b;
-
+    const ZRgb* rgb = &z_colors[Color].rgb;
     ZPixel* screenPixels = z_screen_pixelsGet() + Y * Z_SCREEN_W + X;
 
     for(int y = H; y--; ) {
         ZPixel* screenPixels2 = screenPixels;
 
         for(int x = W; x--; ) {
-            z_pixel_drawAlpha(screenPixels2++, r, g, b, Alpha);
+            z_pixel_drawAlpha(screenPixels2++, rgb, Alpha);
         }
 
         screenPixels += Z_SCREEN_W;

@@ -96,7 +96,7 @@ typedef enum {
 
 typedef struct ZColor {
     ZPixel pixel;
-    int r, g, b;
+    ZRgb rgb;
 } ZColor;
 
 extern ZColor z_colors[Z_COLOR_NUM];
@@ -111,7 +111,7 @@ extern ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y);
 extern void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame);
 extern void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame);
 extern void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha);
-extern void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, int R, int G, int B, int Alpha);
+extern void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, const ZRgb* Rgb, int Alpha);
 extern int z_sprite_widthGet(ZSpriteId Sprite);
 extern int z_sprite_heightGet(ZSpriteId Sprite);
 extern uint8_t z_sprite_framesNumGet(ZSpriteId Sprite);
@@ -124,22 +124,19 @@ extern void z_draw_hline(int X1, int X2, int Y, ZColorId Color);
 extern void z_draw_vline(int X, int Y1, int Y2, ZColorId Color);
 extern void z_draw_circle(int X, int Y, int Radius, ZColorId Color);
 
-static inline void z_pixel_drawAlpha(ZPixel* Dst, int Red, int Green, int Blue, int Alpha)
+static inline void z_pixel_drawAlpha(ZPixel* Dst, const ZRgb* Rgb, int Alpha)
 {
-    int r, g, b;
-    z_pixel_toRGB(*Dst, &r, &g, &b);
+    ZRgb rgb = z_pixel_toRgb(*Dst);
 
-    *Dst = z_pixel_fromRGB(r + (((Red   - r) * Alpha) >> 8),
-                           g + (((Green - g) * Alpha) >> 8),
-                           b + (((Blue  - b) * Alpha) >> 8));
+    *Dst = z_pixel_fromRgb(rgb.r + (((Rgb->r - rgb.r) * Alpha) >> 8),
+                           rgb.g + (((Rgb->g - rgb.g) * Alpha) >> 8),
+                           rgb.b + (((Rgb->b - rgb.b) * Alpha) >> 8));
 }
 
 static inline void z_pixel_drawAlpha2(int X, int Y, ZColorId Color, int Alpha)
 {
     z_pixel_drawAlpha(z_screen_pixelsGet() + Y * Z_SCREEN_W + X,
-                      z_colors[Color].r,
-                      z_colors[Color].g,
-                      z_colors[Color].b,
+                      &z_colors[Color].rgb,
                       Alpha);
 }
 

@@ -56,8 +56,8 @@ struct OSnake {
     int eaten;
     int life;
     OSnakeFlags flags;
-    int r, g, b;
-    ZColorId targetColor;
+    ZRgb rgb;
+    const ZRgb* rgbTarget;
 };
 
 Z_POOL_DECLARE(OSnake, 1, g_pool);
@@ -90,12 +90,10 @@ static inline ZFix dimGet(const OSnake* Snake, int Leeway)
 static void colorSet(OSnake* Snake, ZColorId CurrentColor, ZColorId TargetColor)
 {
     if(CurrentColor != Z_COLOR_INVALID) {
-        Snake->r = z_colors[CurrentColor].r;
-        Snake->g = z_colors[CurrentColor].g;
-        Snake->b = z_colors[CurrentColor].b;
+        Snake->rgb = z_colors[CurrentColor].rgb;
     }
 
-    Snake->targetColor = TargetColor;
+    Snake->rgbTarget = &z_colors[TargetColor].rgb;
 }
 
 static void growAndAdvance(OSnake* Snake)
@@ -170,19 +168,12 @@ bool o_snake_flagsTest(const OSnake* Snake, OSnakeFlags Flags)
 
 static void updateColors(OSnake* Snake, bool CycleColors)
 {
-    const ZColor* target = &z_colors[Snake->targetColor];
+    const ZRgb* current = &Snake->rgb;
+    const ZRgb* target = Snake->rgbTarget;
 
-    if(Snake->r != target->r) {
-        Snake->r += (target->r - Snake->r) >> 3;
-    }
-
-    if(Snake->g != target->g) {
-        Snake->g += (target->g - Snake->g) >> 3;
-    }
-
-    if(Snake->b != target->b) {
-        Snake->b += (target->b - Snake->b) >> 3;
-    }
+    Snake->rgb.r += (target->r - current->r) >> 3;
+    Snake->rgb.g += (target->g - current->g) >> 3;
+    Snake->rgb.b += (target->b - current->b) >> 3;
 
     if(CycleColors) {
         colorSet(Snake, Z_COLOR_INVALID, z_color_snakeGet());
@@ -379,9 +370,7 @@ void o_snake_draw(const OSnake* Snake)
                                    screen.x,
                                    screen.y,
                                    (frameTicks - (len >> 3)) & frameMask,
-                                   Snake->r,
-                                   Snake->g,
-                                   Snake->b,
+                                   &Snake->rgb,
                                    alpha);
     }
 }

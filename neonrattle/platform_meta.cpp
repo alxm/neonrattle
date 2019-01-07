@@ -116,20 +116,20 @@ static void prepLights(ZColorId BgColorId, ZColorId ColorId, int Alpha)
     ZPixel color = 0;
 
     if(ColorId != Z_COLOR_INVALID) {
-        int r2 = z_colors[ColorId].r;
-        int g2 = z_colors[ColorId].g;
-        int b2 = z_colors[ColorId].b;
+        int r2 = z_colors[ColorId].rgb.r;
+        int g2 = z_colors[ColorId].rgb.g;
+        int b2 = z_colors[ColorId].rgb.b;
 
         if(BgColorId != Z_COLOR_INVALID) {
-            int r1 = z_colors[BgColorId].r;
-            int g1 = z_colors[BgColorId].g;
-            int b1 = z_colors[BgColorId].b;
+            int r1 = z_colors[BgColorId].rgb.r;
+            int g1 = z_colors[BgColorId].rgb.g;
+            int b1 = z_colors[BgColorId].rgb.b;
 
-            color = z_pixel_fromRGB(r1 + (((r2 - r1) * Alpha) >> 8),
+            color = z_pixel_fromRgb(r1 + (((r2 - r1) * Alpha) >> 8),
                                     g1 + (((g2 - g1) * Alpha) >> 8),
                                     b1 + (((b2 - b1) * Alpha) >> 8));
         } else {
-            color = z_pixel_fromRGB((r2 * Alpha) >> 8,
+            color = z_pixel_fromRgb((r2 * Alpha) >> 8,
                                     (g2 * Alpha) >> 8,
                                     (b2 * Alpha) >> 8);
         }

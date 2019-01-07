@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,11 +25,11 @@ Z_EXTERN_C_START
 
 typedef uint16_t ZPixel;
 
-static inline void z_pixel_toRGB(ZPixel Pixel, int* R, int* G, int* B)
+static inline ZRgb z_pixel_toRgb(ZPixel Pixel)
 {
-    *R = ((Pixel >> 11)                 ) << 3;
-    *G = ((Pixel >> 5)  & ((1 << 6) - 1)) << 2;
-    *B = ((Pixel >> 0)  & ((1 << 5) - 1)) << 3;
+    return (ZRgb){((Pixel >> 11)                 ) << 3,
+                  ((Pixel >> 5)  & ((1 << 6) - 1)) << 2,
+                  ((Pixel >> 0)  & ((1 << 5) - 1)) << 3};
 }
 
 static inline int z_pixel_toR(ZPixel Pixel)
@@ -37,7 +37,7 @@ static inline int z_pixel_toR(ZPixel Pixel)
     return (Pixel >> 11) << 3;
 }
 
-static inline ZPixel z_pixel_fromRGB(int Red, int Green, int Blue)
+static inline ZPixel z_pixel_fromRgb(int Red, int Green, int Blue)
 {
     return (ZPixel)
         (((Red >> 3) << 11) | ((Green >> 2) << 5)| ((Blue >> 3) << 0));

@@ -41,6 +41,10 @@
 #include <stdint.h>
 #include <limits.h>
 
+typedef struct {
+    int r, g, b;
+} ZRgb;
+
 #if Z_PLATFORM_A2X
     #include "platform_a2x.h"
 #elif Z_PLATFORM_META
