@@ -98,8 +98,10 @@ void z_light_draw(void)
 
 void z_light_pulseSet(ZLightId Light)
 {
-    g_light.pulseId = Light;
-    g_light.counter = 0;
+    if(g_light.pulseId == Z_LIGHT_INVALID || g_light.pulseId != Light) {
+        g_light.pulseId = Light;
+        g_light.counter = 0;
+    }
 }
 
 void z_light_backgroundSet(ZColorId Color)
