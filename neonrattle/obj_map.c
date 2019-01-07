@@ -57,7 +57,7 @@ void o_map_setup(void)
     }
 }
 
-void o_map_init(ZFix* StartX, ZFix* StartY)
+void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
 {
     g_map.totalApples = 0;
 
@@ -67,7 +67,7 @@ void o_map_init(ZFix* StartX, ZFix* StartY)
         }
     }
 
-    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, 0);
+    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, Level);
 
     for(int y = 0; y < Z_COORDS_MAP_H; y++) {
         for(int x = 0; x < Z_COORDS_MAP_W; x++) {

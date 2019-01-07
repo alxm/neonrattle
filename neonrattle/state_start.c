@@ -40,7 +40,7 @@ void s_start_init(void)
     z_light_reset();
 
     ZFix startX, startY;
-    o_map_init(&startX, &startY);
+    o_map_init(0, &startX, &startY);
 
     g_snake = o_snake_new(startX, startY);
     z_state_contextSet(g_snake);
