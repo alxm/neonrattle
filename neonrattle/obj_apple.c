@@ -23,8 +23,8 @@
 #include "util_pool.h"
 
 #define O_APPLE_BOUNCE_DEG_STEP (8 * Z_FIX_DEG_001)
-#define O_APPLE_ALPHA_DEG_STEP (8 * Z_FIX_DEG_001)
-#define O_APPLE_ALPHA_MIN 128
+#define O_APPLE_ALPHA_DEG_STEP (4 * Z_FIX_DEG_001)
+#define O_APPLE_ALPHA_MIN 160
 #define O_APPLE_ALPHA_MAX 256
 
 struct OApple {
@@ -99,8 +99,7 @@ void o_apple_draw(const OApple* Apple)
     screen.x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
     screen.y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
 
-    int alpha = O_APPLE_ALPHA_MIN
-        + (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2
+    int alpha = O_APPLE_ALPHA_MIN + (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2
         + z_fix_toInt(z_fix_sinf(Apple->alphaAngle)
                         * (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2);
 

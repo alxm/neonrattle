@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@
 #include "util_pool.h"
 
 #define O_CIRCLE_ALPHA_START 256
-#define O_CIRCLE_ALPHA_DEC 32
+#define O_CIRCLE_ALPHA_DEC 16
 
 struct OCircle {
     ZListNode circlesList;
@@ -73,6 +73,6 @@ void o_circle_draw(const OCircle* Circle)
                            screen.x,
                            screen.y,
                            0,
-                           Z_COLOR_BG_GREEN_03,
+                           z_color_appleGet(),
                            Circle->alpha);
 }
