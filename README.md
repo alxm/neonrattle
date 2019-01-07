@@ -10,12 +10,12 @@ Copy the `Neonrattle` folder to your SD card.
 
 ## Controls
 
-* Press A to start moving
-* Steer with dpad left and right
+* Press any button to start moving
+* Steer the snake left and right with d-pad
 
 ## License
 
-Copyright 2018 Alex Margarit (alex@alxm.org)
+Copyright 2018, 2019 Alex Margarit (alex@alxm.org)
 
 * Code licensed under [GNU GPL3](https://www.gnu.org/licenses/gpl.html) (see `COPYING`)
 * Game graphics and sound licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) (see `CC-BY-NC-ND`)
