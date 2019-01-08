@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,24 +39,31 @@ static bool swipeTick(void)
     return g_angle >= Z_FIX_DEG_090;
 }
 
-static void swipeDraw(int H)
+static void swipeDraw(ZFixu Angle)
 {
-    z_draw_rectangle(0, 0, Z_SCREEN_W, H, Z_COLOR_BG_GREEN_01);
-    z_draw_hline(0, Z_SCREEN_W - 1, H, Z_COLOR_BG_GREEN_02);
+    ZFix sine = z_fix_sinf(Angle);
+    int h = z_fix_toInt(sine * (Z_SCREEN_H / 2));
+    int alpha = z_fix_toInt(sine * 256);
 
-    z_draw_hline(0, Z_SCREEN_W - 1, Z_SCREEN_H - 1 - H, Z_COLOR_BG_GREEN_02);
-    z_draw_rectangle(0, Z_SCREEN_H - H, Z_SCREEN_W, H, Z_COLOR_BG_GREEN_01);
+    z_draw_rectangleAlpha(
+        0, 0, Z_SCREEN_W, h, Z_COLOR_BG_GREEN_01, alpha);
+    z_draw_hline(
+        0, Z_SCREEN_W - 1, h, Z_COLOR_BG_GREEN_02);
+
+    z_draw_hline(
+        0, Z_SCREEN_W - 1, Z_SCREEN_H - h - 1, Z_COLOR_BG_GREEN_02);
+    z_draw_rectangleAlpha(
+        0, Z_SCREEN_H - h, Z_SCREEN_W, h, Z_COLOR_BG_GREEN_01, alpha);
 }
 
 static void swipeDrawHide(void)
 {
-    swipeDraw(z_fix_toInt(z_fix_sinf(g_angle) * (Z_SCREEN_H / 2)));
+    swipeDraw(g_angle);
 }
 
 static void swipeDrawShow(void)
 {
-    swipeDraw(z_fix_toInt(
-                z_fix_sinf(Z_FIX_DEG_090 - 1 - g_angle) * (Z_SCREEN_H / 2)));
+    swipeDraw(Z_FIX_DEG_090 - 1 - g_angle);
 }
 
 static const struct {
