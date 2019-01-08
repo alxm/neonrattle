@@ -22,7 +22,7 @@
 #include "util_fix.h"
 #include "util_graphics.h"
 
-#define O_APPLE_NUM_MAX 128
+#define O_APPLE_NUM_MAX 256
 #define O_APPLE_GROW_PER 1
 
 typedef struct OApple OApple;
