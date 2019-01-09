@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,28 +19,8 @@
 
 #include "platform.h"
 
-Z_EXTERN_C_START
+#include "obj_snake.h"
 
-typedef enum {
-    Z_STATE_INVALID = -1,
-    Z_STATE_DIED,
-    Z_STATE_INTRO,
-    Z_STATE_PLAY,
-    Z_STATE_START,
-    Z_STATE_NUM
-} ZStateId;
+extern void o_game_init(void);
 
-typedef void (ZStateInit)(void);
-typedef void (ZStateTick)(void);
-typedef void (ZStateDraw)(void);
-typedef void (ZStateFree)(void);
-
-extern void z_state_setup(void);
-
-extern void z_state_tick(void);
-extern void z_state_draw(void);
-
-extern void z_state_set(ZStateId NewState);
-extern bool z_state_changed(void);
-
-Z_EXTERN_C_END
+extern OSnake* o_game_snakeGet(void);

@@ -19,15 +19,13 @@
 
 #include "obj_apple.h"
 #include "obj_camera.h"
+#include "obj_game.h"
 #include "obj_map.h"
-#include "obj_snake.h"
 #include "util_effects.h"
 #include "util_hud.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_sound.h"
-
-static OSnake* g_snake;
 
 void s_start_init(void)
 {
@@ -39,34 +37,34 @@ void s_start_init(void)
     z_input_reset();
     z_light_reset();
 
-    ZFix startX, startY;
-    o_map_init(0, &startX, &startY);
-
-    g_snake = o_snake_new(startX, startY);
-    z_state_contextSet(g_snake);
+    o_game_init();
 }
 
 void s_start_tick(void)
 {
+    OSnake* snake = o_game_snakeGet();
+
     if(z_button_pressGetAny()) {
         z_sfx_play(Z_SFX_PRESSED_A);
         z_state_set(Z_STATE_PLAY);
     }
 
     o_map_tick();
-    o_snake_tickStart(g_snake);
-    o_camera_tick(o_snake_coordsGet(g_snake));
+    o_snake_tickStart(snake);
+    o_camera_tick(o_snake_coordsGet(snake));
     z_effects_tick();
-    z_hud_tick(g_snake);
+    z_hud_tick(snake);
 }
 
 void s_start_draw(void)
 {
+    OSnake* snake = o_game_snakeGet();
+
     o_map_draw();
     z_effects_draw1();
-    o_snake_draw(g_snake);
+    o_snake_draw(snake);
     z_effects_draw2();
-    z_hud_draw(g_snake);
+    z_hud_draw(snake);
 }
 
 void s_start_free(void)

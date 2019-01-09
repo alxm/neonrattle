@@ -79,11 +79,9 @@ static const ZState g_states[Z_STATE_NUM] = {
 static struct {
     ZStateId current;
     ZStateId next;
-    void* context;
 } g_state = {
     Z_STATE_INVALID,
     Z_STATE_INVALID,
-    NULL,
 };
 
 void z_state_setup(void)
@@ -162,14 +160,4 @@ void z_state_set(ZStateId NewState)
 bool z_state_changed(void)
 {
     return g_state.next != Z_STATE_INVALID;
-}
-
-void* z_state_contextGet(void)
-{
-    return g_state.context;
-}
-
-void z_state_contextSet(void* Context)
-{
-    g_state.context = Context;
 }
