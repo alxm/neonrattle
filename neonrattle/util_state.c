@@ -18,6 +18,7 @@
 #include "util_state.h"
 
 #include "obj_apple.h"
+#include "obj_camera.h"
 #include "obj_circle.h"
 #include "obj_map.h"
 #include "obj_particle.h"
@@ -26,7 +27,6 @@
 #include "state_intro.h"
 #include "state_play.h"
 #include "state_start.h"
-#include "util_camera.h"
 #include "util_light.h"
 #include "util_sound.h"
 #include "util_swipe.h"

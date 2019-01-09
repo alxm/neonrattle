@@ -17,7 +17,7 @@
 
 #include "obj_circle.h"
 
-#include "util_camera.h"
+#include "obj_camera.h"
 #include "util_graphics.h"
 #include "util_list.h"
 #include "util_pool.h"
@@ -67,7 +67,7 @@ bool o_circle_tick(OCircle* Circle)
 
 void o_circle_draw(const OCircle* Circle)
 {
-    ZVectorInt screen = z_camera_coordsToScreen(Circle->coords);
+    ZVectorInt screen = o_camera_coordsToScreen(Circle->coords);
 
     z_sprite_blitAlphaMask(Z_SPRITE_APPLE_HALO,
                            screen.x,

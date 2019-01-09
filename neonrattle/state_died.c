@@ -17,10 +17,10 @@
 
 #include "state_died.h"
 
+#include "obj_camera.h"
 #include "obj_map.h"
 #include "obj_snake.h"
 #include "state_play.h"
-#include "util_camera.h"
 #include "util_effects.h"
 #include "util_hud.h"
 #include "util_sound.h"
@@ -33,7 +33,7 @@ void s_died_init(void)
     g_snake = z_state_contextGet();
 
     z_timer_start(Z_TIMER_G1, 12);
-    z_camera_shakeSet(3);
+    o_camera_shakeSet(3);
     z_sfx_play(Z_SFX_END);
 }
 
@@ -41,7 +41,7 @@ void s_died_tick(void)
 {
     o_map_tick();
     o_snake_tickDied(g_snake);
-    z_camera_tick(o_snake_coordsGet(g_snake));
+    o_camera_tick(o_snake_coordsGet(g_snake));
     z_effects_tick();
     z_hud_tick(g_snake);
 

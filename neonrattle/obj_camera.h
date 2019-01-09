@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,11 +21,11 @@
 
 #include "util_fix.h"
 
-extern void z_camera_reset(void);
-extern void z_camera_tick(ZVectorFix Origin);
+extern void o_camera_reset(void);
+extern void o_camera_tick(ZVectorFix Origin);
 
-extern ZVectorFix z_camera_originGet(void);
-extern ZVectorInt z_camera_coordsToScreen(ZVectorFix WorldCoords);
+extern ZVectorFix o_camera_originGet(void);
+extern ZVectorInt o_camera_coordsToScreen(ZVectorFix WorldCoords);
 
-extern ZVectorInt z_camera_shakeGet(void);
-extern void z_camera_shakeSet(uint8_t Ds);
+extern ZVectorInt o_camera_shakeGet(void);
+extern void o_camera_shakeSet(uint8_t Ds);

@@ -18,9 +18,9 @@
 #include "state_start.h"
 
 #include "obj_apple.h"
+#include "obj_camera.h"
 #include "obj_map.h"
 #include "obj_snake.h"
-#include "util_camera.h"
 #include "util_effects.h"
 #include "util_hud.h"
 #include "util_input.h"
@@ -34,7 +34,7 @@ void s_start_init(void)
     o_apple_setup();
     o_snake_setup();
 
-    z_camera_reset();
+    o_camera_reset();
     z_effects_init();
     z_input_reset();
     z_light_reset();
@@ -55,7 +55,7 @@ void s_start_tick(void)
 
     o_map_tick();
     o_snake_tickStart(g_snake);
-    z_camera_tick(o_snake_coordsGet(g_snake));
+    o_camera_tick(o_snake_coordsGet(g_snake));
     z_effects_tick();
     z_hud_tick(g_snake);
 }

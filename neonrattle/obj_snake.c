@@ -18,8 +18,8 @@
 #include "obj_snake.h"
 
 #include "obj_apple.h"
+#include "obj_camera.h"
 #include "obj_map.h"
-#include "util_camera.h"
 #include "util_coords.h"
 #include "util_effects.h"
 #include "util_fps.h"
@@ -326,7 +326,7 @@ bool o_snake_tickPlay(OSnake* Snake)
         Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_HURT);
         Snake->life = z_math_max(Snake->life - damage, 0);
 
-        z_camera_shakeSet(1);
+        o_camera_shakeSet(1);
         z_sfx_play(Z_SFX_HIT_WALL);
 
         if(Snake->life == 0) {
@@ -359,7 +359,7 @@ void o_snake_draw(const OSnake* Snake)
 
     for(unsigned i = Snake->tail; len--; i = (i + 1) & O_SNAKE_LEN_MASK) {
         const OSnakeSegment* s = &Snake->body[i];
-        ZVectorInt screen = z_camera_coordsToScreen(s->coords);
+        ZVectorInt screen = o_camera_coordsToScreen(s->coords);
 
         if(alpha < O_SNAKE_ALPHA_MAX) {
             alpha += alphaInc;

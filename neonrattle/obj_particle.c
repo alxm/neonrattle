@@ -17,7 +17,7 @@
 
 #include "obj_particle.h"
 
-#include "util_camera.h"
+#include "obj_camera.h"
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_list.h"
@@ -74,7 +74,7 @@ bool o_particle_tick(OParticle* Particle)
 
 void o_particle_draw(const OParticle* Particle)
 {
-    ZVectorInt screen = z_camera_coordsToScreen(Particle->coords);
+    ZVectorInt screen = o_camera_coordsToScreen(Particle->coords);
 
     if(screen.x >= 0 && screen.x < Z_SCREEN_W
         && screen.y >= 0 && screen.y < Z_SCREEN_H) {

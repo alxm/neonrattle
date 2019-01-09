@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,7 +15,7 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "util_camera.h"
+#include "obj_camera.h"
 
 #include "util_coords.h"
 #include "util_timer.h"
@@ -24,13 +24,13 @@ static ZVectorFix g_coords;
 static ZVectorInt g_shake;
 static uint8_t g_shakeFrames;
 
-void z_camera_reset(void)
+void o_camera_reset(void)
 {
     g_shake = (ZVectorInt){0, 0};
     g_shakeFrames = 0;
 }
 
-void z_camera_tick(ZVectorFix Origin)
+void o_camera_tick(ZVectorFix Origin)
 {
     g_coords.x = z_math_clamp(Origin.x,
                               z_coords_pixelsToUnits(Z_SCREEN_W / 2),
@@ -49,12 +49,12 @@ void z_camera_tick(ZVectorFix Origin)
     }
 }
 
-ZVectorFix z_camera_originGet(void)
+ZVectorFix o_camera_originGet(void)
 {
     return g_coords;
 }
 
-ZVectorInt z_camera_coordsToScreen(ZVectorFix WorldCoords)
+ZVectorInt o_camera_coordsToScreen(ZVectorFix WorldCoords)
 {
     ZVectorFix relative = {WorldCoords.x - g_coords.x,
                            WorldCoords.y - g_coords.y};
@@ -67,12 +67,12 @@ ZVectorInt z_camera_coordsToScreen(ZVectorFix WorldCoords)
     return coords;
 }
 
-ZVectorInt z_camera_shakeGet(void)
+ZVectorInt o_camera_shakeGet(void)
 {
     return g_shake;
 }
 
-void z_camera_shakeSet(uint8_t Ds)
+void o_camera_shakeSet(uint8_t Ds)
 {
     g_shakeFrames = z_timer_dsToTicks(Ds);
 }

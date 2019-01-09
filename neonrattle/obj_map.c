@@ -18,7 +18,7 @@
 #include "obj_map.h"
 
 #include "obj_apple.h"
-#include "util_camera.h"
+#include "obj_camera.h"
 #include "util_coords.h"
 #include "util_graphics.h"
 
@@ -186,7 +186,7 @@ void o_map_draw(void)
 
 void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)
 {
-    ZVectorFix origin = z_camera_originGet();
+    ZVectorFix origin = o_camera_originGet();
 
     ZVectorFix topLeftCoords = {
         origin.x - z_coords_pixelsToUnits(Z_SCREEN_W / 2),
@@ -239,7 +239,7 @@ void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
     }
 
     if(ScreenStart != NULL) {
-        ZVectorInt shake = z_camera_shakeGet();
+        ZVectorInt shake = o_camera_shakeGet();
 
         topLeftScreen.x += shake.x;
         topLeftScreen.y += shake.y;

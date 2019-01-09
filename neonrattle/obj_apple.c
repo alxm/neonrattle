@@ -17,7 +17,7 @@
 
 #include "obj_apple.h"
 
-#include "util_camera.h"
+#include "obj_camera.h"
 #include "util_coords.h"
 #include "util_list.h"
 #include "util_pool.h"
@@ -94,7 +94,7 @@ void o_apple_tick(OApple* Apple)
 
 void o_apple_draw(const OApple* Apple)
 {
-    ZVectorInt screen = z_camera_coordsToScreen(Apple->coords);
+    ZVectorInt screen = o_camera_coordsToScreen(Apple->coords);
 
     screen.x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
     screen.y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
