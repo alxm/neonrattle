@@ -38,32 +38,14 @@ typedef struct {
 
 static OMap g_map;
 
-void o_map_setup(void)
-{
-    const ZPixel white = z_pixel_fromRgb(255, 255, 255);
-    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, 0);
-
-    for(int y = 0; y < Z_COORDS_MAP_H; y++) {
-        for(int x = 0; x < Z_COORDS_MAP_W; x++) {
-            g_map.tiles[y][x].wall = *pixels++ == white;
-        }
-    }
-
-    for(int y = Z_COORDS_GRID_H; y--; ) {
-        for(int x = Z_COORDS_GRID_W; x--; ) {
-            z_list_init(&g_map.grid[y][x].apples,
-                        o_apple_listNodeOffsets[O_APPLE_LIST_GRID]);
-        }
-    }
-}
-
 void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
 {
     g_map.totalApples = 0;
 
     for(int y = Z_COORDS_GRID_H; y--; ) {
         for(int x = Z_COORDS_GRID_W; x--; ) {
-            z_list_reset(&g_map.grid[y][x].apples);
+            z_list_init(&g_map.grid[y][x].apples,
+                        o_apple_listNodeOffsets[O_APPLE_LIST_GRID]);
         }
     }
 
@@ -72,6 +54,9 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
     for(int y = 0; y < Z_COORDS_MAP_H; y++) {
         for(int x = 0; x < Z_COORDS_MAP_W; x++) {
             const ZPixel p = *pixels++;
+
+            g_map.tiles[y][x].wall =
+                (p == z_colors[Z_COLOR_MAP_WHITE_100].pixel);
 
             if(p == z_colors[Z_COLOR_MAP_GREEN_100].pixel) {
                 *StartX = z_fix_fromInt(x) + Z_FIX_ONE / 2;

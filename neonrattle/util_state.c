@@ -20,7 +20,6 @@
 #include "obj_apple.h"
 #include "obj_camera.h"
 #include "obj_circle.h"
-#include "obj_map.h"
 #include "obj_particle.h"
 #include "obj_snake.h"
 #include "state_died.h"
@@ -85,7 +84,6 @@ void z_state_setup(void)
 {
     z_graphics_setup();
     z_sound_setup();
-    o_map_setup();
 
     #if Z_DEBUG_STATS
         z_state_set(Z_STATE_NEW);

@@ -22,8 +22,6 @@
 #include "util_fix.h"
 #include "util_list.h"
 
-extern void o_map_setup(void);
-
 extern void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY);
 extern void o_map_tick(void);
 extern void o_map_draw(void);
