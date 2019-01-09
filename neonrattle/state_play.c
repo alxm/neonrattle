@@ -35,14 +35,14 @@ void s_play_tick(void)
     OSnake* snake = o_game_snakeGet();
 
     o_map_tick();
-
-    if(o_snake_tickPlay(snake)) {
-        z_state_set(Z_STATE_DIED);
-    }
-
+    o_snake_tickPlay(snake);
     o_camera_tick(o_snake_coordsGet(snake));
     z_effects_tick();
     z_hud_tick(snake);
+
+    if(o_snake_flagsTest(snake, O_SNAKE_FLAG_DEAD)) {
+        z_state_set(Z_STATE_DIED);
+    }
 }
 
 void s_play_draw(void)

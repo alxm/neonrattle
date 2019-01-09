@@ -26,6 +26,7 @@
 typedef enum {
     O_SNAKE_FLAG_HURT = Z_FLAG_BIT(1),
     O_SNAKE_FLAG_ATE = Z_FLAG_BIT(2),
+    O_SNAKE_FLAG_DEAD = Z_FLAG_BIT(3),
 } OSnakeFlags;
 
 typedef struct OSnake OSnake;
@@ -40,6 +41,6 @@ extern int o_snake_lifeGet(const OSnake* Snake);
 extern bool o_snake_flagsTest(const OSnake* Snake, OSnakeFlags Flags);
 
 extern void o_snake_tickStart(OSnake* Snake);
-extern bool o_snake_tickPlay(OSnake* Snake);
+extern void o_snake_tickPlay(OSnake* Snake);
 extern void o_snake_tickDied(OSnake* Snake);
 extern void o_snake_draw(const OSnake* Snake);

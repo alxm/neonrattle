@@ -295,7 +295,7 @@ void o_snake_tickStart(OSnake* Snake)
     updateColors(Snake, true);
 }
 
-bool o_snake_tickPlay(OSnake* Snake)
+void o_snake_tickPlay(OSnake* Snake)
 {
     if(z_button_pressGet(Z_BUTTON_LEFT)) {
         Snake->angle += O_SNAKE_TURN_DEG;
@@ -330,17 +330,14 @@ bool o_snake_tickPlay(OSnake* Snake)
         z_sfx_play(Z_SFX_HIT_WALL);
 
         if(Snake->life == 0) {
+            Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_DEAD);
             colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
-
-            return true;
         }
     }
 
     if(checkApples(Snake)) {
         Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_ATE);
     }
-
-    return false;
 }
 
 void o_snake_tickDied(OSnake* Snake)
