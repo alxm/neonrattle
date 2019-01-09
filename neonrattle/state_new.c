@@ -15,13 +15,13 @@
     along with Neonrattle.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include "state_new.h"
 
-#include "platform.h"
+#include "obj_game.h"
 
-#include "obj_snake.h"
+void s_new_init(void)
+{
+    o_game_setup();
 
-extern void o_game_setup(void);
-
-extern OSnake* o_game_snakeGet(void);
-extern void o_game_nextLevel(void);
+    z_state_set(Z_STATE_START);
+}

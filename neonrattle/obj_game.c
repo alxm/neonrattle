@@ -26,17 +26,21 @@ typedef struct {
 
 static OGame g_game;
 
-void o_game_init(void)
+void o_game_setup(void)
 {
     g_game.level = 0;
-
-    ZFix startX, startY;
-    o_map_init(g_game.level, &startX, &startY);
-
-    g_game.snake = o_snake_new(startX, startY);
 }
 
 OSnake* o_game_snakeGet(void)
 {
     return g_game.snake;
+}
+
+void o_game_nextLevel(void)
+{
+    ZFix startX, startY;
+    o_map_init(g_game.level, &startX, &startY);
+
+    g_game.level++;
+    g_game.snake = o_snake_new(startX, startY);
 }

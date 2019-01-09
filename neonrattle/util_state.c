@@ -25,6 +25,7 @@
 #include "obj_snake.h"
 #include "state_died.h"
 #include "state_intro.h"
+#include "state_new.h"
 #include "state_play.h"
 #include "state_start.h"
 #include "util_light.h"
@@ -57,6 +58,14 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_intro_free,
         Z_SWIPE_INVALID,
         Z_SWIPE_HIDE,
+    },
+    [Z_STATE_NEW] = {
+        s_new_init,
+        NULL,
+        NULL,
+        NULL,
+        Z_SWIPE_INVALID,
+        Z_SWIPE_INVALID,
     },
     [Z_STATE_PLAY] = {
         s_play_init,
@@ -91,7 +100,7 @@ void z_state_setup(void)
     o_map_setup();
 
     #if Z_DEBUG_STATS
-        z_state_set(Z_STATE_START);
+        z_state_set(Z_STATE_NEW);
     #else
         z_state_set(Z_STATE_INTRO);
     #endif

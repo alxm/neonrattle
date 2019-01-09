@@ -19,9 +19,6 @@
 
 #include "platform.h"
 
-#include "obj_snake.h"
+#include "util_state.h"
 
-extern void o_game_setup(void);
-
-extern OSnake* o_game_snakeGet(void);
-extern void o_game_nextLevel(void);
+extern ZStateInit s_new_init;

@@ -32,12 +32,12 @@ void s_start_init(void)
     o_apple_setup();
     o_snake_setup();
 
+    o_game_nextLevel();
+
     o_camera_reset();
     z_effects_init();
     z_input_reset();
     z_light_reset();
-
-    o_game_init();
 }
 
 void s_start_tick(void)

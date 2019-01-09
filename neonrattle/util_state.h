@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,10 +23,11 @@ Z_EXTERN_C_START
 
 typedef enum {
     Z_STATE_INVALID = -1,
-    Z_STATE_DIED,
     Z_STATE_INTRO,
-    Z_STATE_PLAY,
+    Z_STATE_NEW,
     Z_STATE_START,
+    Z_STATE_PLAY,
+    Z_STATE_DIED,
     Z_STATE_NUM
 } ZStateId;
 

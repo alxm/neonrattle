@@ -44,7 +44,7 @@ void s_died_tick(void)
     z_hud_tick(snake);
 
     if(z_timer_expired(Z_TIMER_G1)) {
-        z_state_set(Z_STATE_START);
+        z_state_set(Z_STATE_NEW);
     }
 }
 
