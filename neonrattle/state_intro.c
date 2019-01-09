@@ -18,6 +18,7 @@
 #include "state_intro.h"
 
 #include "util_graphics.h"
+#include "util_swipe.h"
 #include "util_timer.h"
 
 #define S_LOGO_WAIT_DS (8)
@@ -48,7 +49,9 @@ void s_intro_tick(void)
                 if(++g_height == S_LOGO_WAIT_DS) {
                     g_stage = 2;
                     g_height = 0;
+
                     z_state_set(Z_STATE_NEW);
+                    z_swipe_start(Z_SWIPE_HIDE);
                 }
             } break;
 

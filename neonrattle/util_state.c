@@ -38,8 +38,6 @@ typedef struct {
     ZStateTick* tick;
     ZStateDraw* draw;
     ZStateFree* free;
-    ZSwipeId intro;
-    ZSwipeId outro;
 } ZState;
 
 static const ZState g_states[Z_STATE_NUM] = {
@@ -48,40 +46,30 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_died_tick,
         s_died_draw,
         s_died_free,
-        Z_SWIPE_INVALID,
-        Z_SWIPE_HIDE,
     },
     [Z_STATE_INTRO] = {
         s_intro_init,
         s_intro_tick,
         s_intro_draw,
         s_intro_free,
-        Z_SWIPE_INVALID,
-        Z_SWIPE_HIDE,
     },
     [Z_STATE_NEW] = {
         s_new_init,
         NULL,
         NULL,
         NULL,
-        Z_SWIPE_INVALID,
-        Z_SWIPE_INVALID,
     },
     [Z_STATE_PLAY] = {
         s_play_init,
         s_play_tick,
         s_play_draw,
         s_play_free,
-        Z_SWIPE_INVALID,
-        Z_SWIPE_INVALID,
     },
     [Z_STATE_START] = {
         s_start_init,
         s_start_tick,
         s_start_draw,
         s_start_free,
-        Z_SWIPE_SHOW,
-        Z_SWIPE_INVALID,
     },
 };
 
@@ -122,8 +110,6 @@ static void checkNewState(void)
     if(g_states[g_state.current].init) {
         g_states[g_state.current].init();
     }
-
-    z_swipe_start(g_states[g_state.current].intro);
 }
 
 void z_state_tick(void)
@@ -160,10 +146,6 @@ void z_state_set(ZStateId NewState)
     g_state.next = NewState;
 
     z_swipe_stop();
-
-    if(g_state.current != Z_STATE_INVALID) {
-        z_swipe_start(g_states[g_state.current].outro);
-    }
 }
 
 bool z_state_changed(void)

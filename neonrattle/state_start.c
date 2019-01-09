@@ -26,6 +26,7 @@
 #include "util_input.h"
 #include "util_light.h"
 #include "util_sound.h"
+#include "util_swipe.h"
 
 void s_start_init(void)
 {
@@ -38,6 +39,8 @@ void s_start_init(void)
     z_effects_init();
     z_input_reset();
     z_light_reset();
+
+    z_swipe_start(Z_SWIPE_SHOW);
 }
 
 void s_start_tick(void)

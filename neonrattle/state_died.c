@@ -24,6 +24,7 @@
 #include "util_effects.h"
 #include "util_hud.h"
 #include "util_sound.h"
+#include "util_swipe.h"
 #include "util_timer.h"
 
 void s_died_init(void)
@@ -45,6 +46,7 @@ void s_died_tick(void)
 
     if(z_timer_expired(Z_TIMER_G1)) {
         z_state_set(Z_STATE_NEW);
+        z_swipe_start(Z_SWIPE_HIDE);
     }
 }
 
