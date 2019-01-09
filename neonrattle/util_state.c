@@ -23,6 +23,7 @@
 #include "obj_particle.h"
 #include "obj_snake.h"
 #include "state_died.h"
+#include "state_end.h"
 #include "state_intro.h"
 #include "state_new.h"
 #include "state_play.h"
@@ -45,6 +46,12 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_died_tick,
         s_died_draw,
         s_died_free,
+    },
+    [Z_STATE_END] = {
+        s_end_init,
+        s_end_tick,
+        s_end_draw,
+        s_end_free,
     },
     [Z_STATE_INTRO] = {
         s_intro_init,

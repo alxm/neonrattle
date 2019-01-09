@@ -22,7 +22,6 @@
 #include "obj_map.h"
 #include "util_effects.h"
 #include "util_hud.h"
-#include "util_swipe.h"
 
 void s_play_init(void)
 {
@@ -39,13 +38,10 @@ void s_play_tick(void)
     z_effects_tick();
     z_hud_tick(snake);
 
-    if(!z_state_changed()) {
-        if(o_snake_flagsTest(snake, O_SNAKE_FLAG_DEAD)) {
-            z_state_set(Z_STATE_DIED);
-        } else if(o_snake_eatenNumGet(snake) == o_map_applesNumGet()) {
-            z_state_set(Z_STATE_START);
-            z_swipe_start(Z_SWIPE_HIDE);
-        }
+    if(o_snake_flagsTest(snake, O_SNAKE_FLAG_DEAD)) {
+        z_state_set(Z_STATE_DIED);
+    } else if(o_snake_eatenNumGet(snake) == o_map_applesNumGet()) {
+        z_state_set(Z_STATE_END);
     }
 }
 

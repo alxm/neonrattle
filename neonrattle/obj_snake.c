@@ -340,6 +340,12 @@ void o_snake_tickPlay(OSnake* Snake)
     }
 }
 
+void o_snake_tickEnd(OSnake* Snake)
+{
+    Snake->flags = 0;
+    colorSet(Snake, z_color_appleGet(), z_color_snakeGet());
+}
+
 void o_snake_tickDied(OSnake* Snake)
 {
     updateColors(Snake, false);
