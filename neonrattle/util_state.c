@@ -19,8 +19,6 @@
 
 #include "obj_apple.h"
 #include "obj_camera.h"
-#include "obj_circle.h"
-#include "obj_particle.h"
 #include "obj_snake.h"
 #include "state_died.h"
 #include "state_end.h"

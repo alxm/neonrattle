@@ -20,7 +20,6 @@
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
-#include "util_effects.h"
 #include "util_hud.h"
 #include "util_sound.h"
 #include "util_swipe.h"
@@ -39,7 +38,6 @@ void s_end_tick(void)
     o_map_tick();
     o_snake_tickEnd(snake);
     o_camera_tick(o_snake_coordsGet(snake));
-    z_effects_tick();
     z_hud_tick(snake);
 
     if(z_timer_expired(Z_TIMER_G1)) {
@@ -55,9 +53,7 @@ void s_end_draw(void)
     OSnake* snake = o_game_snakeGet();
 
     o_map_draw();
-    z_effects_draw1();
     o_snake_draw(snake);
-    z_effects_draw2();
     z_hud_draw(snake);
 }
 

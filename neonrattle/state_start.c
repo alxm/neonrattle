@@ -21,7 +21,6 @@
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
-#include "util_effects.h"
 #include "util_hud.h"
 #include "util_input.h"
 #include "util_light.h"
@@ -36,7 +35,6 @@ void s_start_init(void)
     o_game_nextLevel();
 
     o_camera_reset();
-    z_effects_init();
     z_input_reset();
     z_light_reset();
 
@@ -55,7 +53,6 @@ void s_start_tick(void)
     o_map_tick();
     o_snake_tickStart(snake);
     o_camera_tick(o_snake_coordsGet(snake));
-    z_effects_tick();
     z_hud_tick(snake);
 }
 
@@ -64,9 +61,7 @@ void s_start_draw(void)
     OSnake* snake = o_game_snakeGet();
 
     o_map_draw();
-    z_effects_draw1();
     o_snake_draw(snake);
-    z_effects_draw2();
     z_hud_draw(snake);
 }
 

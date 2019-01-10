@@ -21,7 +21,6 @@
 #include "obj_camera.h"
 #include "obj_map.h"
 #include "util_coords.h"
-#include "util_effects.h"
 #include "util_fps.h"
 #include "util_input.h"
 #include "util_light.h"
