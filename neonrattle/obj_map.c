@@ -55,10 +55,9 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
         for(int x = 0; x < Z_COORDS_MAP_W; x++) {
             const ZPixel p = *pixels++;
 
-            g_map.tiles[y][x].wall =
-                (p == z_colors[Z_COLOR_MAP_WHITE_100].pixel);
+            g_map.tiles[y][x].wall = (p == z_colors[Z_COLOR_MAP_WHITE].pixel);
 
-            if(p == z_colors[Z_COLOR_MAP_GREEN_100].pixel) {
+            if(p == z_colors[Z_COLOR_MAP_GREEN].pixel) {
                 *StartX = z_fix_fromInt(x) + Z_FIX_ONE / 2;
                 *StartY = z_fix_fromInt(y) + Z_FIX_ONE / 2;
 

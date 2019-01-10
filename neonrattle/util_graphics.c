@@ -45,10 +45,12 @@ void z_graphics_setup(void)
     for(ZColorId c = 0; c < Z_COLOR_NUM; c++, col++) {
         ZPixel pixel = z_sprite_pixelGet(Z_SPRITE_PALETTE, 0, col, row);
 
-        while(pixel == 0) {
-            row++;
+        if(pixel == 0) {
             col = 0;
-            pixel = z_sprite_pixelGet(Z_SPRITE_PALETTE, 0, col, row);
+
+            do {
+                pixel = z_sprite_pixelGet(Z_SPRITE_PALETTE, 0, col, ++row);
+            } while(pixel == 0);
         }
 
         z_colors[c].pixel = pixel;
