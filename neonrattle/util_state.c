@@ -89,6 +89,7 @@ void z_state_setup(void)
 {
     z_graphics_setup();
     z_sound_setup();
+    z_light_reset();
 
     #if Z_DEBUG_STATS
         z_state_set(Z_STATE_NEW);

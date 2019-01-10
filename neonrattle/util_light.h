@@ -26,6 +26,7 @@ typedef enum {
     Z_LIGHT_APPLE_EAT,
     Z_LIGHT_SNAKE_HIT_WALL,
     Z_LIGHT_SNAKE_HIT_SELF,
+    Z_LIGHT_LEVEL_COMPLETE,
     Z_LIGHT_NUM
 } ZLightId;
 

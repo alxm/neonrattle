@@ -21,6 +21,7 @@
 #include "obj_game.h"
 #include "obj_map.h"
 #include "util_hud.h"
+#include "util_light.h"
 #include "util_sound.h"
 #include "util_swipe.h"
 #include "util_timer.h"
@@ -29,6 +30,7 @@ void s_end_init(void)
 {
     z_timer_start(Z_TIMER_G1, 8);
     z_sfx_play(Z_SFX_FINISHED);
+    z_light_pulseSet(Z_LIGHT_LEVEL_COMPLETE);
 }
 
 void s_end_tick(void)

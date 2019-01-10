@@ -34,7 +34,11 @@ static const struct {
     },
     [Z_LIGHT_SNAKE_HIT_SELF] = {
         Z_COLOR_APPLE_03,
-        {Z_FIX_DEG_090, Z_FIX_DEG_090}
+        {Z_FIX_DEG_090 / 1, Z_FIX_DEG_090 / 1}
+    },
+    [Z_LIGHT_LEVEL_COMPLETE] = {
+        Z_COLOR_BG_GREEN_04,
+        {Z_FIX_DEG_090 / 4, Z_FIX_DEG_090 / 32}
     },
 };
 
