@@ -266,20 +266,21 @@ static bool checkApples(OSnake* Snake)
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
             Z_LIST_ITERATE(o_map_applesListGet(gridX, gridY), OApple*, apple) {
+                if(o_apple_eatGet(apple)) {
+                    continue;
+                }
+
                 if(z_coords_collideSquares(head->coords,
                                            snakeDim,
                                            o_apple_coordsGet(apple),
                                            o_apple_dimGet(apple))) {
 
-                    Snake->grow += O_APPLE_GROW_PER;
+                    Snake->grow += o_apple_eatSet(apple);
                     Snake->eaten++;
 
                     colorSet(
                         Snake, o_apple_colorGet(apple), z_color_snakeGet());
 
-                    o_apple_free(apple);
-
-                    z_effects_circles(head->coords.x, head->coords.y);
                     z_light_pulseSet(Z_LIGHT_APPLE_EAT);
                     z_sfx_play(Z_SFX_APPLE_EAT);
                 }

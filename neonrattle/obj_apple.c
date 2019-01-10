@@ -24,6 +24,7 @@
 
 #define O_APPLE_BOUNCE_DEG_STEP (8 * Z_FIX_DEG_001)
 #define O_APPLE_ALPHA_DEG_STEP (4 * Z_FIX_DEG_001)
+#define O_APPLE_ALPHA_DEG_STEP_FADE (Z_FIX_DEG_001)
 #define O_APPLE_ALPHA_MIN 160
 #define O_APPLE_ALPHA_MAX 256
 
@@ -33,6 +34,7 @@ struct OApple {
     ZFixu bounceAngle;
     ZFixu alphaAngle;
     ZColorId color;
+    bool eaten;
 };
 
 const size_t o_apple_listNodeOffsets[O_APPLE_LIST_NUM] = {
@@ -57,6 +59,7 @@ OApple* o_apple_new(ZFix X, ZFix Y)
         a->bounceAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
         a->alphaAngle = z_random_intu(z_fixu_fromInt(Z_ANGLES_NUM));
         a->color = z_color_appleGet();
+        a->eaten = false;
     }
 
     return a;
@@ -86,23 +89,53 @@ ZColorId o_apple_colorGet(const OApple* Apple)
     return Apple->color;
 }
 
+bool o_apple_eatGet(const OApple* Apple)
+{
+    return Apple->eaten;
+}
+
+int o_apple_eatSet(OApple* Apple)
+{
+    Apple->alphaAngle = 0;
+    Apple->eaten = true;
+
+    return O_APPLE_GROW_PER;
+}
+
 void o_apple_tick(OApple* Apple)
 {
-    Apple->bounceAngle += O_APPLE_BOUNCE_DEG_STEP;
-    Apple->alphaAngle += O_APPLE_ALPHA_DEG_STEP;
+    if(Apple->eaten) {
+        Apple->alphaAngle += O_APPLE_ALPHA_DEG_STEP_FADE;
+
+        if(Apple->alphaAngle >= Z_FIX_DEG_090) {
+            o_apple_free(Apple);
+        }
+    } else {
+        Apple->bounceAngle += O_APPLE_BOUNCE_DEG_STEP;
+        Apple->alphaAngle += O_APPLE_ALPHA_DEG_STEP;
+    }
 }
 
 void o_apple_draw(const OApple* Apple)
 {
     ZVectorInt screen = o_camera_coordsToScreen(Apple->coords);
+    ZSpriteId sprite;
+    int alpha;
 
-    screen.x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
-    screen.y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
+    if(Apple->eaten) {
+        sprite = Z_SPRITE_APPLE_HALO;
+        alpha = z_fix_toInt(
+                    z_fix_sinf(Z_FIX_DEG_090 - Apple->alphaAngle) * 192);
+    } else {
+        sprite = Z_SPRITE_APPLE_MASK;
+        alpha =
+            O_APPLE_ALPHA_MIN + (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2
+                + z_fix_toInt(z_fix_sinf(Apple->alphaAngle)
+                                * (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2);
 
-    int alpha = O_APPLE_ALPHA_MIN + (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2
-        + z_fix_toInt(z_fix_sinf(Apple->alphaAngle)
-                        * (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2);
+        screen.x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
+        screen.y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
+    }
 
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_APPLE_MASK, screen.x, screen.y, 0, Apple->color, alpha);
+    z_sprite_blitAlphaMask(sprite, screen.x, screen.y, 0, Apple->color, alpha);
 }

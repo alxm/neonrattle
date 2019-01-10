@@ -44,5 +44,8 @@ extern ZVectorFix o_apple_coordsGet(const OApple* Apple);
 extern ZFix o_apple_dimGet(const OApple* Apple);
 extern ZColorId o_apple_colorGet(const OApple* Apple);
 
+extern bool o_apple_eatGet(const OApple* Apple);
+extern int o_apple_eatSet(OApple* Apple);
+
 extern void o_apple_tick(OApple* Apple);
 extern void o_apple_draw(const OApple* Apple);

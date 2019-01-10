@@ -28,7 +28,7 @@
 
 void s_end_init(void)
 {
-    z_timer_start(Z_TIMER_G1, 5);
+    z_timer_start(Z_TIMER_G1, 8);
     z_sfx_play(Z_SFX_FINISHED);
 }
 
