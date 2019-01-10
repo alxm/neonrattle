@@ -25,7 +25,7 @@
 #define O_APPLE_BOUNCE_DEG_STEP (8 * Z_FIX_DEG_001)
 #define O_APPLE_ALPHA_DEG_STEP (4 * Z_FIX_DEG_001)
 #define O_APPLE_ALPHA_DEG_STEP_FADE (Z_FIX_DEG_001)
-#define O_APPLE_ALPHA_MIN 160
+#define O_APPLE_ALPHA_MIN 192
 #define O_APPLE_ALPHA_MAX 256
 
 struct OApple {
@@ -124,8 +124,8 @@ void o_apple_draw(const OApple* Apple)
 
     if(Apple->eaten) {
         sprite = Z_SPRITE_APPLE_HALO;
-        alpha = z_fix_toInt(
-                    z_fix_sinf(Z_FIX_DEG_090 - Apple->alphaAngle) * 192);
+        alpha = z_fix_toInt(z_fix_sinf(Z_FIX_DEG_090 - Apple->alphaAngle)
+                                * O_APPLE_ALPHA_MIN);
     } else {
         sprite = Z_SPRITE_APPLE_MASK;
         alpha =
