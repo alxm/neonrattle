@@ -53,28 +53,33 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
 
     for(int y = 0; y < Z_COORDS_MAP_H; y++) {
         for(int x = 0; x < Z_COORDS_MAP_W; x++) {
-            const ZPixel p = *pixels++;
+            ZPixel p = *pixels++;
 
             g_map.tiles[y][x].wall = (p == z_colors[Z_COLOR_MAP_WHITE].pixel);
 
             if(p == z_colors[Z_COLOR_MAP_GREEN].pixel) {
                 *StartX = z_fix_fromInt(x) + Z_FIX_ONE / 2;
                 *StartY = z_fix_fromInt(y) + Z_FIX_ONE / 2;
-
-                continue;
             }
+        }
+    }
 
+    pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, Level);
+
+    for(int y = 0; y < Z_COORDS_MAP_H; y++) {
+        for(int x = 0; x < Z_COORDS_MAP_W; x++) {
+            ZPixel p = *pixels++;
             ZRgb rgb = z_pixel_toRgb(p);
 
-            int num = rgb.r > 0 && rgb.g == 0 && rgb.b == 0
-                        ? 4 * rgb.r / 255
-                        : 0;
+            int numApples = rgb.r > 0 && rgb.g == 0 && rgb.b == 0
+                                ? 4 * rgb.r / 255
+                                : 0;
 
-            if(num == 0) {
+            if(numApples == 0) {
                 continue;
             }
 
-            g_map.totalApples += num;
+            g_map.totalApples += numApples;
 
             ZVectorInt grid = z_coords_tileToGrid((ZVectorInt){x, y});
             ZVectorInt gridTileOffset = z_coords_tileToGridOffset(
@@ -90,7 +95,9 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
 
             if(gridTileOffset.x > 0 && !g_map.tiles[y][x - 1].wall) {
                 startX = 0;
-            } else if(gridTileOffset.x < Z_COORDS_TILES_PER_GRID - 1
+            }
+
+            if(gridTileOffset.x < Z_COORDS_TILES_PER_GRID - 1
                 && !g_map.tiles[y][x + 1].wall) {
 
                 endX = Z_FIX_ONE + z_coords_pixelsToUnits(1);
@@ -98,13 +105,15 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
 
             if(gridTileOffset.y > 0 && !g_map.tiles[y - 1][x].wall) {
                 startY = 0;
-            } else if(gridTileOffset.y < Z_COORDS_TILES_PER_GRID - 1
+            }
+
+            if(gridTileOffset.y < Z_COORDS_TILES_PER_GRID - 1
                 && !g_map.tiles[y + 1][x].wall) {
 
                 endY = Z_FIX_ONE + z_coords_pixelsToUnits(1);
             }
 
-            while(num--) {
+            while(numApples--) {
                 ZFix ax = z_fix_fromInt(x) + z_random_range(startX, endX);
                 ZFix ay = z_fix_fromInt(y) + z_random_range(startY, endY);
 
