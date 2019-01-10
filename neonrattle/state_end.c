@@ -29,7 +29,7 @@
 void s_end_init(void)
 {
     z_timer_start(Z_TIMER_G1, 5);
-    z_sfx_play(Z_SFX_END);
+    z_sfx_play(Z_SFX_FINISHED);
 }
 
 void s_end_tick(void)

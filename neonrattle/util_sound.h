@@ -21,6 +21,7 @@ typedef enum {
     Z_SFX_INVALID = -1,
     Z_SFX_APPLE_EAT,
     Z_SFX_END,
+    Z_SFX_FINISHED,
     Z_SFX_HIT_WALL,
     Z_SFX_PRESSED_A,
     Z_SFX_SWIPE_HIDE,
