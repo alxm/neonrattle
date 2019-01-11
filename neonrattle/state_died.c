@@ -55,6 +55,7 @@ void s_died_draw(void)
 
     o_map_draw();
     o_snake_draw(snake);
+    o_map_drawMinimap();
     z_hud_draw(snake);
 }
 

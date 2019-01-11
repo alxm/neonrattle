@@ -17,7 +17,6 @@
 
 #include "obj_snake.h"
 
-#include "obj_apple.h"
 #include "obj_camera.h"
 #include "obj_map.h"
 #include "util_coords.h"
@@ -274,7 +273,7 @@ static bool checkApples(OSnake* Snake)
                                            o_apple_coordsGet(apple),
                                            o_apple_dimGet(apple))) {
 
-                    Snake->grow += o_apple_eatSet(apple);
+                    Snake->grow += o_map_appleEat(apple);
                     Snake->eaten++;
 
                     colorSet(

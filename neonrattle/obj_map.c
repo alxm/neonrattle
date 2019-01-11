@@ -17,13 +17,16 @@
 
 #include "obj_map.h"
 
-#include "obj_apple.h"
 #include "obj_camera.h"
 #include "util_coords.h"
+#include "util_fps.h"
 #include "util_graphics.h"
 
+#define O_TILE_APPLES_MAX 4
+
 typedef struct {
-    bool wall;
+    uint8_t wall;
+    uint8_t numApples;
 } OMapTile;
 
 typedef struct {
@@ -56,6 +59,7 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
             ZPixel p = *pixels++;
 
             g_map.tiles[y][x].wall = (p == z_colors[Z_COLOR_MAP_WHITE].pixel);
+            g_map.tiles[y][x].numApples = 0;
 
             if(p == z_colors[Z_COLOR_MAP_GREEN].pixel) {
                 *StartX = z_fix_fromInt(x) + Z_FIX_ONE / 2;
@@ -72,14 +76,12 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
             ZRgb rgb = z_pixel_toRgb(p);
 
             int numApples = rgb.r > 0 && rgb.g == 0 && rgb.b == 0
-                                ? 4 * rgb.r / 255
+                                ? O_TILE_APPLES_MAX * rgb.r / 255
                                 : 0;
 
             if(numApples == 0) {
                 continue;
             }
-
-            g_map.totalApples += numApples;
 
             ZVectorInt grid = z_coords_tileToGrid((ZVectorInt){x, y});
             ZVectorInt gridTileOffset = z_coords_tileToGridOffset(
@@ -100,7 +102,7 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
             if(gridTileOffset.x < Z_COORDS_TILES_PER_GRID - 1
                 && !g_map.tiles[y][x + 1].wall) {
 
-                endX = Z_FIX_ONE + z_coords_pixelsToUnits(1);
+                endX = Z_FIX_ONE;
             }
 
             if(gridTileOffset.y > 0 && !g_map.tiles[y - 1][x].wall) {
@@ -110,7 +112,7 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
             if(gridTileOffset.y < Z_COORDS_TILES_PER_GRID - 1
                 && !g_map.tiles[y + 1][x].wall) {
 
-                endY = Z_FIX_ONE + z_coords_pixelsToUnits(1);
+                endY = Z_FIX_ONE;
             }
 
             while(numApples--) {
@@ -121,6 +123,8 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
 
                 if(a != NULL) {
                     z_list_addLast(&g_map.grid[grid.y][grid.x].apples, a);
+                    g_map.tiles[y][x].numApples++;
+                    g_map.totalApples++;
                 }
             }
         }
@@ -172,6 +176,54 @@ void o_map_draw(void)
         for(int gridX = gridStart.x; gridX < gridEnd.x; gridX++) {
             Z_LIST_ITERATE(&g_map.grid[gridY][gridX].apples, OApple*, apple) {
                 o_apple_draw(apple);
+            }
+        }
+    }
+}
+
+void o_map_drawMinimap(void)
+{
+    int drawXStart = Z_SCREEN_W - Z_COORDS_MAP_W - 2;
+    int drawYStart = Z_SCREEN_H - Z_COORDS_MAP_H - 2;
+
+    z_draw_rectangleAlpha(drawXStart,
+                          drawYStart - 1,
+                          Z_COORDS_MAP_W,
+                          1,
+                          Z_COLOR_SNAKE_01,
+                          48);
+    z_draw_rectangleAlpha(drawXStart,
+                          drawYStart + Z_COORDS_MAP_H,
+                          Z_COORDS_MAP_W,
+                          1,
+                          Z_COLOR_SNAKE_01,
+                          48);
+    z_draw_rectangleAlpha(drawXStart - 1,
+                          drawYStart,
+                          1,
+                          Z_COORDS_MAP_H,
+                          Z_COLOR_SNAKE_01,
+                          48);
+    z_draw_rectangleAlpha(drawXStart + Z_COORDS_MAP_W,
+                          drawYStart,
+                          1,
+                          Z_COORDS_MAP_H,
+                          Z_COLOR_SNAKE_01,
+                          48);
+
+    for(int y = 0, drawY = drawYStart; y < Z_COORDS_MAP_H; y++, drawY++) {
+        for(int x = 0, drawX = drawXStart; x < Z_COORDS_MAP_W; x++, drawX++) {
+            if(g_map.tiles[y][x].wall) {
+                z_pixel_drawAlpha2(drawX, drawY, Z_COLOR_SNAKE_01, 128);
+            } else {
+                int numApples = g_map.tiles[y][x].numApples;
+
+                if(numApples == 0) {
+                    z_pixel_drawAlpha2(drawX, drawY, Z_COLOR_BG_GREEN_01, 192);
+                } else {
+                    int alpha = 192 + 64 * numApples / O_TILE_APPLES_MAX;
+                    z_pixel_drawAlpha2(drawX, drawY, Z_COLOR_APPLE_03, alpha);
+                }
             }
         }
     }
@@ -249,6 +301,15 @@ ZList* o_map_applesListGet(int GridX, int GridY)
 int o_map_applesNumGet(void)
 {
     return g_map.totalApples;
+}
+
+int o_map_appleEat(OApple* Apple)
+{
+    ZVectorInt tile = z_vectorfix_toInt(o_apple_coordsGet(Apple));
+
+    g_map.tiles[tile.y][tile.x].numApples--;
+
+    return o_apple_eatSet(Apple);
 }
 
 bool o_map_isWall(ZVectorInt Tile)

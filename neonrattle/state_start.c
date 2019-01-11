@@ -17,7 +17,6 @@
 
 #include "state_start.h"
 
-#include "obj_apple.h"
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
@@ -62,6 +61,7 @@ void s_start_draw(void)
 
     o_map_draw();
     o_snake_draw(snake);
+    o_map_drawMinimap();
     z_hud_draw(snake);
 }
 
