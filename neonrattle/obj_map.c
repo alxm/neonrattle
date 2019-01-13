@@ -221,9 +221,15 @@ void o_map_drawMinimap(ZVectorFix PlayerSnake)
                     z_draw_pixelCoordsIdAlpha(
                         drawX, drawY, Z_COLOR_BG_GREEN_01, 192);
                 } else {
-                    int alpha = 128 + 128 * numApples / O_TILE_APPLES_MAX;
-                    z_draw_pixelCoordsIdAlpha(
-                        drawX, drawY, Z_COLOR_APPLE_03, alpha);
+                    ZRgb base = z_colors[Z_COLOR_BG_GREEN_01].rgb;
+                    const ZRgb* target = &z_colors[Z_COLOR_APPLE_03].rgb;
+                    int alpha = 160 + 96 * numApples / O_TILE_APPLES_MAX;
+
+                    base.r += ((target->r - base.r) * alpha) >> 8;
+                    base.g += ((target->g - base.g) * alpha) >> 8;
+                    base.b += ((target->b - base.b) * alpha) >> 8;
+
+                    z_draw_pixelCoordsRgbAlpha(drawX, drawY, &base, 192);
                 }
             }
         }

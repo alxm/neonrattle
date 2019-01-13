@@ -138,4 +138,10 @@ static inline void z_draw_pixelCoordsIdAlpha(int X, int Y, ZColorId Color, int A
         z_screen_pixelsGet() + Y * Z_SCREEN_W + X, &z_colors[Color].rgb, Alpha);
 }
 
+static inline void z_draw_pixelCoordsRgbAlpha(int X, int Y, const ZRgb* Rgb, int Alpha)
+{
+    z_draw_pixelBufferRgbAlpha(
+        z_screen_pixelsGet() + Y * Z_SCREEN_W + X, Rgb, Alpha);
+}
+
 Z_EXTERN_C_END
