@@ -75,13 +75,12 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
             ZPixel p = *pixels++;
             ZRgb rgb = z_pixel_toRgb(p);
 
-            int numApples = rgb.r > 0 && rgb.g == 0 && rgb.b == 0
-                                ? 1 + (O_TILE_APPLES_MAX - 1) * rgb.r / 255
-                                : 0;
-
-            if(numApples == 0) {
+            if(rgb.r == 0 || rgb.g > 0 || rgb.b > 0) {
                 continue;
             }
+
+            int div = 255 / (O_TILE_APPLES_MAX - 1);
+            int numApples = 1 + (rgb.r + div / 2) / div;
 
             ZVectorInt grid = z_coords_tileToGrid((ZVectorInt){x, y});
             ZVectorInt gridTileOffset = z_coords_tileToGridOffset(
