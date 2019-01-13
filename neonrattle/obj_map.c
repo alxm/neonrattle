@@ -76,7 +76,7 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
             ZRgb rgb = z_pixel_toRgb(p);
 
             int numApples = rgb.r > 0 && rgb.g == 0 && rgb.b == 0
-                                ? O_TILE_APPLES_MAX * rgb.r / 255
+                                ? 1 + (O_TILE_APPLES_MAX - 1) * rgb.r / 255
                                 : 0;
 
             if(numApples == 0) {
@@ -221,7 +221,7 @@ void o_map_drawMinimap(ZVectorFix PlayerSnake)
                 if(numApples == 0) {
                     z_pixel_drawAlpha2(drawX, drawY, Z_COLOR_BG_GREEN_01, 192);
                 } else {
-                    int alpha = 192 + 64 * numApples / O_TILE_APPLES_MAX;
+                    int alpha = 128 + 128 * numApples / O_TILE_APPLES_MAX;
                     z_pixel_drawAlpha2(drawX, drawY, Z_COLOR_APPLE_03, alpha);
                 }
             }
