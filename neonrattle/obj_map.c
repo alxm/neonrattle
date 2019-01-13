@@ -181,7 +181,7 @@ void o_map_draw(void)
     }
 }
 
-void o_map_drawMinimap(void)
+void o_map_drawMinimap(ZVectorFix PlayerSnake)
 {
     int drawXStart = Z_SCREEN_W - Z_COORDS_MAP_W - 2;
     int drawYStart = Z_SCREEN_H - Z_COORDS_MAP_H - 2;
@@ -227,6 +227,15 @@ void o_map_drawMinimap(void)
             }
         }
     }
+
+    ZVectorInt tile = z_vectorfix_toInt(PlayerSnake);
+
+    z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MINIMAP,
+                           drawXStart + tile.x,
+                           drawYStart + tile.y,
+                           0,
+                           Z_COLOR_SNAKE_03,
+                           256);
 }
 
 void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)

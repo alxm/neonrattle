@@ -23,6 +23,7 @@
 #include "generated/data_gfx_maps_grid16x16.h"
 #include "generated/data_gfx_tiles_grid16x16.h"
 #include "generated/data_gfx_snake_mask_grid8x8.h"
+#include "generated/data_gfx_snake_minimap.h"
 #include "generated/data_gfx_apple_mask.h"
 #include "generated/data_gfx_apple_halo.h"
 #include "generated/data_gfx_icon_heart.h"
@@ -35,6 +36,7 @@ void z_graphics_setup(void)
     z_sprite_loadGrid(Z_SPRITE_MAPS, maps_grid16x16, 16, 16);
     z_sprite_loadGrid(Z_SPRITE_TILES, tiles_grid16x16, 16, 16);
     z_sprite_loadGrid(Z_SPRITE_SNAKE_MASK, snake_mask_grid8x8, 8, 8);
+    z_sprite_load(Z_SPRITE_SNAKE_MINIMAP, snake_minimap);
     z_sprite_load(Z_SPRITE_APPLE_MASK, apple_mask);
     z_sprite_load(Z_SPRITE_APPLE_HALO, apple_halo);
     z_sprite_load(Z_SPRITE_ICON_HEART, icon_heart);

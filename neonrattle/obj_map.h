@@ -26,7 +26,7 @@
 extern void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY);
 extern void o_map_tick(void);
 extern void o_map_draw(void);
-extern void o_map_drawMinimap(void);
+extern void o_map_drawMinimap(ZVectorFix PlayerSnake);
 
 extern void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart);
 
