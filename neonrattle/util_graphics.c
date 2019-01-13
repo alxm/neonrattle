@@ -132,7 +132,7 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
             int a = (Alpha * z_pixel_toR(*spritePixels2++)) >> 8;
 
             if(a != 0) {
-                z_pixel_drawAlpha(screenPixels2, Rgb, a);
+                z_draw_pixelBufferRgbAlpha(screenPixels2, Rgb, a);
             }
 
             screenPixels2++;
@@ -176,7 +176,7 @@ void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId Color, int Alpha
         ZPixel* screenPixels2 = screenPixels;
 
         for(int x = W; x--; ) {
-            z_pixel_drawAlpha(screenPixels2++, rgb, Alpha);
+            z_draw_pixelBufferRgbAlpha(screenPixels2++, rgb, Alpha);
         }
 
         screenPixels += Z_SCREEN_W;

@@ -123,7 +123,7 @@ extern void z_draw_hline(int X1, int X2, int Y, ZColorId Color);
 extern void z_draw_vline(int X, int Y1, int Y2, ZColorId Color);
 extern void z_draw_circle(int X, int Y, int Radius, ZColorId Color);
 
-static inline void z_pixel_drawAlpha(ZPixel* Dst, const ZRgb* Rgb, int Alpha)
+static inline void z_draw_pixelBufferRgbAlpha(ZPixel* Dst, const ZRgb* Rgb, int Alpha)
 {
     ZRgb rgb = z_pixel_toRgb(*Dst);
 
@@ -132,11 +132,10 @@ static inline void z_pixel_drawAlpha(ZPixel* Dst, const ZRgb* Rgb, int Alpha)
                            rgb.b + (((Rgb->b - rgb.b) * Alpha) >> 8));
 }
 
-static inline void z_pixel_drawAlpha2(int X, int Y, ZColorId Color, int Alpha)
+static inline void z_draw_pixelCoordsIdAlpha(int X, int Y, ZColorId Color, int Alpha)
 {
-    z_pixel_drawAlpha(z_screen_pixelsGet() + Y * Z_SCREEN_W + X,
-                      &z_colors[Color].rgb,
-                      Alpha);
+    z_draw_pixelBufferRgbAlpha(
+        z_screen_pixelsGet() + Y * Z_SCREEN_W + X, &z_colors[Color].rgb, Alpha);
 }
 
 Z_EXTERN_C_END

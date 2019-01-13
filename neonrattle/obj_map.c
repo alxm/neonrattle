@@ -214,15 +214,17 @@ void o_map_drawMinimap(ZVectorFix PlayerSnake)
     for(int y = 0, drawY = drawYStart; y < Z_COORDS_MAP_H; y++, drawY++) {
         for(int x = 0, drawX = drawXStart; x < Z_COORDS_MAP_W; x++, drawX++) {
             if(g_map.tiles[y][x].wall) {
-                z_pixel_drawAlpha2(drawX, drawY, Z_COLOR_SNAKE_01, 128);
+                z_draw_pixelCoordsIdAlpha(drawX, drawY, Z_COLOR_SNAKE_01, 128);
             } else {
                 int numApples = g_map.tiles[y][x].numApples;
 
                 if(numApples == 0) {
-                    z_pixel_drawAlpha2(drawX, drawY, Z_COLOR_BG_GREEN_01, 192);
+                    z_draw_pixelCoordsIdAlpha(
+                        drawX, drawY, Z_COLOR_BG_GREEN_01, 192);
                 } else {
                     int alpha = 128 + 128 * numApples / O_TILE_APPLES_MAX;
-                    z_pixel_drawAlpha2(drawX, drawY, Z_COLOR_APPLE_03, alpha);
+                    z_draw_pixelCoordsIdAlpha(
+                        drawX, drawY, Z_COLOR_APPLE_03, alpha);
                 }
             }
         }
