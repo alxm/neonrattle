@@ -31,12 +31,12 @@ static inline ZRgb z_pixel_toRgb(ZPixel Pixel)
     return rgb;
 }
 
-static inline int z_pixel_toR(ZPixel Pixel)
+static inline int z_pixel_toAnyChannel(ZPixel Pixel)
 {
-    int red;
-    a_pixel_toRgb(Pixel, &red, NULL, NULL);
+    int blue;
+    a_pixel_toRgb(Pixel, NULL, NULL, &blue);
 
-    return red;
+    return blue;
 }
 
 static inline ZPixel z_pixel_fromRgb(int Red, int Green, int Blue)

@@ -32,9 +32,9 @@ static inline ZRgb z_pixel_toRgb(ZPixel Pixel)
                   ((Pixel >> 0)  & ((1 << 5) - 1)) << 3};
 }
 
-static inline int z_pixel_toR(ZPixel Pixel)
+static inline int z_pixel_toAnyChannel(ZPixel Pixel)
 {
-    return (Pixel >> 11) << 3;
+    return (Pixel << 3) & 0xff;
 }
 
 static inline ZPixel z_pixel_fromRgb(int Red, int Green, int Blue)

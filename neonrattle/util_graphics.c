@@ -129,7 +129,7 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
         const ZPixel* spritePixels2 = spritePixels;
 
         for(int x = spriteDrawW; x--; ) {
-            int a = (Alpha * z_pixel_toR(*spritePixels2++)) >> 8;
+            int a = (Alpha * z_pixel_toAnyChannel(*spritePixels2++)) >> 8;
 
             if(a != 0) {
                 z_draw_pixelBufferRgbAlpha(screenPixels2, Rgb, a);
