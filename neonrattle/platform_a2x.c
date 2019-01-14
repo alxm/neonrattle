@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,13 +24,15 @@
 #include "util_state.h"
 
 #if Z_PLATFORM_A2X
-ZColor z_colors[Z_COLOR_NUM];
-static AButton* g_buttons[Z_BUTTON_NUM];
-static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
-static struct {
+typedef struct {
     ASample* sample;
     int channel;
-} g_sfx[Z_SFX_NUM];
+} ZSfx;
+
+ZColor z_colors[Z_COLOR_NUM];
+static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
+static ZSfx g_sfx[Z_SFX_NUM];
+static AButton* g_buttons[Z_BUTTON_NUM];
 
 A_SETUP
 {
@@ -117,11 +119,6 @@ A_MAIN
 bool z_button_pressGet(ZButtonId Button)
 {
     return a_button_pressGet(g_buttons[Button]);
-}
-
-void z_button_pressClear(ZButtonId Button)
-{
-    a_button_pressClear(g_buttons[Button]);
 }
 
 ZPixel* z_screen_pixelsGet(void)

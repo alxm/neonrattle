@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,6 +17,13 @@
 
 #include "util_input.h"
 
+typedef struct {
+    char pressed : 2;
+    char waitForRelease : 2;
+} ZButton;
+
+static ZButton g_buttons[Z_BUTTON_NUM];
+
 void z_input_reset(void)
 {
     for(int b = 0; b < Z_BUTTON_NUM; b++) {
@@ -24,24 +31,45 @@ void z_input_reset(void)
     }
 }
 
+void z_input_tick(void)
+{
+    for(int b = 0; b < Z_BUTTON_NUM; b++) {
+        bool pressed = z_button_pressGet(b);
+
+        if(g_buttons[b].waitForRelease) {
+            if(!pressed) {
+                g_buttons[b].waitForRelease = false;
+            }
+        } else {
+            g_buttons[b].pressed = pressed;
+        }
+    }
+}
+
 bool z_button_pressGetOnce(ZButtonId Button)
 {
-    bool pressed = z_button_pressGet(Button);
-
-    if(pressed) {
+    if(g_buttons[Button].pressed) {
         z_button_pressClear(Button);
+
+        return true;
     }
 
-    return pressed;
+    return false;
 }
 
 bool z_button_pressGetAny(void)
 {
     for(int b = 0; b < Z_BUTTON_NUM; b++) {
-        if(z_button_pressGet(b)) {
+        if(g_buttons[b].pressed) {
             return true;
         }
     }
 
     return false;
+}
+
+void z_button_pressClear(ZButtonId Button)
+{
+    g_buttons[Button].pressed = false;
+    g_buttons[Button].waitForRelease = true;
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -34,11 +34,11 @@ typedef enum Z_PACK_ENUM {
 } ZButtonId;
 
 extern void z_input_reset(void);
+extern void z_input_tick(void);
 
 extern bool z_button_pressGet(ZButtonId Button);
 extern bool z_button_pressGetOnce(ZButtonId Button);
-extern void z_button_pressClear(ZButtonId Button);
-
 extern bool z_button_pressGetAny(void);
+extern void z_button_pressClear(ZButtonId Button);
 
 Z_EXTERN_C_END

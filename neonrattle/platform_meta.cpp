@@ -27,12 +27,6 @@
 
 #if Z_PLATFORM_META
 typedef struct {
-    Button index;
-    bool pressed : 1;
-    bool released : 1;
-} ZButton;
-
-typedef struct {
     Image image;
     const uint16_t* buffer;
 } ZSprite;
@@ -43,22 +37,23 @@ typedef struct {
 } ZSfx;
 
 ZColor z_colors[Z_COLOR_NUM];
-static ZButton g_buttons[Z_BUTTON_NUM];
 static ZSprite g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
+
+static const Button g_buttons[Z_BUTTON_NUM] = {
+    [Z_BUTTON_UP] = BUTTON_UP,
+    [Z_BUTTON_DOWN] = BUTTON_DOWN,
+    [Z_BUTTON_LEFT] = BUTTON_LEFT,
+    [Z_BUTTON_RIGHT] = BUTTON_RIGHT,
+    [Z_BUTTON_A] = BUTTON_A,
+    [Z_BUTTON_B] = BUTTON_B,
+    [Z_BUTTON_MENU] = BUTTON_MENU,
+};
 
 void setup(void)
 {
     gb.begin();
     gb.setFrameRate(Z_FPS);
-
-    g_buttons[Z_BUTTON_UP].index = BUTTON_UP;
-    g_buttons[Z_BUTTON_DOWN].index = BUTTON_DOWN;
-    g_buttons[Z_BUTTON_LEFT].index = BUTTON_LEFT;
-    g_buttons[Z_BUTTON_RIGHT].index = BUTTON_RIGHT;
-    g_buttons[Z_BUTTON_A].index = BUTTON_A;
-    g_buttons[Z_BUTTON_B].index = BUTTON_B;
-    g_buttons[Z_BUTTON_MENU].index = BUTTON_MENU;
 
     z_state_setup();
 }
@@ -67,18 +62,6 @@ void loop(void)
 {
     if(!gb.update()) {
         return;
-    }
-
-    for(uint8_t b = 0; b < Z_BUTTON_NUM; b++) {
-        bool pressed = gb.buttons.repeat(g_buttons[b].index, 0);
-
-        if(g_buttons[b].released) {
-            if(!pressed) {
-                g_buttons[b].released = false;
-            }
-        } else {
-            g_buttons[b].pressed = pressed;
-        }
     }
 
     z_state_tick();
@@ -97,13 +80,7 @@ void loop(void)
 
 bool z_button_pressGet(ZButtonId Button)
 {
-    return g_buttons[Button].pressed;
-}
-
-void z_button_pressClear(ZButtonId Button)
-{
-    g_buttons[Button].pressed = false;
-    g_buttons[Button].released = true;
+    return gb.buttons.repeat(g_buttons[Button], 0);
 }
 
 ZPixel* z_screen_pixelsGet(void)

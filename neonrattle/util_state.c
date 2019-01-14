@@ -26,6 +26,7 @@
 #include "state_new.h"
 #include "state_play.h"
 #include "state_start.h"
+#include "util_input.h"
 #include "util_light.h"
 #include "util_sound.h"
 #include "util_swipe.h"
@@ -121,6 +122,7 @@ void z_state_tick(void)
     z_timer_tick();
     z_swipe_tick();
     z_light_tick();
+    z_input_tick();
 
     checkNewState();
 
