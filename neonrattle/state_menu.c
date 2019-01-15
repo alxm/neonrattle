@@ -23,16 +23,16 @@
 #include "util_input.h"
 #include "util_swipe.h"
 
+#define Z_LEVELS_NUM 32
 #define Z_GRID_W 8
 #define Z_GRID_H 4
+#define Z_CELL_DIM 8
 #define Z_SELECT_DELAY_DS 2
 
-static ZVectorInt g_pos;
+static unsigned g_cursor;
 
 void s_menu_init(void)
 {
-    g_pos = (ZVectorInt){0, 0};
-
     z_input_reset();
 
     z_swipe_start(Z_SWIPE_SHOW);
@@ -45,27 +45,25 @@ void s_menu_tick(void)
     }
 
     if(z_button_pressGetDelay(Z_BUTTON_UP, Z_SELECT_DELAY_DS)) {
-        g_pos.y--;
+        g_cursor -= Z_GRID_W;
     }
 
     if(z_button_pressGetDelay(Z_BUTTON_DOWN, Z_SELECT_DELAY_DS)) {
-        g_pos.y++;
+        g_cursor += Z_GRID_W;
     }
 
     if(z_button_pressGetDelay(Z_BUTTON_LEFT, Z_SELECT_DELAY_DS)) {
-        g_pos.x--;
+        g_cursor--;
     }
 
     if(z_button_pressGetDelay(Z_BUTTON_RIGHT, Z_SELECT_DELAY_DS)) {
-        g_pos.x++;
+        g_cursor++;
     }
 
-    g_pos.x &= Z_GRID_W - 1;
-    g_pos.y &= Z_GRID_H - 1;
+    g_cursor &= Z_LEVELS_NUM - 1;
 
     if(z_button_pressGet(Z_BUTTON_A) || z_button_pressGet(Z_BUTTON_B)) {
-        int level = g_pos.y * Z_GRID_W + g_pos.x;
-        o_game_setup((unsigned)level);
+        o_game_setup(g_cursor);
 
         z_state_set(Z_STATE_START);
         z_swipe_start(Z_SWIPE_HIDE);
@@ -90,32 +88,33 @@ void s_menu_draw(void)
                            Z_COLOR_APPLE_02,
                            256);
 
-    int startX = 8;
-    int startY = 19;
-    int cellDim = 8;
+    for(unsigned l = 0; l < Z_LEVELS_NUM; l++) {
+        ZColorId color;
+        int alpha;
 
-    for(int y = 0; y < Z_GRID_H; y++) {
-        for(int x = 0; x < Z_GRID_W; x++) {
-            if(x == g_pos.x && y == g_pos.y) {
-                z_draw_rectangleAlpha(startX + x * cellDim,
-                                      startY + y * cellDim,
-                                      cellDim - 1,
-                                      cellDim - 1,
-                                      Z_COLOR_SNAKE_01,
-                                      224);
-            } else {
-                z_draw_rectangleAlpha(startX + x * cellDim,
-                                      startY + y * cellDim,
-                                      cellDim - 1,
-                                      cellDim - 1,
-                                      Z_COLOR_APPLE_02,
-                                      192);
-            }
+        if(l == g_cursor) {
+            color = Z_COLOR_SNAKE_01;
+            alpha = 224;
+        } else {
+            color = Z_COLOR_APPLE_02;
+            alpha = 192;
         }
+
+        z_draw_rectangleAlpha((int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM),
+                              (int)(19 + (l / Z_GRID_W) * Z_CELL_DIM),
+                              Z_CELL_DIM - 1,
+                              Z_CELL_DIM - 1,
+                              color,
+                              alpha);
     }
 }
 
 void s_menu_free(void)
 {
     //
+}
+
+void s_menu_selectNext(void)
+{
+    g_cursor = (g_cursor + 1) & (Z_LEVELS_NUM - 1);
 }

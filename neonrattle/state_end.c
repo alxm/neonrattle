@@ -20,6 +20,7 @@
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
+#include "state_menu.h"
 #include "util_hud.h"
 #include "util_light.h"
 #include "util_sound.h"
@@ -47,6 +48,7 @@ void s_end_tick(void)
 
         z_state_set(Z_STATE_START);
         z_swipe_start(Z_SWIPE_HIDE);
+        s_menu_selectNext();
     }
 }
 
