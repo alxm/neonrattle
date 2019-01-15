@@ -78,7 +78,7 @@ void loop(void)
     #endif
 }
 
-bool z_button_pressGet(ZButtonId Button)
+bool z_platform_buttonPressGet(int Button)
 {
     return gb.buttons.repeat(g_buttons[Button], 0);
 }

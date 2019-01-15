@@ -18,8 +18,8 @@
 #include "util_input.h"
 
 typedef struct {
-    char pressed : 2;
-    char waitForRelease : 2;
+    bool pressed;
+    bool waitForRelease;
 } ZButton;
 
 static ZButton g_buttons[Z_BUTTON_NUM];
@@ -34,7 +34,7 @@ void z_input_reset(void)
 void z_input_tick(void)
 {
     for(int b = 0; b < Z_BUTTON_NUM; b++) {
-        bool pressed = z_button_pressGet(b);
+        bool pressed = z_platform_buttonPressGet(b);
 
         if(g_buttons[b].waitForRelease) {
             if(!pressed) {
@@ -44,6 +44,11 @@ void z_input_tick(void)
             g_buttons[b].pressed = pressed;
         }
     }
+}
+
+bool z_button_pressGet(ZButtonId Button)
+{
+    return g_buttons[Button].pressed;
 }
 
 bool z_button_pressGetOnce(ZButtonId Button)

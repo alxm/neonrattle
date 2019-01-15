@@ -116,7 +116,7 @@ A_MAIN
     a_state_push(run, "Neonrattle");
 }
 
-bool z_button_pressGet(ZButtonId Button)
+bool z_platform_buttonPressGet(int Button)
 {
     return a_button_pressGet(g_buttons[Button]);
 }

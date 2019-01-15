@@ -60,4 +60,6 @@ Z_EXTERN_C_START
 #define Z_FLAG_SET(Value, Mask) ((Value) |= (Mask))
 #define Z_FLAG_CLEAR(Value, Mask) ((Value) &= ~(unsigned)(Mask))
 
+extern bool z_platform_buttonPressGet(int Button);
+
 Z_EXTERN_C_END
