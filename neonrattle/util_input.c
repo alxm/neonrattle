@@ -42,15 +42,15 @@ void z_input_tick(void)
     for(int b = 0; b < Z_BUTTON_NUM; b++) {
         bool pressed = z_platform_buttonPressGet(b);
 
-        if(pressed && !g_buttons[b].pressed) {
-            g_buttons[b].lastFramePressed = nextFrame;
-        }
-
         if(g_buttons[b].waitForRelease) {
             if(!pressed) {
                 g_buttons[b].waitForRelease = false;
             }
         } else {
+            if(pressed && !g_buttons[b].pressed) {
+                g_buttons[b].lastFramePressed = nextFrame;
+            }
+
             g_buttons[b].pressed = pressed;
         }
     }
