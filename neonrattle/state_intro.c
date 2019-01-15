@@ -50,7 +50,7 @@ void s_intro_tick(void)
                     g_stage = 2;
                     g_height = 0;
 
-                    z_state_set(Z_STATE_NEW);
+                    z_state_set(Z_STATE_MENU);
                     z_swipe_start(Z_SWIPE_HIDE);
                 }
             } break;

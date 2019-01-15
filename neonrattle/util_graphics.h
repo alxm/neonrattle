@@ -78,6 +78,7 @@ typedef enum {
 
     Z_SPRITE_ALXM,
     Z_SPRITE_ALXM_WING,
+    Z_SPRITE_NEONRATTLE,
 
     Z_SPRITE_MAPS,
     Z_SPRITE_TILES,

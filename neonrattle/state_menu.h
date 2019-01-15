@@ -21,4 +21,7 @@
 
 #include "util_state.h"
 
-extern ZStateInit s_new_init;
+extern ZStateInit s_menu_init;
+extern ZStateTick s_menu_tick;
+extern ZStateDraw s_menu_draw;
+extern ZStateFree s_menu_free;

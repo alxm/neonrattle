@@ -20,6 +20,7 @@
 #include "generated/data_gfx_palette.h"
 #include "generated/data_gfx_alxm.h"
 #include "generated/data_gfx_alxm_wing.h"
+#include "generated/data_gfx_neonrattle.h"
 #include "generated/data_gfx_maps_grid16x16.h"
 #include "generated/data_gfx_tiles_grid16x16.h"
 #include "generated/data_gfx_snake_mask_grid8x8.h"
@@ -33,6 +34,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_PALETTE, palette);
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
+    z_sprite_load(Z_SPRITE_NEONRATTLE, neonrattle);
     z_sprite_loadGrid(Z_SPRITE_MAPS, maps_grid16x16, 16, 16);
     z_sprite_loadGrid(Z_SPRITE_TILES, tiles_grid16x16, 16, 16);
     z_sprite_loadGrid(Z_SPRITE_SNAKE_MASK, snake_mask_grid8x8, 8, 8);

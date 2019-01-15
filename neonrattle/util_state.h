@@ -24,7 +24,7 @@ Z_EXTERN_C_START
 typedef enum {
     Z_STATE_INVALID = -1,
     Z_STATE_INTRO,
-    Z_STATE_NEW,
+    Z_STATE_MENU,
     Z_STATE_START,
     Z_STATE_PLAY,
     Z_STATE_END,

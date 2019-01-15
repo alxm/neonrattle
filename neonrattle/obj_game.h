@@ -21,7 +21,7 @@
 
 #include "obj_snake.h"
 
-extern void o_game_setup(void);
+extern void o_game_setup(unsigned Level);
 
 extern OSnake* o_game_snakeGet(void);
 extern void o_game_nextLevel(void);

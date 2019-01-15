@@ -26,9 +26,9 @@ typedef struct {
 
 static OGame g_game;
 
-void o_game_setup(void)
+void o_game_setup(unsigned Level)
 {
-    g_game.level = 0;
+    g_game.level = Level;
 }
 
 OSnake* o_game_snakeGet(void)
@@ -42,5 +42,6 @@ void o_game_nextLevel(void)
     o_map_init(g_game.level, &startX, &startY);
 
     g_game.level++;
+    g_game.level &= 31;
     g_game.snake = o_snake_new(startX, startY);
 }

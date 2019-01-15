@@ -44,7 +44,7 @@ void s_died_tick(void)
     if(z_timer_expired(Z_TIMER_G1)) {
         z_timer_stop(Z_TIMER_G1);
 
-        z_state_set(Z_STATE_NEW);
+        z_state_set(Z_STATE_MENU);
         z_swipe_start(Z_SWIPE_HIDE);
     }
 }

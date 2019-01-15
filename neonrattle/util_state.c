@@ -23,7 +23,7 @@
 #include "state_died.h"
 #include "state_end.h"
 #include "state_intro.h"
-#include "state_new.h"
+#include "state_menu.h"
 #include "state_play.h"
 #include "state_start.h"
 #include "util_input.h"
@@ -58,11 +58,11 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_intro_draw,
         s_intro_free,
     },
-    [Z_STATE_NEW] = {
-        s_new_init,
-        NULL,
-        NULL,
-        NULL,
+    [Z_STATE_MENU] = {
+        s_menu_init,
+        s_menu_tick,
+        s_menu_draw,
+        s_menu_free,
     },
     [Z_STATE_PLAY] = {
         s_play_init,
@@ -93,7 +93,7 @@ void z_state_setup(void)
     z_light_reset();
 
     #if Z_DEBUG_STATS
-        z_state_set(Z_STATE_NEW);
+        z_state_set(Z_STATE_MENU);
     #else
         z_state_set(Z_STATE_INTRO);
     #endif
