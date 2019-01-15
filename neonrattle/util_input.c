@@ -17,9 +17,13 @@
 
 #include "util_input.h"
 
+#include "util_fps.h"
+#include "util_timer.h"
+
 typedef struct {
-    bool pressed;
-    bool waitForRelease;
+    uint8_t pressed;
+    uint8_t waitForRelease;
+    uint16_t lastFramePressed;
 } ZButton;
 
 static ZButton g_buttons[Z_BUTTON_NUM];
@@ -33,8 +37,14 @@ void z_input_reset(void)
 
 void z_input_tick(void)
 {
+    uint16_t nextFrame = (uint16_t)(z_fps_ticksGet() + 1);
+
     for(int b = 0; b < Z_BUTTON_NUM; b++) {
         bool pressed = z_platform_buttonPressGet(b);
+
+        if(pressed && !g_buttons[b].pressed) {
+            g_buttons[b].lastFramePressed = nextFrame;
+        }
 
         if(g_buttons[b].waitForRelease) {
             if(!pressed) {
@@ -62,6 +72,20 @@ bool z_button_pressGetOnce(ZButtonId Button)
     return false;
 }
 
+bool z_button_pressGetDelay(ZButtonId Button, uint8_t Ds)
+{
+    uint16_t now = z_fps_ticksGet();
+    uint16_t ticksDiff = (uint16_t)(now - g_buttons[Button].lastFramePressed);
+
+    if(g_buttons[Button].pressed && ticksDiff >= z_timer_dsToTicks(Ds)) {
+        g_buttons[Button].lastFramePressed = now;
+
+        return true;
+    }
+
+    return false;
+}
+
 bool z_button_pressGetAny(void)
 {
     for(int b = 0; b < Z_BUTTON_NUM; b++) {
@@ -77,4 +101,5 @@ void z_button_pressClear(ZButtonId Button)
 {
     g_buttons[Button].pressed = false;
     g_buttons[Button].waitForRelease = true;
+    g_buttons[Button].lastFramePressed = z_fps_ticksGet();
 }
