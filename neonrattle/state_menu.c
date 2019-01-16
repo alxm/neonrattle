@@ -96,28 +96,39 @@ void s_menu_draw(void)
                            256);
 
     for(unsigned l = 0; l < Z_LEVELS_NUM; l++) {
-        ZColorId color;
         int alpha;
+        ZColorId colorBg, colorSprite;
+        ZSpriteId sprite = l > g_lastUnlocked
+                            ? Z_SPRITE_ICON_LOCK : Z_SPRITE_ICON_CHECK;
 
         if(l == g_cursor) {
-            color = Z_COLOR_SNAKE_01;
             alpha = 224;
+            colorBg = Z_COLOR_SNAKE_01;
+            colorSprite = Z_COLOR_APPLE_02;
         } else {
             if(l > g_lastUnlocked) {
-                color = Z_COLOR_BG_GREEN_03;
                 alpha = 128;
+                colorBg = Z_COLOR_BG_GREEN_03;
+                colorSprite = Z_COLOR_BG_GREEN_04;
             } else {
-                color = Z_COLOR_APPLE_02;
                 alpha = 192;
+                colorBg = Z_COLOR_APPLE_02;
+                colorSprite = Z_COLOR_SNAKE_01;
             }
         }
 
-        z_draw_rectangleAlpha((int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM),
-                              (int)(19 + (l / Z_GRID_W) * Z_CELL_DIM),
-                              Z_CELL_DIM - 1,
-                              Z_CELL_DIM - 1,
-                              color,
-                              alpha);
+        int drawX = (int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM);
+        int drawY = (int)(19 + (l / Z_GRID_W) * Z_CELL_DIM);
+
+        z_draw_rectangleAlpha(
+            drawX, drawY, Z_CELL_DIM - 1, Z_CELL_DIM - 1, colorBg, alpha);
+
+        z_sprite_blitAlphaMask(sprite,
+                               drawX + (Z_CELL_DIM - 1) / 2,
+                               drawY + (Z_CELL_DIM - 1) / 2,
+                               0,
+                               colorSprite,
+                               256);
     }
 }
 

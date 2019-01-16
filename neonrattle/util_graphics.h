@@ -89,7 +89,9 @@ typedef enum {
     Z_SPRITE_APPLE_MASK,
     Z_SPRITE_APPLE_HALO,
 
+    Z_SPRITE_ICON_CHECK,
     Z_SPRITE_ICON_HEART,
+    Z_SPRITE_ICON_LOCK,
 
     Z_SPRITE_NUM
 } ZSpriteId;
