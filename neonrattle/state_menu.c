@@ -30,6 +30,7 @@
 #define Z_SELECT_DELAY_DS 2
 
 static unsigned g_cursor;
+static unsigned g_lastUnlocked;
 
 void s_menu_init(void)
 {
@@ -63,10 +64,16 @@ void s_menu_tick(void)
     g_cursor &= Z_LEVELS_NUM - 1;
 
     if(z_button_pressGet(Z_BUTTON_A) || z_button_pressGet(Z_BUTTON_B)) {
-        o_game_setup(g_cursor);
+        if(g_cursor > g_lastUnlocked) {
+            // TODO: camera shake, play rejected sfx
+        } else {
+            o_game_setup(g_cursor);
 
-        z_state_set(Z_STATE_START);
-        z_swipe_start(Z_SWIPE_HIDE);
+            // TODO: play start sfx
+
+            z_state_set(Z_STATE_START);
+            z_swipe_start(Z_SWIPE_HIDE);
+        }
     }
 }
 
@@ -96,8 +103,13 @@ void s_menu_draw(void)
             color = Z_COLOR_SNAKE_01;
             alpha = 224;
         } else {
-            color = Z_COLOR_APPLE_02;
-            alpha = 192;
+            if(l > g_lastUnlocked) {
+                color = Z_COLOR_BG_GREEN_03;
+                alpha = 128;
+            } else {
+                color = Z_COLOR_APPLE_02;
+                alpha = 192;
+            }
         }
 
         z_draw_rectangleAlpha((int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM),
@@ -117,4 +129,8 @@ void s_menu_free(void)
 void s_menu_selectNext(void)
 {
     g_cursor = (g_cursor + 1) & (Z_LEVELS_NUM - 1);
+
+    if(g_cursor > g_lastUnlocked) {
+        g_lastUnlocked++;
+    }
 }
