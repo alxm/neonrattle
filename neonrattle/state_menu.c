@@ -30,7 +30,7 @@
 #define Z_GRID_H 4
 #define Z_CELL_DIM 8
 #define Z_SELECT_DELAY_DS 2
-#define Z_MOVE_SPEED Z_FIX_ONE
+#define Z_MOVE_SPEED (Z_FIX_ONE * 2)
 #define Z_GLOW_SPEED (Z_FIX_DEG_001 * 4)
 
 static unsigned g_cursor;
@@ -146,27 +146,34 @@ void s_menu_draw(void)
         int drawX = shake.x + (int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM);
         int drawY = shake.y + (int)(19 + (l / Z_GRID_W) * Z_CELL_DIM);
 
-        if(l == g_cursor) {
-            minimapX = drawX;
-            minimapY = drawY;
-
-            continue;
-        }
-
         int alpha;
         ZColorId colorBg, colorSprite;
         ZSpriteId sprite;
 
-        if(l > g_lastUnlocked) {
-            alpha = 128;
-            colorBg = Z_COLOR_BG_GREEN_03;
-            colorSprite = Z_COLOR_BG_GREEN_04;
-            sprite = Z_SPRITE_ICON_LOCK;
+        if(l <= g_lastUnlocked) {
+            if(l == g_cursor) {
+                minimapX = drawX;
+                minimapY = drawY;
+
+                continue;
+            } else {
+                alpha = 192;
+                colorBg = Z_COLOR_SNAKE_01;
+                colorSprite = Z_COLOR_APPLE_02;
+                sprite = Z_SPRITE_ICON_CHECK;
+            }
         } else {
-            alpha = 192;
-            colorBg = Z_COLOR_APPLE_02;
-            colorSprite = Z_COLOR_SNAKE_01;
-            sprite = Z_SPRITE_ICON_CHECK;
+            if(l == g_cursor) {
+                alpha = 192;
+                colorBg = Z_COLOR_BG_GREEN_03;
+                colorSprite = Z_COLOR_APPLE_03;
+                sprite = Z_SPRITE_ICON_LOCK;
+            } else {
+                alpha = 128;
+                colorBg = Z_COLOR_BG_GREEN_04;
+                colorSprite = Z_COLOR_BG_GREEN_03;
+                sprite = Z_SPRITE_ICON_LOCK;
+            }
         }
 
         z_draw_rectangleAlpha(
