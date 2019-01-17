@@ -107,6 +107,34 @@ void s_menu_tick(void)
     g_angle += Z_GLOW_SPEED;
 }
 
+static void minimapDraw(unsigned Level, int X, int Y)
+{
+    const ZPixel* src = z_sprite_pixelsGet(Z_SPRITE_MAPS, Level);
+    ZPixel* dstStart = z_screen_pixelsGet() + Y * Z_SCREEN_W + X;
+    ZPixel white = z_colors[Z_COLOR_MAP_WHITE].pixel;
+    const ZRgb* rgb[] = {
+        &z_colors[Z_COLOR_APPLE_03].rgb,
+        &z_colors[Z_COLOR_SNAKE_01].rgb,
+    };
+
+    for(int y = Z_COORDS_MAP_H; y--; dstStart += Z_SCREEN_W) {
+        ZPixel* dst = dstStart;
+
+        for(int x = Z_COORDS_MAP_W; x--; dst++, src++) {
+            z_draw_pixelBufferRgbAlpha(dst, rgb[*src == white], 192);
+        }
+    }
+
+    z_draw_rectangleAlpha(
+        X, Y - 1, Z_COORDS_MAP_W, 1, Z_COLOR_APPLE_03, 128);
+    z_draw_rectangleAlpha(
+        X, Y + Z_COORDS_MAP_H, Z_COORDS_MAP_W, 1, Z_COLOR_APPLE_03, 128);
+    z_draw_rectangleAlpha(
+        X - 1, Y, 1, Z_COORDS_MAP_H, Z_COLOR_APPLE_03, 128);
+    z_draw_rectangleAlpha(
+        X + Z_COORDS_MAP_W, Y, 1, Z_COORDS_MAP_H, Z_COLOR_APPLE_03, 128);
+}
+
 void s_menu_draw(void)
 {
     ZVectorInt shake = o_camera_shakeGet();
@@ -154,12 +182,11 @@ void s_menu_draw(void)
             if(l == g_cursor) {
                 minimapX = drawX;
                 minimapY = drawY;
-
                 continue;
             } else {
                 alpha = 192;
                 colorBg = Z_COLOR_SNAKE_01;
-                colorSprite = Z_COLOR_APPLE_02;
+                colorSprite = Z_COLOR_APPLE_03;
                 sprite = Z_SPRITE_ICON_CHECK;
             }
         } else {
@@ -188,10 +215,9 @@ void s_menu_draw(void)
     }
 
     if(minimapX != -1) {
-        z_sprite_blit(Z_SPRITE_MAPS,
-                      minimapX - Z_COORDS_MAP_W / 4,
-                      minimapY - Z_COORDS_MAP_H / 4,
-                      g_cursor);
+        minimapDraw(g_cursor,
+                    minimapX - Z_COORDS_MAP_W / 4,
+                    minimapY - Z_COORDS_MAP_H / 4);
     }
 }
 
