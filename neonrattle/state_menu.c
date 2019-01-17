@@ -30,9 +30,12 @@
 #define Z_GRID_H 4
 #define Z_CELL_DIM 8
 #define Z_SELECT_DELAY_DS 2
+#define Z_MOVE_SPEED Z_FIX_ONE
 
 static unsigned g_cursor;
 static unsigned g_lastUnlocked;
+static ZVectorFix g_origin;
+static ZVectorFix g_velocity;
 
 void s_menu_init(void)
 {
@@ -47,32 +50,42 @@ void s_menu_tick(void)
         return;
     }
 
-    bool changed = false;
+    ZVectorFix velocity = {0, 0};
 
     if(z_button_pressGetDelay(Z_BUTTON_UP, Z_SELECT_DELAY_DS)) {
         g_cursor -= Z_GRID_W;
-        changed = true;
+        velocity.y = Z_MOVE_SPEED;
     }
 
     if(z_button_pressGetDelay(Z_BUTTON_DOWN, Z_SELECT_DELAY_DS)) {
         g_cursor += Z_GRID_W;
-        changed = true;
+        velocity.y = -Z_MOVE_SPEED;
     }
 
     if(z_button_pressGetDelay(Z_BUTTON_LEFT, Z_SELECT_DELAY_DS)) {
         g_cursor--;
-        changed = true;
+        velocity.x = Z_MOVE_SPEED;
     }
 
     if(z_button_pressGetDelay(Z_BUTTON_RIGHT, Z_SELECT_DELAY_DS)) {
         g_cursor++;
-        changed = true;
+        velocity.x = -Z_MOVE_SPEED;
     }
 
-    if(changed) {
+    if(velocity.x != 0 || velocity.y != 0) {
         g_cursor &= Z_LEVELS_NUM - 1;
+        g_velocity = velocity;
+
         z_sfx_play(Z_SFX_MENU_BROWSE);
+    } else {
+        g_velocity.x -= (g_velocity.x >> 2);
+        g_velocity.y -= (g_velocity.y >> 2);
     }
+
+    g_origin.x = (g_origin.x + g_velocity.x)
+                    & (z_fix_fromInt(Z_COORDS_UNIT_PIXELS) - 1);
+    g_origin.y = (g_origin.y + g_velocity.y)
+                    & (z_fix_fromInt(Z_COORDS_UNIT_PIXELS) - 1);
 
     if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGetOnce(Z_BUTTON_B)) {
         if(g_cursor > g_lastUnlocked) {
@@ -93,15 +106,24 @@ void s_menu_tick(void)
 void s_menu_draw(void)
 {
     ZVectorInt shake = o_camera_shakeGet();
-    int offsetX = -shake.x - Z_COORDS_UNIT_PIXELS / 8;
-    int offsetY = -shake.y - Z_COORDS_UNIT_PIXELS / 2;
+
+    int offsetX = z_fix_toInt(g_origin.x) + shake.x;
+    int offsetY = z_fix_toInt(g_origin.y) + shake.y;
+
+    if(offsetX > 0) {
+        offsetX = -(Z_COORDS_UNIT_PIXELS - offsetX);
+    }
+
+    if(offsetY > 0) {
+        offsetY = -(Z_COORDS_UNIT_PIXELS - offsetY);
+    }
 
     for(int y = 0; y < Z_SCREEN_H / Z_COORDS_UNIT_PIXELS + 1; y++) {
         for(int x = 0; x < Z_SCREEN_W / Z_COORDS_UNIT_PIXELS + 1; x++) {
             z_sprite_blit(Z_SPRITE_TILES,
                           offsetX + x * Z_COORDS_UNIT_PIXELS,
                           offsetY + y * Z_COORDS_UNIT_PIXELS,
-                          8 + (unsigned)(!(y & 1) * 2 + (x & 1)));
+                          8);
         }
     }
 
