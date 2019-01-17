@@ -135,30 +135,36 @@ void s_menu_draw(void)
         Z_COLOR_APPLE_02,
         256);
 
+    int minimapX = -1, minimapY;
+
     for(unsigned l = 0; l < Z_LEVELS_NUM; l++) {
-        int alpha;
-        ZColorId colorBg, colorSprite;
-        ZSpriteId sprite = l > g_lastUnlocked
-                            ? Z_SPRITE_ICON_LOCK : Z_SPRITE_ICON_CHECK;
-
-        if(l == g_cursor) {
-            alpha = 224;
-            colorBg = Z_COLOR_SNAKE_01;
-            colorSprite = Z_COLOR_APPLE_02;
-        } else {
-            if(l > g_lastUnlocked) {
-                alpha = 128;
-                colorBg = Z_COLOR_BG_GREEN_03;
-                colorSprite = Z_COLOR_BG_GREEN_04;
-            } else {
-                alpha = 192;
-                colorBg = Z_COLOR_APPLE_02;
-                colorSprite = Z_COLOR_SNAKE_01;
-            }
-        }
-
         int drawX = shake.x + (int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM);
         int drawY = shake.y + (int)(19 + (l / Z_GRID_W) * Z_CELL_DIM);
+
+        if(l == g_cursor) {
+            minimapX = drawX;
+            minimapY = drawY;
+
+            continue;
+        }
+
+        int alpha;
+        ZColorId colorBg, colorSprite;
+        ZSpriteId sprite;
+
+        if(l > g_lastUnlocked) {
+            alpha = 128;
+            colorBg = Z_COLOR_BG_GREEN_03;
+            colorSprite = Z_COLOR_BG_GREEN_04;
+            sprite = Z_SPRITE_ICON_LOCK;
+        } else {
+            alpha = 192;
+            colorBg = Z_COLOR_APPLE_02;
+            colorSprite = Z_COLOR_SNAKE_01;
+            sprite = Z_SPRITE_ICON_CHECK;
+        }
+
+
 
         z_draw_rectangleAlpha(
             drawX, drawY, Z_CELL_DIM - 1, Z_CELL_DIM - 1, colorBg, alpha);
@@ -169,6 +175,13 @@ void s_menu_draw(void)
                                0,
                                colorSprite,
                                256);
+    }
+
+    if(minimapX != -1) {
+        z_sprite_blit(Z_SPRITE_MAPS,
+                      minimapX - Z_COORDS_MAP_W / 4,
+                      minimapY - Z_COORDS_MAP_H / 4,
+                      g_cursor);
     }
 }
 
