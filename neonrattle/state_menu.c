@@ -31,11 +31,13 @@
 #define Z_CELL_DIM 8
 #define Z_SELECT_DELAY_DS 2
 #define Z_MOVE_SPEED Z_FIX_ONE
+#define Z_GLOW_SPEED (Z_FIX_DEG_001 * 4)
 
 static unsigned g_cursor;
 static unsigned g_lastUnlocked;
 static ZVectorFix g_origin;
 static ZVectorFix g_velocity;
+static ZFixu g_angle;
 
 void s_menu_init(void)
 {
@@ -101,6 +103,8 @@ void s_menu_tick(void)
     }
 
     o_camera_tick((ZVectorFix){0, 0});
+
+    g_angle += Z_GLOW_SPEED;
 }
 
 void s_menu_draw(void)
@@ -127,13 +131,14 @@ void s_menu_draw(void)
         }
     }
 
+    int drawX = shake.x + 8 + z_sprite_widthGet(Z_SPRITE_NEONRATTLE) / 2;
+    int drawY = shake.y + 10 + z_sprite_heightGet(Z_SPRITE_NEONRATTLE) / 2;
+    int glowAlpha = 128 + z_fix_toInt(z_fix_sinf(g_angle) * 128);
+
     z_sprite_blitAlphaMask(
-        Z_SPRITE_NEONRATTLE,
-        shake.x + 8 + z_sprite_widthGet(Z_SPRITE_NEONRATTLE) / 2,
-        shake.y + 10 + z_sprite_heightGet(Z_SPRITE_NEONRATTLE) / 2,
-        0,
-        Z_COLOR_APPLE_02,
-        256);
+        Z_SPRITE_NEONRATTLE_GLOW, drawX, drawY, 0, Z_COLOR_APPLE_01, glowAlpha);
+    z_sprite_blitAlphaMask(
+        Z_SPRITE_NEONRATTLE, drawX, drawY, 0, Z_COLOR_APPLE_02, 256);
 
     int minimapX = -1, minimapY;
 
@@ -163,8 +168,6 @@ void s_menu_draw(void)
             colorSprite = Z_COLOR_SNAKE_01;
             sprite = Z_SPRITE_ICON_CHECK;
         }
-
-
 
         z_draw_rectangleAlpha(
             drawX, drawY, Z_CELL_DIM - 1, Z_CELL_DIM - 1, colorBg, alpha);
