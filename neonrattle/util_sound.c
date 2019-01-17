@@ -22,6 +22,9 @@
 #include "generated/data_sfx_finished.h"
 #include "generated/data_sfx_hit_wall.h"
 #include "generated/data_sfx_pressed_a.h"
+#include "generated/data_sfx_menu_browse.h"
+#include "generated/data_sfx_menu_reject.h"
+#include "generated/data_sfx_menu_select.h"
 #include "generated/data_sfx_swipe_hide.h"
 #include "generated/data_sfx_swipe_show.h"
 
@@ -32,6 +35,9 @@ void z_sound_setup(void)
     z_sfx_load(Z_SFX_FINISHED, finished);
     z_sfx_load(Z_SFX_HIT_WALL, hit_wall);
     z_sfx_load(Z_SFX_PRESSED_A, pressed_a);
+    z_sfx_load(Z_SFX_MENU_BROWSE, menu_browse);
+    z_sfx_load(Z_SFX_MENU_REJECT, menu_reject);
+    z_sfx_load(Z_SFX_MENU_SELECT, menu_select);
     z_sfx_load(Z_SFX_SWIPE_HIDE, swipe_hide);
     z_sfx_load(Z_SFX_SWIPE_SHOW, swipe_show);
 }
