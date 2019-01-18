@@ -31,7 +31,7 @@ void s_start_init(void)
     o_apple_setup();
     o_snake_setup();
 
-    o_game_nextLevel();
+    o_game_levelNext();
 
     o_camera_reset();
     z_input_reset();

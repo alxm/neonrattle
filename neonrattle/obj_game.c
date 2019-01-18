@@ -36,7 +36,12 @@ OSnake* o_game_snakeGet(void)
     return g_game.snake;
 }
 
-void o_game_nextLevel(void)
+unsigned o_game_levelGet(void)
+{
+    return g_game.level;
+}
+
+void o_game_levelNext(void)
 {
     ZFix startX, startY;
     o_map_init(g_game.level, &startX, &startY);

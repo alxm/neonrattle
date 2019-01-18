@@ -17,6 +17,7 @@
 
 #include "util_hud.h"
 
+#include "obj_game.h"
 #include "obj_map.h"
 #include "util_graphics.h"
 #include "util_timer.h"
@@ -119,6 +120,20 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
     Coords->x += Width + 2;
 }
 
+static void drawNumber(int X, int Y, unsigned Number, int NumDigits)
+{
+    int charWidth = z_sprite_widthGet(Z_SPRITE_FONT_LCDNUM);
+    int charHeight = z_sprite_heightGet(Z_SPRITE_FONT_LCDNUM);
+
+    X -= charWidth / 2;
+    Y += charHeight / 2;
+
+    for(int d = NumDigits; d--; X -= charWidth + 1, Number /= 10) {
+        z_sprite_blitAlphaMask(
+            Z_SPRITE_FONT_LCDNUM, X, Y, Number % 10, Z_COLOR_SNAKE_01, 256);
+    }
+}
+
 void z_hud_draw(const OSnake* Snake)
 {
     static const ZColorId aColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_BG_GREEN_04};
@@ -133,7 +148,7 @@ void z_hud_draw(const OSnake* Snake)
     drawBar(&pos,
             o_snake_eatenNumGet(Snake),
             o_map_applesNumGet(),
-            32,
+            22,
             4,
             aColor,
             Z_COLOR_BG_GREEN_03,
@@ -143,9 +158,11 @@ void z_hud_draw(const OSnake* Snake)
     drawBar(&pos,
             o_snake_lifeGet(Snake),
             O_SNAKE_LIFE_MAX,
-            20,
+            22,
             4,
             lColor,
             Z_COLOR_BG_GREEN_03,
             192);
+
+    drawNumber(Z_SCREEN_W - 2, 2, o_game_levelGet(), 2);
 }

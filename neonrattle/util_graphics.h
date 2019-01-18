@@ -94,6 +94,8 @@ typedef enum {
     Z_SPRITE_ICON_HEART,
     Z_SPRITE_ICON_LOCK,
 
+    Z_SPRITE_FONT_LCDNUM,
+
     Z_SPRITE_NUM
 } ZSpriteId;
 
