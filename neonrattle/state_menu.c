@@ -28,7 +28,7 @@
 #define Z_LEVELS_NUM 32
 #define Z_GRID_W 8
 #define Z_GRID_H 4
-#define Z_CELL_DIM 8
+#define Z_CELL_DIM (Z_COORDS_UNIT_PIXELS / 2)
 #define Z_SELECT_DELAY_DS 2
 #define Z_MOVE_SPEED (Z_FIX_ONE * 2)
 #define Z_GLOW_SPEED (Z_FIX_DEG_001 * 4)
@@ -85,13 +85,13 @@ void s_menu_tick(void)
     }
 
     g_origin.x = (g_origin.x + g_velocity.x)
-                    & (z_fix_fromInt(Z_COORDS_UNIT_PIXELS) - 1);
+                    & (z_fix_fromInt(2 * Z_COORDS_UNIT_PIXELS) - 1);
     g_origin.y = (g_origin.y + g_velocity.y)
-                    & (z_fix_fromInt(Z_COORDS_UNIT_PIXELS) - 1);
+                    & (z_fix_fromInt(2 * Z_COORDS_UNIT_PIXELS) - 1);
 
     if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGetOnce(Z_BUTTON_B)) {
         if(g_cursor > g_lastUnlocked) {
-            o_camera_shakeSet(1);
+            o_camera_shakeSet(2);
             z_sfx_play(Z_SFX_MENU_REJECT);
         } else {
             o_game_setup(g_cursor);
@@ -113,26 +113,28 @@ static void minimapDraw(unsigned Level, int X, int Y)
     ZPixel* dstStart = z_screen_pixelsGet() + Y * Z_SCREEN_W + X;
     ZPixel white = z_colors[Z_COLOR_MAP_WHITE].pixel;
     const ZRgb* rgb[] = {
-        &z_colors[Z_COLOR_APPLE_03].rgb,
-        &z_colors[Z_COLOR_SNAKE_01].rgb,
+        &z_colors[Z_COLOR_APPLE_02].rgb,
+        &z_colors[Z_COLOR_SNAKE_02].rgb,
     };
+    int alpha[] = {192, 224};
 
     for(int y = Z_COORDS_MAP_H; y--; dstStart += Z_SCREEN_W) {
         ZPixel* dst = dstStart;
 
         for(int x = Z_COORDS_MAP_W; x--; dst++, src++) {
-            z_draw_pixelBufferRgbAlpha(dst, rgb[*src == white], 192);
+            bool isWall = *src == white;
+            z_draw_pixelBufferRgbAlpha(dst, rgb[isWall], alpha[isWall]);
         }
     }
 
     z_draw_rectangleAlpha(
-        X, Y - 1, Z_COORDS_MAP_W, 1, Z_COLOR_APPLE_03, 128);
+        X, Y - 1, Z_COORDS_MAP_W, 1, Z_COLOR_APPLE_02, 92);
     z_draw_rectangleAlpha(
-        X, Y + Z_COORDS_MAP_H, Z_COORDS_MAP_W, 1, Z_COLOR_APPLE_03, 128);
+        X, Y + Z_COORDS_MAP_H, Z_COORDS_MAP_W, 1, Z_COLOR_APPLE_02, 92);
     z_draw_rectangleAlpha(
-        X - 1, Y, 1, Z_COORDS_MAP_H, Z_COLOR_APPLE_03, 128);
+        X - 1, Y, 1, Z_COORDS_MAP_H, Z_COLOR_APPLE_02, 92);
     z_draw_rectangleAlpha(
-        X + Z_COORDS_MAP_W, Y, 1, Z_COORDS_MAP_H, Z_COLOR_APPLE_03, 128);
+        X + Z_COORDS_MAP_W, Y, 1, Z_COORDS_MAP_H, Z_COLOR_APPLE_02, 92);
 }
 
 void s_menu_draw(void)
@@ -143,24 +145,24 @@ void s_menu_draw(void)
     int offsetY = z_fix_toInt(g_origin.y) + shake.y;
 
     if(offsetX > 0) {
-        offsetX = -(Z_COORDS_UNIT_PIXELS - offsetX);
+        offsetX -= 2 * Z_COORDS_UNIT_PIXELS;
     }
 
     if(offsetY > 0) {
-        offsetY = -(Z_COORDS_UNIT_PIXELS - offsetY);
+        offsetY -= 2 * Z_COORDS_UNIT_PIXELS;
     }
 
-    for(int y = 0; y < Z_SCREEN_H / Z_COORDS_UNIT_PIXELS + 1; y++) {
-        for(int x = 0; x < Z_SCREEN_W / Z_COORDS_UNIT_PIXELS + 1; x++) {
+    for(int y = 0; y < Z_SCREEN_H / Z_COORDS_UNIT_PIXELS + 2; y++) {
+        for(int x = 0; x < Z_SCREEN_W / Z_COORDS_UNIT_PIXELS + 2; x++) {
             z_sprite_blit(Z_SPRITE_TILES,
                           offsetX + x * Z_COORDS_UNIT_PIXELS,
                           offsetY + y * Z_COORDS_UNIT_PIXELS,
-                          8);
+                          (unsigned)(8 + (y & 1) * 2 + (x & 1)));
         }
     }
 
-    int drawX = shake.x + 8 + z_sprite_widthGet(Z_SPRITE_NEONRATTLE) / 2;
-    int drawY = shake.y + 10 + z_sprite_heightGet(Z_SPRITE_NEONRATTLE) / 2;
+    int drawX = shake.y + 8 + z_sprite_widthGet(Z_SPRITE_NEONRATTLE) / 2;
+    int drawY = shake.x + 10 + z_sprite_heightGet(Z_SPRITE_NEONRATTLE) / 2;
     int glowAlpha = 128 + z_fix_toInt(z_fix_sinf(g_angle) * 128);
 
     z_sprite_blitAlphaMask(
@@ -171,46 +173,44 @@ void s_menu_draw(void)
     int minimapX = -1, minimapY;
 
     for(unsigned l = 0; l < Z_LEVELS_NUM; l++) {
-        int drawX = shake.x + (int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM);
-        int drawY = shake.y + (int)(19 + (l / Z_GRID_W) * Z_CELL_DIM);
+        int drawX = (int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM) - shake.x;
+        int drawY = (int)(19 + (l / Z_GRID_W) * Z_CELL_DIM) - shake.y;
 
-        int alpha;
-        ZColorId colorBg, colorSprite;
+        ZColorId color;
         ZSpriteId sprite;
 
         if(l <= g_lastUnlocked) {
             if(l == g_cursor) {
                 minimapX = drawX;
                 minimapY = drawY;
+
                 continue;
             } else {
-                alpha = 192;
-                colorBg = Z_COLOR_SNAKE_01;
-                colorSprite = Z_COLOR_APPLE_03;
+                color = Z_COLOR_SNAKE_02;
                 sprite = Z_SPRITE_ICON_CHECK;
             }
         } else {
             if(l == g_cursor) {
-                alpha = 192;
-                colorBg = Z_COLOR_BG_GREEN_03;
-                colorSprite = Z_COLOR_APPLE_03;
+                color = Z_COLOR_APPLE_02;
                 sprite = Z_SPRITE_ICON_LOCK;
+
+                z_draw_rectangleAlpha(drawX,
+                                      drawY,
+                                      Z_CELL_DIM - 1,
+                                      Z_CELL_DIM - 1,
+                                      Z_COLOR_SNAKE_02,
+                                      192);
             } else {
-                alpha = 128;
-                colorBg = Z_COLOR_BG_GREEN_04;
-                colorSprite = Z_COLOR_BG_GREEN_03;
+                color = Z_COLOR_SNAKE_03;
                 sprite = Z_SPRITE_ICON_LOCK;
             }
         }
-
-        z_draw_rectangleAlpha(
-            drawX, drawY, Z_CELL_DIM - 1, Z_CELL_DIM - 1, colorBg, alpha);
 
         z_sprite_blitAlphaMask(sprite,
                                drawX + (Z_CELL_DIM - 1) / 2,
                                drawY + (Z_CELL_DIM - 1) / 2,
                                0,
-                               colorSprite,
+                               color,
                                256);
     }
 
