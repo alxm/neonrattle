@@ -62,4 +62,7 @@ Z_EXTERN_C_START
 
 extern bool z_platform_buttonPressGet(int Button);
 
+extern bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size);
+extern bool z_file_writeOnce(const char* FileName, const void* Buffer, size_t Size);
+
 Z_EXTERN_C_END

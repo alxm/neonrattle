@@ -32,15 +32,27 @@
 #define Z_SELECT_DELAY_DS 2
 #define Z_MOVE_SPEED (Z_FIX_ONE * 2)
 #define Z_GLOW_SPEED (Z_FIX_DEG_001 * 4)
+#define Z_LAST_UNLOCKED_FILE "last.sav"
+#define Z_LAST_UNLOCKED_DEFAULT UINT8_MAX
 
 static unsigned g_cursor;
-static unsigned g_lastUnlocked;
+static uint8_t g_lastUnlocked = Z_LAST_UNLOCKED_DEFAULT;
 static ZVectorFix g_origin;
 static ZVectorFix g_velocity;
 static ZFixu g_angle;
 
 void s_menu_init(void)
 {
+    if(g_lastUnlocked == Z_LAST_UNLOCKED_DEFAULT) {
+        if(!z_file_readOnce(
+            Z_LAST_UNLOCKED_FILE, &g_lastUnlocked, sizeof(g_lastUnlocked))) {
+
+            g_lastUnlocked = 0;
+        }
+
+        g_cursor = g_lastUnlocked;
+    }
+
     z_input_reset();
 
     z_swipe_start(Z_SWIPE_SHOW);
@@ -171,7 +183,7 @@ void s_menu_draw(void)
         Z_SPRITE_NEONRATTLE, drawX, drawY, 0, Z_COLOR_APPLE_02, 256);
     z_sprite_blit(Z_SPRITE_ALXM2, 8 - shake.y, 51 - shake.x, 0);
 
-    int minimapX = -1, minimapY;
+    int minimapX = -1, minimapY = 0;
 
     for(unsigned l = 0; l < Z_LEVELS_NUM; l++) {
         int drawX = (int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM) - shake.x;
@@ -234,5 +246,8 @@ void s_menu_selectNext(void)
 
     if(g_cursor > g_lastUnlocked) {
         g_lastUnlocked++;
+
+        z_file_writeOnce(
+            Z_LAST_UNLOCKED_FILE, &g_lastUnlocked, sizeof(g_lastUnlocked));
     }
 }

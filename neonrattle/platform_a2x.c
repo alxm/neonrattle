@@ -225,4 +225,32 @@ void z_sfx_play(ZSfxId Sfx)
 {
     a_channel_play(g_sfx[Sfx].channel, g_sfx[Sfx].sample, A_CHANNEL_RESTART);
 }
+
+bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size)
+{
+    AFile* f = a_file_new(FileName, A_FILE_READ | A_FILE_BINARY);
+
+    if(f == NULL) {
+        return false;
+    }
+
+    bool ret = a_file_read(f, Buffer, Size);
+    a_file_free(f);
+
+    return ret;
+}
+
+bool z_file_writeOnce(const char* FileName, const void* Buffer, size_t Size)
+{
+    AFile* f = a_file_new(FileName, A_FILE_WRITE | A_FILE_BINARY);
+
+    if(f == NULL) {
+        return false;
+    }
+
+    bool ret = a_file_write(f, Buffer, Size);
+    a_file_free(f);
+
+    return ret;
+}
 #endif // Z_PLATFORM_A2X
