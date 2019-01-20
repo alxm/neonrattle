@@ -189,49 +189,44 @@ void o_map_drawMinimap(ZVectorFix PlayerSnake)
                           drawYStart - 1,
                           Z_COORDS_MAP_W,
                           1,
-                          Z_COLOR_SNAKE_01,
-                          48);
+                          Z_COLOR_APPLE_02,
+                          64);
     z_draw_rectangleAlpha(drawXStart,
                           drawYStart + Z_COORDS_MAP_H,
                           Z_COORDS_MAP_W,
                           1,
-                          Z_COLOR_SNAKE_01,
-                          48);
+                          Z_COLOR_APPLE_02,
+                          64);
     z_draw_rectangleAlpha(drawXStart - 1,
                           drawYStart,
                           1,
                           Z_COORDS_MAP_H,
-                          Z_COLOR_SNAKE_01,
-                          48);
+                          Z_COLOR_APPLE_02,
+                          64);
     z_draw_rectangleAlpha(drawXStart + Z_COORDS_MAP_W,
                           drawYStart,
                           1,
                           Z_COORDS_MAP_H,
-                          Z_COLOR_SNAKE_01,
-                          48);
+                          Z_COLOR_APPLE_02,
+                          64);
 
     for(int y = 0, drawY = drawYStart; y < Z_COORDS_MAP_H; y++, drawY++) {
         for(int x = 0, drawX = drawXStart; x < Z_COORDS_MAP_W; x++, drawX++) {
+            ZColorId color;
+            int alpha;
+
             if(g_map.tiles[y][x].wall) {
-                z_draw_pixelCoordsIdAlpha(drawX, drawY, Z_COLOR_SNAKE_01, 128);
+                color = Z_COLOR_SNAKE_02;
+                alpha = 128;
+            } else if(g_map.tiles[y][x].numApples > 0) {
+                color = Z_COLOR_APPLE_02;
+                alpha = 224;
             } else {
-                int numApples = g_map.tiles[y][x].numApples;
-
-                if(numApples == 0) {
-                    z_draw_pixelCoordsIdAlpha(
-                        drawX, drawY, Z_COLOR_BG_GREEN_01, 192);
-                } else {
-                    ZRgb base = z_colors[Z_COLOR_BG_GREEN_01].rgb;
-                    const ZRgb* target = &z_colors[Z_COLOR_APPLE_03].rgb;
-                    int alpha = 160 + 96 * numApples / O_TILE_APPLES_MAX;
-
-                    base.r += ((target->r - base.r) * alpha) >> 8;
-                    base.g += ((target->g - base.g) * alpha) >> 8;
-                    base.b += ((target->b - base.b) * alpha) >> 8;
-
-                    z_draw_pixelCoordsRgbAlpha(drawX, drawY, &base, 192);
-                }
+                color = Z_COLOR_BG_GREEN_01;
+                alpha = 192;
             }
+
+            z_draw_pixelCoordsIdAlpha(drawX, drawY, color, alpha);
         }
     }
 
