@@ -29,6 +29,7 @@
 #include "generated/data_gfx_snake_minimap.h"
 #include "generated/data_gfx_apple_mask.h"
 #include "generated/data_gfx_apple_halo.h"
+#include "generated/data_gfx_icon_apple.h"
 #include "generated/data_gfx_icon_check.h"
 #include "generated/data_gfx_icon_heart.h"
 #include "generated/data_gfx_icon_lock.h"
@@ -48,6 +49,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_SNAKE_MINIMAP, snake_minimap);
     z_sprite_load(Z_SPRITE_APPLE_MASK, apple_mask);
     z_sprite_load(Z_SPRITE_APPLE_HALO, apple_halo);
+    z_sprite_load(Z_SPRITE_ICON_APPLE, icon_apple);
     z_sprite_load(Z_SPRITE_ICON_CHECK, icon_check);
     z_sprite_load(Z_SPRITE_ICON_HEART, icon_heart);
     z_sprite_load(Z_SPRITE_ICON_LOCK, icon_lock);

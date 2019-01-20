@@ -188,7 +188,8 @@ void s_menu_draw(void)
                 continue;
             } else {
                 color = Z_COLOR_SNAKE_02;
-                sprite = Z_SPRITE_ICON_CHECK;
+                sprite = l == g_lastUnlocked
+                            ? Z_SPRITE_ICON_APPLE : Z_SPRITE_ICON_CHECK;
             }
         } else {
             if(l == g_cursor) {
