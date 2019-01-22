@@ -56,6 +56,14 @@ static void swipeDraw(ZFixu Angle)
         0, Z_SCREEN_H - h, Z_SCREEN_W, h, Z_COLOR_BG_GREEN_01, alpha);
 }
 
+static void swipeDrawIntro(void)
+{
+    int alpha = z_fix_toInt(z_fix_sinf(g_angle) * 256);
+
+    z_draw_rectangleAlpha(
+        0, 0, Z_SCREEN_W, Z_SCREEN_H, Z_COLOR_BG_GREEN_01, alpha);
+}
+
 static void swipeDrawHide(void)
 {
     swipeDraw(g_angle);
@@ -72,6 +80,7 @@ static const struct {
     ZSwipeDraw* draw;
     ZSfxId sfx;
 } g_callbacks[Z_SWIPE_NUM] = {
+    [Z_SWIPE_INTRO] = {swipeInit, swipeTick, swipeDrawIntro, Z_SFX_INVALID},
     [Z_SWIPE_HIDE] = {swipeInit, swipeTick, swipeDrawHide, Z_SFX_SWIPE_HIDE},
     [Z_SWIPE_SHOW] = {swipeInit, swipeTick, swipeDrawShow, Z_SFX_SWIPE_SHOW},
 };

@@ -18,49 +18,62 @@
 #include "state_intro.h"
 
 #include "util_graphics.h"
+#include "util_input.h"
 #include "util_swipe.h"
 #include "util_timer.h"
 
-#define S_LOGO_WAIT_DS (8)
+#define Z_LOGO_WAIT_DS 8
 
-static uint8_t g_stage;
-static int g_height;
+static const int8_t g_lines[] = {
+    -1,
+    8, 4, -1,
+    8, 3, -1,
+    7, 2, 6, 4, -1,
+    7, 1, 6, 3, -1,
+    6, 0, 5, 2, 4, 4, -1,
+    5, 1, 4, 3, -1,
+    4, 0, 3, 2, 2, 4, -1,
+    3, 1, 2, 3, -1,
+    2, 0, 1, 2, -1,
+    1, 1, -1,
+    0, 0, -1,
+    -2
+};
+
+static int g_pc;
 
 void s_intro_init(void)
 {
-    g_stage = 0;
-    g_height = z_sprite_heightGet(Z_SPRITE_ALXM);
-
     z_draw_fill(Z_COLOR_ALXM_BG);
-    z_timer_start(Z_TIMER_G1, 1);
 }
 
 void s_intro_tick(void)
 {
-    if(z_timer_expired(Z_TIMER_G1)) {
-        switch(g_stage) {
-            case 0: {
-                if(--g_height == 0) {
-                    g_stage = 1;
-                }
-            } break;
+    if(z_timer_expired(Z_TIMER_G1)
+        || z_button_pressGetOnce(Z_BUTTON_A)
+        || z_button_pressGetOnce(Z_BUTTON_B)) {
 
-            case 1: {
-                if(++g_height == S_LOGO_WAIT_DS) {
-                    g_stage = 2;
-                    g_height = 0;
+        z_timer_stop(Z_TIMER_G1);
+        z_state_set(Z_STATE_MENU);
+        z_swipe_start(Z_SWIPE_INTRO);
 
-                    z_state_set(Z_STATE_MENU);
-                    z_swipe_start(Z_SWIPE_HIDE);
-                }
-            } break;
+        g_pc = Z_ARRAY_LEN(g_lines) - 1;
+    }
 
-            case 2: {
-                if(g_height < z_sprite_heightGet(Z_SPRITE_ALXM)) {
-                    g_height = g_height + 2;
-                }
-            } break;
-        }
+    if(z_state_changed() || z_timer_running(Z_TIMER_G1)) {
+        return;
+    }
+
+    while(g_lines[g_pc] >= 0) {
+        g_pc++;
+    }
+
+    if(g_lines[g_pc] == -1) {
+        g_pc++;
+    }
+
+    if(g_lines[g_pc] == -2) {
+        z_timer_start(Z_TIMER_G1, Z_LOGO_WAIT_DS);
     }
 }
 
@@ -71,26 +84,26 @@ void s_intro_draw(void)
 
     z_sprite_blitCentered(Z_SPRITE_ALXM, Z_SCREEN_W / 2, Z_SCREEN_H / 2, 0);
 
-    switch(g_stage) {
-        case 0: {
-            z_draw_rectangle(Z_SCREEN_W / 2 - spriteW / 2,
-                             Z_SCREEN_H / 2 - spriteH / 2,
-                             spriteW,
-                             g_height,
-                             Z_COLOR_ALXM_BG);
-        } break;
+    if(g_lines[g_pc] < 0) {
+        return;
+    }
 
-        case 2: {
-            z_draw_rectangle(Z_SCREEN_W / 2 - spriteW / 2,
-                             Z_SCREEN_H / 2 + (spriteH + 1) / 2 - g_height,
-                             spriteW,
-                             g_height,
-                             Z_COLOR_ALXM_BG);
-        } break;
+    int startX1 = Z_SCREEN_W / 2 - spriteW / 2;
+    int startX2 = Z_SCREEN_W / 2 + (spriteW + 1) / 2 - 2;
+    int startY = Z_SCREEN_H / 2 - spriteH / 2;
+
+    for(int pc = g_pc; g_lines[pc] != -2; pc++) {
+        while(g_lines[pc] != -1) {
+            int8_t x = g_lines[pc++];
+            int8_t y = g_lines[pc++];
+
+            z_draw_rectangle(startX1 + x, startY + y, 2, 1, Z_COLOR_ALXM_BG);
+            z_draw_rectangle(startX2 - x, startY + y, 2, 1, Z_COLOR_ALXM_BG);
+        }
     }
 }
 
 void s_intro_free(void)
 {
-    z_timer_stop(Z_TIMER_G1);
+    //
 }

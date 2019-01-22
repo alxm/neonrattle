@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018, 2019 Alex Margarit <alex@alxm.org>
 
     Neonrattle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 typedef enum {
     Z_SWIPE_INVALID = -1,
+    Z_SWIPE_INTRO,
     Z_SWIPE_HIDE,
     Z_SWIPE_SHOW,
     Z_SWIPE_NUM
