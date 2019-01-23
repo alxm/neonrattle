@@ -80,9 +80,6 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
                 continue;
             }
 
-            int div = 255 / (O_TILE_APPLES_MAX - 1);
-            int numApples = 1 + (rgb.r + div / 2) / div;
-
             ZVectorInt grid = z_coords_tileToGrid((ZVectorInt){x, y});
             ZVectorInt gridTileOffset = z_coords_tileToGridOffset(
                                             (ZVectorInt){x, y});
@@ -115,7 +112,9 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
                 endY = Z_FIX_ONE;
             }
 
-            while(numApples--) {
+            int num = (O_TILE_APPLES_MAX * (rgb.r + 1)) >> 8;
+
+            while(num--) {
                 ZFix ax = z_fix_fromInt(x) + z_random_range(startX, endX);
                 ZFix ay = z_fix_fromInt(y) + z_random_range(startY, endY);
 
