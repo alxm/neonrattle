@@ -34,6 +34,7 @@
 #include "generated/data_gfx_icon_check.h"
 #include "generated/data_gfx_icon_heart.h"
 #include "generated/data_gfx_icon_lock.h"
+#include "generated/data_gfx_icon_lvl.h"
 #include "generated/data_gfx_font_lcdnum_grid4x7.h"
 
 void z_graphics_setup(void)
@@ -54,6 +55,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_ICON_CHECK, icon_check);
     z_sprite_load(Z_SPRITE_ICON_HEART, icon_heart);
     z_sprite_load(Z_SPRITE_ICON_LOCK, icon_lock);
+    z_sprite_load(Z_SPRITE_ICON_LVL, icon_lvl);
     z_sprite_loadGrid(Z_SPRITE_FONT_LCDNUM, font_lcdnum_grid4x7, 4, 7);
 
     int row = 1;

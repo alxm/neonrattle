@@ -121,17 +121,17 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
     Coords->x += Width + 2;
 }
 
-static void drawNumber(int X, int Y, unsigned Number, int NumDigits)
+static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZColorId Color)
 {
     int charWidth = z_sprite_widthGet(Z_SPRITE_FONT_LCDNUM);
     int charHeight = z_sprite_heightGet(Z_SPRITE_FONT_LCDNUM);
 
-    X -= charWidth / 2;
+    X += charWidth / 2 + (charWidth + 1) * (NumDigits - 1);
     Y += charHeight / 2;
 
     for(int d = NumDigits; d--; X -= charWidth + 1, Number /= 10) {
         z_sprite_blitAlphaMask(
-            Z_SPRITE_FONT_LCDNUM, X, Y, Number % 10, Z_COLOR_SNAKE_01, 256);
+            Z_SPRITE_FONT_LCDNUM, X, Y, Number % 10, Color, 256);
     }
 }
 
@@ -165,5 +165,6 @@ void z_hud_draw(const OSnake* Snake)
             Z_COLOR_BG_GREEN_03,
             192);
 
-    drawNumber(Z_SCREEN_W - 2, 2, o_game_levelGet(), 2);
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL, 55, 59, 0, Z_COLOR_SNAKE_02, 128);
+    drawNumber(52, 49, o_game_levelGet(), 2, Z_COLOR_SNAKE_02);
 }
