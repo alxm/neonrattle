@@ -182,7 +182,7 @@ void s_menu_draw(void)
         Z_SPRITE_NEONRATTLE_GLOW, drawX, drawY, 0, Z_COLOR_APPLE_01, glowAlpha);
     z_sprite_blitAlphaMask(
         Z_SPRITE_NEONRATTLE, drawX, drawY, 0, Z_COLOR_APPLE_02, 256);
-    z_sprite_blit(Z_SPRITE_ALXM2, 8 - shake.y, 51 - shake.x, 0);
+    z_sprite_blit(Z_SPRITE_ALXM2, 8 - shake.y, 52 - shake.x, 0);
 
     int minimapX = -1, minimapY = 0;
 

@@ -185,31 +185,6 @@ void o_map_drawMinimap(ZVectorFix PlayerSnake)
     int drawXStart = Z_SCREEN_W - Z_COORDS_MAP_W - 2;
     int drawYStart = Z_SCREEN_H - Z_COORDS_MAP_H - 2;
 
-    z_draw_rectangleAlpha(drawXStart,
-                          drawYStart - 1,
-                          Z_COORDS_MAP_W,
-                          1,
-                          Z_COLOR_APPLE_02,
-                          64);
-    z_draw_rectangleAlpha(drawXStart,
-                          drawYStart + Z_COORDS_MAP_H,
-                          Z_COORDS_MAP_W,
-                          1,
-                          Z_COLOR_APPLE_02,
-                          64);
-    z_draw_rectangleAlpha(drawXStart - 1,
-                          drawYStart,
-                          1,
-                          Z_COORDS_MAP_H,
-                          Z_COLOR_APPLE_02,
-                          64);
-    z_draw_rectangleAlpha(drawXStart + Z_COORDS_MAP_W,
-                          drawYStart,
-                          1,
-                          Z_COORDS_MAP_H,
-                          Z_COLOR_APPLE_02,
-                          64);
-
     for(int y = 0, drawY = drawYStart; y < Z_COORDS_MAP_H; y++, drawY++) {
         for(int x = 0, drawX = drawXStart; x < Z_COORDS_MAP_W; x++, drawX++) {
             ZColorId color;
