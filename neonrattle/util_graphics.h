@@ -46,6 +46,9 @@ typedef enum {
     Z_COLOR_APPLE_03,
     Z_COLOR_APPLE_04,
     Z_COLOR_APPLE_05,
+    Z_COLOR_APPLE_06_04,
+    Z_COLOR_APPLE_07_03,
+    Z_COLOR_APPLE_08_02,
 
     Z_COLOR_BG_GREEN_01,
     Z_COLOR_BG_GREEN_02,
@@ -56,12 +59,13 @@ typedef enum {
     Z_COLOR_SNAKE_01,
     Z_COLOR_SNAKE_02,
     Z_COLOR_SNAKE_03,
+    Z_COLOR_SNAKE_04_02,
 
     Z_COLOR_NUM
 } ZColorId;
 
-#define Z_COLOR_APPLE_NUM 5
-#define Z_COLOR_SNAKE_NUM 3
+#define Z_COLOR_APPLE_NUM 8
+#define Z_COLOR_SNAKE_NUM 4
 
 static inline ZColorId z_color_appleGet(void)
 {

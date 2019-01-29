@@ -21,6 +21,7 @@
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "util_coords.h"
+#include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
 #include "util_sound.h"
@@ -53,6 +54,9 @@ void s_menu_init(void)
 
         g_cursor = g_lastUnlocked;
     }
+
+    g_velocity.x = 8 * Z_MOVE_SPEED * (z_random_int(2) ? 1 : -1);
+    g_velocity.y = 8 * Z_MOVE_SPEED * (z_random_int(2) ? 1 : -1);
 
     z_input_reset();
 
@@ -185,6 +189,7 @@ void s_menu_draw(void)
     z_sprite_blit(Z_SPRITE_ALXM2, 8 - shake.y, 52 - shake.x, 0);
 
     int minimapX = -1, minimapY = 0;
+    unsigned now = z_fps_ticksGet() / 4;
 
     for(unsigned l = 0; l < Z_LEVELS_NUM; l++) {
         int drawX = (int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM) - shake.x;
@@ -199,26 +204,23 @@ void s_menu_draw(void)
                 minimapY = drawY;
 
                 continue;
+            } else if(l == g_lastUnlocked) {
+                color = z_color_snakeGet();
+                sprite = Z_SPRITE_ICON_APPLE;
             } else {
-                color = Z_COLOR_SNAKE_02;
-                sprite = l == g_lastUnlocked
-                            ? Z_SPRITE_ICON_APPLE : Z_SPRITE_ICON_CHECK;
+                color = Z_COLOR_SNAKE_01
+                            + ((now + (l * 2 / 3)) % Z_COLOR_SNAKE_NUM);
+                sprite = Z_SPRITE_ICON_CHECK;
             }
         } else {
             if(l == g_cursor) {
-                color = Z_COLOR_APPLE_02;
-                sprite = Z_SPRITE_ICON_LOCK;
-
-                z_draw_rectangleAlpha(drawX,
-                                      drawY,
-                                      Z_CELL_DIM - 1,
-                                      Z_CELL_DIM - 1,
-                                      Z_COLOR_SNAKE_02,
-                                      192);
+                color = z_color_snakeGet();
             } else {
-                color = Z_COLOR_SNAKE_03;
-                sprite = Z_SPRITE_ICON_LOCK;
+                color = Z_COLOR_APPLE_01
+                            + ((now + (l * 2 / 3)) % Z_COLOR_APPLE_NUM);
             }
+
+            sprite = Z_SPRITE_ICON_LOCK;
         }
 
         z_sprite_blitAlphaMask(sprite,
