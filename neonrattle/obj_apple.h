@@ -24,7 +24,6 @@
 #include "util_graphics.h"
 
 #define O_APPLE_NUM_MAX 256
-#define O_APPLE_GROW_PER 1
 
 typedef struct OApple OApple;
 
@@ -46,7 +45,7 @@ extern ZFix o_apple_dimGet(const OApple* Apple);
 extern ZColorId o_apple_colorGet(const OApple* Apple);
 
 extern bool o_apple_eatGet(const OApple* Apple);
-extern int o_apple_eatSet(OApple* Apple);
+extern void o_apple_eatSet(OApple* Apple);
 
 extern void o_apple_tick(OApple* Apple);
 extern void o_apple_draw(const OApple* Apple);

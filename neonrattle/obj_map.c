@@ -289,13 +289,13 @@ int o_map_applesNumGet(void)
     return g_map.totalApples;
 }
 
-int o_map_appleEat(OApple* Apple)
+void o_map_appleEat(OApple* Apple)
 {
     ZVectorInt tile = z_vectorfix_toInt(o_apple_coordsGet(Apple));
 
     g_map.tiles[tile.y][tile.x].numApples--;
 
-    return o_apple_eatSet(Apple);
+    o_apple_eatSet(Apple);
 }
 
 bool o_map_isWall(ZVectorInt Tile)

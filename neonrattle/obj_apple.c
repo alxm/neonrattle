@@ -95,12 +95,10 @@ bool o_apple_eatGet(const OApple* Apple)
     return Apple->eaten;
 }
 
-int o_apple_eatSet(OApple* Apple)
+void o_apple_eatSet(OApple* Apple)
 {
     Apple->alphaAngle = 0;
     Apple->eaten = true;
-
-    return O_APPLE_GROW_PER;
 }
 
 void o_apple_tick(OApple* Apple)

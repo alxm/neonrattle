@@ -22,6 +22,7 @@
 
 typedef struct {
     unsigned level;
+    unsigned score;
     OSnake* snake;
 } OGame;
 
@@ -30,6 +31,7 @@ static OGame g_game;
 void o_game_setup(unsigned Level)
 {
     g_game.level = Level;
+    g_game.score = 0;
 }
 
 OSnake* o_game_snakeGet(void)
@@ -50,4 +52,14 @@ void o_game_levelNext(void)
     g_game.level++;
     g_game.level &= 31;
     g_game.snake = o_snake_new(startX, startY);
+}
+
+unsigned o_game_scoreGet(void)
+{
+    return g_game.score;
+}
+
+void o_game_scoreAdd(unsigned Points)
+{
+    g_game.score += Points;
 }

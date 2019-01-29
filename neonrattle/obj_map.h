@@ -33,5 +33,5 @@ extern void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVector
 
 extern ZList* o_map_applesListGet(int GridX, int GridY);
 extern int o_map_applesNumGet(void);
-extern int o_map_appleEat(OApple* Apple);
+extern void o_map_appleEat(OApple* Apple);
 extern bool o_map_isWall(ZVectorInt Tile);

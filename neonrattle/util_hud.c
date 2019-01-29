@@ -167,7 +167,7 @@ void z_hud_draw(const OSnake* Snake)
             Z_COLOR_BG_GREEN_03,
             192);
 
-    drawNumber(2, 55, 1234, 4, Z_COLOR_SNAKE_01);
+    drawNumber(2, 55, o_game_scoreGet(), 4, Z_COLOR_SNAKE_01);
 
     z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL, 55, 59, 0, Z_COLOR_SNAKE_02, 128);
     drawNumber(52, 49, o_game_levelGet(), 2, Z_COLOR_SNAKE_02);

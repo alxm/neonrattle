@@ -19,6 +19,7 @@
 #include "obj_snake.h"
 
 #include "obj_camera.h"
+#include "obj_game.h"
 #include "obj_map.h"
 #include "util_coords.h"
 #include "util_fps.h"
@@ -27,7 +28,7 @@
 #include "util_pool.h"
 #include "util_sound.h"
 
-#define O_SNAKE_LEN (O_APPLE_NUM_MAX * O_APPLE_GROW_PER)
+#define O_SNAKE_LEN (O_APPLE_NUM_MAX)
 #define O_SNAKE_LEN_MASK (O_SNAKE_LEN - 1)
 
 #define O_SNAKE_START_LEN 4
@@ -274,8 +275,11 @@ static bool checkApples(OSnake* Snake)
                                            o_apple_coordsGet(apple),
                                            o_apple_dimGet(apple))) {
 
-                    Snake->grow += o_map_appleEat(apple);
+                    Snake->grow++;
                     Snake->eaten++;
+
+                    o_map_appleEat(apple);
+                    o_game_scoreAdd(1);
 
                     colorSet(
                         Snake, o_apple_colorGet(apple), z_color_snakeGet());
