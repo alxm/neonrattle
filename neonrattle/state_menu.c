@@ -24,6 +24,7 @@
 #include "util_fps.h"
 #include "util_graphics.h"
 #include "util_input.h"
+#include "util_light.h"
 #include "util_sound.h"
 #include "util_swipe.h"
 
@@ -116,6 +117,7 @@ void s_menu_tick(void)
             z_state_set(Z_STATE_START);
             z_swipe_start(Z_SWIPE_FADE_HIDE);
             z_sfx_play(Z_SFX_MENU_SELECT);
+            z_light_pulseSet(Z_LIGHT_GAME_START);
         }
     }
 

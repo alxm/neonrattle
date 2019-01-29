@@ -47,6 +47,7 @@ void s_start_tick(void)
 
     if(z_button_pressGetAny()) {
         z_sfx_play(Z_SFX_PRESSED_A);
+        z_light_pulseSet(Z_LIGHT_GAME_START);
         z_state_set(Z_STATE_PLAY);
     }
 
