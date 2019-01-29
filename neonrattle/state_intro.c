@@ -56,7 +56,7 @@ void s_intro_tick(void)
 
         z_timer_stop(Z_TIMER_G1);
         z_state_set(Z_STATE_MENU);
-        z_swipe_start(Z_SWIPE_INTRO);
+        z_swipe_start(Z_SWIPE_FADE_HIDE);
 
         g_pc = Z_ARRAY_LEN(g_lines) - 1;
     }

@@ -46,7 +46,7 @@ void s_died_tick(void)
         z_timer_stop(Z_TIMER_G1);
 
         z_state_set(Z_STATE_MENU);
-        z_swipe_start(Z_SWIPE_HIDE);
+        z_swipe_start(Z_SWIPE_LINES_HIDE);
     }
 }
 

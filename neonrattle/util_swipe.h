@@ -22,9 +22,10 @@
 
 typedef enum {
     Z_SWIPE_INVALID = -1,
-    Z_SWIPE_INTRO,
-    Z_SWIPE_HIDE,
-    Z_SWIPE_SHOW,
+    Z_SWIPE_FADE_HIDE,
+    Z_SWIPE_FADE_SHOW,
+    Z_SWIPE_LINES_HIDE,
+    Z_SWIPE_LINES_SHOW,
     Z_SWIPE_NUM
 } ZSwipeId;
 

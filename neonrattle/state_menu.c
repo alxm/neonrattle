@@ -56,7 +56,7 @@ void s_menu_init(void)
 
     z_input_reset();
 
-    z_swipe_start(Z_SWIPE_SHOW);
+    z_swipe_start(Z_SWIPE_FADE_SHOW);
 }
 
 void s_menu_tick(void)
@@ -110,7 +110,7 @@ void s_menu_tick(void)
             o_game_setup(g_cursor);
 
             z_state_set(Z_STATE_START);
-            z_swipe_start(Z_SWIPE_HIDE);
+            z_swipe_start(Z_SWIPE_FADE_HIDE);
             z_sfx_play(Z_SFX_MENU_SELECT);
         }
     }

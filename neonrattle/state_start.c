@@ -38,7 +38,7 @@ void s_start_init(void)
     z_input_reset();
     z_light_reset();
 
-    z_swipe_start(Z_SWIPE_SHOW);
+    z_swipe_start(Z_SWIPE_LINES_SHOW);
 }
 
 void s_start_tick(void)
