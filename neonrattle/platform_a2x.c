@@ -65,10 +65,12 @@ A_STATE(run)
         g_buttons[Z_BUTTON_LEFT] = a_button_new();
         a_button_bind(g_buttons[Z_BUTTON_LEFT], A_KEY_LEFT);
         a_button_bind(g_buttons[Z_BUTTON_LEFT], A_BUTTON_LEFT);
+        a_button_bind(g_buttons[Z_BUTTON_LEFT], A_BUTTON_L);
 
         g_buttons[Z_BUTTON_RIGHT] = a_button_new();
         a_button_bind(g_buttons[Z_BUTTON_RIGHT], A_KEY_RIGHT);
         a_button_bind(g_buttons[Z_BUTTON_RIGHT], A_BUTTON_RIGHT);
+        a_button_bind(g_buttons[Z_BUTTON_RIGHT], A_BUTTON_R);
 
         g_buttons[Z_BUTTON_A] = a_button_new();
         a_button_bind(g_buttons[Z_BUTTON_A], A_KEY_SPACE);

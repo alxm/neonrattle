@@ -10,8 +10,10 @@ Copy the `Neonrattle` folder to your SD card.
 
 ## Controls
 
-* Press any button to start moving
-* Steer the snake left and right with d-pad
+* Browse levels with `D-pad`, select with `A or B`
+* Press `any button` to start moving
+* Turn left and right with `D-pad` or with `A and B`
+    * Use `D-pad left` and `B` for comfortable two-handed controls!
 
 ## License
 
