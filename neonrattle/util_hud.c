@@ -21,6 +21,7 @@
 #include "obj_game.h"
 #include "obj_map.h"
 #include "util_graphics.h"
+#include "util_save.h"
 #include "util_timer.h"
 
 #define Z_HUD_APPLES_BLINK_DS 1
@@ -123,17 +124,16 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
     Coords->x += Width + 2;
 }
 
-static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZColorId Color)
+static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId Font, ZColorId Color)
 {
-    int charWidth = z_sprite_widthGet(Z_SPRITE_FONT_LCDNUM);
-    int charHeight = z_sprite_heightGet(Z_SPRITE_FONT_LCDNUM);
+    int charWidth = z_sprite_widthGet(Font);
+    int charHeight = z_sprite_heightGet(Font);
 
     X += charWidth / 2 + (charWidth + 1) * (NumDigits - 1);
     Y += charHeight / 2;
 
     for(int d = NumDigits; d--; X -= charWidth + 1, Number /= 10) {
-        z_sprite_blitAlphaMask(
-            Z_SPRITE_FONT_LCDNUM, X, Y, Number % 10, Color, 256);
+        z_sprite_blitAlphaMask(Font, X, Y, Number % 10, Color, 256);
     }
 }
 
@@ -167,8 +167,25 @@ void z_hud_draw(const OSnake* Snake)
             Z_COLOR_BG_GREEN_03,
             192);
 
-    drawNumber(2, 55, o_game_scoreGet(), 4, Z_COLOR_SNAKE_01);
+    drawNumber(2,
+               49,
+               o_game_scoreGet(),
+               4,
+               Z_SPRITE_FONT_LCDNUM,
+               Z_COLOR_SNAKE_01);
+    drawNumber(2,
+               57,
+               z_save_hiscoreGet(o_game_levelGet() - 1),
+               5,
+               Z_SPRITE_FONT_SMALLNUM,
+               Z_COLOR_SNAKE_01);
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI, 26, 59, 0, Z_COLOR_SNAKE_01, 192);
 
-    z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL, 55, 59, 0, Z_COLOR_SNAKE_02, 128);
-    drawNumber(52, 49, o_game_levelGet(), 2, Z_COLOR_SNAKE_02);
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL, 55, 59, 0, Z_COLOR_SNAKE_02, 192);
+    drawNumber(52,
+               49,
+               o_game_levelGet(),
+               2,
+               Z_SPRITE_FONT_LCDNUM,
+               Z_COLOR_SNAKE_02);
 }
