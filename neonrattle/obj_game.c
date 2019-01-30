@@ -19,6 +19,7 @@
 #include "obj_game.h"
 
 #include "obj_map.h"
+#include "util_save.h"
 
 typedef struct {
     unsigned level;
@@ -49,8 +50,8 @@ void o_game_levelNext(void)
     ZFix startX, startY;
     o_map_init(g_game.level, &startX, &startY);
 
-    g_game.level++;
-    g_game.level &= 31;
+    g_game.level = (g_game.level + 1) & (Z_LEVELS_NUM - 1);
+    g_game.score = 0;
     g_game.snake = o_snake_new(startX, startY);
 }
 

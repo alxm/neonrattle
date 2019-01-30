@@ -22,6 +22,7 @@
 #include "obj_game.h"
 #include "obj_map.h"
 #include "util_hud.h"
+#include "util_save.h"
 
 void s_play_init(void)
 {
@@ -41,6 +42,11 @@ void s_play_tick(void)
         z_state_set(Z_STATE_DIED);
     } else if(o_snake_eatenNumGet(snake) == o_map_applesNumGet()) {
         z_state_set(Z_STATE_END);
+    }
+
+    if(z_state_changed()) {
+        z_save_hiscoreSet(o_game_levelGet() - 1, o_game_scoreGet());
+        z_save_commit();
     }
 }
 
