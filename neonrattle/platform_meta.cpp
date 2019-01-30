@@ -239,15 +239,16 @@ bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size)
     File f = SD.open(FileName, O_RDONLY);
 
     if(!f) {
-        SerialUSB.printf("Cannot open %s for read\n", FileName);
         return false;
     }
 
     int ret = f.read(Buffer, Size);
+
     f.close();
 
     if(ret < (int)Size) {
         SerialUSB.printf("Read(%s, %u) failed: %d\n", FileName, Size, ret);
+
         return false;
     }
 

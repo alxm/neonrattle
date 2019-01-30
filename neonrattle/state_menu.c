@@ -25,34 +25,27 @@
 #include "util_graphics.h"
 #include "util_input.h"
 #include "util_light.h"
+#include "util_save.h"
 #include "util_sound.h"
 #include "util_swipe.h"
 
-#define Z_LEVELS_NUM 32
 #define Z_GRID_W 8
-#define Z_GRID_H 4
+#define Z_GRID_H (Z_LEVELS_NUM / Z_GRID_W)
 #define Z_CELL_DIM (Z_COORDS_UNIT_PIXELS / 2)
 #define Z_SELECT_DELAY_DS 2
 #define Z_MOVE_SPEED (Z_FIX_ONE * 2)
 #define Z_GLOW_SPEED (Z_FIX_DEG_001 * 4)
-#define Z_LAST_UNLOCKED_FILE "last.sav"
-#define Z_LAST_UNLOCKED_DEFAULT UINT8_MAX
 
 static unsigned g_cursor;
-static uint8_t g_lastUnlocked = Z_LAST_UNLOCKED_DEFAULT;
+static unsigned g_lastUnlocked = UINT_MAX;
 static ZVectorFix g_origin;
 static ZVectorFix g_velocity;
 static ZFixu g_angle;
 
 void s_menu_init(void)
 {
-    if(g_lastUnlocked == Z_LAST_UNLOCKED_DEFAULT) {
-        if(!z_file_readOnce(
-            Z_LAST_UNLOCKED_FILE, &g_lastUnlocked, sizeof(g_lastUnlocked))) {
-
-            g_lastUnlocked = 0;
-        }
-
+    if(g_lastUnlocked == UINT_MAX) {
+        g_lastUnlocked = z_save_unlockedGet();
         g_cursor = g_lastUnlocked;
     }
 
@@ -252,7 +245,7 @@ void s_menu_selectNext(void)
     if(g_cursor > g_lastUnlocked) {
         g_lastUnlocked++;
 
-        z_file_writeOnce(
-            Z_LAST_UNLOCKED_FILE, &g_lastUnlocked, sizeof(g_lastUnlocked));
+        z_save_unlockedSet(g_lastUnlocked);
+        z_save_commit();
     }
 }

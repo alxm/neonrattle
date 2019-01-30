@@ -29,6 +29,7 @@
 #include "state_start.h"
 #include "util_input.h"
 #include "util_light.h"
+#include "util_save.h"
 #include "util_sound.h"
 #include "util_swipe.h"
 #include "util_timer.h"
@@ -89,6 +90,8 @@ static struct {
 
 void z_state_setup(void)
 {
+    z_save_setup();
+
     z_graphics_setup();
     z_sound_setup();
 

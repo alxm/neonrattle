@@ -238,6 +238,7 @@ bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size)
     }
 
     bool ret = a_file_read(f, Buffer, Size);
+
     a_file_free(f);
 
     return ret;
