@@ -175,7 +175,7 @@ void z_hud_draw(const OSnake* Snake)
                Z_COLOR_SNAKE_01);
     drawNumber(2,
                57,
-               z_save_hiscoreGet(o_game_levelGet() - 1),
+               z_save_hiscoreGet(o_game_levelGet()),
                5,
                Z_SPRITE_FONT_SMALLNUM,
                Z_COLOR_SNAKE_01);
@@ -184,7 +184,7 @@ void z_hud_draw(const OSnake* Snake)
     z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL, 55, 59, 0, Z_COLOR_SNAKE_02, 192);
     drawNumber(52,
                49,
-               o_game_levelGet(),
+               o_game_levelGet() + 1,
                2,
                Z_SPRITE_FONT_LCDNUM,
                Z_COLOR_SNAKE_02);

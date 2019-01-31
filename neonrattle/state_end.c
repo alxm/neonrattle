@@ -49,7 +49,6 @@ void s_end_tick(void)
 
         z_state_set(Z_STATE_START);
         z_swipe_start(Z_SWIPE_LINES_HIDE);
-        s_menu_selectNext();
     }
 }
 
@@ -65,5 +64,6 @@ void s_end_draw(void)
 
 void s_end_free(void)
 {
-    //
+    o_game_setup(o_game_levelGet() + 1);
+    s_menu_selectNext();
 }

@@ -25,9 +25,7 @@
 extern void o_game_setup(unsigned Level);
 
 extern OSnake* o_game_snakeGet(void);
-
 extern unsigned o_game_levelGet(void);
-extern void o_game_levelNext(void);
 
 extern unsigned o_game_scoreGet(void);
 extern void o_game_scoreAdd(unsigned Points);

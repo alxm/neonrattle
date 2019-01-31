@@ -45,7 +45,7 @@ void s_play_tick(void)
     }
 
     if(z_state_changed()) {
-        z_save_hiscoreSet(o_game_levelGet() - 1, o_game_scoreGet());
+        z_save_hiscoreSet(o_game_levelGet(), o_game_scoreGet());
         z_save_commit();
     }
 }

@@ -31,8 +31,15 @@ static OGame g_game;
 
 void o_game_setup(unsigned Level)
 {
+    o_apple_setup();
+    o_snake_setup();
+
+    ZFix startX, startY;
+    o_map_init(Level, &startX, &startY);
+
     g_game.level = Level;
     g_game.score = 0;
+    g_game.snake = o_snake_new(startX, startY);
 }
 
 OSnake* o_game_snakeGet(void)
@@ -43,16 +50,6 @@ OSnake* o_game_snakeGet(void)
 unsigned o_game_levelGet(void)
 {
     return g_game.level;
-}
-
-void o_game_levelNext(void)
-{
-    ZFix startX, startY;
-    o_map_init(g_game.level, &startX, &startY);
-
-    g_game.level++;
-    g_game.score = 0;
-    g_game.snake = o_snake_new(startX, startY);
 }
 
 unsigned o_game_scoreGet(void)
