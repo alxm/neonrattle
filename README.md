@@ -4,10 +4,6 @@
 
 ![Neonrattle screenshot](https://github.com/alxm/neonrattle/raw/master/assets/gfx/screenshot01.png "Neonrattle screenshot")
 
-## Install
-
-Copy the `Neonrattle` folder to your SD card.
-
 ## Controls
 
 * Browse levels with `D-pad`, select with `A or B`
