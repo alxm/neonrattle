@@ -21,6 +21,7 @@
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
+#include "state_menu.h"
 #include "util_hud.h"
 #include "util_save.h"
 
@@ -43,11 +44,6 @@ void s_play_tick(void)
     } else if(o_snake_eatenNumGet(snake) == o_map_applesNumGet()) {
         z_state_set(Z_STATE_END);
     }
-
-    if(z_state_changed()) {
-        z_save_hiscoreSet(o_game_levelGet(), o_game_scoreGet());
-        z_save_commit();
-    }
 }
 
 void s_play_draw(void)
@@ -62,5 +58,10 @@ void s_play_draw(void)
 
 void s_play_free(void)
 {
-    //
+    unsigned level = o_game_levelGet();
+
+    z_save_hiscoreSet(level, o_game_scoreGet());
+    z_save_commit();
+
+    s_menu_select(level);
 }

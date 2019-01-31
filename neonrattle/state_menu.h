@@ -27,4 +27,4 @@ extern ZStateTick s_menu_tick;
 extern ZStateDraw s_menu_draw;
 extern ZStateFree s_menu_free;
 
-extern void s_menu_selectNext(void);
+extern void s_menu_select(unsigned Level);

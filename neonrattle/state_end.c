@@ -21,9 +21,9 @@
 #include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
-#include "state_menu.h"
 #include "util_hud.h"
 #include "util_light.h"
+#include "util_save.h"
 #include "util_sound.h"
 #include "util_swipe.h"
 #include "util_timer.h"
@@ -47,7 +47,17 @@ void s_end_tick(void)
     if(z_timer_expired(Z_TIMER_G1)) {
         z_timer_stop(Z_TIMER_G1);
 
-        z_state_set(Z_STATE_START);
+        unsigned nextLevel = o_game_levelGet() + 1;
+
+        if(nextLevel < Z_LEVELS_NUM) {
+            z_save_unlockedSet(nextLevel);
+            z_save_commit();
+
+            z_state_set(Z_STATE_START);
+        } else {
+            z_state_set(Z_STATE_MENU);
+        }
+
         z_swipe_start(Z_SWIPE_LINES_HIDE);
     }
 }
@@ -64,6 +74,7 @@ void s_end_draw(void)
 
 void s_end_free(void)
 {
-    o_game_setup(o_game_levelGet() + 1);
-    s_menu_selectNext();
+    if(z_state_getNext() == Z_STATE_START) {
+        o_game_setup(o_game_levelGet() + 1);
+    }
 }

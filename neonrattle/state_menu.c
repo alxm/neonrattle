@@ -36,17 +36,15 @@
 #define Z_MOVE_SPEED (Z_FIX_ONE * 2)
 #define Z_GLOW_SPEED (Z_FIX_DEG_001 * 4)
 
-static unsigned g_cursor;
-static unsigned g_lastUnlocked = UINT_MAX;
+static unsigned g_cursor = UINT_MAX;
 static ZVectorFix g_origin;
 static ZVectorFix g_velocity;
 static ZFixu g_angle;
 
 void s_menu_init(void)
 {
-    if(g_lastUnlocked == UINT_MAX) {
-        g_lastUnlocked = z_save_unlockedGet();
-        g_cursor = g_lastUnlocked;
+    if(g_cursor == UINT_MAX) {
+        g_cursor = z_save_unlockedGet();
     }
 
     g_velocity.x = 8 * Z_MOVE_SPEED * (z_random_int(2) ? 1 : -1);
@@ -101,7 +99,7 @@ void s_menu_tick(void)
                     & (z_fix_fromInt(2 * Z_COORDS_UNIT_PIXELS) - 1);
 
     if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGetOnce(Z_BUTTON_B)) {
-        if(g_cursor > g_lastUnlocked) {
+        if(g_cursor > z_save_unlockedGet()) {
             o_camera_shakeSet(2);
             z_sfx_play(Z_SFX_MENU_REJECT);
         } else {
@@ -185,6 +183,7 @@ void s_menu_draw(void)
 
     int minimapX = -1, minimapY = 0;
     unsigned now = z_fps_ticksGet() / 4;
+    unsigned lastUnlocked = z_save_unlockedGet();
 
     for(unsigned l = 0; l < Z_LEVELS_NUM; l++) {
         int drawX = (int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM) - shake.x;
@@ -193,13 +192,13 @@ void s_menu_draw(void)
         ZColorId color;
         ZSpriteId sprite;
 
-        if(l <= g_lastUnlocked) {
+        if(l <= lastUnlocked) {
             if(l == g_cursor) {
                 minimapX = drawX;
                 minimapY = drawY;
 
                 continue;
-            } else if(l == g_lastUnlocked) {
+            } else if(l == lastUnlocked) {
                 color = z_color_snakeGet();
                 sprite = Z_SPRITE_ICON_APPLE;
             } else {
@@ -238,14 +237,7 @@ void s_menu_free(void)
     //
 }
 
-void s_menu_selectNext(void)
+void s_menu_select(unsigned Level)
 {
-    g_cursor = (g_cursor + 1) & (Z_LEVELS_NUM - 1);
-
-    if(g_cursor > g_lastUnlocked) {
-        g_lastUnlocked++;
-
-        z_save_unlockedSet(g_lastUnlocked);
-        z_save_commit();
-    }
+    g_cursor = Level;
 }
