@@ -43,6 +43,8 @@ extern void z_state_setup(void);
 extern void z_state_tick(void);
 extern void z_state_draw(void);
 
+extern ZStateId z_state_getCurrent(void);
+extern ZStateId z_state_getNext(void);
 extern void z_state_set(ZStateId NewState);
 extern bool z_state_changed(void);
 

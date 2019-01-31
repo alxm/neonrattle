@@ -149,6 +149,16 @@ void z_state_draw(void)
     z_light_draw();
 }
 
+ZStateId z_state_getCurrent(void)
+{
+    return g_state.current;
+}
+
+ZStateId z_state_getNext(void)
+{
+    return g_state.next;
+}
+
 void z_state_set(ZStateId NewState)
 {
     if(g_state.next != Z_STATE_INVALID) {
