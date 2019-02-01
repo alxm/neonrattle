@@ -171,23 +171,36 @@ void s_menu_draw(void)
         }
     }
 
-    int drawX = shake.y + 8 + z_sprite_widthGet(Z_SPRITE_NEONRATTLE) / 2;
-    int drawY = shake.x + 10 + z_sprite_heightGet(Z_SPRITE_NEONRATTLE) / 2;
+    int startX = 8;
+    int startY = 9;
+
+    int drawX = startX + shake.y + z_sprite_widthGet(Z_SPRITE_NEONRATTLE) / 2;
+    int drawY = startY + shake.x + z_sprite_heightGet(Z_SPRITE_NEONRATTLE) / 2;
     int glowAlpha = 128 + z_fix_toInt(z_fix_sinf(g_angle) * 128);
 
     z_sprite_blitAlphaMask(
         Z_SPRITE_NEONRATTLE_GLOW, drawX, drawY, 0, Z_COLOR_APPLE_01, glowAlpha);
     z_sprite_blitAlphaMask(
         Z_SPRITE_NEONRATTLE, drawX, drawY, 0, Z_COLOR_APPLE_02, 256);
-    z_sprite_blit(Z_SPRITE_ALXM2, 8 - shake.y, 52 - shake.x, 0);
+    z_sprite_blitAlphaMask(Z_SPRITE_ALXM2GLOW,
+                           startX - shake.y
+                            + z_sprite_widthGet(Z_SPRITE_ALXM2) / 2,
+                           startY - shake.x + 42
+                            + z_sprite_heightGet(Z_SPRITE_ALXM2) / 2,
+                           0,
+                           Z_COLOR_APPLE_02,
+                           256);
+    z_sprite_blit(Z_SPRITE_ALXM2, startX - shake.y, startY - shake.x + 42, 0);
 
     int minimapX = -1, minimapY = 0;
     unsigned now = z_fps_ticksGet() / 4;
     unsigned lastUnlocked = z_save_unlockedGet();
 
     for(unsigned l = 0; l < Z_LEVELS_NUM; l++) {
-        int drawX = (int)(8 + (l & (Z_GRID_W - 1)) * Z_CELL_DIM) - shake.x;
-        int drawY = (int)(19 + (l / Z_GRID_W) * Z_CELL_DIM) - shake.y;
+        int drawX = (int)
+            ((unsigned)startX + (l & (Z_GRID_W - 1)) * Z_CELL_DIM) - shake.x;
+        int drawY = (int)
+            ((unsigned)startY + 9 + (l / Z_GRID_W) * Z_CELL_DIM) - shake.y;
 
         ZColorId color;
         ZSpriteId sprite;

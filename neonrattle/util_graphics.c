@@ -21,6 +21,7 @@
 #include "generated/data_gfx_palette.h"
 #include "generated/data_gfx_alxm.h"
 #include "generated/data_gfx_alxm2.h"
+#include "generated/data_gfx_alxm2glow.h"
 #include "generated/data_gfx_alxm_wing.h"
 #include "generated/data_gfx_neonrattle.h"
 #include "generated/data_gfx_neonrattle_glow.h"
@@ -44,6 +45,7 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_PALETTE, palette);
     z_sprite_load(Z_SPRITE_ALXM, alxm);
     z_sprite_load(Z_SPRITE_ALXM2, alxm2);
+    z_sprite_load(Z_SPRITE_ALXM2GLOW, alxm2glow);
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
     z_sprite_load(Z_SPRITE_NEONRATTLE, neonrattle);
     z_sprite_load(Z_SPRITE_NEONRATTLE_GLOW, neonrattle_glow);
