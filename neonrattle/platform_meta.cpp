@@ -85,7 +85,7 @@ void loop(void)
         gb.display.setCursor(2, 52);
         gb.display.print(gb.getFreeRam(), DEC);
         gb.display.setCursor(2, 58);
-        gb.display.print(SOUND_CHANNELS, DEC);
+        gb.display.print(gb.frameCount, DEC);
     #endif
 }
 
