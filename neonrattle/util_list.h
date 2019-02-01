@@ -40,6 +40,7 @@ extern void z_list_reset(ZList* List);
 extern void z_list_addFirst(ZList* List, void* Object);
 extern void z_list_addLast(ZList* List, void* Object);
 extern void z_list_remove(ZListNode* Node);
+extern bool z_list_isEmpty(const ZList* List);
 
 extern ZListIt z_listit__new(ZList* List);
 extern bool z_listit__getNext(ZListIt* Iterator, void* UserPtrAddress);

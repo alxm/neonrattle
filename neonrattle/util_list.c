@@ -69,6 +69,11 @@ void z_list_remove(ZListNode* Node)
     Node->prev = NULL;
 }
 
+bool z_list_isEmpty(const ZList* List)
+{
+    return List->root.next == &List->root;
+}
+
 ZListIt z_listit__new(ZList* List)
 {
     return (ZListIt){List, List->root.next};
