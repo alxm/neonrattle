@@ -1,19 +1,12 @@
 A_CONFIG_APP_NAME := neonrattle.html
-A_DIR_SRC := neonrattle
+A_CONFIG_DIR_SRC := neonrattle
 
-A_CONFIG_EMBED_PATHS_EM := \
-	assets/gfx/palette.png \
-	assets/gfx/map0.png \
-	assets/gfx/tiles.png \
-	assets/gfx/snake_alphamask1.png \
-	assets/gfx/apple_alphamask1.png \
-	assets/gfx/apple_halo.png \
-	assets/gfx/alxm.png \
-	assets/gfx/alxm_wing.png \
-	assets/sfx/apple_eat.wav \
-	assets/sfx/hit_wall.wav \
-	assets/sfx/pressed_a.wav \
-	assets/sfx/swipe_hide.wav \
-	assets/sfx/swipe_show.wav \
+Z_ROOT := ..
+Z_DIR_GFX := assets/gfx
+Z_DIR_SFX := assets/sfx
+
+A_CONFIG_EMBED_PATHS_EMSCRIPTEN := \
+	$(addprefix $(Z_DIR_GFX)/, $(notdir $(wildcard $(Z_ROOT)/$(Z_DIR_GFX)/*.png))) \
+	$(addprefix $(Z_DIR_SFX)/, $(notdir $(wildcard $(Z_ROOT)/$(Z_DIR_SFX)/*.wav))) \
 
 include $(A2X_PATH)/make/project/Makefile.emscripten

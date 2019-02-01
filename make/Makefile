@@ -1,5 +1,6 @@
 A_CONFIG_APP_NAME := neonrattle
-A_DIR_SRC := neonrattle
+A_CONFIG_DIR_SRC := neonrattle
+A_CONFIG_MAKE_CLEAN := genclean
 
 include $(A2X_PATH)/make/project/Makefile
 
