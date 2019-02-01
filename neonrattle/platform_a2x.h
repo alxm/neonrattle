@@ -18,7 +18,7 @@
 
 #include <a2x.h>
 
-#if Z_DEBUG_STATS && A_BUILD_SYSTEM_DESKTOP
+#if Z_DEBUG && A_BUILD_SYSTEM_DESKTOP
     #define Z_DEBUG_INSTRUMENT 1
 #endif
 

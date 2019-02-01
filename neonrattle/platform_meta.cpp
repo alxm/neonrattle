@@ -60,7 +60,7 @@ void setup(void)
 
     SerialUSB.begin(9600);
 
-    #if Z_DEBUG_STATS
+    #if Z_DEBUG
         unsigned now = millis();
 
         while(!SerialUSB && millis() - now < 1000) {
@@ -78,7 +78,7 @@ void loop(void)
     z_state_tick();
     z_state_draw();
 
-    #if Z_DEBUG_STATS
+    #if Z_DEBUG
         gb.display.setColor(WHITE);
         gb.display.setCursor(2, 46);
         gb.display.print(gb.getCpuLoad(), DEC);

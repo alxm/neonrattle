@@ -98,7 +98,7 @@ void z_state_setup(void)
     z_input_reset();
     z_light_reset();
 
-    #if Z_DEBUG_STATS
+    #if Z_DEBUG
         z_state_set(Z_STATE_MENU);
     #else
         z_state_set(Z_STATE_INTRO);
