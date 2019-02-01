@@ -1,8 +1,8 @@
 # Neonrattle
 
-[*Neonrattle*](https://www.alxm.org/games/gamebuino.html#neonrattle) is a 360-degree snake game for the Gamebuino META.
+[*Neonrattle*](https://www.alxm.org/games/gamebuino.html#neonrattle) is a 360-degree snake game for the Gamebuino META. You can also try the [web build](https://www.alxm.org/games/neonrattle.html).
 
-![Neonrattle screenshot](https://github.com/alxm/neonrattle/raw/master/assets/gfx/screenshot01.png "Neonrattle screenshot")
+![Neonrattle screenshot](https://github.com/alxm/neonrattle/raw/master/assets/gfx/screenshot02.png "Neonrattle screenshot")
 
 ## Controls
 
