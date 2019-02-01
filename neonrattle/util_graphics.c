@@ -65,7 +65,7 @@ void z_graphics_setup(void)
     int row = 1;
     int col = 0;
 
-    for(ZColorId c = 0; c < Z_COLOR_NUM; c++, col++) {
+    for(int c = 0; c < Z_COLOR_NUM; c++, col++) {
         ZPixel pixel = z_sprite_pixelGet(Z_SPRITE_PALETTE, 0, col, row);
 
         if(pixel == 0) {

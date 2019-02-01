@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018-2019 Alex Margarit <alex@alxm.org>
     This file is part of Neonrattle, a video game.
 
     This program is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ void z_timer_tick(void)
 {
     uint8_t now = (uint8_t)z_fps_ticksGet();
 
-    for(ZTimerId t = 0; t < Z_TIMER_NUM; t++) {
+    for(int t = 0; t < Z_TIMER_NUM; t++) {
         ZTimer* timer = &g_timers[t];
 
         if(timer->period == 0) {
