@@ -38,7 +38,7 @@ static AButton* g_buttons[Z_BUTTON_NUM];
 A_SETUP
 {
     a_settings_stringSet(A_SETTING_APP_TITLE, "Neonrattle");
-    a_settings_stringSet(A_SETTING_APP_VERSION, "0.2.0");
+    a_settings_stringSet(A_SETTING_APP_VERSION, "0.8.0");
     a_settings_stringSet(A_SETTING_APP_AUTHOR, "alxm");
     a_settings_boolSet(A_SETTING_OUTPUT_ON, true);
     a_settings_boolSet(A_SETTING_OUTPUT_VERBOSE, true);
