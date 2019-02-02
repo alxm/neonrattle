@@ -34,7 +34,7 @@
 #define Z_CELL_DIM (Z_COORDS_UNIT_PIXELS / 2)
 #define Z_SELECT_DELAY_DS 2
 #define Z_MOVE_SPEED (Z_FIX_ONE * 2)
-#define Z_GLOW_SPEED (Z_FIX_DEG_001 * 4)
+#define Z_GLOW_SPEED (Z_DEG_001_FIX * 4)
 
 static unsigned g_cursor = UINT_MAX;
 static ZVectorFix g_origin;

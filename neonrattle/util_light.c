@@ -27,23 +27,23 @@ static const struct {
 } g_patterns[Z_LIGHT_NUM] = {
     [Z_LIGHT_APPLE_EAT] = {
         Z_COLOR_BG_GREEN_03,
-        {Z_FIX_DEG_090 / 4, Z_FIX_DEG_090 / 2},
+        {Z_DEG_090_FIX / 4, Z_DEG_090_FIX / 2},
     },
     [Z_LIGHT_GAME_START] = {
         Z_COLOR_SNAKE_01,
-        {Z_FIX_DEG_090 / 2, Z_FIX_DEG_090 / 4},
+        {Z_DEG_090_FIX / 2, Z_DEG_090_FIX / 4},
     },
     [Z_LIGHT_SNAKE_HIT_WALL] = {
         Z_COLOR_APPLE_01,
-        {Z_FIX_DEG_090 / 2, Z_FIX_DEG_090 / 16},
+        {Z_DEG_090_FIX / 2, Z_DEG_090_FIX / 16},
     },
     [Z_LIGHT_SNAKE_HIT_SELF] = {
         Z_COLOR_APPLE_03,
-        {Z_FIX_DEG_090 / 1, Z_FIX_DEG_090 / 1},
+        {Z_DEG_090_FIX / 1, Z_DEG_090_FIX / 1},
     },
     [Z_LIGHT_LEVEL_COMPLETE] = {
         Z_COLOR_BG_GREEN_04,
-        {Z_FIX_DEG_090 / 4, Z_FIX_DEG_090 / 32},
+        {Z_DEG_090_FIX / 4, Z_DEG_090_FIX / 32},
     },
 };
 
@@ -73,10 +73,10 @@ void z_light_reset(void)
 void z_light_tick(void)
 {
     if(g_light.pulseId != Z_LIGHT_INVALID) {
-        bool goingDown = g_light.counter >= Z_FIX_DEG_090;
+        bool goingDown = g_light.counter >= Z_DEG_090_FIX;
         g_light.counter += g_patterns[g_light.pulseId].counterSpeed[goingDown];
 
-        if(g_light.counter >= Z_FIX_DEG_180) {
+        if(g_light.counter >= Z_DEG_180_FIX) {
             g_light.pulseId = Z_LIGHT_INVALID;
         }
     }

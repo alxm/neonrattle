@@ -23,9 +23,9 @@
 #include "util_list.h"
 #include "util_pool.h"
 
-#define O_APPLE_BOUNCE_DEG_STEP (8 * Z_FIX_DEG_001)
-#define O_APPLE_ALPHA_DEG_STEP (4 * Z_FIX_DEG_001)
-#define O_APPLE_ALPHA_DEG_STEP_FADE (Z_FIX_DEG_001)
+#define O_APPLE_BOUNCE_DEG_STEP (8 * Z_DEG_001_FIX)
+#define O_APPLE_ALPHA_DEG_STEP (4 * Z_DEG_001_FIX)
+#define O_APPLE_ALPHA_DEG_STEP_FADE (Z_DEG_001_FIX)
 #define O_APPLE_ALPHA_MIN 192
 #define O_APPLE_ALPHA_MAX 256
 
@@ -106,7 +106,7 @@ void o_apple_tick(OApple* Apple)
     if(Apple->eaten) {
         Apple->alphaAngle += O_APPLE_ALPHA_DEG_STEP_FADE;
 
-        if(Apple->alphaAngle >= Z_FIX_DEG_090) {
+        if(Apple->alphaAngle >= Z_DEG_090_FIX) {
             o_apple_free(Apple);
         }
     } else {
@@ -123,7 +123,7 @@ void o_apple_draw(const OApple* Apple)
 
     if(Apple->eaten) {
         sprite = Z_SPRITE_APPLE_HALO;
-        alpha = z_fix_toInt(z_fix_sinf(Z_FIX_DEG_090 - Apple->alphaAngle)
+        alpha = z_fix_toInt(z_fix_sinf(Z_DEG_090_FIX - Apple->alphaAngle)
                                 * O_APPLE_ALPHA_MIN);
     } else {
         sprite = Z_SPRITE_APPLE_MASK;
@@ -132,7 +132,7 @@ void o_apple_draw(const OApple* Apple)
                 + z_fix_toInt(z_fix_sinf(Apple->alphaAngle)
                                 * (O_APPLE_ALPHA_MAX - O_APPLE_ALPHA_MIN) / 2);
 
-        screen.x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_FIX_DEG_090));
+        screen.x += z_fix_toInt(z_fix_sinf(Apple->bounceAngle + Z_DEG_090_FIX));
         screen.y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
     }
 

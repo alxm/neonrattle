@@ -21,7 +21,7 @@
 #include "util_graphics.h"
 #include "util_sound.h"
 
-#define Z_ANGLE_INC (Z_FIX_DEG_090 / 16)
+#define Z_ANGLE_INC (Z_DEG_090_FIX / 16)
 
 typedef void (ZSwipeInit)(void);
 typedef bool (ZSwipeTick)(void);
@@ -40,7 +40,7 @@ static void drawFadeHide(void)
 
 static void drawFadeShow(void)
 {
-    int alpha = z_fix_toInt(z_fix_sinf(Z_FIX_DEG_090 - g_angle) * 256);
+    int alpha = z_fix_toInt(z_fix_sinf(Z_DEG_090_FIX - g_angle) * 256);
 
     z_draw_rectangleAlpha(
         0, 0, Z_SCREEN_W, Z_SCREEN_H, Z_COLOR_BG_GREEN_01, alpha);
@@ -70,7 +70,7 @@ static void drawLinesHide(void)
 
 static void drawLinesShow(void)
 {
-    drawLines(Z_FIX_DEG_090 - g_angle);
+    drawLines(Z_DEG_090_FIX - g_angle);
 }
 
 static const struct {
@@ -109,7 +109,7 @@ void z_swipe_tick(void)
     if(g_swipe != Z_SWIPE_INVALID) {
         g_angle += Z_ANGLE_INC;
 
-        if(g_angle > Z_FIX_DEG_090) {
+        if(g_angle > Z_DEG_090_FIX) {
             g_swipe = Z_SWIPE_INVALID;
         }
     }

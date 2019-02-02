@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018-2019 Alex Margarit <alex@alxm.org>
     This file is part of Neonrattle, a video game.
 
     This program is free software: you can redistribute it and/or modify
@@ -33,43 +33,44 @@ typedef uint32_t ZFixu;
 #define Z_ANGLES_NUM 4096u
 
 typedef enum {
-    Z_INT_DEG_022 = (Z_ANGLES_NUM / 16),
-    Z_INT_DEG_045 = (Z_ANGLES_NUM / 8),
-    Z_INT_DEG_067 = (Z_INT_DEG_045 + Z_INT_DEG_022),
-    Z_INT_DEG_090 = (2 * Z_INT_DEG_045),
-    Z_INT_DEG_112 = (Z_INT_DEG_090 + Z_INT_DEG_022),
-    Z_INT_DEG_135 = (3 * Z_INT_DEG_045),
-    Z_INT_DEG_157 = (Z_INT_DEG_135 + Z_INT_DEG_022),
-    Z_INT_DEG_180 = (4 * Z_INT_DEG_045),
-    Z_INT_DEG_202 = (Z_INT_DEG_180 + Z_INT_DEG_022),
-    Z_INT_DEG_225 = (5 * Z_INT_DEG_045),
-    Z_INT_DEG_247 = (Z_INT_DEG_225 + Z_INT_DEG_022),
-    Z_INT_DEG_270 = (6 * Z_INT_DEG_045),
-    Z_INT_DEG_292 = (Z_INT_DEG_270 + Z_INT_DEG_022),
-    Z_INT_DEG_315 = (7 * Z_INT_DEG_045),
-    Z_INT_DEG_337 = (Z_INT_DEG_315 + Z_INT_DEG_022),
-    Z_INT_DEG_360 = (8 * Z_INT_DEG_045),
-} ZIntAngles;
+    Z_DEG_001_INT = (Z_ANGLES_NUM / 360),
+    Z_DEG_022_INT = (Z_ANGLES_NUM / 16),
+    Z_DEG_045_INT = (Z_ANGLES_NUM / 8),
+    Z_DEG_067_INT = (Z_DEG_045_INT + Z_DEG_022_INT),
+    Z_DEG_090_INT = (2 * Z_DEG_045_INT),
+    Z_DEG_112_INT = (Z_DEG_090_INT + Z_DEG_022_INT),
+    Z_DEG_135_INT = (3 * Z_DEG_045_INT),
+    Z_DEG_157_INT = (Z_DEG_135_INT + Z_DEG_022_INT),
+    Z_DEG_180_INT = (4 * Z_DEG_045_INT),
+    Z_DEG_202_INT = (Z_DEG_180_INT + Z_DEG_022_INT),
+    Z_DEG_225_INT = (5 * Z_DEG_045_INT),
+    Z_DEG_247_INT = (Z_DEG_225_INT + Z_DEG_022_INT),
+    Z_DEG_270_INT = (6 * Z_DEG_045_INT),
+    Z_DEG_292_INT = (Z_DEG_270_INT + Z_DEG_022_INT),
+    Z_DEG_315_INT = (7 * Z_DEG_045_INT),
+    Z_DEG_337_INT = (Z_DEG_315_INT + Z_DEG_022_INT),
+    Z_DEG_360_INT = (8 * Z_DEG_045_INT),
+} ZDegInt;
 
 typedef enum {
-    Z_FIX_DEG_022 = (Z_INT_DEG_022 * Z_FIX_ONE),
-    Z_FIX_DEG_045 = (Z_INT_DEG_045 * Z_FIX_ONE),
-    Z_FIX_DEG_067 = (Z_INT_DEG_067 * Z_FIX_ONE),
-    Z_FIX_DEG_090 = (Z_INT_DEG_090 * Z_FIX_ONE),
-    Z_FIX_DEG_112 = (Z_INT_DEG_112 * Z_FIX_ONE),
-    Z_FIX_DEG_135 = (Z_INT_DEG_135 * Z_FIX_ONE),
-    Z_FIX_DEG_157 = (Z_INT_DEG_157 * Z_FIX_ONE),
-    Z_FIX_DEG_180 = (Z_INT_DEG_180 * Z_FIX_ONE),
-    Z_FIX_DEG_202 = (Z_INT_DEG_202 * Z_FIX_ONE),
-    Z_FIX_DEG_225 = (Z_INT_DEG_225 * Z_FIX_ONE),
-    Z_FIX_DEG_247 = (Z_INT_DEG_247 * Z_FIX_ONE),
-    Z_FIX_DEG_270 = (Z_INT_DEG_270 * Z_FIX_ONE),
-    Z_FIX_DEG_292 = (Z_INT_DEG_292 * Z_FIX_ONE),
-    Z_FIX_DEG_315 = (Z_INT_DEG_315 * Z_FIX_ONE),
-    Z_FIX_DEG_337 = (Z_INT_DEG_337 * Z_FIX_ONE),
-    Z_FIX_DEG_360 = (Z_INT_DEG_360 * Z_FIX_ONE),
-    Z_FIX_DEG_001 = (Z_FIX_DEG_360 / 360),
-} ZFixAngles;
+    Z_DEG_001_FIX = (Z_ANGLES_NUM * Z_FIX_ONE / 360),
+    Z_DEG_022_FIX = (Z_DEG_022_INT * Z_FIX_ONE),
+    Z_DEG_045_FIX = (Z_DEG_045_INT * Z_FIX_ONE),
+    Z_DEG_067_FIX = (Z_DEG_067_INT * Z_FIX_ONE),
+    Z_DEG_090_FIX = (Z_DEG_090_INT * Z_FIX_ONE),
+    Z_DEG_112_FIX = (Z_DEG_112_INT * Z_FIX_ONE),
+    Z_DEG_135_FIX = (Z_DEG_135_INT * Z_FIX_ONE),
+    Z_DEG_157_FIX = (Z_DEG_157_INT * Z_FIX_ONE),
+    Z_DEG_180_FIX = (Z_DEG_180_INT * Z_FIX_ONE),
+    Z_DEG_202_FIX = (Z_DEG_202_INT * Z_FIX_ONE),
+    Z_DEG_225_FIX = (Z_DEG_225_INT * Z_FIX_ONE),
+    Z_DEG_247_FIX = (Z_DEG_247_INT * Z_FIX_ONE),
+    Z_DEG_270_FIX = (Z_DEG_270_INT * Z_FIX_ONE),
+    Z_DEG_292_FIX = (Z_DEG_292_INT * Z_FIX_ONE),
+    Z_DEG_315_FIX = (Z_DEG_315_INT * Z_FIX_ONE),
+    Z_DEG_337_FIX = (Z_DEG_337_INT * Z_FIX_ONE),
+    Z_DEG_360_FIX = (Z_DEG_360_INT * Z_FIX_ONE),
+} ZDegFix;
 
 extern const ZFix z_fix__sin[Z_ANGLES_NUM];
 extern const ZFix z_fix__csc[Z_ANGLES_NUM];
@@ -241,7 +242,7 @@ static inline ZFix z_fix_sin(unsigned Angle)
 
 static inline ZFix z_fix_cos(unsigned Angle)
 {
-    return z_fix__sin[z_fix_angleWrap(Angle + Z_INT_DEG_090)];
+    return z_fix__sin[z_fix_angleWrap(Angle + Z_DEG_090_INT)];
 }
 
 static inline ZFix z_fix_sinf(ZFixu Angle)
@@ -251,7 +252,7 @@ static inline ZFix z_fix_sinf(ZFixu Angle)
 
 static inline ZFix z_fix_cosf(ZFixu Angle)
 {
-    return z_fix__sin[z_fix_angleWrap(z_fixu_toInt(Angle + Z_FIX_DEG_090))];
+    return z_fix__sin[z_fix_angleWrap(z_fixu_toInt(Angle + Z_DEG_090_FIX))];
 }
 
 static inline ZFix z_fix_cscf(ZFixu Angle)
@@ -261,7 +262,7 @@ static inline ZFix z_fix_cscf(ZFixu Angle)
 
 static inline ZFix z_fix_secf(ZFixu Angle)
 {
-    return z_fix__csc[z_fix_angleWrap(z_fixu_toInt(Angle + Z_FIX_DEG_090))];
+    return z_fix__csc[z_fix_angleWrap(z_fixu_toInt(Angle + Z_DEG_090_FIX))];
 }
 
 extern unsigned z_fix_atan(ZFix X1, ZFix Y1, ZFix X2, ZFix Y2);
