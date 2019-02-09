@@ -35,6 +35,11 @@ static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
 static AButton* g_buttons[Z_BUTTON_NUM];
 
+A_EXIT
+{
+    //
+}
+
 A_SETUP
 {
     a_settings_stringSet(A_SETTING_APP_TITLE, "Neonrattle");
@@ -166,17 +171,17 @@ void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
 
 int z_sprite_widthGet(ZSpriteId Sprite)
 {
-    return a_sprite_widthGet(getCurrentSprite(Sprite, 0));
+    return a_sprite_sizeGetWidth(getCurrentSprite(Sprite, 0));
 }
 
 int z_sprite_heightGet(ZSpriteId Sprite)
 {
-    return a_sprite_heightGet(getCurrentSprite(Sprite, 0));
+    return a_sprite_sizeGetHeight(getCurrentSprite(Sprite, 0));
 }
 
 uint8_t z_sprite_framesNumGet(ZSpriteId Sprite)
 {
-    return (uint8_t)a_spriteframes_numGet(g_sprites[Sprite]);
+    return (uint8_t)a_spriteframes_framesGetNum(g_sprites[Sprite]);
 }
 
 void z_draw_fill(ZColorId Color)
