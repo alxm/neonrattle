@@ -301,11 +301,19 @@ void o_snake_tickStart(OSnake* Snake)
 
 void o_snake_tickPlay(OSnake* Snake)
 {
-    if(z_button_pressGet(Z_BUTTON_LEFT) || z_button_pressGet(Z_BUTTON_A)) {
+    #if Z_PLATFORM_META
+        #define Z_EXTRA_LEFT z_button_pressGet(Z_BUTTON_A)
+        #define Z_EXTRA_RIGHT z_button_pressGet(Z_BUTTON_B)
+    #else
+        #define Z_EXTRA_LEFT false
+        #define Z_EXTRA_RIGHT false
+    #endif
+
+    if(z_button_pressGet(Z_BUTTON_LEFT) || Z_EXTRA_LEFT) {
         Snake->angle += O_SNAKE_TURN_DEG;
     }
 
-    if(z_button_pressGet(Z_BUTTON_RIGHT) || z_button_pressGet(Z_BUTTON_B)) {
+    if(z_button_pressGet(Z_BUTTON_RIGHT) || Z_EXTRA_RIGHT) {
         Snake->angle -= O_SNAKE_TURN_DEG;
     }
 
