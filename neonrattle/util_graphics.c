@@ -49,9 +49,9 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
     z_sprite_load(Z_SPRITE_NEONRATTLE, neonrattle);
     z_sprite_load(Z_SPRITE_NEONRATTLE_GLOW, neonrattle_glow);
-    z_sprite_loadGrid(Z_SPRITE_MAPS, maps_grid16x16, 16, 16);
-    z_sprite_loadGrid(Z_SPRITE_TILES, tiles_grid16x16, 16, 16);
-    z_sprite_loadGrid(Z_SPRITE_SNAKE_MASK, snake_mask_grid8x8, 8, 8);
+    z_sprite_load(Z_SPRITE_MAPS, maps_grid16x16);
+    z_sprite_load(Z_SPRITE_TILES, tiles_grid16x16);
+    z_sprite_load(Z_SPRITE_SNAKE_MASK, snake_mask_grid8x8);
     z_sprite_load(Z_SPRITE_SNAKE_MINIMAP, snake_minimap);
     z_sprite_load(Z_SPRITE_APPLE_MASK, apple_mask);
     z_sprite_load(Z_SPRITE_APPLE_HALO, apple_halo);
@@ -61,8 +61,8 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_ICON_HI, icon_hi);
     z_sprite_load(Z_SPRITE_ICON_LOCK, icon_lock);
     z_sprite_load(Z_SPRITE_ICON_LVL, icon_lvl);
-    z_sprite_loadGrid(Z_SPRITE_FONT_LCDNUM, font_lcdnum_grid4x7, 4, 7);
-    z_sprite_loadGrid(Z_SPRITE_FONT_SMALLNUM, font_smallnum_grid3x5, 3, 5);
+    z_sprite_load(Z_SPRITE_FONT_LCDNUM, font_lcdnum_grid4x7);
+    z_sprite_load(Z_SPRITE_FONT_SMALLNUM, font_smallnum_grid3x5);
 
     int row = 1;
     int col = 0;
