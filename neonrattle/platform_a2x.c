@@ -35,26 +35,6 @@ static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
 static AButton* g_buttons[Z_BUTTON_NUM];
 
-A_EXIT
-{
-    //
-}
-
-A_SETUP
-{
-    a_settings_stringSet(A_SETTING_APP_TITLE, "Neonrattle");
-    a_settings_stringSet(A_SETTING_APP_VERSION, "0.8.0");
-    a_settings_stringSet(A_SETTING_APP_AUTHOR, "alxm");
-    a_settings_boolSet(A_SETTING_OUTPUT_ON, true);
-    a_settings_boolSet(A_SETTING_OUTPUT_VERBOSE, true);
-    a_settings_colorSet(A_SETTING_COLOR_SCREEN_BORDER, 0x042a26);
-    a_settings_intSet(A_SETTING_VIDEO_WIDTH, Z_SCREEN_W);
-    a_settings_intSet(A_SETTING_VIDEO_HEIGHT, Z_SCREEN_H);
-    a_settings_intSet(A_SETTING_SOUND_VOLUME_SCALE_SAMPLE, 50);
-    a_settings_intuSet(A_SETTING_FPS_TICK, Z_FPS);
-    a_settings_intuSet(A_SETTING_FPS_DRAW, Z_FPS);
-}
-
 A_STATE(run)
 {
     A_STATE_INIT
@@ -121,7 +101,9 @@ A_STATE(run)
 
 A_MAIN
 {
-    a_state_push(run, "Neonrattle");
+    a_state_init(1);
+    a_state_new(0, run, "Neonrattle");
+    a_state_push(0);
 }
 
 bool z_platform_buttonPressGet(int Button)
@@ -136,7 +118,7 @@ ZPixel* z_screen_pixelsGet(void)
 
 void z_platform__loadSprite(int Sprite, const char* Path)
 {
-    g_sprites[Sprite] = a_spriteframes_newFromPngGrid(Path, 0, 0);
+    g_sprites[Sprite] = a_spriteframes_newFromPng(Path, 0, 0);
 }
 
 ZPixel z_sprite_transparentColorGet(void)
