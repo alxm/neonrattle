@@ -47,7 +47,7 @@ void s_start_tick(void)
     }
 
     o_map_tick();
-    o_snake_tickStart(snake);
+    o_snake_tick(snake);
     o_camera_tick(o_snake_coordsGet(snake));
     z_hud_tick(snake);
 }

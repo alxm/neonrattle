@@ -27,6 +27,7 @@
 #include "util_light.h"
 #include "util_pool.h"
 #include "util_sound.h"
+#include "util_state.h"
 
 #define O_SNAKE_LEN (O_APPLE_NUM_MAX)
 #define O_SNAKE_LEN_MASK (O_SNAKE_LEN - 1)
@@ -296,73 +297,68 @@ static bool checkApples(OSnake* Snake)
     return Snake->eaten > eaten;
 }
 
-void o_snake_tickStart(OSnake* Snake)
+void o_snake_tick(OSnake* Snake)
 {
-    updateColors(Snake, true);
-}
+    ZStateId state = z_state_getCurrent();
 
-void o_snake_tickPlay(OSnake* Snake)
-{
-    #if Z_PLATFORM_META
-        #define Z_EXTRA_LEFT z_button_pressGet(Z_BUTTON_A)
-        #define Z_EXTRA_RIGHT z_button_pressGet(Z_BUTTON_B)
-    #else
-        #define Z_EXTRA_LEFT false
-        #define Z_EXTRA_RIGHT false
-    #endif
-
-    if(z_button_pressGet(Z_BUTTON_LEFT) || Z_EXTRA_LEFT) {
-        Snake->angle += O_SNAKE_TURN_DEG;
+    if(state != Z_STATE_DIED) {
+        Snake->flags = 0;
     }
 
-    if(z_button_pressGet(Z_BUTTON_RIGHT) || Z_EXTRA_RIGHT) {
-        Snake->angle -= O_SNAKE_TURN_DEG;
+    if(state == Z_STATE_END) {
+        colorSet(Snake, z_color_appleGet(), z_color_snakeGet());
     }
 
-    Snake->flags = 0;
+    updateColors(Snake, state != Z_STATE_DIED);
 
-    updateColors(Snake, true);
-    growAndAdvance(Snake);
+    if(state == Z_STATE_PLAY) {
+        #if Z_PLATFORM_META
+            #define Z_EXTRA_LEFT z_button_pressGet(Z_BUTTON_A)
+            #define Z_EXTRA_RIGHT z_button_pressGet(Z_BUTTON_B)
+        #else
+            #define Z_EXTRA_LEFT false
+            #define Z_EXTRA_RIGHT false
+        #endif
 
-    int damage = 0;
+        if(z_button_pressGet(Z_BUTTON_LEFT) || Z_EXTRA_LEFT) {
+            Snake->angle += O_SNAKE_TURN_DEG;
+        }
 
-    if(checkWall(Snake)) {
-        damage += O_SNAKE_DAMAGE_WALL;
-        z_light_pulseSet(Z_LIGHT_SNAKE_HIT_WALL);
-    }
+        if(z_button_pressGet(Z_BUTTON_RIGHT) || Z_EXTRA_RIGHT) {
+            Snake->angle -= O_SNAKE_TURN_DEG;
+        }
 
-    if(checkTail(Snake)) {
-        damage += O_SNAKE_DAMAGE_TAIL;
-        z_light_pulseSet(Z_LIGHT_SNAKE_HIT_SELF);
-    }
+        growAndAdvance(Snake);
 
-    if(damage > 0) {
-        Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_HURT);
-        Snake->life = z_math_max(Snake->life - damage, 0);
+        int damage = 0;
 
-        o_camera_shakeSet(1);
-        z_sfx_play(Z_SFX_HIT_WALL);
+        if(checkWall(Snake)) {
+            damage += O_SNAKE_DAMAGE_WALL;
+            z_light_pulseSet(Z_LIGHT_SNAKE_HIT_WALL);
+        }
 
-        if(Snake->life == 0) {
-            Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_DEAD);
-            colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
+        if(checkTail(Snake)) {
+            damage += O_SNAKE_DAMAGE_TAIL;
+            z_light_pulseSet(Z_LIGHT_SNAKE_HIT_SELF);
+        }
+
+        if(damage > 0) {
+            Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_HURT);
+            Snake->life = z_math_max(Snake->life - damage, 0);
+
+            o_camera_shakeSet(1);
+            z_sfx_play(Z_SFX_HIT_WALL);
+
+            if(Snake->life == 0) {
+                Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_DEAD);
+                colorSet(Snake, Z_COLOR_INVALID, Z_COLOR_BG_GREEN_03);
+            }
+        }
+
+        if(checkApples(Snake)) {
+            Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_ATE);
         }
     }
-
-    if(checkApples(Snake)) {
-        Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_ATE);
-    }
-}
-
-void o_snake_tickEnd(OSnake* Snake)
-{
-    Snake->flags = 0;
-    colorSet(Snake, z_color_appleGet(), z_color_snakeGet());
-}
-
-void o_snake_tickDied(OSnake* Snake)
-{
-    updateColors(Snake, false);
 }
 
 void o_snake_draw(const OSnake* Snake)

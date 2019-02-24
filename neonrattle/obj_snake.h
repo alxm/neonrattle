@@ -41,8 +41,5 @@ extern int o_snake_eatenNumGet(const OSnake* Snake);
 extern int o_snake_lifeGet(const OSnake* Snake);
 extern bool o_snake_flagsTest(const OSnake* Snake, OSnakeFlags Flags);
 
-extern void o_snake_tickStart(OSnake* Snake);
-extern void o_snake_tickPlay(OSnake* Snake);
-extern void o_snake_tickEnd(OSnake* Snake);
-extern void o_snake_tickDied(OSnake* Snake);
+extern void o_snake_tick(OSnake* Snake);
 extern void o_snake_draw(const OSnake* Snake);

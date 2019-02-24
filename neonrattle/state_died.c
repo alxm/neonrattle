@@ -38,7 +38,7 @@ void s_died_tick(void)
     OSnake* snake = o_game_snakeGet();
 
     o_map_tick();
-    o_snake_tickDied(snake);
+    o_snake_tick(snake);
     o_camera_tick(o_snake_coordsGet(snake));
     z_hud_tick(snake);
 
