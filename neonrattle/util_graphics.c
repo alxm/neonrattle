@@ -64,8 +64,8 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_FONT_LCDNUM, font_lcdnum_grid4x7);
     z_sprite_load(Z_SPRITE_FONT_SMALLNUM, font_smallnum_grid3x5);
 
-    int palWidth = z_sprite_widthGet(Z_SPRITE_PALETTE);
-    int palHeight = z_sprite_heightGet(Z_SPRITE_PALETTE) - 1;
+    int palWidth = z_sprite_sizeGetWidth(Z_SPRITE_PALETTE);
+    int palHeight = z_sprite_sizeGetHeight(Z_SPRITE_PALETTE) - 1;
     const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_PALETTE, 0) + palWidth;
     int color = 0;
 
@@ -88,8 +88,8 @@ void z_graphics_setup(void)
 void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame)
 {
     z_sprite_blit(Sprite,
-                  X - z_sprite_widthGet(Sprite) / 2,
-                  Y - z_sprite_heightGet(Sprite) / 2,
+                  X - z_sprite_sizeGetWidth(Sprite) / 2,
+                  Y - z_sprite_sizeGetHeight(Sprite) / 2,
                   Frame);
 }
 
@@ -109,8 +109,8 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
         return;
     }
 
-    const int spriteW = z_sprite_widthGet(AlphaMask);
-    const int spriteH = z_sprite_heightGet(AlphaMask);
+    const int spriteW = z_sprite_sizeGetWidth(AlphaMask);
+    const int spriteH = z_sprite_sizeGetHeight(AlphaMask);
 
     X -= spriteW / 2;
     Y -= spriteH / 2;

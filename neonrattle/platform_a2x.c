@@ -146,12 +146,12 @@ void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
     a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }
 
-int z_sprite_widthGet(ZSpriteId Sprite)
+int z_sprite_sizeGetWidth(ZSpriteId Sprite)
 {
     return a_sprite_sizeGetWidth(getCurrentSprite(Sprite, 0));
 }
 
-int z_sprite_heightGet(ZSpriteId Sprite)
+int z_sprite_sizeGetHeight(ZSpriteId Sprite)
 {
     return a_sprite_sizeGetHeight(getCurrentSprite(Sprite, 0));
 }

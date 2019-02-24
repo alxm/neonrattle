@@ -84,7 +84,7 @@ static inline ZFix dimGet(const OSnake* Snake, int Leeway)
     Z_UNUSED(Snake);
 
     return z_coords_pixelsToUnits(
-            z_sprite_widthGet(Z_SPRITE_SNAKE_MASK) - Leeway);
+            z_sprite_sizeGetWidth(Z_SPRITE_SNAKE_MASK) - Leeway);
 }
 
 static void colorSet(OSnake* Snake, ZColorId CurrentColor, ZColorId TargetColor)

@@ -84,8 +84,8 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
             ZVectorInt gridTileOffset = z_coords_tileToGridOffset(
                                             (ZVectorInt){x, y});
 
-            int w = z_sprite_widthGet(Z_SPRITE_APPLE_MASK);
-            int h = z_sprite_heightGet(Z_SPRITE_APPLE_MASK);
+            int w = z_sprite_sizeGetWidth(Z_SPRITE_APPLE_MASK);
+            int h = z_sprite_sizeGetHeight(Z_SPRITE_APPLE_MASK);
 
             ZFix startX = z_coords_pixelsToUnits(w / 2);
             ZFix endX = Z_FIX_ONE - z_coords_pixelsToUnits(w / 2 - 1);

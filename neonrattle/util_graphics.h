@@ -131,8 +131,8 @@ extern void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame);
 extern void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame);
 extern void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha);
 extern void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, const ZRgb* Rgb, int Alpha);
-extern int z_sprite_widthGet(ZSpriteId Sprite);
-extern int z_sprite_heightGet(ZSpriteId Sprite);
+extern int z_sprite_sizeGetWidth(ZSpriteId Sprite);
+extern int z_sprite_sizeGetHeight(ZSpriteId Sprite);
 extern uint8_t z_sprite_framesNumGet(ZSpriteId Sprite);
 
 extern void z_draw_fill(ZColorId Color);

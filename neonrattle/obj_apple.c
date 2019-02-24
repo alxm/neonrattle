@@ -82,7 +82,7 @@ ZFix o_apple_dimGet(const OApple* Apple)
     Z_UNUSED(Apple);
 
     return z_coords_pixelsToUnits(
-            z_sprite_widthGet(Z_SPRITE_APPLE_MASK) - 2);
+            z_sprite_sizeGetWidth(Z_SPRITE_APPLE_MASK) - 2);
 }
 
 ZColorId o_apple_colorGet(const OApple* Apple)

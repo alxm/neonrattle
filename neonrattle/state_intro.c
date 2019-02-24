@@ -80,8 +80,8 @@ void s_intro_tick(void)
 
 void s_intro_draw(void)
 {
-    int spriteW = z_sprite_widthGet(Z_SPRITE_ALXM);
-    int spriteH = z_sprite_heightGet(Z_SPRITE_ALXM);
+    int spriteW = z_sprite_sizeGetWidth(Z_SPRITE_ALXM);
+    int spriteH = z_sprite_sizeGetHeight(Z_SPRITE_ALXM);
 
     z_sprite_blitCentered(Z_SPRITE_ALXM, Z_SCREEN_W / 2, Z_SCREEN_H / 2, 0);
 

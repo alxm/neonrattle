@@ -56,7 +56,7 @@ void z_hud_tick(const OSnake* Snake)
 
 static void drawIcon(ZVectorInt* Coords, ZSpriteId Sprite, unsigned Frame, ZColorId Color, int Alpha)
 {
-    int w = z_sprite_widthGet(Sprite);
+    int w = z_sprite_sizeGetWidth(Sprite);
 
     z_sprite_blitAlphaMask(
         Sprite, Coords->x + w / 2, Coords->y, Frame, Color, Alpha);
@@ -126,8 +126,8 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
 
 static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId Font, ZColorId Color)
 {
-    int charWidth = z_sprite_widthGet(Font);
-    int charHeight = z_sprite_heightGet(Font);
+    int charWidth = z_sprite_sizeGetWidth(Font);
+    int charHeight = z_sprite_sizeGetHeight(Font);
 
     X += charWidth / 2 + (charWidth + 1) * (NumDigits - 1);
     Y += charHeight / 2;
