@@ -50,9 +50,6 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
     return a_pixel_fromHex(Hexcode);
 }
 
-#define Z_SCREEN_W A_CONFIG_SCREEN_WIDTH
-#define Z_SCREEN_H A_CONFIG_SCREEN_HEIGHT
-
 #define z_sprite_load(Index, Id) \
     z_platform__loadSprite(Index, "assets/gfx/" #Id ".png");
 

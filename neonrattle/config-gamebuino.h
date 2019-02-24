@@ -1,5 +1,5 @@
 /*
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018-2019 Alex Margarit <alex@alxm.org>
     This file is part of Neonrattle, a video game.
 
     This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#pragma once
+
+#define A_CONFIG_FPS_TICK 30
+
+#define A_CONFIG_SCREEN_WIDTH 80
+#define A_CONFIG_SCREEN_HEIGHT 64
 
 #define FOLDER_NAME "Neonrattle"
 #define DISPLAY_MODE DISPLAY_MODE_RGB565

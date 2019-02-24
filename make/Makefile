@@ -7,7 +7,7 @@ A_CONFIG_MAKE_CLEAN := genclean
 include $(A2X_PATH)/make/dev
 
 Z_ROOT := ..
-Z_DIR_GEN := $(Z_ROOT)/$(A_DIR_SRC)/generated
+Z_DIR_GEN := $(Z_ROOT)/$(A_CONFIG_DIR_SRC)/generated
 Z_DIR_GFX := $(Z_ROOT)/assets/gfx
 Z_DIR_SFX := $(Z_ROOT)/assets/sfx
 

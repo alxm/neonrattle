@@ -19,6 +19,7 @@
 #include "obj_camera.h"
 
 #include "util_coords.h"
+#include "util_graphics.h"
 #include "util_timer.h"
 
 static ZVectorFix g_coords;

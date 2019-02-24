@@ -17,6 +17,7 @@
 */
 
 #include <Arduino.h>
+#include "config-gamebuino.h"
 
 #ifdef __cplusplus
 #include <Gamebuino-Meta.h>
@@ -51,9 +52,6 @@ static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
          ((((Hexcode >> 8)  & 0xff) >> 2) << 5)   |
          ((((Hexcode)       & 0xff) >> 3) << 0));
 }
-
-#define Z_SCREEN_W 80
-#define Z_SCREEN_H 64
 
 #define z_sprite_load(Index, Id)                             \
     z_platform__loadSprite(Index, z_data_gfx_##Id##_buffer);

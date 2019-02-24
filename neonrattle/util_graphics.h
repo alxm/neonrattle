@@ -24,6 +24,9 @@ Z_EXTERN_C_START
 
 #include "util_fix.h"
 
+#define Z_SCREEN_W A_CONFIG_SCREEN_WIDTH
+#define Z_SCREEN_H A_CONFIG_SCREEN_HEIGHT
+
 typedef enum {
     Z_COLOR_INVALID = -1,
 
