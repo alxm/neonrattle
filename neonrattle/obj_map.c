@@ -154,11 +154,11 @@ void o_map_draw(void)
 
     for(int tileY = tileStart.y, screenY = screenStart.y;
         tileY < tileEnd.y;
-        tileY++, screenY += Z_COORDS_UNIT_PIXELS) {
+        tileY++, screenY += Z_COORDS_PIXELS_PER_UNIT) {
 
         for(int tileX = tileStart.x, screenX = screenStart.x;
             tileX < tileEnd.x;
-            tileX++, screenX += Z_COORDS_UNIT_PIXELS) {
+            tileX++, screenX += Z_COORDS_PIXELS_PER_UNIT) {
 
             z_sprite_blit(Z_SPRITE_TILES,
                           screenX,
@@ -225,25 +225,27 @@ void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
     ZVectorInt topLeftPixels = z_coords_unitsToPixels(topLeftCoords);
 
     ZVectorInt topLeftScreen = {
-        0 - (topLeftPixels.x & (Z_COORDS_UNIT_PIXELS - 1)),
-        0 - (topLeftPixels.y & (Z_COORDS_UNIT_PIXELS - 1))
+        0 - (topLeftPixels.x & (Z_COORDS_PIXELS_PER_UNIT - 1)),
+        0 - (topLeftPixels.y & (Z_COORDS_PIXELS_PER_UNIT - 1))
     };
 
     if(topLeftCoords.x < 0) {
-        topLeftScreen.x += -topLeftTile.x * Z_COORDS_UNIT_PIXELS;
+        topLeftScreen.x += -topLeftTile.x * Z_COORDS_PIXELS_PER_UNIT;
         topLeftTile.x = 0;
     }
 
     if(topLeftCoords.y < 0) {
-        topLeftScreen.y += -topLeftTile.y * Z_COORDS_UNIT_PIXELS;
+        topLeftScreen.y += -topLeftTile.y * Z_COORDS_PIXELS_PER_UNIT;
         topLeftTile.y = 0;
     }
 
     #define Z_X_TILES \
-        ((Z_SCREEN_W + (Z_COORDS_UNIT_PIXELS - 1)) / Z_COORDS_UNIT_PIXELS + 1)
+        ((Z_SCREEN_W + (Z_COORDS_PIXELS_PER_UNIT - 1)) \
+            / Z_COORDS_PIXELS_PER_UNIT + 1)
 
     #define Z_Y_TILES \
-        ((Z_SCREEN_H + (Z_COORDS_UNIT_PIXELS - 1)) / Z_COORDS_UNIT_PIXELS + 1)
+        ((Z_SCREEN_H + (Z_COORDS_PIXELS_PER_UNIT - 1)) \
+            / Z_COORDS_PIXELS_PER_UNIT + 1)
 
     ZVectorInt tileEnd = {
         z_math_min(topLeftTile.x + Z_X_TILES, Z_COORDS_MAP_W),

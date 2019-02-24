@@ -41,7 +41,7 @@
 #define O_SNAKE_TAIL_FADE_RATIO 4
 
 // May enter at most 1/2 inside a wall tile
-#define O_SNAKE_DAMAGE_WALL (O_SNAKE_LIFE_MAX / (Z_COORDS_UNIT_PIXELS / 2))
+#define O_SNAKE_DAMAGE_WALL (O_SNAKE_LIFE_MAX / (Z_COORDS_PIXELS_PER_UNIT / 2))
 #define O_SNAKE_DAMAGE_TAIL (O_SNAKE_LIFE_MAX / 32)
 
 typedef struct {
@@ -100,8 +100,10 @@ static void growAndAdvance(OSnake* Snake)
 {
     const OSnakeSegment* head = &Snake->body[Snake->head];
 
-    ZFix x = head->coords.x + z_fix_cosf(Snake->angle) / Z_COORDS_UNIT_PIXELS;
-    ZFix y = head->coords.y - z_fix_sinf(Snake->angle) / Z_COORDS_UNIT_PIXELS;
+    ZFix x = head->coords.x
+                + z_fix_cosf(Snake->angle) / Z_COORDS_PIXELS_PER_UNIT;
+    ZFix y = head->coords.y
+                - z_fix_sinf(Snake->angle) / Z_COORDS_PIXELS_PER_UNIT;
 
     if(Snake->grow > 0) {
         if(getLength(Snake) == O_SNAKE_LEN) {

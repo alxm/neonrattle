@@ -31,7 +31,7 @@
 
 #define Z_GRID_W 8
 #define Z_GRID_H (Z_LEVELS_NUM / Z_GRID_W)
-#define Z_CELL_DIM (Z_COORDS_UNIT_PIXELS / 2)
+#define Z_CELL_DIM (Z_COORDS_PIXELS_PER_UNIT / 2)
 #define Z_SELECT_DELAY_DS 2
 #define Z_MOVE_SPEED (Z_FIX_ONE * 2)
 #define Z_GLOW_SPEED (Z_DEG_001_FIX * 4)
@@ -93,7 +93,7 @@ void s_menu_tick(void)
         g_velocity.y -= (g_velocity.y >> 2);
     }
 
-    #define Z_OFFSET_MASK (z_fix_fromInt(2 * Z_COORDS_UNIT_PIXELS) - 1)
+    #define Z_OFFSET_MASK (z_fix_fromInt(2 * Z_COORDS_PIXELS_PER_UNIT) - 1)
     g_origin.x = (g_origin.x + g_velocity.x) & Z_OFFSET_MASK;
     g_origin.y = (g_origin.y + g_velocity.y) & Z_OFFSET_MASK;
 
@@ -154,24 +154,26 @@ void s_menu_draw(void)
     int offsetY = z_fix_toInt(g_origin.y) + shake.y;
 
     if(offsetX > 0) {
-        offsetX -= 2 * Z_COORDS_UNIT_PIXELS;
+        offsetX -= 2 * Z_COORDS_PIXELS_PER_UNIT;
     }
 
     if(offsetY > 0) {
-        offsetY -= 2 * Z_COORDS_UNIT_PIXELS;
+        offsetY -= 2 * Z_COORDS_PIXELS_PER_UNIT;
     }
 
     #define Z_X_TILES \
-        ((Z_SCREEN_W + (Z_COORDS_UNIT_PIXELS - 1)) / Z_COORDS_UNIT_PIXELS + 2)
+        ((Z_SCREEN_W + (Z_COORDS_PIXELS_PER_UNIT - 1)) \
+            / Z_COORDS_PIXELS_PER_UNIT + 2)
 
     #define Z_Y_TILES \
-        ((Z_SCREEN_H + (Z_COORDS_UNIT_PIXELS - 1)) / Z_COORDS_UNIT_PIXELS + 2)
+        ((Z_SCREEN_H + (Z_COORDS_PIXELS_PER_UNIT - 1)) \
+            / Z_COORDS_PIXELS_PER_UNIT + 2)
 
     for(int y = 0; y < Z_Y_TILES; y++) {
         for(int x = 0; x < Z_X_TILES; x++) {
             z_sprite_blit(Z_SPRITE_TILES,
-                          offsetX + x * Z_COORDS_UNIT_PIXELS,
-                          offsetY + y * Z_COORDS_UNIT_PIXELS,
+                          offsetX + x * Z_COORDS_PIXELS_PER_UNIT,
+                          offsetY + y * Z_COORDS_PIXELS_PER_UNIT,
                           (unsigned)(8 + (y & 1) * 2 + (x & 1)));
         }
     }

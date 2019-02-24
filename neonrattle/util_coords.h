@@ -22,7 +22,7 @@
 
 #include "util_fix.h"
 
-#define Z_COORDS_UNIT_PIXELS 16
+#define Z_COORDS_PIXELS_PER_UNIT 16
 #define Z_COORDS_TILES_PER_GRID_SHIFT 1
 #define Z_COORDS_TILES_PER_GRID (1 << Z_COORDS_TILES_PER_GRID_SHIFT)
 #define Z_COORDS_MAP_W 16
@@ -32,13 +32,13 @@
 
 static inline ZFix z_coords_pixelsToUnits(int Pixels)
 {
-    return z_fix_fromInt(Pixels) / Z_COORDS_UNIT_PIXELS;
+    return z_fix_fromInt(Pixels) / Z_COORDS_PIXELS_PER_UNIT;
 }
 
 static inline ZVectorInt z_coords_unitsToPixels(ZVectorFix Units)
 {
-    return (ZVectorInt){z_fix_toInt(Units.x * Z_COORDS_UNIT_PIXELS),
-                        z_fix_toInt(Units.y * Z_COORDS_UNIT_PIXELS)};
+    return (ZVectorInt){z_fix_toInt(Units.x * Z_COORDS_PIXELS_PER_UNIT),
+                        z_fix_toInt(Units.y * Z_COORDS_PIXELS_PER_UNIT)};
 }
 
 static inline ZVectorInt z_coords_unitsToGrid(ZVectorFix Units)
