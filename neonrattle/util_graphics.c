@@ -64,22 +64,24 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_FONT_LCDNUM, font_lcdnum_grid4x7);
     z_sprite_load(Z_SPRITE_FONT_SMALLNUM, font_smallnum_grid3x5);
 
-    int row = 1;
-    int col = 0;
+    int palWidth = z_sprite_widthGet(Z_SPRITE_PALETTE);
+    int palHeight = z_sprite_heightGet(Z_SPRITE_PALETTE) - 1;
+    const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_PALETTE, 0) + palWidth;
+    int color = 0;
 
-    for(int c = 0; c < Z_COLOR_NUM; c++, col++) {
-        ZPixel pixel = z_sprite_pixelGet(Z_SPRITE_PALETTE, 0, col, row);
+    for(int p = palWidth * palHeight; p--; ) {
+        ZPixel pixel = *pixels++;
 
         if(pixel == 0) {
-            col = 0;
-
-            do {
-                pixel = z_sprite_pixelGet(Z_SPRITE_PALETTE, 0, col, ++row);
-            } while(pixel == 0);
+            continue;
         }
 
-        z_colors[c].pixel = pixel;
-        z_colors[c].rgb = z_pixel_toRgb(pixel);
+        z_colors[color].pixel = pixel;
+        z_colors[color].rgb = z_pixel_toRgb(pixel);
+
+        if(++color == Z_COLOR_NUM) {
+            break;
+        }
     }
 }
 
