@@ -25,11 +25,6 @@
 #include "util_hud.h"
 #include "util_save.h"
 
-void s_play_init(void)
-{
-    //
-}
-
 void s_play_tick(void)
 {
     OSnake* snake = o_game_snakeGet();

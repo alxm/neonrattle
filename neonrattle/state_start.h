@@ -25,4 +25,3 @@
 extern ZStateInit s_start_init;
 extern ZStateTick s_start_tick;
 extern ZStateDraw s_start_draw;
-extern ZStateFree s_start_free;

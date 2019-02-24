@@ -22,7 +22,6 @@
 
 #include "util_state.h"
 
-extern ZStateInit s_play_init;
 extern ZStateTick s_play_tick;
 extern ZStateDraw s_play_draw;
 extern ZStateFree s_play_free;

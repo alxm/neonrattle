@@ -25,4 +25,3 @@
 extern ZStateInit s_died_init;
 extern ZStateTick s_died_tick;
 extern ZStateDraw s_died_draw;
-extern ZStateFree s_died_free;

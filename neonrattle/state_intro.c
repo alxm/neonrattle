@@ -101,8 +101,3 @@ void s_intro_draw(void)
         }
     }
 }
-
-void s_intro_free(void)
-{
-    //
-}

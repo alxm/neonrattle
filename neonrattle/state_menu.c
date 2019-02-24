@@ -253,11 +253,6 @@ void s_menu_draw(void)
     }
 }
 
-void s_menu_free(void)
-{
-    //
-}
-
 void s_menu_select(unsigned Level)
 {
     g_cursor = Level;

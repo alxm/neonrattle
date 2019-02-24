@@ -61,8 +61,3 @@ void s_start_draw(void)
     o_map_drawMinimap(o_snake_coordsGet(snake));
     z_hud_draw(snake);
 }
-
-void s_start_free(void)
-{
-    //
-}

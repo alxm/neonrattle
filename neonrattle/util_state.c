@@ -46,7 +46,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_died_init,
         s_died_tick,
         s_died_draw,
-        s_died_free,
+        NULL,
     },
     [Z_STATE_END] = {
         s_end_init,
@@ -58,16 +58,16 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_intro_init,
         s_intro_tick,
         s_intro_draw,
-        s_intro_free,
+        NULL,
     },
     [Z_STATE_MENU] = {
         s_menu_init,
         s_menu_tick,
         s_menu_draw,
-        s_menu_free,
+        NULL,
     },
     [Z_STATE_PLAY] = {
-        s_play_init,
+        NULL,
         s_play_tick,
         s_play_draw,
         s_play_free,
@@ -76,7 +76,7 @@ static const ZState g_states[Z_STATE_NUM] = {
         s_start_init,
         s_start_tick,
         s_start_draw,
-        s_start_free,
+        NULL,
     },
 };
 
