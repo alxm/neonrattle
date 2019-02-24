@@ -80,17 +80,14 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
                 continue;
             }
 
+            ZVectorInt aplSize = z_sprite_sizeGet(Z_SPRITE_APPLE_MASK);
+            ZFix startX = z_coords_pixelsToUnits(aplSize.x / 2);
+            ZFix endX = Z_FIX_ONE - z_coords_pixelsToUnits(aplSize.x / 2 - 1);
+            ZFix startY = z_coords_pixelsToUnits(aplSize.y / 2);
+            ZFix endY = Z_FIX_ONE - z_coords_pixelsToUnits(aplSize.y / 2 - 1);
             ZVectorInt grid = z_coords_tileToGrid((ZVectorInt){x, y});
             ZVectorInt gridTileOffset = z_coords_tileToGridOffset(
                                             (ZVectorInt){x, y});
-
-            int w = z_sprite_sizeGetWidth(Z_SPRITE_APPLE_MASK);
-            int h = z_sprite_sizeGetHeight(Z_SPRITE_APPLE_MASK);
-
-            ZFix startX = z_coords_pixelsToUnits(w / 2);
-            ZFix endX = Z_FIX_ONE - z_coords_pixelsToUnits(w / 2 - 1);
-            ZFix startY = z_coords_pixelsToUnits(h / 2);
-            ZFix endY = Z_FIX_ONE - z_coords_pixelsToUnits(h / 2 - 1);
 
             if(gridTileOffset.x > 0 && !g_map.tiles[y][x - 1].wall) {
                 startX = 0;

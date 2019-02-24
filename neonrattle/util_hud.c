@@ -126,13 +126,12 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
 
 static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId Font, ZColorId Color)
 {
-    int charWidth = z_sprite_sizeGetWidth(Font);
-    int charHeight = z_sprite_sizeGetHeight(Font);
+    ZVectorInt charSize = z_sprite_sizeGet(Font);
 
-    X += charWidth / 2 + (charWidth + 1) * (NumDigits - 1);
-    Y += charHeight / 2;
+    X += charSize.x / 2 + (charSize.x + 1) * (NumDigits - 1);
+    Y += charSize.y / 2;
 
-    for(int d = NumDigits; d--; X -= charWidth + 1, Number /= 10) {
+    for(int d = NumDigits; d--; X -= charSize.x + 1, Number /= 10) {
         z_sprite_blitAlphaMask(Font, X, Y, Number % 10, Color, 256);
     }
 }

@@ -146,6 +146,13 @@ void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
     a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }
 
+ZVectorInt z_sprite_sizeGet(ZSpriteId Sprite)
+{
+    AVectorInt size = a_sprite_sizeGet(getCurrentSprite(Sprite, 0));
+
+    return (ZVectorInt){size.x, size.y};
+}
+
 int z_sprite_sizeGetWidth(ZSpriteId Sprite)
 {
     return a_sprite_sizeGetWidth(getCurrentSprite(Sprite, 0));

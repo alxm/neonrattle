@@ -87,10 +87,9 @@ void z_graphics_setup(void)
 
 void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame)
 {
-    z_sprite_blit(Sprite,
-                  X - z_sprite_sizeGetWidth(Sprite) / 2,
-                  Y - z_sprite_sizeGetHeight(Sprite) / 2,
-                  Frame);
+    ZVectorInt size = z_sprite_sizeGet(Sprite);
+
+    z_sprite_blit(Sprite, X - size.x / 2, Y - size.y / 2, Frame);
 }
 
 void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha)
@@ -109,14 +108,13 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
         return;
     }
 
-    const int spriteW = z_sprite_sizeGetWidth(AlphaMask);
-    const int spriteH = z_sprite_sizeGetHeight(AlphaMask);
+    ZVectorInt spriteSize = z_sprite_sizeGet(AlphaMask);
 
-    X -= spriteW / 2;
-    Y -= spriteH / 2;
+    X -= spriteSize.x / 2;
+    Y -= spriteSize.y / 2;
 
-    if(X >= Z_SCREEN_W || X + spriteW <= 0
-        || Y >= Z_SCREEN_H || Y + spriteH <= 0) {
+    if(X >= Z_SCREEN_W || X + spriteSize.x <= 0
+        || Y >= Z_SCREEN_H || Y + spriteSize.y <= 0) {
 
         return;
     }
@@ -124,11 +122,11 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
     ZPixel* screenPixels = z_screen_pixelsGet();
     const ZPixel* spritePixels = z_sprite_pixelsGet(AlphaMask, Frame);
 
-    int spriteDrawW = spriteW;
-    int spriteDrawH = spriteH;
+    int spriteDrawW = spriteSize.x;
+    int spriteDrawH = spriteSize.y;
 
     if(Y < 0) {
-        spritePixels += -Y * spriteW;
+        spritePixels += -Y * spriteSize.x;
         spriteDrawH -= -Y;
         Y = 0;
     }
@@ -164,7 +162,7 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
         }
 
         screenPixels += Z_SCREEN_W;
-        spritePixels += spriteW;
+        spritePixels += spriteSize.x;
     }
 }
 

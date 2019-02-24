@@ -179,10 +179,11 @@ void s_menu_draw(void)
     int startX = 8;
     int startY = 9 - (64 - Z_SCREEN_H) / 2;
 
-    int drawX =
-        startX + shake.y + z_sprite_sizeGetWidth(Z_SPRITE_NEONRATTLE) / 2;
-    int drawY =
-        startY + shake.x + z_sprite_sizeGetHeight(Z_SPRITE_NEONRATTLE) / 2;
+    ZVectorInt alxmSize = z_sprite_sizeGet(Z_SPRITE_ALXM2);
+    ZVectorInt logoSize = z_sprite_sizeGet(Z_SPRITE_NEONRATTLE);
+
+    int drawX = startX + shake.y + logoSize.x / 2;
+    int drawY = startY + shake.x + logoSize.y / 2;
     int glowAlpha = 128 + z_fix_toInt(z_fix_sinf(g_angle) * 128);
 
     z_sprite_blitAlphaMask(
@@ -190,10 +191,8 @@ void s_menu_draw(void)
     z_sprite_blitAlphaMask(
         Z_SPRITE_NEONRATTLE, drawX, drawY, 0, Z_COLOR_APPLE_02, 256);
     z_sprite_blitAlphaMask(Z_SPRITE_ALXM2GLOW,
-                           startX - shake.y
-                            + z_sprite_sizeGetWidth(Z_SPRITE_ALXM2) / 2,
-                           startY - shake.x + 42
-                            + z_sprite_sizeGetHeight(Z_SPRITE_ALXM2) / 2,
+                           startX - shake.y + alxmSize.x / 2,
+                           startY - shake.x + 42 + alxmSize.y / 2,
                            0,
                            Z_COLOR_APPLE_02,
                            256);

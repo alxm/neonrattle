@@ -173,6 +173,12 @@ void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
     gb.display.drawImage(X, Y, g_sprites[Sprite].image);
 }
 
+ZVectorInt z_sprite_sizeGet(ZSpriteId Sprite)
+{
+    return (ZVectorInt){g_sprites[Sprite].buffer[0],
+                        g_sprites[Sprite].buffer[1]};
+}
+
 int z_sprite_sizeGetWidth(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].buffer[0];
