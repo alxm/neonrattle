@@ -24,6 +24,9 @@
 
 extern void o_game_setup(unsigned Level);
 
+extern void o_game_tick(void);
+extern void o_game_draw(void);
+
 extern OSnake* o_game_snakeGet(void);
 extern unsigned o_game_levelGet(void);
 

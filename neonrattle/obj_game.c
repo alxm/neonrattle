@@ -18,7 +18,9 @@
 
 #include "obj_game.h"
 
+#include "obj_camera.h"
 #include "obj_map.h"
+#include "util_hud.h"
 #include "util_save.h"
 
 typedef struct {
@@ -40,6 +42,22 @@ void o_game_setup(unsigned Level)
     g_game.level = Level;
     g_game.score = 0;
     g_game.snake = o_snake_new(startX, startY);
+}
+
+void o_game_tick(void)
+{
+    o_map_tick();
+    o_snake_tick(g_game.snake);
+    o_camera_tick(o_snake_coordsGet(g_game.snake));
+    z_hud_tick(g_game.snake);
+}
+
+void o_game_draw(void)
+{
+    o_map_draw();
+    o_snake_draw(g_game.snake);
+    o_map_drawMinimap(o_snake_coordsGet(g_game.snake));
+    z_hud_draw(g_game.snake);
 }
 
 OSnake* o_game_snakeGet(void)

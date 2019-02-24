@@ -18,21 +18,16 @@
 
 #include "state_play.h"
 
-#include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
 #include "state_menu.h"
-#include "util_hud.h"
 #include "util_save.h"
 
 void s_play_tick(void)
 {
-    OSnake* snake = o_game_snakeGet();
+    o_game_tick();
 
-    o_map_tick();
-    o_snake_tick(snake);
-    o_camera_tick(o_snake_coordsGet(snake));
-    z_hud_tick(snake);
+    OSnake* snake = o_game_snakeGet();
 
     if(o_snake_flagsTest(snake, O_SNAKE_FLAG_DEAD)) {
         z_state_set(Z_STATE_DIED);
@@ -43,12 +38,7 @@ void s_play_tick(void)
 
 void s_play_draw(void)
 {
-    OSnake* snake = o_game_snakeGet();
-
-    o_map_draw();
-    o_snake_draw(snake);
-    o_map_drawMinimap(o_snake_coordsGet(snake));
-    z_hud_draw(snake);
+    o_game_draw();
 }
 
 void s_play_free(void)

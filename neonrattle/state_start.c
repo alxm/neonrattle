@@ -20,8 +20,6 @@
 
 #include "obj_camera.h"
 #include "obj_game.h"
-#include "obj_map.h"
-#include "util_hud.h"
 #include "util_input.h"
 #include "util_light.h"
 #include "util_sound.h"
@@ -38,26 +36,16 @@ void s_start_init(void)
 
 void s_start_tick(void)
 {
-    OSnake* snake = o_game_snakeGet();
+    o_game_tick();
 
     if(z_button_pressGetAny()) {
         z_sfx_play(Z_SFX_PRESSED_A);
         z_light_pulseSet(Z_LIGHT_GAME_START);
         z_state_set(Z_STATE_PLAY);
     }
-
-    o_map_tick();
-    o_snake_tick(snake);
-    o_camera_tick(o_snake_coordsGet(snake));
-    z_hud_tick(snake);
 }
 
 void s_start_draw(void)
 {
-    OSnake* snake = o_game_snakeGet();
-
-    o_map_draw();
-    o_snake_draw(snake);
-    o_map_drawMinimap(o_snake_coordsGet(snake));
-    z_hud_draw(snake);
+    o_game_draw();
 }
