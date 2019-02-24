@@ -363,8 +363,10 @@ void o_snake_tick(OSnake* Snake)
 
 void o_snake_draw(const OSnake* Snake)
 {
+    ZStateId state = z_state_getCurrent();
+
     unsigned len = getLength(Snake);
-    unsigned frameTicks = z_fps_ticksGet() >> 2;
+    unsigned frameBase = state == Z_STATE_DIED ? 0 : (z_fps_ticksGet() >> 2);
     unsigned frameMask = z_sprite_framesNumGet(Z_SPRITE_SNAKE_MASK) - 1u;
     int alpha = O_SNAKE_ALPHA_MIN;
     int alphaInc = (O_SNAKE_ALPHA_MAX - O_SNAKE_ALPHA_MIN)
@@ -382,7 +384,7 @@ void o_snake_draw(const OSnake* Snake)
         z_sprite_blitAlphaMaskRGBA(Z_SPRITE_SNAKE_MASK,
                                    screen.x,
                                    screen.y,
-                                   (frameTicks - (len >> 3)) & frameMask,
+                                   (frameBase - (len >> 3)) & frameMask,
                                    &Snake->rgb,
                                    alpha);
     }
