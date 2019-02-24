@@ -242,11 +242,15 @@ void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
         topLeftTile.y = 0;
     }
 
+    #define Z_X_TILES \
+        ((Z_SCREEN_W + (Z_COORDS_UNIT_PIXELS - 1)) / Z_COORDS_UNIT_PIXELS + 1)
+
+    #define Z_Y_TILES \
+        ((Z_SCREEN_H + (Z_COORDS_UNIT_PIXELS - 1)) / Z_COORDS_UNIT_PIXELS + 1)
+
     ZVectorInt tileEnd = {
-        z_math_min(topLeftTile.x + (Z_SCREEN_W / Z_COORDS_UNIT_PIXELS + 1),
-                   Z_COORDS_MAP_W),
-        z_math_min(topLeftTile.y + (Z_SCREEN_H / Z_COORDS_UNIT_PIXELS + 1),
-                   Z_COORDS_MAP_H)
+        z_math_min(topLeftTile.x + Z_X_TILES, Z_COORDS_MAP_W),
+        z_math_min(topLeftTile.y + Z_Y_TILES, Z_COORDS_MAP_H)
     };
 
     if(TileStart != NULL) {

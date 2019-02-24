@@ -93,10 +93,9 @@ void s_menu_tick(void)
         g_velocity.y -= (g_velocity.y >> 2);
     }
 
-    g_origin.x = (g_origin.x + g_velocity.x)
-                    & (z_fix_fromInt(2 * Z_COORDS_UNIT_PIXELS) - 1);
-    g_origin.y = (g_origin.y + g_velocity.y)
-                    & (z_fix_fromInt(2 * Z_COORDS_UNIT_PIXELS) - 1);
+    #define Z_OFFSET_MASK (z_fix_fromInt(2 * Z_COORDS_UNIT_PIXELS) - 1)
+    g_origin.x = (g_origin.x + g_velocity.x) & Z_OFFSET_MASK;
+    g_origin.y = (g_origin.y + g_velocity.y) & Z_OFFSET_MASK;
 
     if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGetOnce(Z_BUTTON_B)) {
         if(g_cursor > z_save_unlockedGet()) {
@@ -162,8 +161,14 @@ void s_menu_draw(void)
         offsetY -= 2 * Z_COORDS_UNIT_PIXELS;
     }
 
-    for(int y = 0; y < Z_SCREEN_H / Z_COORDS_UNIT_PIXELS + 2; y++) {
-        for(int x = 0; x < Z_SCREEN_W / Z_COORDS_UNIT_PIXELS + 2; x++) {
+    #define Z_X_TILES \
+        ((Z_SCREEN_W + (Z_COORDS_UNIT_PIXELS - 1)) / Z_COORDS_UNIT_PIXELS + 2)
+
+    #define Z_Y_TILES \
+        ((Z_SCREEN_H + (Z_COORDS_UNIT_PIXELS - 1)) / Z_COORDS_UNIT_PIXELS + 2)
+
+    for(int y = 0; y < Z_Y_TILES; y++) {
+        for(int x = 0; x < Z_X_TILES; x++) {
             z_sprite_blit(Z_SPRITE_TILES,
                           offsetX + x * Z_COORDS_UNIT_PIXELS,
                           offsetY + y * Z_COORDS_UNIT_PIXELS,
@@ -172,7 +177,7 @@ void s_menu_draw(void)
     }
 
     int startX = 8;
-    int startY = 9;
+    int startY = 9 - (64 - Z_SCREEN_H) / 2;
 
     int drawX = startX + shake.y + z_sprite_widthGet(Z_SPRITE_NEONRATTLE) / 2;
     int drawY = startY + shake.x + z_sprite_heightGet(Z_SPRITE_NEONRATTLE) / 2;
