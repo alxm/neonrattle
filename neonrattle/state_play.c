@@ -25,27 +25,27 @@
 
 void s_play_tick(void)
 {
-    o_game_tick();
+    n_game_tick();
 
-    OSnake* snake = o_game_snakeGet();
+    OSnake* snake = n_game_snakeGet();
 
     if(o_snake_flagsTest(snake, O_SNAKE_FLAG_DEAD)) {
         z_state_set(Z_STATE_DIED);
-    } else if(o_snake_eatenNumGet(snake) == o_map_applesNumGet()) {
+    } else if(o_snake_eatenNumGet(snake) == n_map_applesNumGet()) {
         z_state_set(Z_STATE_END);
     }
 }
 
 void s_play_draw(void)
 {
-    o_game_draw();
+    n_game_draw();
 }
 
 void s_play_free(void)
 {
-    unsigned level = o_game_levelGet();
+    unsigned level = n_game_levelGet();
 
-    z_save_hiscoreSet(level, o_game_scoreGet());
+    z_save_hiscoreSet(level, n_game_scoreGet());
     z_save_commit();
 
     s_menu_select(level);

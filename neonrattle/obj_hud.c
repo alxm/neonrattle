@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "util_hud.h"
+#include "obj_hud.h"
 
 #include "obj_game.h"
 #include "obj_map.h"
@@ -27,22 +27,24 @@
 #define Z_HUD_APPLES_BLINK_DS 1
 #define Z_HUD_LIFE_BLINK_DS 2
 
-static struct {
-    int colorIndex;
-} g_life;
+typedef struct {
+    int lifeColorIndex;
+} NHud;
 
-void z_hud_tick(const OSnake* Snake)
+static NHud g_hud;
+
+void n_hud_tick(const OSnake* Snake)
 {
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_HURT)) {
         if(!z_timer_running(Z_TIMER_HUD_LIFE)) {
             z_timer_start(Z_TIMER_HUD_LIFE, Z_HUD_LIFE_BLINK_DS);
-            g_life.colorIndex = 1;
+            g_hud.lifeColorIndex = 1;
         } else if(z_timer_expired(Z_TIMER_HUD_LIFE)) {
-            g_life.colorIndex = !g_life.colorIndex;
+            g_hud.lifeColorIndex = !g_hud.lifeColorIndex;
         }
     } else {
         z_timer_stop(Z_TIMER_HUD_LIFE);
-        g_life.colorIndex = 0;
+        g_hud.lifeColorIndex = 0;
     }
 
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_ATE)) {
@@ -136,20 +138,20 @@ static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId F
     }
 }
 
-void z_hud_draw(const OSnake* Snake)
+void n_hud_draw(const OSnake* Snake)
 {
     static const ZColorId aColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_BG_GREEN_04};
     static const ZColorId lColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_APPLE_03};
 
     ZColorId aColor = aColors[z_timer_running(Z_TIMER_HUD_APPLES)];
-    ZColorId lColor = lColors[g_life.colorIndex];
+    ZColorId lColor = lColors[g_hud.lifeColorIndex];
 
     ZVectorInt pos = {1, 5};
 
     drawIcon(&pos, Z_SPRITE_APPLE_MASK, 0, aColor, 256);
     drawBar(&pos,
             o_snake_eatenNumGet(Snake),
-            o_map_applesNumGet(),
+            n_map_applesNumGet(),
             28,
             4,
             aColor,
@@ -166,13 +168,13 @@ void z_hud_draw(const OSnake* Snake)
             Z_COLOR_BG_GREEN_03,
             192);
 
-    unsigned score = o_game_scoreGet();
-    unsigned hiscore = z_save_hiscoreGet(o_game_levelGet());
+    unsigned score = n_game_scoreGet();
+    unsigned hiscore = z_save_hiscoreGet(n_game_levelGet());
     ZColorId color = Z_COLOR_SNAKE_01 + (score > hiscore);
 
     drawNumber(2,
                Z_SCREEN_H - 15,
-               o_game_scoreGet(),
+               n_game_scoreGet(),
                4,
                Z_SPRITE_FONT_LCDNUM,
                Z_COLOR_SNAKE_01);
@@ -189,7 +191,7 @@ void z_hud_draw(const OSnake* Snake)
         Z_SPRITE_ICON_LVL, 55, Z_SCREEN_H - 5, 0, Z_COLOR_SNAKE_02, 192);
     drawNumber(52,
                Z_SCREEN_H - 15,
-               o_game_levelGet() + 1,
+               n_game_levelGet() + 1,
                2,
                Z_SPRITE_FONT_LCDNUM,
                Z_COLOR_SNAKE_02);

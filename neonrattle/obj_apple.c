@@ -117,7 +117,7 @@ void o_apple_tick(OApple* Apple)
 
 void o_apple_draw(const OApple* Apple)
 {
-    ZVectorInt screen = o_camera_coordsToScreen(Apple->coords);
+    ZVectorInt screen = n_camera_coordsToScreen(Apple->coords);
     ZSpriteId sprite;
     int alpha;
 

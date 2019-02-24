@@ -188,7 +188,7 @@ static bool checkWall(const OSnake* Snake)
     const OSnakeSegment* head = &Snake->body[Snake->head];
     ZVectorInt tile = z_vectorfix_toInt(head->coords);
 
-    if(o_map_isWall(tile)) {
+    if(n_map_isWall(tile)) {
         return true;
     }
 
@@ -268,7 +268,7 @@ static bool checkApples(OSnake* Snake)
 
     for(int gridY = gridStartY; gridY <= gridEndY; gridY++) {
         for(int gridX = gridStartX; gridX <= gridEndX; gridX++) {
-            Z_LIST_ITERATE(o_map_applesListGet(gridX, gridY), OApple*, apple) {
+            Z_LIST_ITERATE(n_map_applesListGet(gridX, gridY), OApple*, apple) {
                 if(o_apple_eatGet(apple)) {
                     continue;
                 }
@@ -281,8 +281,8 @@ static bool checkApples(OSnake* Snake)
                     Snake->grow++;
                     Snake->eaten++;
 
-                    o_map_appleEat(apple);
-                    o_game_scoreAdd(1);
+                    n_map_appleEat(apple);
+                    n_game_scoreAdd(1);
 
                     colorSet(
                         Snake, o_apple_colorGet(apple), z_color_snakeGet());
@@ -346,7 +346,7 @@ void o_snake_tick(OSnake* Snake)
             Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_HURT);
             Snake->life = z_math_max(Snake->life - damage, 0);
 
-            o_camera_shakeSet(1);
+            n_camera_shakeSet(1);
             z_sfx_play(Z_SFX_HIT_WALL);
 
             if(Snake->life == 0) {
@@ -372,7 +372,7 @@ void o_snake_draw(const OSnake* Snake)
 
     for(unsigned i = Snake->tail; len--; i = (i + 1) & O_SNAKE_LEN_MASK) {
         const OSnakeSegment* s = &Snake->body[i];
-        ZVectorInt screen = o_camera_coordsToScreen(s->coords);
+        ZVectorInt screen = n_camera_coordsToScreen(s->coords);
 
         if(alpha < O_SNAKE_ALPHA_MAX) {
             alpha += alphaInc;

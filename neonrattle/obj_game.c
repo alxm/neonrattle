@@ -20,62 +20,62 @@
 
 #include "obj_camera.h"
 #include "obj_map.h"
-#include "util_hud.h"
+#include "obj_hud.h"
 #include "util_save.h"
 
 typedef struct {
     unsigned level;
     unsigned score;
     OSnake* snake;
-} OGame;
+} NGame;
 
-static OGame g_game;
+static NGame g_game;
 
-void o_game_setup(unsigned Level)
+void n_game_setup(unsigned Level)
 {
     o_apple_setup();
     o_snake_setup();
 
     ZFix startX, startY;
-    o_map_init(Level, &startX, &startY);
+    n_map_init(Level, &startX, &startY);
 
     g_game.level = Level;
     g_game.score = 0;
     g_game.snake = o_snake_new(startX, startY);
 }
 
-void o_game_tick(void)
+void n_game_tick(void)
 {
-    o_map_tick();
+    n_map_tick();
     o_snake_tick(g_game.snake);
-    o_camera_tick(o_snake_coordsGet(g_game.snake));
-    z_hud_tick(g_game.snake);
+    n_camera_tick(o_snake_coordsGet(g_game.snake));
+    n_hud_tick(g_game.snake);
 }
 
-void o_game_draw(void)
+void n_game_draw(void)
 {
-    o_map_draw();
+    n_map_draw();
     o_snake_draw(g_game.snake);
-    o_map_drawMinimap(o_snake_coordsGet(g_game.snake));
-    z_hud_draw(g_game.snake);
+    n_map_drawMinimap(o_snake_coordsGet(g_game.snake));
+    n_hud_draw(g_game.snake);
 }
 
-OSnake* o_game_snakeGet(void)
+OSnake* n_game_snakeGet(void)
 {
     return g_game.snake;
 }
 
-unsigned o_game_levelGet(void)
+unsigned n_game_levelGet(void)
 {
     return g_game.level;
 }
 
-unsigned o_game_scoreGet(void)
+unsigned n_game_scoreGet(void)
 {
     return g_game.score;
 }
 
-void o_game_scoreAdd(unsigned Points)
+void n_game_scoreAdd(unsigned Points)
 {
     g_game.score += Points;
 }

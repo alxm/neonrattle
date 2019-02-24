@@ -99,10 +99,10 @@ void s_menu_tick(void)
 
     if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGetOnce(Z_BUTTON_B)) {
         if(g_cursor > z_save_unlockedGet()) {
-            o_camera_shakeSet(2);
+            n_camera_shakeSet(2);
             z_sfx_play(Z_SFX_MENU_REJECT);
         } else {
-            o_game_setup(g_cursor);
+            n_game_setup(g_cursor);
 
             z_state_set(Z_STATE_START);
             z_swipe_start(Z_SWIPE_FADE_HIDE);
@@ -111,7 +111,7 @@ void s_menu_tick(void)
         }
     }
 
-    o_camera_tick((ZVectorFix){0, 0});
+    n_camera_tick((ZVectorFix){0, 0});
 
     g_angle += Z_GLOW_SPEED;
 }
@@ -148,7 +148,7 @@ static void minimapDraw(unsigned Level, int X, int Y)
 
 void s_menu_draw(void)
 {
-    ZVectorInt shake = o_camera_shakeGet();
+    ZVectorInt shake = n_camera_shakeGet();
 
     int offsetX = z_fix_toInt(g_origin.x) + shake.x;
     int offsetY = z_fix_toInt(g_origin.y) + shake.y;

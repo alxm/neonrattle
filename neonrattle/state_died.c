@@ -27,13 +27,13 @@
 void s_died_init(void)
 {
     z_timer_start(Z_TIMER_G1, 12);
-    o_camera_shakeSet(3);
+    n_camera_shakeSet(3);
     z_sfx_play(Z_SFX_END);
 }
 
 void s_died_tick(void)
 {
-    o_game_tick();
+    n_game_tick();
 
     if(z_timer_expired(Z_TIMER_G1)) {
         z_timer_stop(Z_TIMER_G1);
@@ -45,5 +45,5 @@ void s_died_tick(void)
 
 void s_died_draw(void)
 {
-    o_game_draw();
+    n_game_draw();
 }

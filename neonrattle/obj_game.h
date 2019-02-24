@@ -22,13 +22,13 @@
 
 #include "obj_snake.h"
 
-extern void o_game_setup(unsigned Level);
+extern void n_game_setup(unsigned Level);
 
-extern void o_game_tick(void);
-extern void o_game_draw(void);
+extern void n_game_tick(void);
+extern void n_game_draw(void);
 
-extern OSnake* o_game_snakeGet(void);
-extern unsigned o_game_levelGet(void);
+extern OSnake* n_game_snakeGet(void);
+extern unsigned n_game_levelGet(void);
 
-extern unsigned o_game_scoreGet(void);
-extern void o_game_scoreAdd(unsigned Points);
+extern unsigned n_game_scoreGet(void);
+extern void n_game_scoreAdd(unsigned Points);

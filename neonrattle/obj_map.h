@@ -24,14 +24,14 @@
 #include "util_fix.h"
 #include "util_list.h"
 
-extern void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY);
-extern void o_map_tick(void);
-extern void o_map_draw(void);
-extern void o_map_drawMinimap(ZVectorFix PlayerSnake);
+extern void n_map_init(unsigned Level, ZFix* StartX, ZFix* StartY);
+extern void n_map_tick(void);
+extern void n_map_draw(void);
+extern void n_map_drawMinimap(ZVectorFix PlayerSnake);
 
-extern void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart);
+extern void n_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart);
 
-extern ZList* o_map_applesListGet(int GridX, int GridY);
-extern int o_map_applesNumGet(void);
-extern void o_map_appleEat(OApple* Apple);
-extern bool o_map_isWall(ZVectorInt Tile);
+extern ZList* n_map_applesListGet(int GridX, int GridY);
+extern int n_map_applesNumGet(void);
+extern void n_map_appleEat(OApple* Apple);
+extern bool n_map_isWall(ZVectorInt Tile);

@@ -22,11 +22,11 @@
 
 #include "util_fix.h"
 
-extern void o_camera_reset(void);
-extern void o_camera_tick(ZVectorFix Origin);
+extern void n_camera_reset(void);
+extern void n_camera_tick(ZVectorFix Origin);
 
-extern ZVectorFix o_camera_originGet(void);
-extern ZVectorInt o_camera_coordsToScreen(ZVectorFix WorldCoords);
+extern ZVectorFix n_camera_originGet(void);
+extern ZVectorInt n_camera_coordsToScreen(ZVectorFix WorldCoords);
 
-extern ZVectorInt o_camera_shakeGet(void);
-extern void o_camera_shakeSet(uint8_t Ds);
+extern ZVectorInt n_camera_shakeGet(void);
+extern void n_camera_shakeSet(uint8_t Ds);

@@ -28,21 +28,21 @@
 typedef struct {
     uint8_t wall;
     uint8_t numApples;
-} OMapTile;
+} ZMapTile;
 
 typedef struct {
     ZList apples;
-} OMapCell;
+} ZMapCell;
 
 typedef struct {
-    OMapTile tiles[Z_COORDS_MAP_H][Z_COORDS_MAP_W];
-    OMapCell grid[Z_COORDS_GRID_H][Z_COORDS_GRID_W];
+    ZMapTile tiles[Z_COORDS_MAP_H][Z_COORDS_MAP_W];
+    ZMapCell grid[Z_COORDS_GRID_H][Z_COORDS_GRID_W];
     int totalApples;
-} OMap;
+} NMap;
 
-static OMap g_map;
+static NMap g_map;
 
-void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
+void n_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
 {
     g_map.totalApples = 0;
 
@@ -131,26 +131,26 @@ void o_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
     #endif
 }
 
-void o_map_tick(void)
+void n_map_tick(void)
 {
     ZVectorInt gridStart, gridEnd;
-    o_map_visibleGet(NULL, NULL, &gridStart, &gridEnd, NULL);
+    n_map_visibleGet(NULL, NULL, &gridStart, &gridEnd, NULL);
 
     for(int gridY = gridStart.y; gridY < gridEnd.y; gridY++) {
         for(int gridX = gridStart.x; gridX < gridEnd.x; gridX++) {
-            Z_LIST_ITERATE(o_map_applesListGet(gridX, gridY), OApple*, apple) {
+            Z_LIST_ITERATE(n_map_applesListGet(gridX, gridY), OApple*, apple) {
                 o_apple_tick(apple);
             }
         }
     }
 }
 
-void o_map_draw(void)
+void n_map_draw(void)
 {
     ZVectorInt tileStart, tileEnd;
     ZVectorInt gridStart, gridEnd;
     ZVectorInt screenStart;
-    o_map_visibleGet(&tileStart, &tileEnd, &gridStart, &gridEnd, &screenStart);
+    n_map_visibleGet(&tileStart, &tileEnd, &gridStart, &gridEnd, &screenStart);
 
     for(int tileY = tileStart.y, screenY = screenStart.y;
         tileY < tileEnd.y;
@@ -177,7 +177,7 @@ void o_map_draw(void)
     }
 }
 
-void o_map_drawMinimap(ZVectorFix PlayerSnake)
+void n_map_drawMinimap(ZVectorFix PlayerSnake)
 {
     int drawXStart = Z_SCREEN_W - Z_COORDS_MAP_W - 2;
     int drawYStart = Z_SCREEN_H - Z_COORDS_MAP_H - 2;
@@ -212,9 +212,9 @@ void o_map_drawMinimap(ZVectorFix PlayerSnake)
                            256);
 }
 
-void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)
+void n_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)
 {
-    ZVectorFix origin = o_camera_originGet();
+    ZVectorFix origin = n_camera_originGet();
 
     ZVectorFix topLeftCoords = {
         origin.x - z_coords_pixelsToUnits(Z_SCREEN_W / 2),
@@ -273,7 +273,7 @@ void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
     }
 
     if(ScreenStart != NULL) {
-        ZVectorInt shake = o_camera_shakeGet();
+        ZVectorInt shake = n_camera_shakeGet();
 
         topLeftScreen.x += shake.x;
         topLeftScreen.y += shake.y;
@@ -282,17 +282,17 @@ void o_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
     }
 }
 
-ZList* o_map_applesListGet(int GridX, int GridY)
+ZList* n_map_applesListGet(int GridX, int GridY)
 {
     return &g_map.grid[GridY][GridX].apples;
 }
 
-int o_map_applesNumGet(void)
+int n_map_applesNumGet(void)
 {
     return g_map.totalApples;
 }
 
-void o_map_appleEat(OApple* Apple)
+void n_map_appleEat(OApple* Apple)
 {
     ZVectorInt tile = z_vectorfix_toInt(o_apple_coordsGet(Apple));
 
@@ -301,7 +301,7 @@ void o_map_appleEat(OApple* Apple)
     o_apple_eatSet(Apple);
 }
 
-bool o_map_isWall(ZVectorInt Tile)
+bool n_map_isWall(ZVectorInt Tile)
 {
     return g_map.tiles[Tile.y][Tile.x].wall;
 }

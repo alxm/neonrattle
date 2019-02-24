@@ -34,12 +34,12 @@ void s_end_init(void)
 
 void s_end_tick(void)
 {
-    o_game_tick();
+    n_game_tick();
 
     if(z_timer_expired(Z_TIMER_G1)) {
         z_timer_stop(Z_TIMER_G1);
 
-        unsigned nextLevel = o_game_levelGet() + 1;
+        unsigned nextLevel = n_game_levelGet() + 1;
 
         if(nextLevel < Z_LEVELS_NUM) {
             z_save_unlockedSet(nextLevel);
@@ -56,12 +56,12 @@ void s_end_tick(void)
 
 void s_end_draw(void)
 {
-    o_game_draw();
+    n_game_draw();
 }
 
 void s_end_free(void)
 {
     if(z_state_getNext() == Z_STATE_START) {
-        o_game_setup(o_game_levelGet() + 1);
+        n_game_setup(n_game_levelGet() + 1);
     }
 }

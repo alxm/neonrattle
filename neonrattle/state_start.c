@@ -27,7 +27,7 @@
 
 void s_start_init(void)
 {
-    o_camera_reset();
+    n_camera_reset();
     z_input_reset();
     z_light_reset();
 
@@ -36,7 +36,7 @@ void s_start_init(void)
 
 void s_start_tick(void)
 {
-    o_game_tick();
+    n_game_tick();
 
     if(z_button_pressGetAny()) {
         z_sfx_play(Z_SFX_PRESSED_A);
@@ -47,5 +47,5 @@ void s_start_tick(void)
 
 void s_start_draw(void)
 {
-    o_game_draw();
+    n_game_draw();
 }
