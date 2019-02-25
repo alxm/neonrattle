@@ -63,9 +63,9 @@ struct OSnake {
 
 Z_POOL_DECLARE(OSnake, 1, g_pool);
 
-void o_snake_setup(void)
+void o_snake_reset(void)
 {
-    z_pool_reset(g_pool);
+    z_pool_clear(g_pool);
 }
 
 static inline unsigned getLength(const OSnake* Snake)

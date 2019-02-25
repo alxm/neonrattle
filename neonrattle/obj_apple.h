@@ -35,7 +35,7 @@ typedef enum {
 
 extern const size_t o_apple_listNodeOffsets[O_APPLE_LIST_NUM];
 
-extern void o_apple_setup(void);
+extern void o_apple_reset(void);
 
 extern OApple* o_apple_new(ZFix X, ZFix Y);
 extern void o_apple_free(OApple* Apple);

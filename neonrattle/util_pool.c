@@ -20,7 +20,7 @@
 
 #include "util_fps.h"
 
-void z_pool_reset(ZPool* Pool)
+void z_pool_clear(ZPool* Pool)
 {
     ZPoolFreeObject* current = (ZPoolFreeObject*)(Pool + 1);
 

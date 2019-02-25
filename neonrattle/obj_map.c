@@ -42,14 +42,14 @@ typedef struct {
 
 static NMap g_map;
 
-void n_map_init(unsigned Level, ZFix* StartX, ZFix* StartY)
+void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY)
 {
     g_map.totalApples = 0;
 
     for(int y = Z_COORDS_GRID_H; y--; ) {
         for(int x = Z_COORDS_GRID_W; x--; ) {
-            z_list_init(&g_map.grid[y][x].apples,
-                        o_apple_listNodeOffsets[O_APPLE_LIST_GRID]);
+            z_list_new(&g_map.grid[y][x].apples,
+                       o_apple_listNodeOffsets[O_APPLE_LIST_GRID]);
         }
     }
 

@@ -55,7 +55,7 @@ typedef struct {
     };                                                               \
     static ZPool* const VarName = &g_pool__##ObjectType.header
 
-extern void z_pool_reset(ZPool* Pool);
+extern void z_pool_clear(ZPool* Pool);
 
 extern void* z_pool_alloc(ZPool* Pool);
 extern void z_pool_free(ZPool* Pool, void* Object);

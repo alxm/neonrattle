@@ -32,7 +32,7 @@ typedef enum {
 
 typedef struct OSnake OSnake;
 
-extern void o_snake_setup(void);
+extern void o_snake_reset(void);
 
 extern OSnake* o_snake_new(ZFix X, ZFix Y);
 

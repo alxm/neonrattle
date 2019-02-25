@@ -102,7 +102,7 @@ void s_menu_tick(void)
             n_camera_shakeSet(2);
             z_sfx_play(Z_SFX_MENU_REJECT);
         } else {
-            n_game_setup(g_cursor);
+            n_game_new(g_cursor);
 
             z_state_set(Z_STATE_START);
             z_swipe_start(Z_SWIPE_FADE_HIDE);

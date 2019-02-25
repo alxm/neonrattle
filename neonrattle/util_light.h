@@ -33,6 +33,7 @@ typedef enum {
 } ZLightId;
 
 extern void z_light_reset(void);
+
 extern void z_light_tick(void);
 extern void z_light_draw(void);
 

@@ -35,8 +35,10 @@ typedef struct ZListIt {
     ZListNode* next;
 } ZListIt;
 
-extern void z_list_init(ZList* List, size_t NodeOffset);
-extern void z_list_reset(ZList* List);
+extern void z_list_new(ZList* List, size_t NodeOffset);
+
+extern void z_list_clear(ZList* List);
+
 extern void z_list_addFirst(ZList* List, void* Object);
 extern void z_list_addLast(ZList* List, void* Object);
 extern void z_list_remove(ZListNode* Node);

@@ -62,6 +62,6 @@ void s_end_draw(void)
 void s_end_free(void)
 {
     if(z_state_getNext() == Z_STATE_START) {
-        n_game_setup(n_game_levelGet() + 1);
+        n_game_new(n_game_levelGet() + 1);
     }
 }

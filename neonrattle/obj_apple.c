@@ -44,9 +44,9 @@ const size_t o_apple_listNodeOffsets[O_APPLE_LIST_NUM] = {
 
 Z_POOL_DECLARE(OApple, O_APPLE_NUM_MAX, g_pool);
 
-void o_apple_setup(void)
+void o_apple_reset(void)
 {
-    z_pool_reset(g_pool);
+    z_pool_clear(g_pool);
 }
 
 OApple* o_apple_new(ZFix X, ZFix Y)

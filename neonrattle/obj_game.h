@@ -22,7 +22,7 @@
 
 #include "obj_snake.h"
 
-extern void n_game_setup(unsigned Level);
+extern void n_game_new(unsigned Level);
 
 extern void n_game_tick(void);
 extern void n_game_draw(void);

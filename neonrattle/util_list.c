@@ -18,14 +18,15 @@
 
 #include "util_list.h"
 
-void z_list_init(ZList* List, size_t NodeOffset)
+void z_list_new(ZList* List, size_t NodeOffset)
 {
     List->root.prev = &List->root;
     List->root.next = &List->root;
+
     List->nodeOffset = NodeOffset;
 }
 
-void z_list_reset(ZList* List)
+void z_list_clear(ZList* List)
 {
     List->root.prev = &List->root;
     List->root.next = &List->root;

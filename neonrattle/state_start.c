@@ -27,9 +27,10 @@
 
 void s_start_init(void)
 {
-    n_camera_reset();
     z_input_reset();
     z_light_reset();
+
+    n_camera_new();
 
     z_swipe_start(Z_SWIPE_LINES_SHOW);
 }

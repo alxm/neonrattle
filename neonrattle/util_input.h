@@ -35,6 +35,7 @@ typedef enum Z_PACK_ENUM {
 } ZButtonId;
 
 extern void z_input_reset(void);
+
 extern void z_input_tick(void);
 
 extern bool z_button_pressGet(ZButtonId Button);

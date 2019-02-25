@@ -31,13 +31,13 @@ typedef struct {
 
 static NGame g_game;
 
-void n_game_setup(unsigned Level)
+void n_game_new(unsigned Level)
 {
-    o_apple_setup();
-    o_snake_setup();
+    o_apple_reset();
+    o_snake_reset();
 
     ZFix startX, startY;
-    n_map_init(Level, &startX, &startY);
+    n_map_new(Level, &startX, &startY);
 
     g_game.level = Level;
     g_game.score = 0;

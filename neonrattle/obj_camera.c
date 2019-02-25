@@ -30,7 +30,7 @@ typedef struct {
 
 static NCamera g_camera;
 
-void n_camera_reset(void)
+void n_camera_new(void)
 {
     g_camera.shake = (ZVectorInt){0, 0};
     g_camera.shakeFrames = 0;
