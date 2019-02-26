@@ -113,6 +113,15 @@ typedef enum {
     Z_SPRITE_NUM
 } ZSpriteId;
 
+typedef enum {
+    Z_ALIGN_X_LEFT = Z_FLAG_BIT(1),
+    Z_ALIGN_X_CENTER = Z_FLAG_BIT(2),
+    Z_ALIGN_X_RIGHT = Z_FLAG_BIT(3),
+    Z_ALIGN_Y_TOP = Z_FLAG_BIT(4),
+    Z_ALIGN_Y_CENTER = Z_FLAG_BIT(5),
+    Z_ALIGN_Y_BOTTOM = Z_FLAG_BIT(6),
+} ZAlign;
+
 typedef struct ZColor {
     ZPixel pixel;
     ZRgb rgb;
@@ -121,6 +130,9 @@ typedef struct ZColor {
 extern ZColor z_colors[Z_COLOR_NUM];
 
 extern void z_graphics_setup(void);
+
+extern void z_graphics_stateAlignSet(ZAlign Alignment);
+extern void z_graphics_stateAlignReset(void);
 
 extern ZPixel* z_screen_pixelsGet(void);
 

@@ -2,6 +2,9 @@ include global
 
 A_CONFIG_APP_BIN := $(A_CONFIG_APP_TITLE).html
 
+A_CONFIG_SCREEN_WIDTH := 96
+A_CONFIG_SCREEN_HEIGHT := 64
+
 Z_ROOT := ..
 Z_DIR_GFX := assets/gfx
 Z_DIR_SFX := assets/sfx

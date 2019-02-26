@@ -40,6 +40,8 @@
 #include "generated/data_gfx_font_lcdnum_grid4x7.h"
 #include "generated/data_gfx_font_smallnum_grid3x5.h"
 
+static ZAlign g_align;
+
 void z_graphics_setup(void)
 {
     z_sprite_load(Z_SPRITE_PALETTE, palette);
@@ -83,16 +85,43 @@ void z_graphics_setup(void)
             break;
         }
     }
+
+    z_graphics_stateAlignReset();
+}
+
+void z_graphics_stateAlignSet(ZAlign Alignment)
+{
+    g_align = Alignment;
+}
+
+void z_graphics_stateAlignReset(void)
+{
+    g_align = Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP;
+}
+
+void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
+{
+    ZVectorInt spriteSize = z_sprite_sizeGet(Sprite);
+
+    if(g_align & Z_ALIGN_X_CENTER) {
+        X -= spriteSize.x >> 1;
+    } else if(g_align & Z_ALIGN_X_RIGHT) {
+        X -= spriteSize.x;
+    }
+
+    if(g_align & Z_ALIGN_Y_CENTER) {
+        Y -= spriteSize.y >> 1;
+    } else if(g_align & Z_ALIGN_Y_BOTTOM) {
+        Y -= spriteSize.y;
+    }
+
+    z_platform_spriteBlit(Sprite, X, Y, Frame);
 }
 
 void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha)
 {
-    z_sprite_blitAlphaMaskRGBA(AlphaMask,
-                               X,
-                               Y,
-                               Frame,
-                               &z_colors[Fill].rgb,
-                               Alpha);
+    z_sprite_blitAlphaMaskRGBA(
+        AlphaMask, X, Y, Frame, &z_colors[Fill].rgb, Alpha);
 }
 
 void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, const ZRgb* Rgb, int Alpha)
@@ -103,8 +132,17 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
 
     ZVectorInt spriteSize = z_sprite_sizeGet(AlphaMask);
 
-    X -= spriteSize.x / 2;
-    Y -= spriteSize.y / 2;
+    if(g_align & Z_ALIGN_X_CENTER) {
+        X -= spriteSize.x >> 1;
+    } else if(g_align & Z_ALIGN_X_RIGHT) {
+        X -= spriteSize.x;
+    }
+
+    if(g_align & Z_ALIGN_Y_CENTER) {
+        Y -= spriteSize.y >> 1;
+    } else if(g_align & Z_ALIGN_Y_BOTTOM) {
+        Y -= spriteSize.y;
+    }
 
     if(X >= Z_SCREEN_W || X + spriteSize.x <= 0
         || Y >= Z_SCREEN_H || Y + spriteSize.y <= 0) {

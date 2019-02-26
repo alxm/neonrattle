@@ -2,6 +2,9 @@ include global
 
 A_CONFIG_APP_BIN := $(A_CONFIG_APP_TITLE)
 
+A_CONFIG_SCREEN_MAXIMIZED := 0
+A_CONFIG_SCREEN_ZOOM := 4
+
 A_CONFIG_MAKE_CLEAN := genclean
 
 include $(A2X_PATH)/make/dev

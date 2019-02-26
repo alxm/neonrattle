@@ -136,5 +136,7 @@ void o_apple_draw(const OApple* Apple)
         screen.y += z_fix_toInt(z_fix_sinf(Apple->bounceAngle) * 3 / 2);
     }
 
+    z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
     z_sprite_blitAlphaMask(sprite, screen.x, screen.y, 0, Apple->color, alpha);
+    z_graphics_stateAlignReset();
 }

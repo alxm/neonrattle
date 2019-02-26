@@ -204,12 +204,14 @@ void n_map_drawMinimap(ZVectorFix PlayerSnake)
 
     ZVectorInt tile = z_vectorfix_toInt(PlayerSnake);
 
+    z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
     z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MINIMAP,
                            drawXStart + tile.x,
                            drawYStart + tile.y,
                            0,
                            Z_COLOR_SNAKE_03,
                            256);
+    z_graphics_stateAlignReset();
 }
 
 void n_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)

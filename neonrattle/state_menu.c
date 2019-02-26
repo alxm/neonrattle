@@ -178,26 +178,31 @@ void s_menu_draw(void)
         }
     }
 
-    int startX = 8;
-    int startY = 9 - (64 - Z_SCREEN_H) / 2;
-
-    ZVectorInt alxmSize = z_sprite_sizeGet(Z_SPRITE_ALXM2);
-    ZVectorInt logoSize = z_sprite_sizeGet(Z_SPRITE_NEONRATTLE);
-
-    int drawX = startX + shake.y + logoSize.x / 2;
-    int drawY = startY + shake.x + logoSize.y / 2;
+    int startX = (Z_SCREEN_W - 64) / 2;
+    int startY = (Z_SCREEN_H - 46) / 2;
+    int drawX = startX + shake.y;
+    int drawY = startY + shake.x;
     int glowAlpha = 128 + z_fix_toInt(z_fix_sinf(g_angle) * 128);
+    ZVectorInt sizeTitle = z_sprite_sizeGet(Z_SPRITE_NEONRATTLE);
+    ZVectorInt sizeFooter = z_sprite_sizeGet(Z_SPRITE_ALXM2);
 
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_NEONRATTLE_GLOW, drawX, drawY, 0, Z_COLOR_APPLE_01, glowAlpha);
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_NEONRATTLE, drawX, drawY, 0, Z_COLOR_APPLE_02, 256);
+    z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
+    z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE_GLOW,
+                           drawX + sizeTitle.x / 2,
+                           drawY + sizeTitle.y / 2,
+                           0,
+                           Z_COLOR_APPLE_01,
+                           glowAlpha);
     z_sprite_blitAlphaMask(Z_SPRITE_ALXM2GLOW,
-                           startX - shake.y + alxmSize.x / 2,
-                           startY - shake.x + 42 + alxmSize.y / 2,
+                           startX - shake.y + sizeFooter.x / 2,
+                           startY - shake.x + 42 + sizeFooter.y / 2,
                            0,
                            Z_COLOR_APPLE_02,
                            256);
+    z_graphics_stateAlignReset();
+
+    z_sprite_blitAlphaMask(
+        Z_SPRITE_NEONRATTLE, drawX, drawY, 0, Z_COLOR_APPLE_02, 256);
     z_sprite_blit(Z_SPRITE_ALXM2, startX - shake.y, startY - shake.x + 42, 0);
 
     int minimapX = -1, minimapY = 0;
@@ -238,12 +243,7 @@ void s_menu_draw(void)
             sprite = Z_SPRITE_ICON_LOCK;
         }
 
-        z_sprite_blitAlphaMask(sprite,
-                               drawX + (Z_CELL_DIM - 1) / 2,
-                               drawY + (Z_CELL_DIM - 1) / 2,
-                               0,
-                               color,
-                               256);
+        z_sprite_blitAlphaMask(sprite, drawX, drawY, 0, color, 256);
     }
 
     if(minimapX != -1) {

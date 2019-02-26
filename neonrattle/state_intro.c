@@ -80,17 +80,15 @@ void s_intro_tick(void)
 
 void s_intro_draw(void)
 {
-    ZVectorInt logoSize = z_sprite_sizeGet(Z_SPRITE_ALXM);
-
-    z_sprite_blit(Z_SPRITE_ALXM,
-                  Z_SCREEN_W / 2 - logoSize.x / 2,
-                  Z_SCREEN_H / 2 - logoSize.y / 2,
-                  0);
+    z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
+    z_sprite_blit(Z_SPRITE_ALXM, Z_SCREEN_W / 2, Z_SCREEN_H / 2, 0);
+    z_graphics_stateAlignReset();
 
     if(g_lines[g_pc] < 0) {
         return;
     }
 
+    ZVectorInt logoSize = z_sprite_sizeGet(Z_SPRITE_ALXM);
     int startX1 = Z_SCREEN_W / 2 - logoSize.x / 2;
     int startX2 = Z_SCREEN_W / 2 + (logoSize.x + 1) / 2 - 2;
     int startY = Z_SCREEN_H / 2 - logoSize.y / 2;

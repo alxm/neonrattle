@@ -167,7 +167,7 @@ ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y)
                 + Z_META_IMAGE_HEADER_LEN + dim * Frame + Y * w + X);
 }
 
-void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
+void z_platform_spriteBlit(int Sprite, int X, int Y, unsigned Frame)
 {
     g_sprites[Sprite].image.setFrame(Frame);
     gb.display.drawImage(X, Y, g_sprites[Sprite].image);

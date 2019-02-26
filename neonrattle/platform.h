@@ -61,6 +61,8 @@ Z_EXTERN_C_START
 #define Z_FLAG_SET(Value, Mask) ((Value) |= (Mask))
 #define Z_FLAG_CLEAR(Value, Mask) ((Value) &= ~(unsigned)(Mask))
 
+extern void z_platform_spriteBlit(int Sprite, int X, int Y, unsigned Frame);
+
 extern bool z_platform_buttonPressGet(int Button);
 
 extern bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size);

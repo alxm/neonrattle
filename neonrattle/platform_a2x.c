@@ -141,7 +141,7 @@ ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y)
     return a_sprite_pixelsGetPixel(getCurrentSprite(Sprite, Frame), X, Y);
 }
 
-void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
+void z_platform_spriteBlit(int Sprite, int X, int Y, unsigned Frame)
 {
     a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
 }

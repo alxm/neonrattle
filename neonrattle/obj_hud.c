@@ -58,66 +58,64 @@ void n_hud_tick(const OSnake* Snake)
 
 static void drawIcon(ZVectorInt* Coords, ZSpriteId Sprite, unsigned Frame, ZColorId Color, int Alpha)
 {
-    int w = z_sprite_sizeGetWidth(Sprite);
+    ZVectorInt size = z_sprite_sizeGet(Sprite);
 
     z_sprite_blitAlphaMask(
-        Sprite, Coords->x + w / 2, Coords->y, Frame, Color, Alpha);
+        Sprite, Coords->x, Coords->y - 2 + (size.y & 1), Frame, Color, Alpha);
 
-    Coords->x += w + 2;
+    Coords->x += size.x + 2;
 }
 
 static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Height, ZColorId ProgressColor, ZColorId BackgroundColor, int Alpha)
 {
     int progressWidth = Width * Value / Total;
     int borderAlpha = Alpha >> 2;
-    int heightHalf = Height >> 1;
-    int heightHalf2 = Height - heightHalf;
 
     z_draw_rectangleAlpha(Coords->x - 1,
-                          Coords->y - heightHalf,
+                          Coords->y,
                           1,
                           Height,
                           Value > 0 ? ProgressColor : BackgroundColor,
                           borderAlpha);
     z_draw_rectangleAlpha(Coords->x,
-                          Coords->y - heightHalf - 1,
+                          Coords->y - 1,
                           progressWidth,
                           1,
                           ProgressColor,
                           borderAlpha);
     z_draw_rectangleAlpha(Coords->x,
-                          Coords->y - heightHalf,
+                          Coords->y,
                           progressWidth,
                           Height,
                           ProgressColor,
                           Alpha);
     z_draw_rectangleAlpha(Coords->x,
-                          Coords->y + heightHalf2,
+                          Coords->y + Height,
                           progressWidth,
                           1,
                           ProgressColor,
                           borderAlpha);
 
     z_draw_rectangleAlpha(Coords->x + progressWidth,
-                          Coords->y - heightHalf - 1,
+                          Coords->y - 1,
                           Width - progressWidth,
                           1,
                           BackgroundColor,
                           borderAlpha);
     z_draw_rectangleAlpha(Coords->x + progressWidth,
-                          Coords->y - heightHalf,
+                          Coords->y,
                           Width - progressWidth,
                           Height,
                           BackgroundColor,
                           Alpha);
     z_draw_rectangleAlpha(Coords->x + progressWidth,
-                          Coords->y + heightHalf2,
+                          Coords->y + Height,
                           Width - progressWidth,
                           1,
                           BackgroundColor,
                           borderAlpha);
     z_draw_rectangleAlpha(Coords->x + Width,
-                          Coords->y - heightHalf,
+                          Coords->y,
                           1,
                           Height,
                           Value >= Total ? ProgressColor : BackgroundColor,
@@ -128,12 +126,11 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
 
 static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId Font, ZColorId Color)
 {
-    ZVectorInt charSize = z_sprite_sizeGet(Font);
+    int charSize = z_sprite_sizeGetWidth(Font) + 1;
 
-    X += charSize.x / 2 + (charSize.x + 1) * (NumDigits - 1);
-    Y += charSize.y / 2;
+    X += charSize * (NumDigits - 1);
 
-    for(int d = NumDigits; d--; X -= charSize.x + 1, Number /= 10) {
+    for(int d = NumDigits; d--; X -= charSize, Number /= 10) {
         z_sprite_blitAlphaMask(Font, X, Y, Number % 10, Color, 256);
     }
 }
@@ -146,13 +143,13 @@ void n_hud_draw(const OSnake* Snake)
     ZColorId aColor = aColors[z_timer_running(Z_TIMER_HUD_APPLES)];
     ZColorId lColor = lColors[g_hud.lifeColorIndex];
 
-    ZVectorInt pos = {1, 5};
+    ZVectorInt pos = {1, 3};
 
     drawIcon(&pos, Z_SPRITE_APPLE_MASK, 0, aColor, 256);
     drawBar(&pos,
             o_snake_eatenNumGet(Snake),
             n_map_applesNumGet(),
-            28,
+            Z_SCREEN_W / 2 - pos.x,
             4,
             aColor,
             Z_COLOR_BG_GREEN_03,
@@ -162,7 +159,7 @@ void n_hud_draw(const OSnake* Snake)
     drawBar(&pos,
             o_snake_lifeGet(Snake),
             O_SNAKE_LIFE_MAX,
-            28,
+            Z_SCREEN_W - pos.x - 2,
             4,
             lColor,
             Z_COLOR_BG_GREEN_03,
@@ -184,12 +181,20 @@ void n_hud_draw(const OSnake* Snake)
                5,
                Z_SPRITE_FONT_SMALLNUM,
                color);
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_ICON_HI, 26, Z_SCREEN_H - 5, 0, color, 192);
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI,
+                           22,
+                           Z_SCREEN_H - 7,
+                           0,
+                           color,
+                           192);
 
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_ICON_LVL, 55, Z_SCREEN_H - 5, 0, Z_COLOR_SNAKE_02, 192);
-    drawNumber(52,
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL,
+                           Z_SCREEN_W - 31,
+                           Z_SCREEN_H - 7,
+                           0,
+                           Z_COLOR_SNAKE_02,
+                           192);
+    drawNumber(Z_SCREEN_W - 28,
                Z_SCREEN_H - 15,
                n_game_levelGet() + 1,
                2,
