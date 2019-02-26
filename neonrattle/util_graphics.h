@@ -152,10 +152,11 @@ extern uint8_t z_sprite_framesNumGet(ZSpriteId Sprite);
 extern void z_draw_fill(ZColorId Color);
 extern void z_draw_rectangle(int X, int Y, int W, int H, ZColorId Color);
 extern void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId Color, int Alpha);
-extern void z_draw_pixel(int X, int Y, ZColorId Color);
-extern void z_draw_hline(int X1, int X2, int Y, ZColorId Color);
-extern void z_draw_vline(int X, int Y1, int Y2, ZColorId Color);
-extern void z_draw_circle(int X, int Y, int Radius, ZColorId Color);
+
+static inline void z_draw_hline(int X1, int X2, int Y, ZColorId Color)
+{
+    z_draw_rectangle(X1, Y, X2 - X1 + 1, 1, Color);
+}
 
 static inline void z_draw_pixelBufferRgbAlpha(ZPixel* Dst, const ZRgb* Rgb, int Alpha)
 {

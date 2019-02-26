@@ -250,13 +250,3 @@ void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId Color, int Alpha
         screenPixels += Z_SCREEN_W;
     }
 }
-
-void z_draw_hline(int X1, int X2, int Y, ZColorId Color)
-{
-    z_draw_rectangle(X1, Y, X2 - X1 + 1, 1, Color);
-}
-
-void z_draw_vline(int X, int Y1, int Y2, ZColorId Color)
-{
-    z_draw_rectangle(X, Y1, 1, Y2 - Y1 + 1, Color);
-}

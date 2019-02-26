@@ -206,18 +206,6 @@ void z_draw_rectangle(int X, int Y, int W, int H, ZColorId ColorId)
     gb.display.fillRect(X, Y, W, H);
 }
 
-void z_draw_pixel(int X, int Y, ZColorId ColorId)
-{
-    gb.display.setColor((Color)z_colors[ColorId].pixel);
-    gb.display.drawPixel(X, Y);
-}
-
-void z_draw_circle(int X, int Y, int Radius, ZColorId ColorId)
-{
-    gb.display.setColor((Color)z_colors[ColorId].pixel);
-    gb.display.drawCircle(X, Y, Radius);
-}
-
 uint16_t z_fps_ticksGet(void)
 {
     return (uint16_t)gb.frameCount;
