@@ -85,13 +85,6 @@ void z_graphics_setup(void)
     }
 }
 
-void z_sprite_blitCentered(ZSpriteId Sprite, int X, int Y, unsigned Frame)
-{
-    ZVectorInt size = z_sprite_sizeGet(Sprite);
-
-    z_sprite_blit(Sprite, X - size.x / 2, Y - size.y / 2, Frame);
-}
-
 void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha)
 {
     z_sprite_blitAlphaMaskRGBA(AlphaMask,
