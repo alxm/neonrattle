@@ -125,16 +125,6 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
     int spriteDrawW = spriteSize.x;
     int spriteDrawH = spriteSize.y;
 
-    if(Y < 0) {
-        spritePixels += -Y * spriteSize.x;
-        spriteDrawH -= -Y;
-        Y = 0;
-    }
-
-    if(Y + spriteDrawH > Z_SCREEN_H) {
-        spriteDrawH -= Y + spriteDrawH - Z_SCREEN_H;
-    }
-
     if(X < 0) {
         spritePixels += -X;
         spriteDrawW -= -X;
@@ -142,7 +132,17 @@ void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Fram
     }
 
     if(X + spriteDrawW > Z_SCREEN_W) {
-        spriteDrawW -= X + spriteDrawW - Z_SCREEN_W;
+        spriteDrawW = Z_SCREEN_W - X;
+    }
+
+    if(Y < 0) {
+        spritePixels += -Y * spriteSize.x;
+        spriteDrawH -= -Y;
+        Y = 0;
+    }
+
+    if(Y + spriteDrawH > Z_SCREEN_H) {
+        spriteDrawH = Z_SCREEN_H - Y;
     }
 
     screenPixels += Y * Z_SCREEN_W + X;
@@ -180,7 +180,7 @@ void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId Color, int Alpha
     }
 
     if(X + W > Z_SCREEN_W) {
-        W -= X + W - Z_SCREEN_W;
+        W = Z_SCREEN_W - X;
     }
 
     if(Y < 0) {
@@ -189,7 +189,7 @@ void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId Color, int Alpha
     }
 
     if(Y + H > Z_SCREEN_H) {
-        H -= Y + H - Z_SCREEN_H;
+        H = Z_SCREEN_H - Y;
     }
 
     const ZRgb* rgb = &z_colors[Color].rgb;
