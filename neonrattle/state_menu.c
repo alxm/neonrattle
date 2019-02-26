@@ -186,23 +186,24 @@ void s_menu_draw(void)
     ZVectorInt sizeTitle = z_sprite_sizeGet(Z_SPRITE_NEONRATTLE);
     ZVectorInt sizeFooter = z_sprite_sizeGet(Z_SPRITE_ALXM2);
 
+    z_graphics_stateColorSetId(Z_COLOR_APPLE_01);
+    z_graphics_stateAlphaSet(glowAlpha);
     z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
     z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE_GLOW,
                            drawX + sizeTitle.x / 2,
                            drawY + sizeTitle.y / 2,
-                           0,
-                           Z_COLOR_APPLE_01,
-                           glowAlpha);
+                           0);
+    z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
+    z_graphics_stateAlphaSet(256);
     z_sprite_blitAlphaMask(Z_SPRITE_ALXM2GLOW,
                            startX - shake.y + sizeFooter.x / 2,
                            startY - shake.x + 42 + sizeFooter.y / 2,
-                           0,
-                           Z_COLOR_APPLE_02,
-                           256);
+                           0);
     z_graphics_stateAlignReset();
 
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_NEONRATTLE, drawX, drawY, 0, Z_COLOR_APPLE_02, 256);
+    z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
+    z_graphics_stateAlphaSet(256);
+    z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE, drawX, drawY, 0);
     z_sprite_blit(Z_SPRITE_ALXM2, startX - shake.y, startY - shake.x + 42, 0);
 
     int minimapX = -1, minimapY = 0;
@@ -243,7 +244,9 @@ void s_menu_draw(void)
             sprite = Z_SPRITE_ICON_LOCK;
         }
 
-        z_sprite_blitAlphaMask(sprite, drawX, drawY, 0, color, 256);
+        z_graphics_stateColorSetId(color);
+        z_graphics_stateAlphaSet(256);
+        z_sprite_blitAlphaMask(sprite, drawX, drawY, 0);
     }
 
     if(minimapX != -1) {

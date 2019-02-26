@@ -60,8 +60,10 @@ static void drawIcon(ZVectorInt* Coords, ZSpriteId Sprite, unsigned Frame, ZColo
 {
     ZVectorInt size = z_sprite_sizeGet(Sprite);
 
+    z_graphics_stateColorSetId(Color);
+    z_graphics_stateAlphaSet(Alpha);
     z_sprite_blitAlphaMask(
-        Sprite, Coords->x, Coords->y - 2 + (size.y & 1), Frame, Color, Alpha);
+        Sprite, Coords->x, Coords->y - 2 + (size.y & 1), Frame);
 
     Coords->x += size.x + 2;
 }
@@ -124,14 +126,16 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
     Coords->x += Width + 2;
 }
 
-static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId Font, ZColorId Color)
+static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId Font)
 {
     int charSize = z_sprite_sizeGetWidth(Font) + 1;
 
     X += charSize * (NumDigits - 1);
 
+    z_graphics_stateAlphaSet(256);
+
     for(int d = NumDigits; d--; X -= charSize, Number /= 10) {
-        z_sprite_blitAlphaMask(Font, X, Y, Number % 10, Color, 256);
+        z_sprite_blitAlphaMask(Font, X, Y, Number % 10);
     }
 }
 
@@ -169,35 +173,29 @@ void n_hud_draw(const OSnake* Snake)
     unsigned hiscore = z_save_hiscoreGet(n_game_levelGet());
     ZColorId color = Z_COLOR_SNAKE_01 + (score > hiscore);
 
+    z_graphics_stateColorSetId(Z_COLOR_SNAKE_01);
     drawNumber(2,
                Z_SCREEN_H - 15,
                n_game_scoreGet(),
                4,
-               Z_SPRITE_FONT_LCDNUM,
-               Z_COLOR_SNAKE_01);
+               Z_SPRITE_FONT_LCDNUM);
+
+    z_graphics_stateColorSetId(color);
     drawNumber(2,
                Z_SCREEN_H - 7,
                z_math_maxu(score, hiscore),
                5,
-               Z_SPRITE_FONT_SMALLNUM,
-               color);
-    z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI,
-                           22,
-                           Z_SCREEN_H - 7,
-                           0,
-                           color,
-                           192);
+               Z_SPRITE_FONT_SMALLNUM);
+    z_graphics_stateAlphaSet(192);
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI, 22, Z_SCREEN_H - 7, 0);
 
-    z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL,
-                           Z_SCREEN_W - 31,
-                           Z_SCREEN_H - 7,
-                           0,
-                           Z_COLOR_SNAKE_02,
-                           192);
+    z_graphics_stateColorSetId(Z_COLOR_SNAKE_02);
+    z_graphics_stateAlphaSet(192);
+    z_sprite_blitAlphaMask(
+        Z_SPRITE_ICON_LVL, Z_SCREEN_W - 31, Z_SCREEN_H - 7, 0);
     drawNumber(Z_SCREEN_W - 28,
                Z_SCREEN_H - 15,
                n_game_levelGet() + 1,
                2,
-               Z_SPRITE_FONT_LCDNUM,
-               Z_COLOR_SNAKE_02);
+               Z_SPRITE_FONT_LCDNUM);
 }

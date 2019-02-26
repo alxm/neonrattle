@@ -131,6 +131,9 @@ extern ZColor z_colors[Z_COLOR_NUM];
 
 extern void z_graphics_setup(void);
 
+void z_graphics_stateColorSetId(ZColorId Color);
+void z_graphics_stateColorSetRgb(const ZRgb* Rgb);
+void z_graphics_stateAlphaSet(int Alpha);
 extern void z_graphics_stateAlignSet(ZAlign Alignment);
 extern void z_graphics_stateAlignReset(void);
 
@@ -140,8 +143,7 @@ extern ZPixel z_sprite_transparentColorGet(void);
 extern const ZPixel* z_sprite_pixelsGet(ZSpriteId Sprite, unsigned Frame);
 extern ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y);
 extern void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame);
-extern void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha);
-extern void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, const ZRgb* Rgb, int Alpha);
+extern void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame);
 extern ZVectorInt z_sprite_sizeGet(ZSpriteId Sprite);
 extern int z_sprite_sizeGetWidth(ZSpriteId Sprite);
 extern int z_sprite_sizeGetHeight(ZSpriteId Sprite);

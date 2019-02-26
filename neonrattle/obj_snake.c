@@ -383,12 +383,12 @@ void o_snake_draw(const OSnake* Snake)
         }
 
         // frameTicks == animation speed, (len >> 3) == sprite frames cycle
-        z_sprite_blitAlphaMaskRGBA(Z_SPRITE_SNAKE_MASK,
-                                   screen.x,
-                                   screen.y,
-                                   (frameBase - (len >> 3)) & frameMask,
-                                   &Snake->rgb,
-                                   alpha);
+        z_graphics_stateColorSetRgb(&Snake->rgb);
+        z_graphics_stateAlphaSet(alpha);
+        z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MASK,
+                               screen.x,
+                               screen.y,
+                               (frameBase - (len >> 3)) & frameMask);
     }
 
     z_graphics_stateAlignReset();

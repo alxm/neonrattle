@@ -40,6 +40,8 @@
 #include "generated/data_gfx_font_lcdnum_grid4x7.h"
 #include "generated/data_gfx_font_smallnum_grid3x5.h"
 
+static ZRgb g_rgb;
+static int g_alpha;
 static ZAlign g_align;
 
 void z_graphics_setup(void)
@@ -89,6 +91,21 @@ void z_graphics_setup(void)
     z_graphics_stateAlignReset();
 }
 
+void z_graphics_stateColorSetId(ZColorId Color)
+{
+    g_rgb = z_colors[Color].rgb;
+}
+
+void z_graphics_stateColorSetRgb(const ZRgb* Rgb)
+{
+    g_rgb = *Rgb;
+}
+
+void z_graphics_stateAlphaSet(int Alpha)
+{
+    g_alpha = Alpha;
+}
+
 void z_graphics_stateAlignSet(ZAlign Alignment)
 {
     g_align = Alignment;
@@ -118,14 +135,11 @@ void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
     z_platform_spriteBlit(Sprite, X, Y, Frame);
 }
 
-void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, ZColorId Fill, int Alpha)
+void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame)
 {
-    z_sprite_blitAlphaMaskRGBA(
-        AlphaMask, X, Y, Frame, &z_colors[Fill].rgb, Alpha);
-}
+    const ZRgb* Rgb = &g_rgb;
+    int Alpha = g_alpha;
 
-void z_sprite_blitAlphaMaskRGBA(ZSpriteId AlphaMask, int X, int Y, unsigned Frame, const ZRgb* Rgb, int Alpha)
-{
     if(Alpha == 0) {
         return;
     }
