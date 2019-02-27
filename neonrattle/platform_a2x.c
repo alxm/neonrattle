@@ -168,18 +168,6 @@ uint8_t z_sprite_framesNumGet(ZSpriteId Sprite)
     return (uint8_t)a_spriteframes_framesGetNum(g_sprites[Sprite]);
 }
 
-void z_draw_fill(ZColorId Color)
-{
-    a_pixel_colorSetPixel(z_colors[Color].pixel);
-    a_draw_fill();
-}
-
-void z_draw_rectangle(int X, int Y, int W, int H, ZColorId Color)
-{
-    a_pixel_colorSetPixel(z_colors[Color].pixel);
-    a_draw_rectangle(X, Y, W, H);
-}
-
 uint16_t z_fps_ticksGet(void)
 {
     return (uint16_t)a_fps_ticksGet();

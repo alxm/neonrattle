@@ -194,18 +194,6 @@ uint8_t z_sprite_framesNumGet(ZSpriteId Sprite)
     return g_sprites[Sprite].buffer[2];
 }
 
-void z_draw_fill(ZColorId ColorId)
-{
-    gb.display.setColor((Color)z_colors[ColorId].pixel);
-    gb.display.fill();
-}
-
-void z_draw_rectangle(int X, int Y, int W, int H, ZColorId ColorId)
-{
-    gb.display.setColor((Color)z_colors[ColorId].pixel);
-    gb.display.fillRect(X, Y, W, H);
-}
-
 uint16_t z_fps_ticksGet(void)
 {
     return (uint16_t)gb.frameCount;
