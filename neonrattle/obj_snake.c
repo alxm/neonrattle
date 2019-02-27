@@ -166,7 +166,7 @@ int o_snake_lifeGet(const OSnake* Snake)
 
 bool o_snake_flagsTest(const OSnake* Snake, OSnakeFlags Flags)
 {
-    return (Snake->flags & Flags) == Flags;
+    return Z_FLAG_TEST_ALL(Snake->flags, Flags);
 }
 
 static void updateColors(OSnake* Snake, bool CycleColors)
