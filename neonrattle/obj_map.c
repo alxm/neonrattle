@@ -207,8 +207,10 @@ void n_map_drawMinimap(ZVectorFix PlayerSnake)
     z_graphics_stateColorSetId(Z_COLOR_SNAKE_03);
     z_graphics_stateAlphaSet(256);
     z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
+
     z_sprite_blitAlphaMask(
         Z_SPRITE_SNAKE_MINIMAP, drawXStart + tile.x, drawYStart + tile.y, 0);
+
     z_graphics_stateAlignReset();
 }
 

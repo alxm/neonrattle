@@ -62,6 +62,7 @@ static void drawIcon(ZVectorInt* Coords, ZSpriteId Sprite, unsigned Frame, ZColo
 
     z_graphics_stateColorSetId(Color);
     z_graphics_stateAlphaSet(Alpha);
+
     z_sprite_blitAlphaMask(
         Sprite, Coords->x, Coords->y - 2 + (size.y & 1), Frame);
 
@@ -73,55 +74,59 @@ static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Hei
     int progressWidth = Width * Value / Total;
     int borderAlpha = Alpha >> 2;
 
+    z_graphics_stateAlphaSet(borderAlpha);
+    z_graphics_stateColorSetId(Value > 0 ? ProgressColor : BackgroundColor);
+
     z_draw_rectangleAlpha(Coords->x - 1,
                           Coords->y,
                           1,
-                          Height,
-                          Value > 0 ? ProgressColor : BackgroundColor,
-                          borderAlpha);
+                          Height);
+
+    z_graphics_stateColorSetId(ProgressColor);
+
     z_draw_rectangleAlpha(Coords->x,
                           Coords->y - 1,
                           progressWidth,
-                          1,
-                          ProgressColor,
-                          borderAlpha);
-    z_draw_rectangleAlpha(Coords->x,
-                          Coords->y,
-                          progressWidth,
-                          Height,
-                          ProgressColor,
-                          Alpha);
+                          1);
     z_draw_rectangleAlpha(Coords->x,
                           Coords->y + Height,
                           progressWidth,
-                          1,
-                          ProgressColor,
-                          borderAlpha);
+                          1);
+
+    z_graphics_stateAlphaSet(Alpha);
+
+    z_draw_rectangleAlpha(Coords->x,
+                          Coords->y,
+                          progressWidth,
+                          Height);
+
+    z_graphics_stateAlphaSet(borderAlpha);
+    z_graphics_stateColorSetId(BackgroundColor);
 
     z_draw_rectangleAlpha(Coords->x + progressWidth,
                           Coords->y - 1,
                           Width - progressWidth,
-                          1,
-                          BackgroundColor,
-                          borderAlpha);
-    z_draw_rectangleAlpha(Coords->x + progressWidth,
-                          Coords->y,
-                          Width - progressWidth,
-                          Height,
-                          BackgroundColor,
-                          Alpha);
+                          1);
+
     z_draw_rectangleAlpha(Coords->x + progressWidth,
                           Coords->y + Height,
                           Width - progressWidth,
-                          1,
-                          BackgroundColor,
-                          borderAlpha);
+                          1);
+
+    z_graphics_stateAlphaSet(Alpha);
+
+    z_draw_rectangleAlpha(Coords->x + progressWidth,
+                          Coords->y,
+                          Width - progressWidth,
+                          Height);
+
+    z_graphics_stateColorSetId(
+        Value >= Total ? ProgressColor : BackgroundColor);
+
     z_draw_rectangleAlpha(Coords->x + Width,
                           Coords->y,
                           1,
-                          Height,
-                          Value >= Total ? ProgressColor : BackgroundColor,
-                          borderAlpha);
+                          Height);
 
     Coords->x += Width + 2;
 }
@@ -174,6 +179,7 @@ void n_hud_draw(const OSnake* Snake)
     ZColorId color = Z_COLOR_SNAKE_01 + (score > hiscore);
 
     z_graphics_stateColorSetId(Z_COLOR_SNAKE_01);
+
     drawNumber(2,
                Z_SCREEN_H - 15,
                n_game_scoreGet(),
@@ -181,16 +187,19 @@ void n_hud_draw(const OSnake* Snake)
                Z_SPRITE_FONT_LCDNUM);
 
     z_graphics_stateColorSetId(color);
+
     drawNumber(2,
                Z_SCREEN_H - 7,
                z_math_maxu(score, hiscore),
                5,
                Z_SPRITE_FONT_SMALLNUM);
+
     z_graphics_stateAlphaSet(192);
     z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI, 22, Z_SCREEN_H - 7, 0);
 
     z_graphics_stateColorSetId(Z_COLOR_SNAKE_02);
     z_graphics_stateAlphaSet(192);
+
     z_sprite_blitAlphaMask(
         Z_SPRITE_ICON_LVL, Z_SCREEN_W - 31, Z_SCREEN_H - 7, 0);
     drawNumber(Z_SCREEN_W - 28,

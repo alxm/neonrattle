@@ -149,13 +149,18 @@ extern int z_sprite_sizeGetWidth(ZSpriteId Sprite);
 extern int z_sprite_sizeGetHeight(ZSpriteId Sprite);
 extern uint8_t z_sprite_framesNumGet(ZSpriteId Sprite);
 
-extern void z_draw_fill(ZColorId Color);
-extern void z_draw_rectangle(int X, int Y, int W, int H, ZColorId Color);
-extern void z_draw_rectangleAlpha(int X, int Y, int W, int H, ZColorId Color, int Alpha);
-
-static inline void z_draw_hline(int X1, int X2, int Y, ZColorId Color)
+static inline ZPixel z_pixel_fromRgbStruct(const ZRgb* Rgb)
 {
-    z_draw_rectangle(X1, Y, X2 - X1 + 1, 1, Color);
+    return z_pixel_fromRgb(Rgb->r, Rgb->g, Rgb->b);
+}
+
+extern void z_draw_fill(void);
+extern void z_draw_rectangle(int X, int Y, int W, int H);
+extern void z_draw_rectangleAlpha(int X, int Y, int W, int H);
+
+static inline void z_draw_hline(int X1, int X2, int Y)
+{
+    z_draw_rectangle(X1, Y, X2 - X1 + 1, 1);
 }
 
 static inline void z_draw_pixelBufferRgbAlpha(ZPixel* Dst, const ZRgb* Rgb, int Alpha)

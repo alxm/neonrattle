@@ -136,14 +136,13 @@ static void minimapDraw(unsigned Level, int X, int Y)
         }
     }
 
-    z_draw_rectangleAlpha(
-        X, Y - 1, Z_COORDS_MAP_W, 1, Z_COLOR_APPLE_02, 92);
-    z_draw_rectangleAlpha(
-        X, Y + Z_COORDS_MAP_H, Z_COORDS_MAP_W, 1, Z_COLOR_APPLE_02, 92);
-    z_draw_rectangleAlpha(
-        X - 1, Y, 1, Z_COORDS_MAP_H, Z_COLOR_APPLE_02, 92);
-    z_draw_rectangleAlpha(
-        X + Z_COORDS_MAP_W, Y, 1, Z_COORDS_MAP_H, Z_COLOR_APPLE_02, 92);
+    z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
+    z_graphics_stateAlphaSet(92);
+
+    z_draw_rectangleAlpha(X, Y - 1, Z_COORDS_MAP_W, 1);
+    z_draw_rectangleAlpha(X, Y + Z_COORDS_MAP_H, Z_COORDS_MAP_W, 1);
+    z_draw_rectangleAlpha(X - 1, Y, 1, Z_COORDS_MAP_H);
+    z_draw_rectangleAlpha(X + Z_COORDS_MAP_W, Y, 1, Z_COORDS_MAP_H);
 }
 
 void s_menu_draw(void)
@@ -189,20 +188,25 @@ void s_menu_draw(void)
     z_graphics_stateColorSetId(Z_COLOR_APPLE_01);
     z_graphics_stateAlphaSet(glowAlpha);
     z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
+
     z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE_GLOW,
                            drawX + sizeTitle.x / 2,
                            drawY + sizeTitle.y / 2,
                            0);
+
     z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
     z_graphics_stateAlphaSet(256);
+
     z_sprite_blitAlphaMask(Z_SPRITE_ALXM2GLOW,
                            startX - shake.y + sizeFooter.x / 2,
                            startY - shake.x + 42 + sizeFooter.y / 2,
                            0);
+
     z_graphics_stateAlignReset();
 
     z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
     z_graphics_stateAlphaSet(256);
+
     z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE, drawX, drawY, 0);
     z_sprite_blit(Z_SPRITE_ALXM2, startX - shake.y, startY - shake.x + 42, 0);
 
@@ -246,6 +250,7 @@ void s_menu_draw(void)
 
         z_graphics_stateColorSetId(color);
         z_graphics_stateAlphaSet(256);
+
         z_sprite_blitAlphaMask(sprite, drawX, drawY, 0);
     }
 

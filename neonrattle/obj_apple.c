@@ -139,6 +139,8 @@ void o_apple_draw(const OApple* Apple)
     z_graphics_stateColorSetId(Apple->color);
     z_graphics_stateAlphaSet(alpha);
     z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
+
     z_sprite_blitAlphaMask(sprite, screen.x, screen.y, 0);
+
     z_graphics_stateAlignReset();
 }

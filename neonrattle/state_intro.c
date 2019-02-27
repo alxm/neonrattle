@@ -45,7 +45,9 @@ static int g_pc;
 
 void s_intro_init(void)
 {
-    z_draw_fill(Z_COLOR_ALXM_BG);
+    z_graphics_stateColorSetId(Z_COLOR_ALXM_BG);
+
+    z_draw_fill();
 }
 
 void s_intro_tick(void)
@@ -81,7 +83,9 @@ void s_intro_tick(void)
 void s_intro_draw(void)
 {
     z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
+
     z_sprite_blit(Z_SPRITE_ALXM, Z_SCREEN_W / 2, Z_SCREEN_H / 2, 0);
+
     z_graphics_stateAlignReset();
 
     if(g_lines[g_pc] < 0) {
@@ -93,13 +97,15 @@ void s_intro_draw(void)
     int startX2 = Z_SCREEN_W / 2 + (logoSize.x + 1) / 2 - 2;
     int startY = Z_SCREEN_H / 2 - logoSize.y / 2;
 
+    z_graphics_stateColorSetId(Z_COLOR_ALXM_BG);
+
     for(int pc = g_pc; g_lines[pc] != -2; pc++) {
         while(g_lines[pc] != -1) {
             int8_t x = g_lines[pc++];
             int8_t y = g_lines[pc++];
 
-            z_draw_rectangle(startX1 + x, startY + y, 2, 1, Z_COLOR_ALXM_BG);
-            z_draw_rectangle(startX2 - x, startY + y, 2, 1, Z_COLOR_ALXM_BG);
+            z_draw_rectangle(startX1 + x, startY + y, 2, 1);
+            z_draw_rectangle(startX2 - x, startY + y, 2, 1);
         }
     }
 }
