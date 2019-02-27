@@ -56,7 +56,6 @@ void n_game_draw(void)
 {
     n_map_draw();
     o_snake_draw(g_game.snake);
-    n_map_drawMinimap(o_snake_coordsGet(g_game.snake));
     n_hud_draw(g_game.snake);
 }
 

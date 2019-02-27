@@ -203,7 +203,6 @@ void s_menu_draw(void)
                            0);
 
     z_graphics_stateAlignReset();
-
     z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
     z_graphics_stateAlphaSet(256);
 

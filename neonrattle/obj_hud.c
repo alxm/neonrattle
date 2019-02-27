@@ -18,6 +18,7 @@
 
 #include "obj_hud.h"
 
+#include "obj_camera.h"
 #include "obj_game.h"
 #include "obj_map.h"
 #include "util_graphics.h"
@@ -54,79 +55,49 @@ void n_hud_tick(const OSnake* Snake)
     }
 }
 
-static void drawIcon(ZVectorInt* Coords, ZSpriteId Sprite, unsigned Frame, ZColorId Color, int Alpha)
+static void drawIcon(int X, int Y, ZSpriteId Sprite, unsigned Frame, ZColorId Color, int Alpha)
 {
-    ZVectorInt size = z_sprite_sizeGet(Sprite);
-
     z_graphics_stateColorSetId(Color);
     z_graphics_stateAlphaSet(Alpha);
 
-    z_sprite_blitAlphaMask(
-        Sprite, Coords->x, Coords->y - 2 + (size.y & 1), Frame);
-
-    Coords->x += size.x + 2;
+    z_sprite_blitAlphaMask(Sprite, X, Y, Frame);
 }
 
-static void drawBar(ZVectorInt* Coords, int Value, int Total, int Width, int Height, ZColorId ProgressColor, ZColorId BackgroundColor, int Alpha)
+static void drawBar(int X, int Y, int Value, int Total, int Width, int Height, ZColorId ColorProg, ZColorId ColorBg, int Alpha)
 {
-    int progressWidth = Width * Value / Total;
+    int progWidth = Width * Value / Total;
     int borderAlpha = Alpha >> 2;
 
-    z_graphics_stateAlphaSet(borderAlpha);
-    z_graphics_stateColorSetId(Value > 0 ? ProgressColor : BackgroundColor);
-
-    z_draw_rectangleAlpha(Coords->x - 1,
-                          Coords->y,
-                          1,
-                          Height);
-
-    z_graphics_stateColorSetId(ProgressColor);
-
-    z_draw_rectangleAlpha(Coords->x,
-                          Coords->y - 1,
-                          progressWidth,
-                          1);
-    z_draw_rectangleAlpha(Coords->x,
-                          Coords->y + Height,
-                          progressWidth,
-                          1);
+    // Main bar
 
     z_graphics_stateAlphaSet(Alpha);
+    z_graphics_stateColorSetId(ColorProg);
 
-    z_draw_rectangleAlpha(Coords->x,
-                          Coords->y,
-                          progressWidth,
-                          Height);
+    z_draw_rectangleAlpha(X, Y, progWidth, Height);
+
+    z_graphics_stateColorSetId(ColorBg);
+
+    z_draw_rectangleAlpha(X + progWidth, Y, Width - progWidth, Height);
+
+    // Glow border
 
     z_graphics_stateAlphaSet(borderAlpha);
-    z_graphics_stateColorSetId(BackgroundColor);
+    z_graphics_stateColorSetId(Value > 0 ? ColorProg : ColorBg);
 
-    z_draw_rectangleAlpha(Coords->x + progressWidth,
-                          Coords->y - 1,
-                          Width - progressWidth,
-                          1);
+    z_draw_rectangleAlpha(X - 1, Y, 1, Height);
 
-    z_draw_rectangleAlpha(Coords->x + progressWidth,
-                          Coords->y + Height,
-                          Width - progressWidth,
-                          1);
+    z_graphics_stateColorSetId(ColorProg);
+    z_draw_rectangleAlpha(X, Y - 1, progWidth, 1);
+    z_draw_rectangleAlpha(X, Y + Height, progWidth, 1);
 
-    z_graphics_stateAlphaSet(Alpha);
+    z_graphics_stateColorSetId(ColorBg);
 
-    z_draw_rectangleAlpha(Coords->x + progressWidth,
-                          Coords->y,
-                          Width - progressWidth,
-                          Height);
+    z_draw_rectangleAlpha(X + progWidth, Y - 1, Width - progWidth, 1);
+    z_draw_rectangleAlpha(X + progWidth, Y + Height, Width - progWidth, 1);
 
-    z_graphics_stateColorSetId(
-        Value >= Total ? ProgressColor : BackgroundColor);
+    z_graphics_stateColorSetId(Value >= Total ? ColorProg : ColorBg);
 
-    z_draw_rectangleAlpha(Coords->x + Width,
-                          Coords->y,
-                          1,
-                          Height);
-
-    Coords->x += Width + 2;
+    z_draw_rectangleAlpha(X + Width, Y, 1, Height);
 }
 
 static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId Font)
@@ -142,67 +113,91 @@ static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId F
     }
 }
 
-void n_hud_draw(const OSnake* Snake)
+static void hudDrawApples(int X, int Y, const OSnake* Snake)
 {
-    static const ZColorId aColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_SNAKE_03};
-    static const ZColorId lColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_APPLE_03};
+    const ZColorId colors[] = {Z_COLOR_SNAKE_01, Z_COLOR_SNAKE_03};
+    ZColorId color = colors[z_timer_running(Z_TIMER_HUD_APPLES)];
 
-    ZColorId aColor = aColors[z_timer_running(Z_TIMER_HUD_APPLES)];
-    ZColorId lColor = lColors[g_hud.lifeColorIndex];
+    drawIcon(X, Y, Z_SPRITE_APPLE_MASK, 0, color, 256);
 
-    ZVectorInt pos = {1, 3};
+    X += 10;
+    Y += 2;
 
-    drawIcon(&pos, Z_SPRITE_APPLE_MASK, 0, aColor, 256);
-    drawBar(&pos,
+    drawBar(X,
+            Y,
             o_snake_eatenNumGet(Snake),
             n_map_applesNumGet(),
-            Z_SCREEN_W / 2 - pos.x,
+            Z_SCREEN_W / 2 - 2 - X,
             4,
-            aColor,
+            color,
             Z_COLOR_BG_GREEN_03,
             192);
+}
 
-    drawIcon(&pos, Z_SPRITE_ICON_HEART, 0, lColor, 256);
-    drawBar(&pos,
+static void hudDrawLife(int X, int Y, const OSnake* Snake)
+{
+    const ZColorId lColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_APPLE_03};
+    ZColorId lColor = lColors[g_hud.lifeColorIndex];
+
+    drawIcon(X, Y, Z_SPRITE_ICON_HEART, 0, lColor, 256);
+
+    X += 9;
+    Y += 1;
+
+    drawBar(X,
+            Y,
             o_snake_lifeGet(Snake),
             O_SNAKE_LIFE_MAX,
-            Z_SCREEN_W - pos.x - 2,
+            Z_SCREEN_W - 2 - X,
             4,
             lColor,
             Z_COLOR_BG_GREEN_03,
             192);
+}
 
+static void hudDrawScore(int X, int Y)
+{
     unsigned score = n_game_scoreGet();
     unsigned hiscore = z_save_hiscoreGet(n_game_levelGet());
     ZColorId color = Z_COLOR_SNAKE_01 + (score > hiscore);
 
     z_graphics_stateColorSetId(Z_COLOR_SNAKE_01);
 
-    drawNumber(2,
-               Z_SCREEN_H - 15,
-               n_game_scoreGet(),
-               4,
-               Z_SPRITE_FONT_LCDNUM);
+    drawNumber(X, Y, n_game_scoreGet(), 4, Z_SPRITE_FONT_LCDNUM);
+
+    Y += 8;
 
     z_graphics_stateColorSetId(color);
 
-    drawNumber(2,
-               Z_SCREEN_H - 7,
-               z_math_maxu(score, hiscore),
-               5,
-               Z_SPRITE_FONT_SMALLNUM);
+    drawNumber(X, Y, z_math_maxu(score, hiscore), 5, Z_SPRITE_FONT_SMALLNUM);
+
+    X += 20;
 
     z_graphics_stateAlphaSet(192);
-    z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI, 22, Z_SCREEN_H - 7, 0);
 
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI, X, Y, 0);
+}
+
+static void hudDrawLevel(int X, int Y)
+{
     z_graphics_stateColorSetId(Z_COLOR_SNAKE_02);
     z_graphics_stateAlphaSet(192);
 
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_ICON_LVL, Z_SCREEN_W - 31, Z_SCREEN_H - 7, 0);
-    drawNumber(Z_SCREEN_W - 28,
-               Z_SCREEN_H - 15,
-               n_game_levelGet() + 1,
-               2,
-               Z_SPRITE_FONT_LCDNUM);
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL, X, Y + 8, 0);
+
+    drawNumber(X + 3, Y, n_game_levelGet() + 1, 2, Z_SPRITE_FONT_LCDNUM);
+}
+
+void n_hud_draw(const OSnake* Snake)
+{
+    ZVectorInt shake = n_camera_shakeGet();
+
+    hudDrawApples(1 + shake.x, 1 + shake.y, Snake);
+    hudDrawLife(Z_SCREEN_W / 2 + 2 + shake.x, 2 - shake.y, Snake);
+    hudDrawScore(2 - shake.x, Z_SCREEN_H - 15 + shake.y);
+    hudDrawLevel(Z_SCREEN_W - 31 - shake.x, Z_SCREEN_H - 15 - shake.y);
+
+    n_map_drawMinimap(Z_SCREEN_W - 18 + shake.x,
+                      Z_SCREEN_H - 18 + shake.y,
+                      o_snake_coordsGet(Snake));
 }

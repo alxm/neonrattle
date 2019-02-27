@@ -177,13 +177,10 @@ void n_map_draw(void)
     }
 }
 
-void n_map_drawMinimap(ZVectorFix PlayerSnake)
+void n_map_drawMinimap(int X, int Y, ZVectorFix SnakeCoords)
 {
-    int drawXStart = Z_SCREEN_W - Z_COORDS_MAP_W - 2;
-    int drawYStart = Z_SCREEN_H - Z_COORDS_MAP_H - 2;
-
-    for(int y = 0, drawY = drawYStart; y < Z_COORDS_MAP_H; y++, drawY++) {
-        for(int x = 0, drawX = drawXStart; x < Z_COORDS_MAP_W; x++, drawX++) {
+    for(int y = 0, drawY = Y; y < Z_COORDS_MAP_H; y++, drawY++) {
+        for(int x = 0, drawX = X; x < Z_COORDS_MAP_W; x++, drawX++) {
             ZColorId color;
             int alpha;
 
@@ -202,14 +199,13 @@ void n_map_drawMinimap(ZVectorFix PlayerSnake)
         }
     }
 
-    ZVectorInt tile = z_vectorfix_toInt(PlayerSnake);
+    ZVectorInt tile = z_vectorfix_toInt(SnakeCoords);
 
     z_graphics_stateColorSetId(Z_COLOR_SNAKE_03);
     z_graphics_stateAlphaSet(256);
     z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
 
-    z_sprite_blitAlphaMask(
-        Z_SPRITE_SNAKE_MINIMAP, drawXStart + tile.x, drawYStart + tile.y, 0);
+    z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MINIMAP, X + tile.x, Y + tile.y, 0);
 
     z_graphics_stateAlignReset();
 }

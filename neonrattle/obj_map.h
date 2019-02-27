@@ -29,7 +29,7 @@ extern void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY);
 extern void n_map_tick(void);
 extern void n_map_draw(void);
 
-extern void n_map_drawMinimap(ZVectorFix PlayerSnake);
+extern void n_map_drawMinimap(int X, int Y, ZVectorFix SnakeCoords);
 
 extern void n_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart);
 
