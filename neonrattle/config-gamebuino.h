@@ -18,6 +18,8 @@
 
 #pragma once
 
+#define A_CONFIG_BUILD_DEBUG 1
+
 #define A_CONFIG_FPS_TICK 30
 
 #define A_CONFIG_SCREEN_WIDTH 80

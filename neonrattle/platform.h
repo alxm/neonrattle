@@ -26,7 +26,7 @@
     #define Z_PLATFORM_META 1
 #endif
 
-#define Z_DEBUG 0
+#define Z_DEBUG A_CONFIG_BUILD_DEBUG
 
 #ifdef __cplusplus
 #define Z_EXTERN_C_START extern "C" {
