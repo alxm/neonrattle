@@ -56,7 +56,6 @@ void s_intro_tick(void)
         || z_button_pressGetOnce(Z_BUTTON_A)
         || z_button_pressGetOnce(Z_BUTTON_B)) {
 
-        z_timer_stop(Z_TIMER_G1);
         z_state_set(Z_STATE_MENU);
         z_swipe_start(Z_SWIPE_FADE_HIDE);
 
@@ -76,7 +75,7 @@ void s_intro_tick(void)
     }
 
     if(g_lines[g_pc] == -2) {
-        z_timer_start(Z_TIMER_G1, Z_LOGO_WAIT_DS);
+        z_timer_start(Z_TIMER_G1, Z_LOGO_WAIT_DS, false);
     }
 }
 

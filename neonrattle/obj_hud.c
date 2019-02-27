@@ -37,7 +37,7 @@ void n_hud_tick(const OSnake* Snake)
 {
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_HURT)) {
         if(!z_timer_running(Z_TIMER_HUD_LIFE)) {
-            z_timer_start(Z_TIMER_HUD_LIFE, Z_HUD_LIFE_BLINK_DS);
+            z_timer_start(Z_TIMER_HUD_LIFE, Z_HUD_LIFE_BLINK_DS, true);
             g_hud.lifeColorIndex = 1;
         } else if(z_timer_expired(Z_TIMER_HUD_LIFE)) {
             g_hud.lifeColorIndex = !g_hud.lifeColorIndex;
@@ -49,10 +49,8 @@ void n_hud_tick(const OSnake* Snake)
 
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_ATE)) {
         if(!z_timer_running(Z_TIMER_HUD_APPLES)) {
-            z_timer_start(Z_TIMER_HUD_APPLES, Z_HUD_APPLES_BLINK_DS);
+            z_timer_start(Z_TIMER_HUD_APPLES, Z_HUD_APPLES_BLINK_DS, false);
         }
-    } else if(z_timer_expired(Z_TIMER_HUD_APPLES)) {
-        z_timer_stop(Z_TIMER_HUD_APPLES);
     }
 }
 
@@ -146,7 +144,7 @@ static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId F
 
 void n_hud_draw(const OSnake* Snake)
 {
-    static const ZColorId aColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_BG_GREEN_04};
+    static const ZColorId aColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_SNAKE_03};
     static const ZColorId lColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_APPLE_03};
 
     ZColorId aColor = aColors[z_timer_running(Z_TIMER_HUD_APPLES)];

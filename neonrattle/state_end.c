@@ -27,7 +27,7 @@
 
 void s_end_init(void)
 {
-    z_timer_start(Z_TIMER_G1, 8);
+    z_timer_start(Z_TIMER_G1, 8, false);
     z_sfx_play(Z_SFX_FINISHED);
     z_light_pulseSet(Z_LIGHT_LEVEL_COMPLETE);
 }
@@ -37,8 +37,6 @@ void s_end_tick(void)
     n_game_tick();
 
     if(z_timer_expired(Z_TIMER_G1)) {
-        z_timer_stop(Z_TIMER_G1);
-
         unsigned nextLevel = n_game_levelGet() + 1;
 
         if(nextLevel < Z_LEVELS_NUM) {
