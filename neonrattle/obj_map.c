@@ -24,10 +24,10 @@
 #include "util_graphics.h"
 
 #define O_TILE_APPLES_MAX 4
+#define Z_WALL_FLAG Z_FLAG_BIT(7)
 
 typedef struct {
-    uint8_t wall;
-    uint8_t numApples;
+    uint8_t data; // MSB == wall, lower rest == numApples
 } ZMapTile;
 
 typedef struct {
@@ -41,6 +41,28 @@ typedef struct {
 } NMap;
 
 static NMap g_map;
+
+static inline bool tileWallGet(int X, int Y)
+{
+    return Z_FLAG_TEST_ANY(g_map.tiles[Y][X].data, Z_WALL_FLAG);
+}
+
+static inline void tileWallSet(int X, int Y)
+{
+    Z_FLAG_SET(g_map.tiles[Y][X].data, Z_WALL_FLAG);
+}
+
+static inline unsigned tileApplesGet(int X, int Y)
+{
+    return g_map.tiles[Y][X].data & (Z_WALL_FLAG - 1);
+}
+
+static inline void tileApplesSet(int X, int Y, unsigned NumApples)
+{
+    g_map.tiles[Y][X].data &= Z_WALL_FLAG;
+    g_map.tiles[Y][X].data =
+        (uint8_t)(g_map.tiles[Y][X].data | (NumApples & (Z_WALL_FLAG - 1)));
+}
 
 void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY)
 {
@@ -59,8 +81,11 @@ void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY)
         for(int x = 0; x < Z_COORDS_MAP_W; x++) {
             ZPixel p = *pixels++;
 
-            g_map.tiles[y][x].wall = (p == z_colors[Z_COLOR_MAP_WHITE].pixel);
-            g_map.tiles[y][x].numApples = 0;
+            g_map.tiles[y][x].data = 0;
+
+            if(p == z_colors[Z_COLOR_MAP_WHITE].pixel) {
+                tileWallSet(x, y);
+            }
 
             if(p == z_colors[Z_COLOR_MAP_GREEN].pixel) {
                 *StartX = z_fix_fromInt(x) + Z_FIX_ONE / 2;
@@ -89,22 +114,22 @@ void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY)
             ZVectorInt gridTileOffset = z_coords_tileToGridOffset(
                                             (ZVectorInt){x, y});
 
-            if(gridTileOffset.x > 0 && !g_map.tiles[y][x - 1].wall) {
+            if(gridTileOffset.x > 0 && !tileWallGet(x - 1, y)) {
                 startX = 0;
             }
 
             if(gridTileOffset.x < Z_COORDS_TILES_PER_GRID - 1
-                && !g_map.tiles[y][x + 1].wall) {
+                && !tileWallGet(x + 1, y)) {
 
                 endX = Z_FIX_ONE;
             }
 
-            if(gridTileOffset.y > 0 && !g_map.tiles[y - 1][x].wall) {
+            if(gridTileOffset.y > 0 && !tileWallGet(x, y - 1)) {
                 startY = 0;
             }
 
             if(gridTileOffset.y < Z_COORDS_TILES_PER_GRID - 1
-                && !g_map.tiles[y + 1][x].wall) {
+                && !tileWallGet(x, y + 1)) {
 
                 endY = Z_FIX_ONE;
             }
@@ -119,7 +144,7 @@ void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY)
 
                 if(a != NULL) {
                     z_list_addLast(&g_map.grid[grid.y][grid.x].apples, a);
-                    g_map.tiles[y][x].numApples++;
+                    tileApplesSet(x, y, tileApplesGet(x, y) + 1);
                     g_map.totalApples++;
                 }
             }
@@ -161,7 +186,7 @@ void n_map_draw(void)
             tileX++, screenX += Z_COORDS_PIXELS_PER_UNIT) {
 
             z_sprite_blit(Z_SPRITE_TILES,
-                          (unsigned)(g_map.tiles[tileY][tileX].wall * 4
+                          (unsigned)(tileWallGet(tileX, tileY) * 4
                                         + !(tileY & 1) * 2 + !(tileX & 1)),
                           screenX,
                           screenY);
@@ -184,10 +209,10 @@ void n_map_drawMinimap(int X, int Y, ZVectorFix SnakeCoords)
             ZColorId color;
             int alpha;
 
-            if(g_map.tiles[y][x].wall) {
+            if(tileWallGet(x, y)) {
                 color = Z_COLOR_SNAKE_02;
                 alpha = 128;
-            } else if(g_map.tiles[y][x].numApples > 0) {
+            } else if(tileApplesGet(x, y) > 0) {
                 color = Z_COLOR_APPLE_02;
                 alpha = 224;
             } else {
@@ -294,12 +319,12 @@ void n_map_appleEat(OApple* Apple)
 {
     ZVectorInt tile = z_vectorfix_toInt(o_apple_coordsGet(Apple));
 
-    g_map.tiles[tile.y][tile.x].numApples--;
+    tileApplesSet(tile.x, tile.y, tileApplesGet(tile.x, tile.y) - 1);
 
     o_apple_eatSet(Apple);
 }
 
 bool n_map_isWall(ZVectorInt Tile)
 {
-    return g_map.tiles[Tile.y][Tile.x].wall;
+    return tileWallGet(Tile.x, Tile.y);
 }
