@@ -18,13 +18,12 @@
 
 #include "util_input.h"
 
-#include "util_fps.h"
 #include "util_timer.h"
 
 typedef struct {
     uint8_t pressed;
     uint8_t waitForRelease;
-    uint16_t lastFramePressed;
+    uint16_t ticksHeldDown;
 } ZButton;
 
 static ZButton g_buttons[Z_BUTTON_NUM];
@@ -38,8 +37,6 @@ void z_input_reset(void)
 
 void z_input_tick(void)
 {
-    uint16_t nextFrame = (uint16_t)(z_fps_ticksGet() + 1);
-
     for(int b = 0; b < Z_BUTTON_NUM; b++) {
         bool pressed = z_platform_buttonPressGet(b);
 
@@ -48,8 +45,12 @@ void z_input_tick(void)
                 g_buttons[b].waitForRelease = false;
             }
         } else {
-            if(pressed && !g_buttons[b].pressed) {
-                g_buttons[b].lastFramePressed = nextFrame;
+            if(pressed && g_buttons[b].pressed) {
+                if(g_buttons[b].ticksHeldDown < UINT16_MAX) {
+                    g_buttons[b].ticksHeldDown++;
+                }
+            } else {
+                g_buttons[b].ticksHeldDown = UINT16_MAX;
             }
 
             g_buttons[b].pressed = pressed;
@@ -75,11 +76,10 @@ bool z_button_pressGetOnce(ZButtonId Button)
 
 bool z_button_pressGetDelay(ZButtonId Button, unsigned Ms)
 {
-    uint16_t now = z_fps_ticksGet();
-    uint16_t ticksDiff = (uint16_t)(now - g_buttons[Button].lastFramePressed);
+    if(g_buttons[Button].pressed
+        && g_buttons[Button].ticksHeldDown >= z_timer_msToTicks(Ms)) {
 
-    if(g_buttons[Button].pressed && ticksDiff >= z_timer_msToTicks(Ms)) {
-        g_buttons[Button].lastFramePressed = now;
+        g_buttons[Button].ticksHeldDown = 0;
 
         return true;
     }
@@ -102,5 +102,4 @@ void z_button_pressClear(ZButtonId Button)
 {
     g_buttons[Button].pressed = false;
     g_buttons[Button].waitForRelease = true;
-    g_buttons[Button].lastFramePressed = z_fps_ticksGet();
 }
