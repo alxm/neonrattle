@@ -22,7 +22,7 @@ typedef enum {
     Z_EXPIRED = Z_FLAG_BIT(0),
     Z_REPEAT = Z_FLAG_BIT(1),
     Z_RUNNING = Z_FLAG_BIT(2),
-} ATimerFlags;
+} ZTimerFlags;
 
 typedef struct {
     unsigned base;

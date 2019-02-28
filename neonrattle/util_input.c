@@ -20,10 +20,14 @@
 
 #include "util_timer.h"
 
+typedef enum {
+    Z_PRESSED = Z_FLAG_BIT(0),
+    Z_WAIT_FOR_RELEASE = Z_FLAG_BIT(1),
+} ZButtonFlags;
+
 typedef struct {
-    uint8_t pressed;
-    uint8_t waitForRelease;
-    uint16_t ticksHeldDown;
+    unsigned flags;
+    unsigned ticksHeldDown;
 } ZButton;
 
 static ZButton g_buttons[Z_BUTTON_NUM];
@@ -38,34 +42,39 @@ void z_input_reset(void)
 void z_input_tick(void)
 {
     for(int b = 0; b < Z_BUTTON_NUM; b++) {
+        ZButton* button = &g_buttons[b];
         bool pressed = z_platform_buttonPressGet(b);
 
-        if(g_buttons[b].waitForRelease) {
+        if(Z_FLAG_TEST_ANY(button->flags, Z_WAIT_FOR_RELEASE)) {
             if(!pressed) {
-                g_buttons[b].waitForRelease = false;
+                Z_FLAG_CLEAR(button->flags, Z_WAIT_FOR_RELEASE);
             }
         } else {
-            if(pressed && g_buttons[b].pressed) {
-                if(g_buttons[b].ticksHeldDown < UINT16_MAX) {
-                    g_buttons[b].ticksHeldDown++;
+            if(pressed && Z_FLAG_TEST_ANY(button->flags, Z_PRESSED)) {
+                if(button->ticksHeldDown < UINT_MAX) {
+                    button->ticksHeldDown++;
                 }
             } else {
-                g_buttons[b].ticksHeldDown = UINT16_MAX;
+                button->ticksHeldDown = UINT_MAX;
             }
 
-            g_buttons[b].pressed = pressed;
+            if(pressed) {
+                Z_FLAG_SET(button->flags, Z_PRESSED);
+            } else {
+                Z_FLAG_CLEAR(button->flags, Z_PRESSED);
+            }
         }
     }
 }
 
 bool z_button_pressGet(ZButtonId Button)
 {
-    return g_buttons[Button].pressed;
+    return Z_FLAG_TEST_ANY(g_buttons[Button].flags, Z_PRESSED);
 }
 
 bool z_button_pressGetOnce(ZButtonId Button)
 {
-    if(g_buttons[Button].pressed) {
+    if(Z_FLAG_TEST_ANY(g_buttons[Button].flags, Z_PRESSED)) {
         z_button_pressClear(Button);
 
         return true;
@@ -76,10 +85,12 @@ bool z_button_pressGetOnce(ZButtonId Button)
 
 bool z_button_pressGetDelay(ZButtonId Button, unsigned Ms)
 {
-    if(g_buttons[Button].pressed
-        && g_buttons[Button].ticksHeldDown >= z_timer_msToTicks(Ms)) {
+    ZButton* button = &g_buttons[Button];
 
-        g_buttons[Button].ticksHeldDown = 0;
+    if(Z_FLAG_TEST_ANY(button->flags, Z_PRESSED)
+        && button->ticksHeldDown >= z_timer_msToTicks(Ms)) {
+
+        button->ticksHeldDown = 0;
 
         return true;
     }
@@ -90,7 +101,7 @@ bool z_button_pressGetDelay(ZButtonId Button, unsigned Ms)
 bool z_button_pressGetAny(void)
 {
     for(int b = 0; b < Z_BUTTON_NUM; b++) {
-        if(g_buttons[b].pressed) {
+        if(Z_FLAG_TEST_ANY(g_buttons[b].flags, Z_PRESSED)) {
             return true;
         }
     }
@@ -100,6 +111,8 @@ bool z_button_pressGetAny(void)
 
 void z_button_pressClear(ZButtonId Button)
 {
-    g_buttons[Button].pressed = false;
-    g_buttons[Button].waitForRelease = true;
+    ZButton* button = &g_buttons[Button];
+
+    Z_FLAG_CLEAR(button->flags, Z_PRESSED);
+    Z_FLAG_SET(button->flags, Z_WAIT_FOR_RELEASE);
 }
