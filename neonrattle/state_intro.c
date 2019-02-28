@@ -83,7 +83,7 @@ void s_intro_draw(void)
 {
     z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
 
-    z_sprite_blit(Z_SPRITE_ALXM, Z_SCREEN_W / 2, Z_SCREEN_H / 2, 0);
+    z_sprite_blit(Z_SPRITE_ALXM, 0, Z_SCREEN_W / 2, Z_SCREEN_H / 2);
 
     z_graphics_stateAlignReset();
 

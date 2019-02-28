@@ -387,9 +387,9 @@ void o_snake_draw(const OSnake* Snake)
 
         // frameTicks == animation speed, (len >> 3) == sprite frames cycle
         z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MASK,
+                               (frameBase - (len >> 3)) & frameMask,
                                screen.x,
-                               screen.y,
-                               (frameBase - (len >> 3)) & frameMask);
+                               screen.y);
     }
 
     z_graphics_stateAlignReset();

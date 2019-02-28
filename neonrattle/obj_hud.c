@@ -60,7 +60,7 @@ static void drawIcon(int X, int Y, ZSpriteId Sprite, unsigned Frame, ZColorId Co
     z_graphics_stateColorSetId(Color);
     z_graphics_stateAlphaSet(Alpha);
 
-    z_sprite_blitAlphaMask(Sprite, X, Y, Frame);
+    z_sprite_blitAlphaMask(Sprite, Frame, X, Y);
 }
 
 static void drawBar(int X, int Y, int Value, int Total, int Width, int Height, ZColorId ColorProg, ZColorId ColorBg, int Alpha)
@@ -109,7 +109,7 @@ static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId F
     z_graphics_stateAlphaSet(256);
 
     for(int d = NumDigits; d--; X -= charSize, Number /= 10) {
-        z_sprite_blitAlphaMask(Font, X, Y, Number % 10);
+        z_sprite_blitAlphaMask(Font, Number % 10, X, Y);
     }
 }
 
@@ -175,7 +175,7 @@ static void hudDrawScore(int X, int Y)
 
     z_graphics_stateAlphaSet(192);
 
-    z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI, X, Y, 0);
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI, 0, X, Y);
 }
 
 static void hudDrawLevel(int X, int Y)
@@ -183,7 +183,7 @@ static void hudDrawLevel(int X, int Y)
     z_graphics_stateColorSetId(Z_COLOR_SNAKE_02);
     z_graphics_stateAlphaSet(192);
 
-    z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL, X, Y + 8, 0);
+    z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL, 0, X, Y + 8);
 
     drawNumber(X + 3, Y, n_game_levelGet() + 1, 2, Z_SPRITE_FONT_LCDNUM);
 }

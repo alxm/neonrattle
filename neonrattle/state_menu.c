@@ -171,9 +171,9 @@ void s_menu_draw(void)
     for(int y = 0; y < Z_Y_TILES; y++) {
         for(int x = 0; x < Z_X_TILES; x++) {
             z_sprite_blit(Z_SPRITE_TILES,
+                          (unsigned)(8 + (y & 1) * 2 + (x & 1)),
                           offsetX + x * Z_COORDS_PIXELS_PER_UNIT,
-                          offsetY + y * Z_COORDS_PIXELS_PER_UNIT,
-                          (unsigned)(8 + (y & 1) * 2 + (x & 1)));
+                          offsetY + y * Z_COORDS_PIXELS_PER_UNIT);
         }
     }
 
@@ -190,24 +190,24 @@ void s_menu_draw(void)
     z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
 
     z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE_GLOW,
+                           0,
                            drawX + sizeTitle.x / 2,
-                           drawY + sizeTitle.y / 2,
-                           0);
+                           drawY + sizeTitle.y / 2);
 
     z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
     z_graphics_stateAlphaSet(256);
 
     z_sprite_blitAlphaMask(Z_SPRITE_ALXM2GLOW,
+                           0,
                            startX - shake.y + sizeFooter.x / 2,
-                           startY - shake.x + 42 + sizeFooter.y / 2,
-                           0);
+                           startY - shake.x + 42 + sizeFooter.y / 2);
 
     z_graphics_stateAlignReset();
     z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
     z_graphics_stateAlphaSet(256);
 
-    z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE, drawX, drawY, 0);
-    z_sprite_blit(Z_SPRITE_ALXM2, startX - shake.y, startY - shake.x + 42, 0);
+    z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE, 0, drawX, drawY);
+    z_sprite_blit(Z_SPRITE_ALXM2, 0, startX - shake.y, startY - shake.x + 42);
 
     int minimapX = -1, minimapY = 0;
     unsigned now = z_fps_ticksGet() / 4;
@@ -250,7 +250,7 @@ void s_menu_draw(void)
         z_graphics_stateColorSetId(color);
         z_graphics_stateAlphaSet(256);
 
-        z_sprite_blitAlphaMask(sprite, drawX, drawY, 0);
+        z_sprite_blitAlphaMask(sprite, 0, drawX, drawY);
     }
 
     if(minimapX != -1) {

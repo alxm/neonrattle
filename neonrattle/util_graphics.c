@@ -116,7 +116,7 @@ void z_graphics_stateAlignReset(void)
     g_align = Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP;
 }
 
-void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
+void z_sprite_blit(ZSpriteId Sprite, unsigned Frame, int X, int Y)
 {
     ZVectorInt spriteSize = z_sprite_sizeGet(Sprite);
 
@@ -135,7 +135,7 @@ void z_sprite_blit(ZSpriteId Sprite, int X, int Y, unsigned Frame)
     z_platform_spriteBlit(Sprite, X, Y, Frame);
 }
 
-void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, int X, int Y, unsigned Frame)
+void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, unsigned Frame, int X, int Y)
 {
     if(g_alpha == 0) {
         return;

@@ -161,10 +161,10 @@ void n_map_draw(void)
             tileX++, screenX += Z_COORDS_PIXELS_PER_UNIT) {
 
             z_sprite_blit(Z_SPRITE_TILES,
-                          screenX,
-                          screenY,
                           (unsigned)(g_map.tiles[tileY][tileX].wall * 4
-                                        + !(tileY & 1) * 2 + !(tileX & 1)));
+                                        + !(tileY & 1) * 2 + !(tileX & 1)),
+                          screenX,
+                          screenY);
         }
     }
 
@@ -205,7 +205,7 @@ void n_map_drawMinimap(int X, int Y, ZVectorFix SnakeCoords)
     z_graphics_stateAlphaSet(256);
     z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
 
-    z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MINIMAP, X + tile.x, Y + tile.y, 0);
+    z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MINIMAP, 0, X + tile.x, Y + tile.y);
 
     z_graphics_stateAlignReset();
 }
