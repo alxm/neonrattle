@@ -41,8 +41,8 @@ void* z_pool_alloc(ZPool* Pool)
 {
     if(Pool->freeList == NULL) {
         #if Z_DEBUG_INSTRUMENT
-            printf("%05u: %s pool out of space (%d)\n",
-                   z_fps_ticksGet(),
+            printf("%08x: %s pool out of space (%d)\n",
+                   (uint32_t)z_fps_ticksGet(),
                    Pool->name,
                    ++(Pool->fails));
         #endif

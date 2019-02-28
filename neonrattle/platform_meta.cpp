@@ -189,17 +189,17 @@ int z_sprite_sizeGetHeight(ZSpriteId Sprite)
     return g_sprites[Sprite].buffer[1];
 }
 
-uint8_t z_sprite_framesNumGet(ZSpriteId Sprite)
+unsigned z_sprite_framesNumGet(ZSpriteId Sprite)
 {
     return g_sprites[Sprite].buffer[2];
 }
 
-uint16_t z_fps_ticksGet(void)
+unsigned z_fps_ticksGet(void)
 {
-    return (uint16_t)gb.frameCount;
+    return gb.frameCount;
 }
 
-bool z_fps_ticksNth(uint8_t N)
+bool z_fps_ticksNth(unsigned N)
 {
     return (gb.frameCount % N) == 0;
 }

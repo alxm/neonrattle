@@ -163,17 +163,17 @@ int z_sprite_sizeGetHeight(ZSpriteId Sprite)
     return a_sprite_sizeGetHeight(getCurrentSprite(Sprite, 0));
 }
 
-uint8_t z_sprite_framesNumGet(ZSpriteId Sprite)
+unsigned z_sprite_framesNumGet(ZSpriteId Sprite)
 {
-    return (uint8_t)a_spriteframes_framesGetNum(g_sprites[Sprite]);
+    return a_spriteframes_framesGetNum(g_sprites[Sprite]);
 }
 
-uint16_t z_fps_ticksGet(void)
+unsigned z_fps_ticksGet(void)
 {
-    return (uint16_t)a_fps_ticksGet();
+    return a_fps_ticksGet();
 }
 
-bool z_fps_ticksNth(uint8_t N)
+bool z_fps_ticksNth(unsigned N)
 {
     return a_fps_ticksNth(N);
 }

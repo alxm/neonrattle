@@ -147,7 +147,7 @@ extern void z_sprite_blitAlphaMask(ZSpriteId AlphaMask, unsigned Frame, int X, i
 extern ZVectorInt z_sprite_sizeGet(ZSpriteId Sprite);
 extern int z_sprite_sizeGetWidth(ZSpriteId Sprite);
 extern int z_sprite_sizeGetHeight(ZSpriteId Sprite);
-extern uint8_t z_sprite_framesNumGet(ZSpriteId Sprite);
+extern unsigned z_sprite_framesNumGet(ZSpriteId Sprite);
 
 static inline ZPixel z_pixel_fromRgbStruct(const ZRgb* Rgb)
 {
