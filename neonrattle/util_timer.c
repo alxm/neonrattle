@@ -82,12 +82,12 @@ void z_timer_stop(ZTimerId Timer)
     Z_FLAG_CLEAR(timer->flags, Z_RUNNING | Z_EXPIRED);
 }
 
-bool z_timer_running(ZTimerId Timer)
+bool z_timer_isRunning(ZTimerId Timer)
 {
     return Z_FLAG_TEST_ANY(g_timers[Timer].flags, Z_RUNNING);
 }
 
-bool z_timer_expired(ZTimerId Timer)
+bool z_timer_isExpired(ZTimerId Timer)
 {
     return Z_FLAG_TEST_ANY(g_timers[Timer].flags, Z_EXPIRED);
 }

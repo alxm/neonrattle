@@ -52,7 +52,7 @@ void s_intro_init(void)
 
 void s_intro_tick(void)
 {
-    if(z_timer_expired(Z_TIMER_G1)
+    if(z_timer_isExpired(Z_TIMER_G1)
         || z_button_pressGetOnce(Z_BUTTON_A)
         || z_button_pressGetOnce(Z_BUTTON_B)) {
 
@@ -62,7 +62,7 @@ void s_intro_tick(void)
         g_pc = Z_ARRAY_LEN(g_lines) - 1;
     }
 
-    if(z_state_changed() || z_timer_running(Z_TIMER_G1)) {
+    if(z_state_changed() || z_timer_isRunning(Z_TIMER_G1)) {
         return;
     }
 

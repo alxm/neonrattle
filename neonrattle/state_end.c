@@ -36,7 +36,7 @@ void s_end_tick(void)
 {
     n_game_tick();
 
-    if(z_timer_expired(Z_TIMER_G1)) {
+    if(z_timer_isExpired(Z_TIMER_G1)) {
         unsigned nextLevel = n_game_levelGet() + 1;
 
         if(nextLevel < Z_LEVELS_NUM) {

@@ -36,8 +36,8 @@ extern void z_timer_tick(void);
 
 extern void z_timer_start(ZTimerId Timer, unsigned Ms, bool Repeat);
 extern void z_timer_stop(ZTimerId Timer);
-extern bool z_timer_running(ZTimerId Timer);
-extern bool z_timer_expired(ZTimerId Timer);
+extern bool z_timer_isRunning(ZTimerId Timer);
+extern bool z_timer_isExpired(ZTimerId Timer);
 
 static inline unsigned z_timer_msToTicks(unsigned Ms)
 {

@@ -48,7 +48,7 @@ void n_camera_tick(ZVectorFix Origin)
         z_coords_pixelsToUnits(Z_SCREEN_H / 2),
         z_fix_fromInt(Z_COORDS_MAP_H) - z_coords_pixelsToUnits(Z_SCREEN_H / 2));
 
-    if(z_timer_running(Z_TIMER_CAMERA_SHAKE)) {
+    if(z_timer_isRunning(Z_TIMER_CAMERA_SHAKE)) {
         g_camera.shake = (ZVectorInt){-1 + z_random_int(3),
                                       -1 + z_random_int(3)};
     } else {

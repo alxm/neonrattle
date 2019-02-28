@@ -35,7 +35,7 @@ void s_died_tick(void)
 {
     n_game_tick();
 
-    if(z_timer_expired(Z_TIMER_G1)) {
+    if(z_timer_isExpired(Z_TIMER_G1)) {
         z_state_set(Z_STATE_MENU);
         z_swipe_start(Z_SWIPE_LINES_HIDE);
     }

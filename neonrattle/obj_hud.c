@@ -49,7 +49,7 @@ void n_hud_new(void)
 void n_hud_tick(const OSnake* Snake)
 {
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_HURT)) {
-        if(!z_timer_running(Z_TIMER_HUD_LIFE)) {
+        if(!z_timer_isRunning(Z_TIMER_HUD_LIFE)) {
             z_timer_start(Z_TIMER_HUD_LIFE_2, Z_HUD_LIFE_BLINK_MS, true);
             g_hud.lifeColor = Z_HUD_LIFE_COLOR_ALERT;
         }
@@ -57,21 +57,21 @@ void n_hud_tick(const OSnake* Snake)
         z_timer_start(Z_TIMER_HUD_LIFE, 4 * Z_HUD_LIFE_BLINK_MS, false);
     }
 
-    if(z_timer_expired(Z_TIMER_HUD_LIFE)) {
+    if(z_timer_isExpired(Z_TIMER_HUD_LIFE)) {
         z_timer_stop(Z_TIMER_HUD_LIFE_2);
         g_hud.lifeColor = Z_HUD_LIFE_COLOR_NORMAL;
-    } else if(z_timer_expired(Z_TIMER_HUD_LIFE_2)) {
+    } else if(z_timer_isExpired(Z_TIMER_HUD_LIFE_2)) {
         g_hud.lifeColor = g_hud.lifeColor == Z_HUD_LIFE_COLOR_NORMAL
                             ? Z_HUD_LIFE_COLOR_ALERT
                             : Z_HUD_LIFE_COLOR_NORMAL;
     }
 
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_ATE)) {
-        if(!z_timer_running(Z_TIMER_HUD_APPLES)) {
+        if(!z_timer_isRunning(Z_TIMER_HUD_APPLES)) {
             z_timer_start(Z_TIMER_HUD_APPLES, Z_HUD_APPLE_BLINK_MS, false);
             g_hud.appleColor = Z_HUD_APPLE_COLOR_ALERT;
         }
-    } else if(z_timer_expired(Z_TIMER_HUD_APPLES)) {
+    } else if(z_timer_isExpired(Z_TIMER_HUD_APPLES)) {
         g_hud.appleColor = Z_HUD_APPLE_COLOR_NORMAL;
     }
 }
