@@ -18,7 +18,6 @@
 
 #include "state_start.h"
 
-#include "obj_camera.h"
 #include "obj_game.h"
 #include "util_input.h"
 #include "util_light.h"
@@ -29,8 +28,6 @@ void s_start_init(void)
 {
     z_input_reset();
     z_light_reset();
-
-    n_camera_new();
 
     z_swipe_start(Z_SWIPE_LINES_SHOW);
 }

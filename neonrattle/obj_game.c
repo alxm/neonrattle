@@ -39,6 +39,8 @@ void n_game_new(unsigned Level)
     ZFix startX, startY;
     n_map_new(Level, &startX, &startY);
 
+    n_camera_new();
+
     g_game.level = Level;
     g_game.score = 0;
     g_game.snake = o_snake_new(startX, startY);

@@ -25,7 +25,6 @@
 typedef struct {
     ZVectorFix coords;
     ZVectorInt shake;
-    uint8_t shakeFrames;
 } NCamera;
 
 static NCamera g_camera;
@@ -33,7 +32,8 @@ static NCamera g_camera;
 void n_camera_new(void)
 {
     g_camera.shake = (ZVectorInt){0, 0};
-    g_camera.shakeFrames = 0;
+
+    z_timer_stop(Z_TIMER_CAMERA_SHAKE);
 }
 
 void n_camera_tick(ZVectorFix Origin)
@@ -48,8 +48,7 @@ void n_camera_tick(ZVectorFix Origin)
         z_coords_pixelsToUnits(Z_SCREEN_H / 2),
         z_fix_fromInt(Z_COORDS_MAP_H) - z_coords_pixelsToUnits(Z_SCREEN_H / 2));
 
-    if(g_camera.shakeFrames) {
-        g_camera.shakeFrames--;
+    if(z_timer_running(Z_TIMER_CAMERA_SHAKE)) {
         g_camera.shake = (ZVectorInt){-1 + z_random_int(3),
                                       -1 + z_random_int(3)};
     } else {
@@ -82,5 +81,5 @@ ZVectorInt n_camera_shakeGet(void)
 
 void n_camera_shakeSet(uint8_t Ds)
 {
-    g_camera.shakeFrames = z_timer_dsToTicks(Ds);
+    z_timer_start(Z_TIMER_CAMERA_SHAKE, Ds, false);
 }
