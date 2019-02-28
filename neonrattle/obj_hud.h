@@ -22,5 +22,7 @@
 
 #include "obj_snake.h"
 
+extern void n_hud_new(void);
+
 extern void n_hud_tick(const OSnake* Snake);
 extern void n_hud_draw(const OSnake* Snake);

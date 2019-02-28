@@ -28,6 +28,7 @@ typedef enum {
     Z_TIMER_G1,
     Z_TIMER_HUD_APPLES,
     Z_TIMER_HUD_LIFE,
+    Z_TIMER_HUD_LIFE_2,
     Z_TIMER_NUM
 } ZTimerId;
 

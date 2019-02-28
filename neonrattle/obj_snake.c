@@ -301,15 +301,13 @@ void o_snake_tick(OSnake* Snake)
 {
     ZStateId state = z_state_getCurrent();
 
-    if(state != Z_STATE_DIED) {
-        Snake->flags = 0;
-    }
-
     if(state == Z_STATE_END) {
         colorSet(Snake, z_color_appleGet(), z_color_snakeGet());
     }
 
     updateColors(Snake, state != Z_STATE_DIED);
+
+    Z_FLAG_CLEAR(Snake->flags, O_SNAKE_FLAG_HURT | O_SNAKE_FLAG_ATE);
 
     if(state == Z_STATE_PLAY) {
         #if Z_PLATFORM_META

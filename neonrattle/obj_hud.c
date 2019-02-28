@@ -25,33 +25,54 @@
 #include "util_save.h"
 #include "util_timer.h"
 
-#define Z_HUD_APPLES_BLINK_MS 100
+#define Z_HUD_APPLE_BLINK_MS 100
+#define Z_HUD_APPLE_COLOR_NORMAL Z_COLOR_SNAKE_01
+#define Z_HUD_APPLE_COLOR_ALERT Z_COLOR_SNAKE_03
+
 #define Z_HUD_LIFE_BLINK_MS 200
+#define Z_HUD_LIFE_COLOR_NORMAL Z_COLOR_SNAKE_01
+#define Z_HUD_LIFE_COLOR_ALERT Z_COLOR_APPLE_03
 
 typedef struct {
-    int lifeColorIndex;
+    ZColorId appleColor;
+    ZColorId lifeColor;
 } NHud;
 
 static NHud g_hud;
+
+void n_hud_new(void)
+{
+    g_hud.lifeColor = Z_HUD_LIFE_COLOR_NORMAL;
+    g_hud.appleColor = Z_HUD_APPLE_COLOR_NORMAL;
+}
 
 void n_hud_tick(const OSnake* Snake)
 {
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_HURT)) {
         if(!z_timer_running(Z_TIMER_HUD_LIFE)) {
-            z_timer_start(Z_TIMER_HUD_LIFE, Z_HUD_LIFE_BLINK_MS, true);
-            g_hud.lifeColorIndex = 1;
-        } else if(z_timer_expired(Z_TIMER_HUD_LIFE)) {
-            g_hud.lifeColorIndex = !g_hud.lifeColorIndex;
+            z_timer_start(Z_TIMER_HUD_LIFE_2, Z_HUD_LIFE_BLINK_MS, true);
+            g_hud.lifeColor = Z_HUD_LIFE_COLOR_ALERT;
         }
-    } else {
-        z_timer_stop(Z_TIMER_HUD_LIFE);
-        g_hud.lifeColorIndex = 0;
+
+        z_timer_start(Z_TIMER_HUD_LIFE, 4 * Z_HUD_LIFE_BLINK_MS, false);
+    }
+
+    if(z_timer_expired(Z_TIMER_HUD_LIFE)) {
+        z_timer_stop(Z_TIMER_HUD_LIFE_2);
+        g_hud.lifeColor = Z_HUD_LIFE_COLOR_NORMAL;
+    } else if(z_timer_expired(Z_TIMER_HUD_LIFE_2)) {
+        g_hud.lifeColor = g_hud.lifeColor == Z_HUD_LIFE_COLOR_NORMAL
+                            ? Z_HUD_LIFE_COLOR_ALERT
+                            : Z_HUD_LIFE_COLOR_NORMAL;
     }
 
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_ATE)) {
         if(!z_timer_running(Z_TIMER_HUD_APPLES)) {
-            z_timer_start(Z_TIMER_HUD_APPLES, Z_HUD_APPLES_BLINK_MS, false);
+            z_timer_start(Z_TIMER_HUD_APPLES, Z_HUD_APPLE_BLINK_MS, false);
+            g_hud.appleColor = Z_HUD_APPLE_COLOR_ALERT;
         }
+    } else if(z_timer_expired(Z_TIMER_HUD_APPLES)) {
+        g_hud.appleColor = Z_HUD_APPLE_COLOR_NORMAL;
     }
 }
 
@@ -115,10 +136,7 @@ static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId F
 
 static void hudDrawApples(int X, int Y, const OSnake* Snake)
 {
-    const ZColorId colors[] = {Z_COLOR_SNAKE_01, Z_COLOR_SNAKE_03};
-    ZColorId color = colors[z_timer_running(Z_TIMER_HUD_APPLES)];
-
-    drawIcon(X, Y, Z_SPRITE_APPLE_MASK, 0, color, 256);
+    drawIcon(X, Y, Z_SPRITE_APPLE_MASK, 0, g_hud.appleColor, 256);
 
     X += 10;
     Y += 2;
@@ -129,17 +147,14 @@ static void hudDrawApples(int X, int Y, const OSnake* Snake)
             n_map_applesNumGet(),
             Z_SCREEN_W / 2 - 2 - X,
             4,
-            color,
+            g_hud.appleColor,
             Z_COLOR_BG_GREEN_03,
             192);
 }
 
 static void hudDrawLife(int X, int Y, const OSnake* Snake)
 {
-    const ZColorId lColors[] = {Z_COLOR_SNAKE_01, Z_COLOR_APPLE_03};
-    ZColorId lColor = lColors[g_hud.lifeColorIndex];
-
-    drawIcon(X, Y, Z_SPRITE_ICON_HEART, 0, lColor, 256);
+    drawIcon(X, Y, Z_SPRITE_ICON_HEART, 0, g_hud.lifeColor, 256);
 
     X += 9;
     Y += 1;
@@ -150,7 +165,7 @@ static void hudDrawLife(int X, int Y, const OSnake* Snake)
             O_SNAKE_LIFE_MAX,
             Z_SCREEN_W - 2 - X,
             4,
-            lColor,
+            g_hud.lifeColor,
             Z_COLOR_BG_GREEN_03,
             192);
 }

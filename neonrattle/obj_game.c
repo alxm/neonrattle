@@ -40,6 +40,7 @@ void n_game_new(unsigned Level)
     n_map_new(Level, &startX, &startY);
 
     n_camera_new();
+    n_hud_new();
 
     g_game.level = Level;
     g_game.score = 0;
