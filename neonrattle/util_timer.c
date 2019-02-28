@@ -25,8 +25,8 @@ typedef enum {
 } ATimerFlags;
 
 typedef struct {
-    uint8_t base;
-    uint8_t period;
+    unsigned base;
+    unsigned period;
     unsigned flags;
 } ZTimer;
 
@@ -34,7 +34,7 @@ static ZTimer g_timers[Z_TIMER_NUM];
 
 void z_timer_tick(void)
 {
-    uint8_t now = (uint8_t)z_fps_ticksGet();
+    unsigned now = z_fps_ticksGet();
 
     for(int t = 0; t < Z_TIMER_NUM; t++) {
         ZTimer* timer = &g_timers[t];
@@ -44,7 +44,7 @@ void z_timer_tick(void)
             continue;
         }
 
-        if((uint8_t)(now - timer->base) >= timer->period) {
+        if(now - timer->base >= timer->period) {
             Z_FLAG_SET(timer->flags, Z_EXPIRED);
 
             if(Z_FLAG_TEST_ANY(timer->flags, Z_REPEAT)) {
@@ -58,15 +58,15 @@ void z_timer_tick(void)
     }
 }
 
-void z_timer_start(ZTimerId Timer, uint8_t Ds, bool Repeat)
+void z_timer_start(ZTimerId Timer, unsigned Ms, bool Repeat)
 {
     ZTimer* timer = &g_timers[Timer];
 
-    timer->base = (uint8_t)z_fps_ticksGet();
-    timer->period = z_timer_dsToTicks(Ds);
+    timer->base = z_fps_ticksGet();
+    timer->period = z_timer_msToTicks(Ms);
     timer->flags = Z_RUNNING;
 
-    if(Ds == 0) {
+    if(Ms == 0) {
         Z_FLAG_SET(timer->flags, Z_EXPIRED);
     }
 
@@ -86,7 +86,7 @@ void z_timer_restart(ZTimerId Timer)
 {
     ZTimer* timer = &g_timers[Timer];
 
-    timer->base = (uint8_t)z_fps_ticksGet();
+    timer->base = z_fps_ticksGet();
 
     Z_FLAG_CLEAR(timer->flags, Z_EXPIRED);
 }

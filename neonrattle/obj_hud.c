@@ -25,8 +25,8 @@
 #include "util_save.h"
 #include "util_timer.h"
 
-#define Z_HUD_APPLES_BLINK_DS 1
-#define Z_HUD_LIFE_BLINK_DS 2
+#define Z_HUD_APPLES_BLINK_MS 100
+#define Z_HUD_LIFE_BLINK_MS 200
 
 typedef struct {
     int lifeColorIndex;
@@ -38,7 +38,7 @@ void n_hud_tick(const OSnake* Snake)
 {
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_HURT)) {
         if(!z_timer_running(Z_TIMER_HUD_LIFE)) {
-            z_timer_start(Z_TIMER_HUD_LIFE, Z_HUD_LIFE_BLINK_DS, true);
+            z_timer_start(Z_TIMER_HUD_LIFE, Z_HUD_LIFE_BLINK_MS, true);
             g_hud.lifeColorIndex = 1;
         } else if(z_timer_expired(Z_TIMER_HUD_LIFE)) {
             g_hud.lifeColorIndex = !g_hud.lifeColorIndex;
@@ -50,7 +50,7 @@ void n_hud_tick(const OSnake* Snake)
 
     if(o_snake_flagsTest(Snake, O_SNAKE_FLAG_ATE)) {
         if(!z_timer_running(Z_TIMER_HUD_APPLES)) {
-            z_timer_start(Z_TIMER_HUD_APPLES, Z_HUD_APPLES_BLINK_DS, false);
+            z_timer_start(Z_TIMER_HUD_APPLES, Z_HUD_APPLES_BLINK_MS, false);
         }
     }
 }

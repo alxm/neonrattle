@@ -32,7 +32,7 @@
 #define Z_GRID_W 8
 #define Z_GRID_H (Z_LEVELS_NUM / Z_GRID_W)
 #define Z_CELL_DIM (Z_COORDS_PIXELS_PER_UNIT / 2)
-#define Z_SELECT_DELAY_DS 2
+#define Z_SELECT_DELAY_MS 200
 #define Z_MOVE_SPEED (Z_FIX_ONE * 2)
 #define Z_GLOW_SPEED (Z_DEG_001_FIX * 4)
 
@@ -63,22 +63,22 @@ void s_menu_tick(void)
 
     ZVectorFix velocity = {0, 0};
 
-    if(z_button_pressGetDelay(Z_BUTTON_UP, Z_SELECT_DELAY_DS)) {
+    if(z_button_pressGetDelay(Z_BUTTON_UP, Z_SELECT_DELAY_MS)) {
         g_cursor -= Z_GRID_W;
         velocity.y = Z_MOVE_SPEED;
     }
 
-    if(z_button_pressGetDelay(Z_BUTTON_DOWN, Z_SELECT_DELAY_DS)) {
+    if(z_button_pressGetDelay(Z_BUTTON_DOWN, Z_SELECT_DELAY_MS)) {
         g_cursor += Z_GRID_W;
         velocity.y = -Z_MOVE_SPEED;
     }
 
-    if(z_button_pressGetDelay(Z_BUTTON_LEFT, Z_SELECT_DELAY_DS)) {
+    if(z_button_pressGetDelay(Z_BUTTON_LEFT, Z_SELECT_DELAY_MS)) {
         g_cursor--;
         velocity.x = Z_MOVE_SPEED;
     }
 
-    if(z_button_pressGetDelay(Z_BUTTON_RIGHT, Z_SELECT_DELAY_DS)) {
+    if(z_button_pressGetDelay(Z_BUTTON_RIGHT, Z_SELECT_DELAY_MS)) {
         g_cursor++;
         velocity.x = -Z_MOVE_SPEED;
     }
@@ -99,7 +99,7 @@ void s_menu_tick(void)
 
     if(z_button_pressGetOnce(Z_BUTTON_A) || z_button_pressGetOnce(Z_BUTTON_B)) {
         if(g_cursor > z_save_unlockedGet()) {
-            n_camera_shakeSet(2);
+            n_camera_shakeSet(200);
             z_sfx_play(Z_SFX_MENU_REJECT);
         } else {
             n_game_new(g_cursor);

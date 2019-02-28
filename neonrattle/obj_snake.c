@@ -346,7 +346,7 @@ void o_snake_tick(OSnake* Snake)
             Z_FLAG_SET(Snake->flags, O_SNAKE_FLAG_HURT);
             Snake->life = z_math_max(Snake->life - damage, 0);
 
-            n_camera_shakeSet(1);
+            n_camera_shakeSet(100);
             z_sfx_play(Z_SFX_HIT_WALL);
 
             if(Snake->life == 0) {

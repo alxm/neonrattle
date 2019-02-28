@@ -23,7 +23,7 @@
 #include "util_swipe.h"
 #include "util_timer.h"
 
-#define Z_LOGO_WAIT_DS 8
+#define Z_LOGO_WAIT_MS 800
 
 static const int8_t g_lines[] = {
     -1,
@@ -75,7 +75,7 @@ void s_intro_tick(void)
     }
 
     if(g_lines[g_pc] == -2) {
-        z_timer_start(Z_TIMER_G1, Z_LOGO_WAIT_DS, false);
+        z_timer_start(Z_TIMER_G1, Z_LOGO_WAIT_MS, false);
     }
 }
 

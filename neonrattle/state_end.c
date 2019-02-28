@@ -27,7 +27,7 @@
 
 void s_end_init(void)
 {
-    z_timer_start(Z_TIMER_G1, 8, false);
+    z_timer_start(Z_TIMER_G1, 800, false);
     z_sfx_play(Z_SFX_FINISHED);
     z_light_pulseSet(Z_LIGHT_LEVEL_COMPLETE);
 }

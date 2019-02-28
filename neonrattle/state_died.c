@@ -26,8 +26,8 @@
 
 void s_died_init(void)
 {
-    z_timer_start(Z_TIMER_G1, 12, false);
-    n_camera_shakeSet(3);
+    z_timer_start(Z_TIMER_G1, 1200, false);
+    n_camera_shakeSet(300);
     z_sfx_play(Z_SFX_END);
 }
 

@@ -33,13 +33,13 @@ typedef enum {
 
 extern void z_timer_tick(void);
 
-extern void z_timer_start(ZTimerId Timer, uint8_t Ds, bool Repeat);
+extern void z_timer_start(ZTimerId Timer, unsigned Ms, bool Repeat);
 extern void z_timer_stop(ZTimerId Timer);
 extern void z_timer_restart(ZTimerId Timer);
 extern bool z_timer_running(ZTimerId Timer);
 extern bool z_timer_expired(ZTimerId Timer);
 
-static inline uint8_t z_timer_dsToTicks(uint8_t Ds)
+static inline unsigned z_timer_msToTicks(unsigned Ms)
 {
-    return (uint8_t)(Z_FPS * Ds / 10);
+    return (Z_FPS * Ms + 500) / 1000;
 }

@@ -40,7 +40,7 @@ extern void z_input_tick(void);
 
 extern bool z_button_pressGet(ZButtonId Button);
 extern bool z_button_pressGetOnce(ZButtonId Button);
-extern bool z_button_pressGetDelay(ZButtonId Button, uint8_t Ds);
+extern bool z_button_pressGetDelay(ZButtonId Button, unsigned Ms);
 extern bool z_button_pressGetAny(void);
 extern void z_button_pressClear(ZButtonId Button);
 

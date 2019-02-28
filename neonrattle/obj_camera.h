@@ -30,4 +30,4 @@ extern ZVectorFix n_camera_originGet(void);
 extern ZVectorInt n_camera_coordsToScreen(ZVectorFix WorldCoords);
 
 extern ZVectorInt n_camera_shakeGet(void);
-extern void n_camera_shakeSet(uint8_t Ds);
+extern void n_camera_shakeSet(unsigned Ms);

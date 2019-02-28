@@ -73,12 +73,12 @@ bool z_button_pressGetOnce(ZButtonId Button)
     return false;
 }
 
-bool z_button_pressGetDelay(ZButtonId Button, uint8_t Ds)
+bool z_button_pressGetDelay(ZButtonId Button, unsigned Ms)
 {
     uint16_t now = z_fps_ticksGet();
     uint16_t ticksDiff = (uint16_t)(now - g_buttons[Button].lastFramePressed);
 
-    if(g_buttons[Button].pressed && ticksDiff >= z_timer_dsToTicks(Ds)) {
+    if(g_buttons[Button].pressed && ticksDiff >= z_timer_msToTicks(Ms)) {
         g_buttons[Button].lastFramePressed = now;
 
         return true;

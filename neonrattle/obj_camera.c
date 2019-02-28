@@ -79,7 +79,7 @@ ZVectorInt n_camera_shakeGet(void)
     return g_camera.shake;
 }
 
-void n_camera_shakeSet(uint8_t Ds)
+void n_camera_shakeSet(unsigned Ms)
 {
-    z_timer_start(Z_TIMER_CAMERA_SHAKE, Ds, false);
+    z_timer_start(Z_TIMER_CAMERA_SHAKE, Ms, false);
 }
