@@ -82,15 +82,6 @@ void z_timer_stop(ZTimerId Timer)
     Z_FLAG_CLEAR(timer->flags, Z_RUNNING | Z_EXPIRED);
 }
 
-void z_timer_restart(ZTimerId Timer)
-{
-    ZTimer* timer = &g_timers[Timer];
-
-    timer->base = z_fps_ticksGet();
-
-    Z_FLAG_CLEAR(timer->flags, Z_EXPIRED);
-}
-
 bool z_timer_running(ZTimerId Timer)
 {
     return Z_FLAG_TEST_ANY(g_timers[Timer].flags, Z_RUNNING);
