@@ -22,7 +22,7 @@
 
 #include "util_fix.h"
 
-extern void n_camera_new(void);
+extern void n_camera_new(ZVectorFix Coords);
 
 extern void n_camera_tick(ZVectorFix Origin);
 

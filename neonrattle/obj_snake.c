@@ -72,11 +72,9 @@ static inline unsigned getLength(const OSnake* Snake)
     return ((Snake->head - Snake->tail) & O_SNAKE_LEN_MASK) + 1;
 }
 
-static inline void headSet(OSnake* Snake, ZFix X, ZFix Y)
+static inline void headSet(OSnake* Snake, ZVectorFix Coords)
 {
-    OSnakeSegment* s = &Snake->body[Snake->head];
-
-    s->coords = (ZVectorFix){X, Y};
+    Snake->body[Snake->head].coords = Coords;
 }
 
 static inline ZFix dimGet(const OSnake* Snake, int Leeway)
@@ -100,10 +98,10 @@ static void growAndAdvance(OSnake* Snake)
 {
     const OSnakeSegment* head = &Snake->body[Snake->head];
 
-    ZFix x = head->coords.x
-                + z_fix_cosf(Snake->angle) / Z_COORDS_PIXELS_PER_UNIT;
-    ZFix y = head->coords.y
-                - z_fix_sinf(Snake->angle) / Z_COORDS_PIXELS_PER_UNIT;
+    ZVectorFix newHeadCoords = {
+        head->coords.x + z_fix_cosf(Snake->angle) / Z_COORDS_PIXELS_PER_UNIT,
+        head->coords.y - z_fix_sinf(Snake->angle) / Z_COORDS_PIXELS_PER_UNIT
+    };
 
     if(Snake->grow > 0) {
         if(getLength(Snake) == O_SNAKE_LEN) {
@@ -112,17 +110,17 @@ static void growAndAdvance(OSnake* Snake)
             Snake->grow--;
             Snake->head = (Snake->head + 1) & O_SNAKE_LEN_MASK;
 
-            headSet(Snake, x, y);
+            headSet(Snake, newHeadCoords);
         }
     } else {
         Snake->tail = (Snake->tail + 1) & O_SNAKE_LEN_MASK;
         Snake->head = (Snake->head + 1) & O_SNAKE_LEN_MASK;
 
-        headSet(Snake, x, y);
+        headSet(Snake, newHeadCoords);
     }
 }
 
-OSnake* o_snake_new(ZFix X, ZFix Y)
+OSnake* o_snake_new(ZVectorFix Coords)
 {
     OSnake* s = z_pool_alloc(g_pool);
 
@@ -135,7 +133,7 @@ OSnake* o_snake_new(ZFix X, ZFix Y)
         s->life = O_SNAKE_LIFE_MAX;
         s->flags = 0;
 
-        headSet(s, X, Y);
+        headSet(s, Coords);
         colorSet(s, z_color_snakeGet(), z_color_snakeGet());
 
         while(s->grow > 0) {

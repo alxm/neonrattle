@@ -34,7 +34,7 @@ typedef struct OSnake OSnake;
 
 extern void o_snake_reset(void);
 
-extern OSnake* o_snake_new(ZFix X, ZFix Y);
+extern OSnake* o_snake_new(ZVectorFix Coords);
 
 extern ZVectorFix o_snake_coordsGet(const OSnake* Snake);
 extern void o_snake_turnLeft(OSnake* Snake);

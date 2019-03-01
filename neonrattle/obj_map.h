@@ -24,7 +24,7 @@
 #include "util_fix.h"
 #include "util_list.h"
 
-extern void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY);
+extern ZVectorFix n_map_new(unsigned Level);
 
 extern void n_map_tick(void);
 extern void n_map_draw(void);

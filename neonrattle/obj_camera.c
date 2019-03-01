@@ -29,8 +29,9 @@ typedef struct {
 
 static NCamera g_camera;
 
-void n_camera_new(void)
+void n_camera_new(ZVectorFix Coords)
 {
+    g_camera.coords = Coords;
     g_camera.shake = (ZVectorInt){0, 0};
 
     z_timer_stop(Z_TIMER_CAMERA_SHAKE);
@@ -38,19 +39,23 @@ void n_camera_new(void)
 
 void n_camera_tick(ZVectorFix Origin)
 {
+    #define Z_SHIFT 3
+
     g_camera.coords.x = z_math_clamp(
-        Origin.x,
+        (Origin.x >> Z_SHIFT)
+            + (g_camera.coords.x - (g_camera.coords.x >> Z_SHIFT)),
         z_coords_pixelsToUnits(Z_SCREEN_W / 2),
         z_fix_fromInt(Z_COORDS_MAP_W) - z_coords_pixelsToUnits(Z_SCREEN_W / 2));
 
     g_camera.coords.y = z_math_clamp(
-        Origin.y,
+        (Origin.y >> Z_SHIFT)
+            + (g_camera.coords.y - (g_camera.coords.y >> Z_SHIFT)),
         z_coords_pixelsToUnits(Z_SCREEN_H / 2),
         z_fix_fromInt(Z_COORDS_MAP_H) - z_coords_pixelsToUnits(Z_SCREEN_H / 2));
 
     if(z_timer_isRunning(Z_TIMER_CAMERA_SHAKE)) {
-        g_camera.shake = (ZVectorInt){-1 + z_random_int(3),
-                                      -1 + z_random_int(3)};
+        g_camera.shake = (ZVectorInt){z_random_range(-1, 2),
+                                      z_random_range(-1, 2)};
     } else {
         g_camera.shake = (ZVectorInt){0, 0};
     }

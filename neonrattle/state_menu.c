@@ -111,7 +111,7 @@ void s_menu_tick(void)
         }
     }
 
-    n_camera_tick((ZVectorFix){0, 0});
+    n_camera_tick(n_camera_originGet());
 
     g_angle += Z_GLOW_SPEED;
 }

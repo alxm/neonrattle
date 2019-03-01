@@ -36,15 +36,14 @@ void n_game_new(unsigned Level)
     o_apple_reset();
     o_snake_reset();
 
-    ZFix startX, startY;
-    n_map_new(Level, &startX, &startY);
+    ZVectorFix origin = n_map_new(Level);
 
-    n_camera_new();
+    n_camera_new(origin);
     n_hud_new();
 
     g_game.level = Level;
     g_game.score = 0;
-    g_game.snake = o_snake_new(startX, startY);
+    g_game.snake = o_snake_new(origin);
 }
 
 void n_game_tick(void)

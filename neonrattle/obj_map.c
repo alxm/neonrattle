@@ -64,8 +64,10 @@ static inline void tileApplesSet(int X, int Y, unsigned NumApples)
         (uint8_t)(g_map.tiles[Y][X].data | (NumApples & (Z_WALL_FLAG - 1)));
 }
 
-void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY)
+ZVectorFix n_map_new(unsigned Level)
 {
+    ZVectorFix origin = {0, 0};
+
     g_map.totalApples = 0;
 
     for(int y = Z_COORDS_GRID_H; y--; ) {
@@ -88,8 +90,8 @@ void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY)
             }
 
             if(p == z_colors[Z_COLOR_MAP_GREEN].pixel) {
-                *StartX = z_fix_fromInt(x) + Z_FIX_ONE / 2;
-                *StartY = z_fix_fromInt(y) + Z_FIX_ONE / 2;
+                origin.x = z_fix_fromInt(x) + Z_FIX_ONE / 2;
+                origin.y = z_fix_fromInt(y) + Z_FIX_ONE / 2;
             }
         }
     }
@@ -154,6 +156,8 @@ void n_map_new(unsigned Level, ZFix* StartX, ZFix* StartY)
     #if Z_DEBUG_INSTRUMENT
         printf("Placed %d apples\n", g_map.totalApples);
     #endif
+
+    return origin;
 }
 
 void n_map_tick(void)
