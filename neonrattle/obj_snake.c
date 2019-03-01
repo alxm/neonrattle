@@ -23,7 +23,6 @@
 #include "obj_map.h"
 #include "util_coords.h"
 #include "util_fps.h"
-#include "util_input.h"
 #include "util_light.h"
 #include "util_pool.h"
 #include "util_sound.h"
@@ -152,6 +151,16 @@ ZVectorFix o_snake_coordsGet(const OSnake* Snake)
     const OSnakeSegment* head = &Snake->body[Snake->head];
 
     return head->coords;
+}
+
+void o_snake_turnLeft(OSnake* Snake)
+{
+    Snake->angle += O_SNAKE_TURN_DEG;
+}
+
+void o_snake_turnRight(OSnake* Snake)
+{
+    Snake->angle -= O_SNAKE_TURN_DEG;
 }
 
 int o_snake_eatenNumGet(const OSnake* Snake)
@@ -310,22 +319,6 @@ void o_snake_tick(OSnake* Snake)
     Z_FLAG_CLEAR(Snake->flags, O_SNAKE_FLAG_HURT | O_SNAKE_FLAG_ATE);
 
     if(state == Z_STATE_PLAY) {
-        #if Z_PLATFORM_META
-            #define Z_EXTRA_LEFT z_button_pressGet(Z_BUTTON_A)
-            #define Z_EXTRA_RIGHT z_button_pressGet(Z_BUTTON_B)
-        #else
-            #define Z_EXTRA_LEFT false
-            #define Z_EXTRA_RIGHT false
-        #endif
-
-        if(z_button_pressGet(Z_BUTTON_LEFT) || Z_EXTRA_LEFT) {
-            Snake->angle += O_SNAKE_TURN_DEG;
-        }
-
-        if(z_button_pressGet(Z_BUTTON_RIGHT) || Z_EXTRA_RIGHT) {
-            Snake->angle -= O_SNAKE_TURN_DEG;
-        }
-
         growAndAdvance(Snake);
 
         int damage = 0;

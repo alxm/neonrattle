@@ -21,13 +21,30 @@
 #include "obj_game.h"
 #include "obj_map.h"
 #include "state_menu.h"
+#include "util_input.h"
 #include "util_save.h"
 
 void s_play_tick(void)
 {
-    n_game_tick();
-
     OSnake* snake = n_game_snakeGet();
+
+    #if Z_PLATFORM_META
+        #define Z_EXTRA_LEFT z_button_pressGet(Z_BUTTON_A)
+        #define Z_EXTRA_RIGHT z_button_pressGet(Z_BUTTON_B)
+    #else
+        #define Z_EXTRA_LEFT false
+        #define Z_EXTRA_RIGHT false
+    #endif
+
+    if(z_button_pressGet(Z_BUTTON_LEFT) || Z_EXTRA_LEFT) {
+        o_snake_turnLeft(snake);
+    }
+
+    if(z_button_pressGet(Z_BUTTON_RIGHT) || Z_EXTRA_RIGHT) {
+        o_snake_turnRight(snake);
+    }
+
+    n_game_tick();
 
     if(o_snake_flagsTest(snake, O_SNAKE_FLAG_DEAD)) {
         z_state_set(Z_STATE_DIED);

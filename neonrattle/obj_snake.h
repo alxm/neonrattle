@@ -37,6 +37,9 @@ extern void o_snake_reset(void);
 extern OSnake* o_snake_new(ZFix X, ZFix Y);
 
 extern ZVectorFix o_snake_coordsGet(const OSnake* Snake);
+extern void o_snake_turnLeft(OSnake* Snake);
+extern void o_snake_turnRight(OSnake* Snake);
+
 extern int o_snake_eatenNumGet(const OSnake* Snake);
 extern int o_snake_lifeGet(const OSnake* Snake);
 extern bool o_snake_flagsTest(const OSnake* Snake, OSnakeFlags Flags);
