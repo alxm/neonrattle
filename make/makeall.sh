@@ -30,7 +30,7 @@ do_emmake ()
     record_result "$1" $?
 }
 
-source /opt/emsdk-portable/emsdk_env.sh
+source /opt/emsdk/emsdk_env.sh
 
 do_make "Dev" Makefile
 do_emmake "Emscripten" Makefile.emscripten
