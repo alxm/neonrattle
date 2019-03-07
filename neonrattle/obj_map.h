@@ -24,6 +24,9 @@
 #include "util_fix.h"
 #include "util_list.h"
 
+#define N_MAP_W 16
+#define N_MAP_H 16
+
 extern ZVectorFix n_map_new(unsigned Level);
 
 extern void n_map_tick(void);

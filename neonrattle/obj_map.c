@@ -35,7 +35,7 @@ typedef struct {
 } ZMapCell;
 
 typedef struct {
-    ZMapTile tiles[Z_COORDS_MAP_H][Z_COORDS_MAP_W];
+    ZMapTile tiles[N_MAP_H][N_MAP_W];
     ZMapCell grid[Z_COORDS_GRID_H][Z_COORDS_GRID_W];
     int totalApples;
 } NMap;
@@ -79,8 +79,8 @@ ZVectorFix n_map_new(unsigned Level)
 
     const ZPixel* pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, Level);
 
-    for(int y = 0; y < Z_COORDS_MAP_H; y++) {
-        for(int x = 0; x < Z_COORDS_MAP_W; x++) {
+    for(int y = 0; y < N_MAP_H; y++) {
+        for(int x = 0; x < N_MAP_W; x++) {
             ZPixel p = *pixels++;
 
             g_map.tiles[y][x].data = 0;
@@ -98,8 +98,8 @@ ZVectorFix n_map_new(unsigned Level)
 
     pixels = z_sprite_pixelsGet(Z_SPRITE_MAPS, Level);
 
-    for(int y = 0; y < Z_COORDS_MAP_H; y++) {
-        for(int x = 0; x < Z_COORDS_MAP_W; x++) {
+    for(int y = 0; y < N_MAP_H; y++) {
+        for(int x = 0; x < N_MAP_W; x++) {
             ZPixel p = *pixels++;
             ZRgb rgb = z_pixel_toRgb(p);
 
@@ -208,8 +208,8 @@ void n_map_draw(void)
 
 void n_map_drawMinimap(int X, int Y, ZVectorFix SnakeCoords)
 {
-    for(int y = 0, drawY = Y; y < Z_COORDS_MAP_H; y++, drawY++) {
-        for(int x = 0, drawX = X; x < Z_COORDS_MAP_W; x++, drawX++) {
+    for(int y = 0, drawY = Y; y < N_MAP_H; y++, drawY++) {
+        for(int x = 0, drawX = X; x < N_MAP_W; x++, drawX++) {
             ZColorId color;
             int alpha;
 
@@ -275,8 +275,8 @@ void n_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* Gr
             / Z_COORDS_PIXELS_PER_UNIT + 1)
 
     ZVectorInt tileEnd = {
-        z_math_min(topLeftTile.x + Z_X_TILES, Z_COORDS_MAP_W),
-        z_math_min(topLeftTile.y + Z_Y_TILES, Z_COORDS_MAP_H)
+        z_math_min(topLeftTile.x + Z_X_TILES, N_MAP_W),
+        z_math_min(topLeftTile.y + Z_Y_TILES, N_MAP_H)
     };
 
     if(TileStart != NULL) {

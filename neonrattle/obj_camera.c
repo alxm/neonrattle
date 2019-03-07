@@ -18,6 +18,7 @@
 
 #include "obj_camera.h"
 
+#include "obj_map.h"
 #include "util_coords.h"
 #include "util_graphics.h"
 #include "util_timer.h"
@@ -45,13 +46,13 @@ void n_camera_tick(ZVectorFix Origin)
         (Origin.x >> Z_SHIFT)
             + (g_camera.coords.x - (g_camera.coords.x >> Z_SHIFT)),
         z_coords_pixelsToUnits(Z_SCREEN_W / 2),
-        z_fix_fromInt(Z_COORDS_MAP_W) - z_coords_pixelsToUnits(Z_SCREEN_W / 2));
+        z_fix_fromInt(N_MAP_W) - z_coords_pixelsToUnits(Z_SCREEN_W / 2));
 
     g_camera.coords.y = z_math_clamp(
         (Origin.y >> Z_SHIFT)
             + (g_camera.coords.y - (g_camera.coords.y >> Z_SHIFT)),
         z_coords_pixelsToUnits(Z_SCREEN_H / 2),
-        z_fix_fromInt(Z_COORDS_MAP_H) - z_coords_pixelsToUnits(Z_SCREEN_H / 2));
+        z_fix_fromInt(N_MAP_H) - z_coords_pixelsToUnits(Z_SCREEN_H / 2));
 
     if(z_timer_isRunning(Z_TIMER_CAMERA_SHAKE)) {
         g_camera.shake = (ZVectorInt){z_random_range(-1, 2),

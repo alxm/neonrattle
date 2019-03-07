@@ -19,6 +19,7 @@
 #include "state_menu.h"
 
 #include "obj_camera.h"
+#include "obj_map.h"
 #include "obj_game.h"
 #include "util_coords.h"
 #include "util_fps.h"
@@ -127,10 +128,10 @@ static void minimapDraw(unsigned Level, int X, int Y)
     };
     int alpha[] = {192, 224};
 
-    for(int y = Z_COORDS_MAP_H; y--; dstStart += Z_SCREEN_W) {
+    for(int y = N_MAP_H; y--; dstStart += Z_SCREEN_W) {
         ZPixel* dst = dstStart;
 
-        for(int x = Z_COORDS_MAP_W; x--; dst++, src++) {
+        for(int x = N_MAP_W; x--; dst++, src++) {
             bool isWall = *src == white;
             z_draw_pixelBufferRgbAlpha(dst, rgb[isWall], alpha[isWall]);
         }
@@ -139,10 +140,10 @@ static void minimapDraw(unsigned Level, int X, int Y)
     z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
     z_graphics_stateAlphaSet(92);
 
-    z_draw_rectangleAlpha(X, Y - 1, Z_COORDS_MAP_W, 1);
-    z_draw_rectangleAlpha(X, Y + Z_COORDS_MAP_H, Z_COORDS_MAP_W, 1);
-    z_draw_rectangleAlpha(X - 1, Y, 1, Z_COORDS_MAP_H);
-    z_draw_rectangleAlpha(X + Z_COORDS_MAP_W, Y, 1, Z_COORDS_MAP_H);
+    z_draw_rectangleAlpha(X, Y - 1, N_MAP_W, 1);
+    z_draw_rectangleAlpha(X, Y + N_MAP_H, N_MAP_W, 1);
+    z_draw_rectangleAlpha(X - 1, Y, 1, N_MAP_H);
+    z_draw_rectangleAlpha(X + N_MAP_W, Y, 1, N_MAP_H);
 }
 
 void s_menu_draw(void)
@@ -254,9 +255,7 @@ void s_menu_draw(void)
     }
 
     if(minimapX != -1) {
-        minimapDraw(g_cursor,
-                    minimapX - Z_COORDS_MAP_W / 4,
-                    minimapY - Z_COORDS_MAP_H / 4);
+        minimapDraw(g_cursor, minimapX - N_MAP_W / 4, minimapY - N_MAP_H / 4);
     }
 }
 
