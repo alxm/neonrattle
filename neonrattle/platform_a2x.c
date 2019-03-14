@@ -165,7 +165,7 @@ int z_sprite_sizeGetHeight(ZSpriteId Sprite)
 
 unsigned z_sprite_framesNumGet(ZSpriteId Sprite)
 {
-    return a_spriteframes_framesGetNum(g_sprites[Sprite]);
+    return a_spriteframes_framesNumGet(g_sprites[Sprite]);
 }
 
 unsigned z_fps_ticksGet(void)

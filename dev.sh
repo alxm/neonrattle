@@ -1,5 +1,5 @@
 #!/bin/sh
-geany -i neonrattle/* make/* dev.sh README.md &
+geany -i make/* neonrattle/* dev.sh README.md &
 arduino neonrattle/neonrattle.ino &
-gimp -n assets/gfx/palette.png assets/gfx/maps_grid16x16.xcf &
+gimp -n assets/gfx/maps_grid16x16.xcf assets/gfx/palette.png &
 cd make
