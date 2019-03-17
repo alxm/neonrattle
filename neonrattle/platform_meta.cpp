@@ -230,7 +230,6 @@ bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size)
 
     if(ret < (int)Size) {
         SerialUSB.printf("Read(%s, %u) failed: %d\n", FileName, Size, ret);
-
         return false;
     }
 

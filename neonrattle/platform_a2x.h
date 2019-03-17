@@ -26,18 +26,14 @@ typedef APixel ZPixel;
 
 static inline ZRgb z_pixel_toRgb(ZPixel Pixel)
 {
-    ZRgb rgb;
-    a_pixel_toRgb(Pixel, &rgb.r, &rgb.g, &rgb.b);
+    ARgb rgb = a_pixel_toRgb(Pixel);
 
-    return rgb;
+    return (ZRgb){rgb.r, rgb.g, rgb.b};
 }
 
 static inline int z_pixel_toAnyChannel(ZPixel Pixel)
 {
-    int blue;
-    a_pixel_toRgb(Pixel, NULL, NULL, &blue);
-
-    return blue;
+    return a_pixel_toRgb(Pixel).r;
 }
 
 static inline ZPixel z_pixel_fromRgb(int Red, int Green, int Blue)
