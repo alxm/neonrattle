@@ -18,7 +18,7 @@
 
 #pragma once
 
-#define A_CONFIG_BUILD_DEBUG 1
+#define A_CONFIG_BUILD_DEBUG 0
 
 #define A_CONFIG_FPS_RATE_TICK 30
 
