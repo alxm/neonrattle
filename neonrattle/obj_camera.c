@@ -80,6 +80,76 @@ ZVectorInt n_camera_coordsToScreen(ZVectorFix WorldCoords)
     return coords;
 }
 
+void n_camera_boundsGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart)
+{
+    ZVectorFix origin = n_camera_originGet();
+
+    ZVectorFix topLeftCoords = {
+        origin.x - z_coords_pixelsToUnits(Z_SCREEN_W / 2),
+        origin.y - z_coords_pixelsToUnits(Z_SCREEN_H / 2)
+    };
+
+    ZVectorInt topLeftTile = z_vectorfix_toInt(topLeftCoords);
+    ZVectorInt topLeftPixels = z_coords_unitsToPixels(topLeftCoords);
+
+    ZVectorInt topLeftScreen = {
+        0 - (topLeftPixels.x & (Z_COORDS_PIXELS_PER_UNIT - 1)),
+        0 - (topLeftPixels.y & (Z_COORDS_PIXELS_PER_UNIT - 1))
+    };
+
+    if(topLeftCoords.x < 0) {
+        topLeftScreen.x += -topLeftTile.x * Z_COORDS_PIXELS_PER_UNIT;
+        topLeftTile.x = 0;
+    }
+
+    if(topLeftCoords.y < 0) {
+        topLeftScreen.y += -topLeftTile.y * Z_COORDS_PIXELS_PER_UNIT;
+        topLeftTile.y = 0;
+    }
+
+    #define Z_X_TILES \
+        ((Z_SCREEN_W + (Z_COORDS_PIXELS_PER_UNIT - 1)) \
+            / Z_COORDS_PIXELS_PER_UNIT + 1)
+
+    #define Z_Y_TILES \
+        ((Z_SCREEN_H + (Z_COORDS_PIXELS_PER_UNIT - 1)) \
+            / Z_COORDS_PIXELS_PER_UNIT + 1)
+
+    ZVectorInt tileEnd = {
+        z_math_min(topLeftTile.x + Z_X_TILES, N_MAP_W),
+        z_math_min(topLeftTile.y + Z_Y_TILES, N_MAP_H)
+    };
+
+    if(TileStart != NULL) {
+        *TileStart = topLeftTile;
+        *TileEnd = tileEnd;
+    }
+
+    if(GridStart != NULL) {
+        *GridStart = z_coords_tileToGrid(topLeftTile);
+        *GridEnd = z_coords_tileToGrid(tileEnd);
+
+        ZVectorInt gridTileOffset = z_coords_tileToGridOffset(tileEnd);
+
+        if(gridTileOffset.x > 0) {
+            GridEnd->x += 1;
+        }
+
+        if(gridTileOffset.y > 0) {
+            GridEnd->y += 1;
+        }
+    }
+
+    if(ScreenStart != NULL) {
+        ZVectorInt shake = n_camera_shakeGet();
+
+        topLeftScreen.x += shake.x;
+        topLeftScreen.y += shake.y;
+
+        *ScreenStart = topLeftScreen;
+    }
+}
+
 ZVectorInt n_camera_shakeGet(void)
 {
     return g_camera.shake;

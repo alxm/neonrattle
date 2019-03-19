@@ -34,8 +34,6 @@ extern void n_map_draw(void);
 
 extern void n_map_drawMinimap(int X, int Y, ZVectorFix SnakeCoords);
 
-extern void n_map_visibleGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart);
-
 extern ZList* n_map_applesListGet(int GridX, int GridY);
 extern int n_map_applesNumGet(void);
 extern void n_map_appleEat(OApple* Apple);

@@ -28,6 +28,7 @@ extern void n_camera_tick(ZVectorFix Origin);
 
 extern ZVectorFix n_camera_originGet(void);
 extern ZVectorInt n_camera_coordsToScreen(ZVectorFix WorldCoords);
+extern void n_camera_boundsGet(ZVectorInt* TileStart, ZVectorInt* TileEnd, ZVectorInt* GridStart, ZVectorInt* GridEnd, ZVectorInt* ScreenStart);
 
 extern ZVectorInt n_camera_shakeGet(void);
 extern void n_camera_shakeSet(unsigned Ms);
