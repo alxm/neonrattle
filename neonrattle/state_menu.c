@@ -188,8 +188,8 @@ void s_menu_draw(void)
 
     z_graphics_stateColorSetId(Z_COLOR_APPLE_01);
     z_graphics_stateAlphaSet(glowAlpha);
-    z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
 
+    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
     z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE_GLOW,
                            0,
                            drawX + sizeTitle.x / 2,
@@ -203,10 +203,10 @@ void s_menu_draw(void)
                            startX - shake.y + sizeFooter.x / 2,
                            startY - shake.x + 42 + sizeFooter.y / 2);
 
-    z_graphics_stateAlignReset();
     z_graphics_stateColorSetId(Z_COLOR_APPLE_02);
     z_graphics_stateAlphaSet(256);
 
+    z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
     z_sprite_blitAlphaMask(Z_SPRITE_NEONRATTLE, 0, drawX, drawY);
     z_sprite_blit(Z_SPRITE_ALXM2, 0, startX - shake.y, startY - shake.x + 42);
 

@@ -134,11 +134,10 @@ extern void z_graphics_setup(void);
 extern void z_graphics_stateColorSetId(ZColorId Color);
 extern void z_graphics_stateColorSetRgb(const ZRgb* Rgb);
 extern void z_graphics_stateAlphaSet(int Alpha);
-extern void z_graphics_stateAlignSet(ZAlign Alignment);
-extern void z_graphics_stateAlignReset(void);
 
 extern ZPixel* z_screen_pixelsGet(void);
 
+extern void z_sprite_align(ZAlign Alignment);
 extern ZPixel z_sprite_transparentColorGet(void);
 extern const ZPixel* z_sprite_pixelsGet(ZSpriteId Sprite, unsigned Frame);
 extern ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y);

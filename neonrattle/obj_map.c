@@ -181,6 +181,8 @@ void n_map_draw(void)
     ZVectorInt screenStart;
     n_camera_boundsGet(&tileStart, &tileEnd, &gridStart, &gridEnd, &screenStart);
 
+    z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+
     for(int tileY = tileStart.y, screenY = screenStart.y;
         tileY < tileEnd.y;
         tileY++, screenY += Z_COORDS_PIXELS_PER_UNIT) {
@@ -232,11 +234,9 @@ void n_map_drawMinimap(int X, int Y, ZVectorFix SnakeCoords)
 
     z_graphics_stateColorSetId(Z_COLOR_SNAKE_03);
     z_graphics_stateAlphaSet(256);
-    z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
 
+    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
     z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MINIMAP, 0, X + tile.x, Y + tile.y);
-
-    z_graphics_stateAlignReset();
 }
 
 ZList* n_map_applesListGet(int GridX, int GridY)

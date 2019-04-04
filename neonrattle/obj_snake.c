@@ -361,7 +361,7 @@ void o_snake_draw(const OSnake* Snake)
     int alphaInc = (O_SNAKE_ALPHA_MAX - O_SNAKE_ALPHA_MIN)
                         / z_math_max(1, (int)len / O_SNAKE_TAIL_FADE_RATIO);
 
-    z_graphics_stateAlignSet(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
+    z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
 
     for(unsigned i = Snake->tail; len--; i = (i + 1) & O_SNAKE_LEN_MASK) {
         const OSnakeSegment* s = &Snake->body[i];
@@ -380,6 +380,4 @@ void o_snake_draw(const OSnake* Snake)
                                screen.x,
                                screen.y);
     }
-
-    z_graphics_stateAlignReset();
 }

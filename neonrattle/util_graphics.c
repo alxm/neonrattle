@@ -88,7 +88,7 @@ void z_graphics_setup(void)
         }
     }
 
-    z_graphics_stateAlignReset();
+    g_align = Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP;
 }
 
 void z_graphics_stateColorSetId(ZColorId Color)
@@ -106,14 +106,9 @@ void z_graphics_stateAlphaSet(int Alpha)
     g_alpha = Alpha;
 }
 
-void z_graphics_stateAlignSet(ZAlign Alignment)
+void z_sprite_align(ZAlign Alignment)
 {
     g_align = Alignment;
-}
-
-void z_graphics_stateAlignReset(void)
-{
-    g_align = Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP;
 }
 
 void z_sprite_blit(ZSpriteId Sprite, unsigned Frame, int X, int Y)

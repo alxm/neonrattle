@@ -207,6 +207,8 @@ void n_hud_draw(const OSnake* Snake)
 {
     ZVectorInt shake = n_camera_shakeGet();
 
+    z_sprite_align(Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP);
+
     hudDrawApples(1 + shake.x, 1 + shake.y, Snake);
     hudDrawLife(Z_SCREEN_W / 2 + 2 + shake.x, 2 - shake.y, Snake);
     hudDrawScore(2 - shake.x, Z_SCREEN_H - 15 + shake.y);
