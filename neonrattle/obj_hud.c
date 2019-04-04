@@ -78,8 +78,8 @@ void n_hud_tick(const OSnake* Snake)
 
 static void drawIcon(int X, int Y, ZSpriteId Sprite, unsigned Frame, ZColorId Color, int Alpha)
 {
-    z_graphics_stateColorSetId(Color);
-    z_graphics_stateAlphaSet(Alpha);
+    z_graphics_colorSetId(Color);
+    z_graphics_alphaSet(Alpha);
 
     z_sprite_blitAlphaMask(Sprite, Frame, X, Y);
 }
@@ -91,32 +91,32 @@ static void drawBar(int X, int Y, int Value, int Total, int Width, int Height, Z
 
     // Main bar
 
-    z_graphics_stateAlphaSet(Alpha);
-    z_graphics_stateColorSetId(ColorProg);
+    z_graphics_alphaSet(Alpha);
+    z_graphics_colorSetId(ColorProg);
 
     z_draw_rectangleAlpha(X, Y, progWidth, Height);
 
-    z_graphics_stateColorSetId(ColorBg);
+    z_graphics_colorSetId(ColorBg);
 
     z_draw_rectangleAlpha(X + progWidth, Y, Width - progWidth, Height);
 
     // Glow border
 
-    z_graphics_stateAlphaSet(borderAlpha);
-    z_graphics_stateColorSetId(Value > 0 ? ColorProg : ColorBg);
+    z_graphics_alphaSet(borderAlpha);
+    z_graphics_colorSetId(Value > 0 ? ColorProg : ColorBg);
 
     z_draw_rectangleAlpha(X - 1, Y, 1, Height);
 
-    z_graphics_stateColorSetId(ColorProg);
+    z_graphics_colorSetId(ColorProg);
     z_draw_rectangleAlpha(X, Y - 1, progWidth, 1);
     z_draw_rectangleAlpha(X, Y + Height, progWidth, 1);
 
-    z_graphics_stateColorSetId(ColorBg);
+    z_graphics_colorSetId(ColorBg);
 
     z_draw_rectangleAlpha(X + progWidth, Y - 1, Width - progWidth, 1);
     z_draw_rectangleAlpha(X + progWidth, Y + Height, Width - progWidth, 1);
 
-    z_graphics_stateColorSetId(Value >= Total ? ColorProg : ColorBg);
+    z_graphics_colorSetId(Value >= Total ? ColorProg : ColorBg);
 
     z_draw_rectangleAlpha(X + Width, Y, 1, Height);
 }
@@ -127,7 +127,7 @@ static void drawNumber(int X, int Y, unsigned Number, int NumDigits, ZSpriteId F
 
     X += charSize * (NumDigits - 1);
 
-    z_graphics_stateAlphaSet(256);
+    z_graphics_alphaSet(256);
 
     for(int d = NumDigits; d--; X -= charSize, Number /= 10) {
         z_sprite_blitAlphaMask(Font, Number % 10, X, Y);
@@ -176,27 +176,27 @@ static void hudDrawScore(int X, int Y)
     unsigned hiscore = z_save_hiscoreGet(n_game_levelGet());
     ZColorId color = Z_COLOR_SNAKE_01 + (score > hiscore);
 
-    z_graphics_stateColorSetId(Z_COLOR_SNAKE_01);
+    z_graphics_colorSetId(Z_COLOR_SNAKE_01);
 
     drawNumber(X, Y, n_game_scoreGet(), 4, Z_SPRITE_FONT_LCDNUM);
 
     Y += 8;
 
-    z_graphics_stateColorSetId(color);
+    z_graphics_colorSetId(color);
 
     drawNumber(X, Y, z_math_maxu(score, hiscore), 5, Z_SPRITE_FONT_SMALLNUM);
 
     X += 20;
 
-    z_graphics_stateAlphaSet(192);
+    z_graphics_alphaSet(192);
 
     z_sprite_blitAlphaMask(Z_SPRITE_ICON_HI, 0, X, Y);
 }
 
 static void hudDrawLevel(int X, int Y)
 {
-    z_graphics_stateColorSetId(Z_COLOR_SNAKE_02);
-    z_graphics_stateAlphaSet(192);
+    z_graphics_colorSetId(Z_COLOR_SNAKE_02);
+    z_graphics_alphaSet(192);
 
     z_sprite_blitAlphaMask(Z_SPRITE_ICON_LVL, 0, X, Y + 8);
 

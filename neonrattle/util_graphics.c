@@ -91,17 +91,17 @@ void z_graphics_setup(void)
     g_align = Z_ALIGN_X_LEFT | Z_ALIGN_Y_TOP;
 }
 
-void z_graphics_stateColorSetId(ZColorId Color)
+void z_graphics_colorSetId(ZColorId Color)
 {
     g_rgb = z_colors[Color].rgb;
 }
 
-void z_graphics_stateColorSetRgb(const ZRgb* Rgb)
+void z_graphics_colorSetRgb(const ZRgb* Rgb)
 {
     g_rgb = *Rgb;
 }
 
-void z_graphics_stateAlphaSet(int Alpha)
+void z_graphics_alphaSet(int Alpha)
 {
     g_alpha = Alpha;
 }

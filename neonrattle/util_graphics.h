@@ -131,9 +131,9 @@ extern ZColor z_colors[Z_COLOR_NUM];
 
 extern void z_graphics_setup(void);
 
-extern void z_graphics_stateColorSetId(ZColorId Color);
-extern void z_graphics_stateColorSetRgb(const ZRgb* Rgb);
-extern void z_graphics_stateAlphaSet(int Alpha);
+extern void z_graphics_colorSetId(ZColorId Color);
+extern void z_graphics_colorSetRgb(const ZRgb* Rgb);
+extern void z_graphics_alphaSet(int Alpha);
 
 extern ZPixel* z_screen_pixelsGet(void);
 

@@ -232,8 +232,8 @@ void n_map_drawMinimap(int X, int Y, ZVectorFix SnakeCoords)
 
     ZVectorInt tile = z_vectorfix_toInt(SnakeCoords);
 
-    z_graphics_stateColorSetId(Z_COLOR_SNAKE_03);
-    z_graphics_stateAlphaSet(256);
+    z_graphics_colorSetId(Z_COLOR_SNAKE_03);
+    z_graphics_alphaSet(256);
 
     z_sprite_align(Z_ALIGN_X_CENTER | Z_ALIGN_Y_CENTER);
     z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MINIMAP, 0, X + tile.x, Y + tile.y);

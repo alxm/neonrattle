@@ -371,8 +371,8 @@ void o_snake_draw(const OSnake* Snake)
             alpha += alphaInc;
         }
 
-        z_graphics_stateColorSetRgb(&Snake->rgb);
-        z_graphics_stateAlphaSet(alpha);
+        z_graphics_colorSetRgb(&Snake->rgb);
+        z_graphics_alphaSet(alpha);
 
         // frameTicks == animation speed, (len >> 3) == sprite frames cycle
         z_sprite_blitAlphaMask(Z_SPRITE_SNAKE_MASK,

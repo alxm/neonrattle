@@ -45,7 +45,7 @@ static int g_pc;
 
 void s_intro_init(void)
 {
-    z_graphics_stateColorSetId(Z_COLOR_ALXM_BG);
+    z_graphics_colorSetId(Z_COLOR_ALXM_BG);
 
     z_draw_fill();
 }
@@ -93,7 +93,7 @@ void s_intro_draw(void)
     int startX2 = Z_SCREEN_W / 2 + (logoSize.x + 1) / 2 - 2;
     int startY = Z_SCREEN_H / 2 - logoSize.y / 2;
 
-    z_graphics_stateColorSetId(Z_COLOR_ALXM_BG);
+    z_graphics_colorSetId(Z_COLOR_ALXM_BG);
 
     for(int pc = g_pc; g_lines[pc] != -2; pc++) {
         while(g_lines[pc] != -1) {
