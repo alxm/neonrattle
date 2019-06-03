@@ -25,9 +25,9 @@
 #include "generated/data_gfx_alxm_wing.h"
 #include "generated/data_gfx_neonrattle.h"
 #include "generated/data_gfx_neonrattle_glow.h"
-#include "generated/data_gfx_maps_grid16x16.h"
-#include "generated/data_gfx_tiles_grid16x16.h"
-#include "generated/data_gfx_snake_mask_grid8x8.h"
+#include "generated/data_gfx_maps_16x16.h"
+#include "generated/data_gfx_tiles_16x16.h"
+#include "generated/data_gfx_snake_mask_8x8.h"
 #include "generated/data_gfx_snake_minimap.h"
 #include "generated/data_gfx_apple_mask.h"
 #include "generated/data_gfx_apple_halo.h"
@@ -37,8 +37,8 @@
 #include "generated/data_gfx_icon_hi.h"
 #include "generated/data_gfx_icon_lock.h"
 #include "generated/data_gfx_icon_lvl.h"
-#include "generated/data_gfx_font_lcdnum_grid4x7.h"
-#include "generated/data_gfx_font_smallnum_grid3x5.h"
+#include "generated/data_gfx_font_lcdnum_4x7.h"
+#include "generated/data_gfx_font_smallnum_3x5.h"
 
 static ZRgb g_rgb;
 static int g_alpha;
@@ -53,9 +53,9 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_ALXM_WING, alxm_wing);
     z_sprite_load(Z_SPRITE_NEONRATTLE, neonrattle);
     z_sprite_load(Z_SPRITE_NEONRATTLE_GLOW, neonrattle_glow);
-    z_sprite_load(Z_SPRITE_MAPS, maps_grid16x16);
-    z_sprite_load(Z_SPRITE_TILES, tiles_grid16x16);
-    z_sprite_load(Z_SPRITE_SNAKE_MASK, snake_mask_grid8x8);
+    z_sprite_load(Z_SPRITE_MAPS, maps_16x16);
+    z_sprite_load(Z_SPRITE_TILES, tiles_16x16);
+    z_sprite_load(Z_SPRITE_SNAKE_MASK, snake_mask_8x8);
     z_sprite_load(Z_SPRITE_SNAKE_MINIMAP, snake_minimap);
     z_sprite_load(Z_SPRITE_APPLE_MASK, apple_mask);
     z_sprite_load(Z_SPRITE_APPLE_HALO, apple_halo);
@@ -65,8 +65,8 @@ void z_graphics_setup(void)
     z_sprite_load(Z_SPRITE_ICON_HI, icon_hi);
     z_sprite_load(Z_SPRITE_ICON_LOCK, icon_lock);
     z_sprite_load(Z_SPRITE_ICON_LVL, icon_lvl);
-    z_sprite_load(Z_SPRITE_FONT_LCDNUM, font_lcdnum_grid4x7);
-    z_sprite_load(Z_SPRITE_FONT_SMALLNUM, font_smallnum_grid3x5);
+    z_sprite_load(Z_SPRITE_FONT_LCDNUM, font_lcdnum_4x7);
+    z_sprite_load(Z_SPRITE_FONT_SMALLNUM, font_smallnum_3x5);
 
     int palWidth = z_sprite_sizeGetWidth(Z_SPRITE_PALETTE);
     int palHeight = z_sprite_sizeGetHeight(Z_SPRITE_PALETTE) - 1;

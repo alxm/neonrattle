@@ -31,44 +31,44 @@ typedef struct {
 } ZSfx;
 
 ZColor z_colors[Z_COLOR_NUM];
-static ASpriteFrames* g_sprites[Z_SPRITE_NUM];
+static ASprite* g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
 static AButton* g_buttons[Z_BUTTON_NUM];
 
-A_STATE(run)
+void s_run(void)
 {
     A_STATE_INIT
     {
         g_buttons[Z_BUTTON_UP] = a_button_new();
-        a_button_bind(g_buttons[Z_BUTTON_UP], A_KEY_UP);
-        a_button_bind(g_buttons[Z_BUTTON_UP], A_BUTTON_UP);
+        a_button_bindKey(g_buttons[Z_BUTTON_UP], A_KEY_UP);
+        a_button_bindButton(g_buttons[Z_BUTTON_UP], NULL, A_BUTTON_UP);
 
         g_buttons[Z_BUTTON_DOWN] = a_button_new();
-        a_button_bind(g_buttons[Z_BUTTON_DOWN], A_KEY_DOWN);
-        a_button_bind(g_buttons[Z_BUTTON_DOWN], A_BUTTON_DOWN);
+        a_button_bindKey(g_buttons[Z_BUTTON_DOWN], A_KEY_DOWN);
+        a_button_bindButton(g_buttons[Z_BUTTON_DOWN], NULL, A_BUTTON_DOWN);
 
         g_buttons[Z_BUTTON_LEFT] = a_button_new();
-        a_button_bind(g_buttons[Z_BUTTON_LEFT], A_KEY_LEFT);
-        a_button_bind(g_buttons[Z_BUTTON_LEFT], A_BUTTON_LEFT);
-        a_button_bind(g_buttons[Z_BUTTON_LEFT], A_BUTTON_L);
+        a_button_bindKey(g_buttons[Z_BUTTON_LEFT], A_KEY_LEFT);
+        a_button_bindButton(g_buttons[Z_BUTTON_LEFT], NULL, A_BUTTON_LEFT);
+        a_button_bindButton(g_buttons[Z_BUTTON_LEFT], NULL, A_BUTTON_L);
 
         g_buttons[Z_BUTTON_RIGHT] = a_button_new();
-        a_button_bind(g_buttons[Z_BUTTON_RIGHT], A_KEY_RIGHT);
-        a_button_bind(g_buttons[Z_BUTTON_RIGHT], A_BUTTON_RIGHT);
-        a_button_bind(g_buttons[Z_BUTTON_RIGHT], A_BUTTON_R);
+        a_button_bindKey(g_buttons[Z_BUTTON_RIGHT], A_KEY_RIGHT);
+        a_button_bindButton(g_buttons[Z_BUTTON_RIGHT], NULL, A_BUTTON_RIGHT);
+        a_button_bindButton(g_buttons[Z_BUTTON_RIGHT], NULL, A_BUTTON_R);
 
         g_buttons[Z_BUTTON_A] = a_button_new();
-        a_button_bind(g_buttons[Z_BUTTON_A], A_KEY_SPACE);
-        a_button_bind(g_buttons[Z_BUTTON_A], A_KEY_Z);
-        a_button_bind(g_buttons[Z_BUTTON_A], A_BUTTON_A);
+        a_button_bindKey(g_buttons[Z_BUTTON_A], A_KEY_SPACE);
+        a_button_bindKey(g_buttons[Z_BUTTON_A], A_KEY_Z);
+        a_button_bindButton(g_buttons[Z_BUTTON_A], NULL, A_BUTTON_A);
 
         g_buttons[Z_BUTTON_B] = a_button_new();
-        a_button_bind(g_buttons[Z_BUTTON_B], A_KEY_X);
-        a_button_bind(g_buttons[Z_BUTTON_B], A_BUTTON_B);
+        a_button_bindKey(g_buttons[Z_BUTTON_B], A_KEY_X);
+        a_button_bindButton(g_buttons[Z_BUTTON_B], NULL, A_BUTTON_B);
 
         g_buttons[Z_BUTTON_MENU] = a_button_new();
-        a_button_bind(g_buttons[Z_BUTTON_MENU], A_KEY_ENTER);
-        a_button_bind(g_buttons[Z_BUTTON_MENU], A_BUTTON_START);
+        a_button_bindKey(g_buttons[Z_BUTTON_MENU], A_KEY_ENTER);
+        a_button_bindButton(g_buttons[Z_BUTTON_MENU], NULL, A_BUTTON_START);
 
         z_state_setup();
     }
@@ -90,7 +90,7 @@ A_STATE(run)
         }
 
         for(int s = 0; s < Z_SPRITE_NUM; s++) {
-            a_spriteframes_free(g_sprites[s], true);
+            a_sprite_free(g_sprites[s]);
         }
 
         for(int s = 0; s < Z_SFX_NUM; s++) {
@@ -99,11 +99,9 @@ A_STATE(run)
     }
 }
 
-A_MAIN
+void a_main(void)
 {
-    a_state_init(1);
-    a_state_new(0, run, "Neonrattle");
-    a_state_push(0);
+    a_state_push(s_run);
 }
 
 bool z_platform_buttonPressGet(int Button)
@@ -118,54 +116,49 @@ ZPixel* z_screen_pixelsGet(void)
 
 void z_platform__loadSprite(int Sprite, const char* Path)
 {
-    g_sprites[Sprite] = a_spriteframes_newFromPng(Path, 0, 0);
+    g_sprites[Sprite] = a_sprite_newFromPng(Path, 0, 0, 0, 0);
 }
 
 ZPixel z_sprite_transparentColorGet(void)
 {
-    return a_sprite_colorKeyGet();
-}
-
-static inline ASprite* getCurrentSprite(ZSpriteId Sprite, unsigned Frame)
-{
-    return a_spriteframes_getByIndex(g_sprites[Sprite], Frame);
+    return a_pixel_fromHex(A_CONFIG_COLOR_SPRITE_KEY);
 }
 
 const ZPixel* z_sprite_pixelsGet(ZSpriteId Sprite, unsigned Frame)
 {
-    return a_sprite_pixelsGetBuffer(getCurrentSprite(Sprite, Frame));
+    return a_sprite_pixelsGetBuffer(g_sprites[Sprite], Frame);
 }
 
 ZPixel z_sprite_pixelGet(ZSpriteId Sprite, unsigned Frame, int X, int Y)
 {
-    return a_sprite_pixelsGetPixel(getCurrentSprite(Sprite, Frame), X, Y);
+    return a_sprite_pixelsGetValue(g_sprites[Sprite], Frame, X, Y);
 }
 
 void z_platform_spriteBlit(int Sprite, int X, int Y, unsigned Frame)
 {
-    a_sprite_blit(getCurrentSprite(Sprite, Frame), X, Y);
+    a_sprite_blit(g_sprites[Sprite], Frame, X, Y);
 }
 
 ZVectorInt z_sprite_sizeGet(ZSpriteId Sprite)
 {
-    AVectorInt size = a_sprite_sizeGet(getCurrentSprite(Sprite, 0));
+    AVectorInt size = a_sprite_sizeGet(g_sprites[Sprite]);
 
     return (ZVectorInt){size.x, size.y};
 }
 
 int z_sprite_sizeGetWidth(ZSpriteId Sprite)
 {
-    return a_sprite_sizeGetWidth(getCurrentSprite(Sprite, 0));
+    return a_sprite_sizeGetWidth(g_sprites[Sprite]);
 }
 
 int z_sprite_sizeGetHeight(ZSpriteId Sprite)
 {
-    return a_sprite_sizeGetHeight(getCurrentSprite(Sprite, 0));
+    return a_sprite_sizeGetHeight(g_sprites[Sprite]);
 }
 
 unsigned z_sprite_framesNumGet(ZSpriteId Sprite)
 {
-    return a_spriteframes_framesNumGet(g_sprites[Sprite]);
+    return a_sprite_framesNumGet(g_sprites[Sprite]);
 }
 
 unsigned z_fps_ticksGet(void)

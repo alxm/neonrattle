@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-    Copyright 2018 Alex Margarit <alex@alxm.org>
+    Copyright 2018-2019 Alex Margarit <alex@alxm.org>
     This file is part of Neonrattle, a video game.
 
     This program is free software: you can redistribute it and/or modify
@@ -51,7 +51,7 @@ class Sheet:
         else:
             self.transparentColor = 0
 
-        grid_match = re.match('^.*_grid([0-9]+)x([0-9]+)\..*$', ImageName)
+        grid_match = re.match('^.*_([0-9]+)x([0-9]+)\..*$', ImageName)
 
         if grid_match:
             self.frameWidth = int(grid_match.group(1))

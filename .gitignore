@@ -1,5 +1,5 @@
 /assets/gfx/mockups/
 /assets/sfx/music/
-/bin/
-/obj/
-/neonrattle/generated/*
+/build/shared/
+/build/builds/
+/neonrattle/generated/

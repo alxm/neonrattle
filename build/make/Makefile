@@ -1,18 +1,15 @@
-include global
-
-A_CONFIG_APP_BIN := $(A_CONFIG_APP_TITLE)
+include global.mk
 
 A_CONFIG_SCREEN_MAXIMIZED := 0
 A_CONFIG_SCREEN_ZOOM := 4
 
 A_CONFIG_MAKE_CLEAN := genclean
 
-include $(A2X_PATH)/make/dev
+include $(A2X_PATH)/make/dev.mk
 
-Z_ROOT := ..
-Z_DIR_GEN := $(Z_ROOT)/$(A_CONFIG_DIR_SRC)/generated
-Z_DIR_GFX := $(Z_ROOT)/assets/gfx
-Z_DIR_SFX := $(Z_ROOT)/assets/sfx
+Z_DIR_GEN := $(A_DIR_ROOT)/$(A_CONFIG_DIR_SRC)/generated
+Z_DIR_GFX := $(A_DIR_ROOT)/assets/gfx
+Z_DIR_SFX := $(A_DIR_ROOT)/assets/sfx
 
 Z_GFX_COMPILER := compile-gfx.py
 Z_GFX_PNG_FILES := $(notdir $(wildcard $(Z_DIR_GFX)/*.png))
