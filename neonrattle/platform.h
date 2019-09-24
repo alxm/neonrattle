@@ -22,7 +22,7 @@
     #define Z_PLATFORM_A2X 1
 #endif
 
-#ifdef ARDUINO_SAMD_ZERO
+#ifdef __SAMD21G18A__
     #define Z_PLATFORM_META 1
 #endif
 

@@ -1,0 +1,43 @@
+ifndef ACTUALLY_BUILD
+
+MY_PROJECT_ROOT := $(realpath ../..)
+MY_PROJECT_DIR_MAKE = $(MY_PROJECT_ROOT)/build/make
+MY_PROJECT_DIR_SOURCE = $(MY_PROJECT_ROOT)/neonrattle
+MY_PROJECT_DIR_BUILD = $(MY_PROJECT_ROOT)/build/builds/gamebuino_meta
+
+MY_COMMAND := $(MAKE) \
+                -f $(MY_PROJECT_DIR_MAKE)/$(lastword $(MAKEFILE_LIST)) \
+                -C $(MY_PROJECT_DIR_SOURCE) \
+                OBJDIR=$(MY_PROJECT_DIR_BUILD) \
+                ACTUALLY_BUILD=1
+
+all :
+	$(MY_COMMAND)
+
+% :
+	$(MY_COMMAND) $@
+
+else
+
+# Where you unzipped the Arduino IDE and cloned Arduino-Makefile
+ARDUINO_DIR = /opt/arduino
+ARDMK_DIR = /opt/Arduino-Makefile
+
+# Specify the custom Gamebuino board and where it's installed
+BOARD_TAG = gamebuino_meta_native
+ALTERNATE_CORE_PATH = \
+    $(wildcard $(HOME)/.arduino15/packages/gamebuino/hardware/samd/1.*)
+
+# The Arduino libraries the game uses
+ARDUINO_LIBS = Gamebuino_META SPI
+
+# Now that everything is configured, include Arduino-Makefile
+include $(ARDMK_DIR)/Sam.mk
+
+# The META lib expects __SKETCH_NAME__ to be defined,
+# and doesn't build well with Link Time Optimization
+CFLAGS += -D__SKETCH_NAME__=\"$(TARGET).ino\" -fno-lto
+CXXFLAGS += -D__SKETCH_NAME__=\"$(TARGET).ino\" -fno-lto
+LDFLAGS += -fno-lto
+
+endif
