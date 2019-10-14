@@ -18,12 +18,10 @@
 
 #pragma once
 
-#ifdef A2X
-    #define Z_PLATFORM_A2X 1
-#endif
-
 #ifdef __SAMD21G18A__
     #define Z_PLATFORM_META 1
+#else
+    #define Z_PLATFORM_A2X 1
 #endif
 
 #define Z_DEBUG A_CONFIG_BUILD_DEBUG
