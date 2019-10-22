@@ -18,7 +18,7 @@
 
 #include "util_save.h"
 
-#define Z_SAVE_FILE_NAME A_CONFIG_PATH_STORAGE_PREFIX "neonrattle.sav"
+#define Z_SAVE_FILE_NAME F_CONFIG_PATH_STORAGE_PREFIX "neonrattle.sav"
 
 typedef struct {
     uint32_t version;

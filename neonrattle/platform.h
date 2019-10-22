@@ -21,10 +21,10 @@
 #ifdef __SAMD21G18A__
     #define Z_PLATFORM_META 1
 #else
-    #define Z_PLATFORM_A2X 1
+    #define Z_PLATFORM_FAUR 1
 #endif
 
-#define Z_DEBUG A_CONFIG_BUILD_DEBUG
+#define Z_DEBUG F_CONFIG_BUILD_DEBUG
 
 #ifdef __cplusplus
 #define Z_EXTERN_C_START extern "C" {
@@ -44,7 +44,7 @@ typedef struct {
     int r, g, b;
 } ZRgb;
 
-#if Z_PLATFORM_A2X
+#if Z_PLATFORM_FAUR
     #include "platform_a2x.h"
 #elif Z_PLATFORM_META
     #include "platform_meta.h"
