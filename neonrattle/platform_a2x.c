@@ -121,7 +121,7 @@ void z_platform__loadSprite(int Sprite, const char* Path)
 
 ZPixel z_sprite_transparentColorGet(void)
 {
-    return f_pixel_fromHex(F_CONFIG_COLOR_SPRITE_KEY);
+    return f_color_pixelFromHex(F_CONFIG_COLOR_SPRITE_KEY);
 }
 
 const ZPixel* z_sprite_pixelsGet(ZSpriteId Sprite, unsigned Frame)
@@ -179,7 +179,8 @@ void z_platform__loadSfx(int Sfx, const char* Path)
 
 void z_sfx_play(ZSfxId Sfx)
 {
-    f_channel_play(g_sfx[Sfx].channel, g_sfx[Sfx].sample, F_CHANNEL_RESTART);
+    f_channel_play(
+        g_sfx[Sfx].channel, g_sfx[Sfx].sample, F_CHANNEL_PLAY_RESTART);
 }
 
 bool z_file_readOnce(const char* FileName, void* Buffer, size_t Size)

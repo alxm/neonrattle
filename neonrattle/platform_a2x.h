@@ -22,28 +22,28 @@
     #define Z_DEBUG_INSTRUMENT 1
 #endif
 
-typedef FPixel ZPixel;
+typedef FColorPixel ZPixel;
 
 static inline ZRgb z_pixel_toRgb(ZPixel Pixel)
 {
-    FRgb rgb = f_pixel_toRgb(Pixel);
+    FColorRgb rgb = f_color_pixelToRgb(Pixel);
 
     return (ZRgb){rgb.r, rgb.g, rgb.b};
 }
 
 static inline int z_pixel_toAnyChannel(ZPixel Pixel)
 {
-    return f_pixel_toRgb(Pixel).r;
+    return f_color_pixelToRgb(Pixel).r;
 }
 
 static inline ZPixel z_pixel_fromRgb(int Red, int Green, int Blue)
 {
-    return f_pixel_fromRgb(Red, Green, Blue);
+    return f_color_pixelFromRgb3(Red, Green, Blue);
 }
 
 static inline ZPixel z_pixel_fromHex(uint32_t Hexcode)
 {
-    return f_pixel_fromHex(Hexcode);
+    return f_color_pixelFromHex(Hexcode);
 }
 
 #define z_sprite_load(Index, Id) \
