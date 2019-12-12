@@ -22,7 +22,7 @@
 
 Z_EXTERN_C_START
 
-#define Z_FPS F_CONFIG_FPS_RATE_TICK
+#define Z_FPS 30
 
 extern unsigned z_fps_ticksGet(void);
 extern bool z_fps_ticksNth(unsigned N);

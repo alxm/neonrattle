@@ -16,7 +16,7 @@ color_text ()
 for f in Makefile*
 do
     color_text 34 ">>>> START $f"
-    make -k -j -f "$f" $make_arg
+    make -k -j8 -f "$f" $make_arg
 
     if [ $? -eq 0 ]
     then

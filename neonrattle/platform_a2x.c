@@ -35,7 +35,13 @@ static FSprite* g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
 static FButton* g_buttons[Z_BUTTON_NUM];
 
-void s_run(void)
+void f_init(void)
+{
+    f_init_app("Neonrattle", "alxm", 0, 9, 0);
+    f_init_fps(Z_FPS, Z_FPS);
+}
+
+void f_main(void)
 {
     F_STATE_INIT
     {
@@ -97,11 +103,6 @@ void s_run(void)
             f_sample_free(g_sfx[s].sample);
         }
     }
-}
-
-void f_main(void)
-{
-    f_state_push(s_run);
 }
 
 bool z_platform_buttonPressGet(int Button)
