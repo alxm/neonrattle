@@ -35,12 +35,6 @@ static FSprite* g_sprites[Z_SPRITE_NUM];
 static ZSfx g_sfx[Z_SFX_NUM];
 static FButton* g_buttons[Z_BUTTON_NUM];
 
-void f_init(void)
-{
-    f_init_app("Neonrattle", "alxm", 0, 9, 0);
-    f_init_fps(Z_FPS, Z_FPS);
-}
-
 void f_main(void)
 {
     F_STATE_INIT
@@ -142,7 +136,7 @@ void z_platform_spriteBlit(int Sprite, int X, int Y, unsigned Frame)
 
 ZVectorInt z_sprite_sizeGet(ZSpriteId Sprite)
 {
-    FVectorInt size = f_sprite_sizeGet(g_sprites[Sprite]);
+    FVecInt size = f_sprite_sizeGet(g_sprites[Sprite]);
 
     return (ZVectorInt){size.x, size.y};
 }
@@ -180,7 +174,7 @@ void z_platform__loadSfx(int Sfx, const char* Path)
 
 void z_sfx_play(ZSfxId Sfx)
 {
-    f_channel_play(
+    f_channel_playStart(
         g_sfx[Sfx].channel, g_sfx[Sfx].sample, F_CHANNEL_PLAY_RESTART);
 }
 

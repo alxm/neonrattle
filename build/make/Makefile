@@ -19,8 +19,8 @@ Z_SFX_COMPILER := compile-sfx.py
 Z_SFX_WAV_FILES := $(notdir $(wildcard $(Z_DIR_SFX)/*.wav))
 Z_SFX_H_FILES := $(addprefix $(Z_DIR_GEN)/data_sfx_, $(Z_SFX_WAV_FILES:.wav=.h))
 
-$(F_DIR_OBJ_APP)/util_graphics.c.o : $(Z_GFX_H_FILES)
-$(F_DIR_OBJ_APP)/util_sound.c.o : $(Z_SFX_H_FILES)
+$(F_BUILD_DIR_PROJ_O)/util_graphics.c.o : $(Z_GFX_H_FILES)
+$(F_BUILD_DIR_PROJ_O)/util_sound.c.o : $(Z_SFX_H_FILES)
 
 $(Z_DIR_GEN)/data_gfx_%.h: $(Z_DIR_GFX)/%.png $(Z_GFX_COMPILER)
 	@ mkdir -p $(@D)
