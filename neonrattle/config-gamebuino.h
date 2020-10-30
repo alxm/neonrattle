@@ -18,7 +18,7 @@
 
 #pragma once
 
-#define F_CONFIG_BUILD_DEBUG 0
+#define F_CONFIG_DEBUG 0
 
 #define F_CONFIG_SCREEN_SIZE_WIDTH 80
 #define F_CONFIG_SCREEN_SIZE_HEIGHT 64

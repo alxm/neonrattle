@@ -5,7 +5,7 @@ F_CONFIG_SCREEN_ZOOM := 4
 
 F_CONFIG_MAKE_CLEAN := genclean
 
-include $(FAUR_PATH)/make/dev.mk
+include $(FAUR_PATH)/make/default.mk
 
 Z_DIR_GEN := $(F_DIR_ROOT)/$(F_CONFIG_DIR_SRC)/generated
 Z_DIR_GFX := $(F_DIR_ROOT)/assets/gfx

@@ -10,8 +10,8 @@ Z_ROOT := ../..
 Z_DIR_GFX := assets/gfx
 Z_DIR_SFX := assets/sfx
 
-F_CONFIG_PATH_EMBED_EMSCRIPTEN := \
-	$(addprefix $(Z_DIR_GFX)/, $(notdir $(wildcard $(Z_ROOT)/$(Z_DIR_GFX)/*.png))) \
-	$(addprefix $(Z_DIR_SFX)/, $(notdir $(wildcard $(Z_ROOT)/$(Z_DIR_SFX)/*.wav))) \
+F_CONFIG_FILES_EMBED_PATHS_EMSCRIPTEN := \
+    $(addprefix $(Z_DIR_GFX)/, $(notdir $(wildcard $(Z_ROOT)/$(Z_DIR_GFX)/*.png))) \
+    $(addprefix $(Z_DIR_SFX)/, $(notdir $(wildcard $(Z_ROOT)/$(Z_DIR_SFX)/*.wav))) \
 
 include $(FAUR_PATH)/make/emscripten.mk

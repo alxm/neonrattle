@@ -24,7 +24,7 @@
     #define Z_PLATFORM_FAUR 1
 #endif
 
-#define Z_DEBUG F_CONFIG_BUILD_DEBUG
+#define Z_DEBUG F_CONFIG_DEBUG
 
 #ifdef __cplusplus
 #define Z_EXTERN_C_START extern "C" {
